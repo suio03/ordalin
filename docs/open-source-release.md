@@ -55,21 +55,16 @@ Before the reset, the private history was audited (27 commits, 446 historical
 file versions) with no actual credentials identified by the checks used. These
 findings are a point-in-time review, not a security guarantee for later changes.
 
-## GitHub and deployment handoff
+## GitHub and deployment
 
-- Push and confirm the new CI workflow passes on GitHub. CI runs verification
-  only and has read-only repository permissions; it does not deploy.
-- If Cloudflare Workers Builds or another deployment pipeline is connected,
-  configure it to supply ignored `wrangler.production.jsonc` from private CI
-  configuration before the next deployment. A clean checkout deliberately has
-  no production configuration. Set production build-time environment variables
-  as documented in `environment.md`.
-- Change GitHub visibility only as an explicit publication action. Preparation
-  itself does not change visibility, push commits or deploy the site.
-- Enable GitHub private vulnerability reporting and available secret-scanning
-  protections when the public repository settings are available. The private
-  reporting endpoint returned 404 while the repository was private; availability
-  has not been assumed. `SECURITY.md` includes a fallback contact procedure.
+- The repository is public. CI runs verification only with read-only
+  repository permissions; it does not deploy.
+- Production deploys run locally with `pnpm run deploy`, which reads the ignored
+  `wrangler.production.jsonc`. Cloudflare Workers Builds is not connected: a
+  clean checkout deliberately has no production configuration, and building it
+  would fall back to the local demo configuration.
+- GitHub private vulnerability reporting, secret scanning and push protection
+  are enabled.
 
 Configuration references:
 [Wrangler configuration](https://developers.cloudflare.com/workers/wrangler/configuration/),

@@ -82,10 +82,13 @@ pnpm exec wrangler r2 bucket create your-directory-assets
 Set the Worker name, D1 database ID/name, R2 bucket name, public application URL,
 Turnstile site key and Access team domain in `wrangler.production.jsonc`.
 Add your custom-domain routes if desired. This file is ignored by Git; never
-put API keys or secret values in it. CI deployments must create the file from
-private CI configuration before running `pnpm deploy`.
+put API keys or secret values in it.
 
-`pnpm deploy`, `pnpm preview`, remote database scripts and remote import/backfill
+Production deploys run from a maintainer machine with `pnpm run deploy`
+(`pnpm deploy` is a built-in pnpm command, not this script). No Git-connected
+deployment pipeline is used, so pushing to `main` does not deploy.
+
+`pnpm run deploy`, `pnpm preview`, remote database scripts and remote import/backfill
 scripts explicitly use this private file. Direct Wrangler commands must include
 `--config wrangler.production.jsonc`, including secret management:
 
