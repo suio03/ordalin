@@ -35,6 +35,19 @@
 - About ranking has no public navigation entry. Keep Guides navigation hidden
   until useful content and its release are approved.
 
+## Deployment
+
+- Production deploys run only from a maintainer machine with `pnpm run deploy`,
+  which reads the ignored `wrangler.production.jsonc`. `pnpm deploy` is a
+  built-in pnpm command and does not run this script.
+- No Git-connected pipeline deploys this repository; pushing to `main` runs CI
+  only. Do not reconnect Cloudflare Workers Builds or add CI deploy steps: a
+  clean checkout falls back to the demo `wrangler.jsonc`.
+- Do not rename the demo Worker in `wrangler.jsonc` or merge automated PRs
+  that change it to match production.
+- Deploy only when the maintainer asks, then verify the live homepage,
+  `/submit`, sitemap and canonical URL.
+
 ## Catalogue research standard
 
 - New manual and scheduled imports must follow `docs/catalog-profile-standard.md`. Granola is the approved content-depth reference; a short description and screenshot alone are insufficient.
