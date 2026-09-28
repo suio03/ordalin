@@ -1,0 +1,8 @@
+# Add local-only secrets here as they are introduced.
+# Never commit a populated .dev.vars file.
+TURNSTILE_SECRET_KEY=
+SUBMISSION_HASH_SALT=
+OPENAI_API_KEY=
+OPENAI_ANALYSIS_MODEL=gpt-5.6-luna
+CLOUDFLARE_ACCESS_TEAM_DOMAIN=
+CLOUDFLARE_ACCESS_AUD=

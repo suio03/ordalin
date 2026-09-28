@@ -1,0 +1,54 @@
+.mark {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-tool-mark);
+  color: var(--color-text-primary);
+  background: var(--color-surface-muted);
+  font-family: var(--font-family-metadata);
+  font-size: var(--font-size-control);
+  font-weight: 700;
+}
+
+.row {
+  grid-area: icon;
+  width: 40px;
+  height: 40px;
+}
+
+.hero {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-medium);
+  font-size: var(--font-size-panel-heading);
+}
+
+.option {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-lg);
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 8%;
+  object-fit: contain;
+  background: var(--color-surface-raised);
+}
+
+@media (max-width: 560px) {
+  .row {
+    width: 38px;
+    height: 38px;
+  }
+
+  .hero {
+    width: 56px;
+    height: 56px;
+  }
+}

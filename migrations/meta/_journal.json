@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1787409875399,
+      "tag": "0000_lowly_fabian_cortez",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1787443027762,
+      "tag": "0001_catalog_search",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1787449432021,
+      "tag": "0002_confused_ultimates",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1787486120236,
+      "tag": "0003_flat_robin_chapel",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1787491887370,
+      "tag": "0004_giant_typhoid_mary",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1787494081640,
+      "tag": "0005_tough_purifiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1787642684775,
+      "tag": "0006_open_supernaut",
+      "breakpoints": true
+    }
+  ]
+}

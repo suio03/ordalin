@@ -1,0 +1,503 @@
+{
+  "checkedAt": "2026-08-23T00:00:00Z",
+  "categories": [
+    { "slug": "writing", "name": "Writing & Language", "description": "Writing, editing, translation, and language workflows." },
+    { "slug": "image", "name": "Image & Design", "description": "Image generation, editing, branding, and visual design tools." },
+    { "slug": "video", "name": "Video & Animation", "description": "Video creation, recording, editing, animation, and publishing tools." },
+    { "slug": "audio", "name": "Voice & Speech", "description": "Dictation, transcription, dubbing, speech synthesis, and voice tools." },
+    { "slug": "music", "name": "Music & Audio", "description": "Music generation, audio production, sound editing, and podcast tools." },
+    { "slug": "coding", "name": "Coding & Development", "description": "Software development, testing, deployment, and developer tooling." },
+    { "slug": "agents", "name": "Automation & Agents", "description": "Agents and automation systems that carry out multi-step work." },
+    { "slug": "productivity", "name": "Productivity", "description": "Tools for organizing work, meetings, and everyday workflows." },
+    { "slug": "research", "name": "Research & Data", "description": "Research, document analysis, data work, and source-backed discovery." },
+    { "slug": "marketing", "name": "Marketing & Sales", "description": "Campaign, advertising, social media, sales, and audience tools." },
+    { "slug": "business", "name": "Business & Operations", "description": "Customer support, finance, legal operations, and team management tools." },
+    { "slug": "education", "name": "Education & Learning", "description": "Teaching, studying, course creation, and language-learning tools." },
+    { "slug": "lifestyle", "name": "Personal & Lifestyle", "description": "Personal creativity, gifts, travel, wellness, and everyday-life tools." },
+    { "slug": "other", "name": "Other", "description": "Internal fallback for products awaiting classification.", "isActive": false }
+  ],
+  "tags": [
+    { "slug": "dictation", "name": "Dictation", "kind": "category", "group": "audio", "description": "Speak into the active app instead of typing." },
+    { "slug": "transcription", "name": "Transcription", "kind": "category", "group": "audio", "description": "Turn recorded or live speech into searchable text." },
+    { "slug": "translation", "name": "Translation", "kind": "category", "group": "writing", "description": "Translate written or spoken content across languages." },
+    { "slug": "image-generation", "name": "Image generation", "kind": "category", "group": "image", "description": "Create images and visual concepts from prompts or references." },
+    { "slug": "image-editing", "name": "Image editing", "kind": "category", "group": "image", "description": "Retouch, transform, expand, or refine existing images." },
+    { "slug": "brand-design", "name": "Brand design", "kind": "category", "group": "image", "description": "Create reusable brand identities and campaign systems." },
+    { "slug": "video-generation", "name": "Video generation", "kind": "category", "group": "video", "description": "Generate video from text, images, briefs, or references." },
+    { "slug": "video-editing", "name": "Video editing", "kind": "category", "group": "video", "description": "Edit and polish recorded or generated video." },
+    { "slug": "screen-recording", "name": "Screen recording", "kind": "category", "group": "video", "description": "Record screens and turn captures into product demos." },
+    { "slug": "dubbing", "name": "Dubbing", "kind": "category", "group": "audio", "description": "Replace or translate spoken audio while preserving timing." },
+    { "slug": "music-generation", "name": "Music generation", "kind": "category", "group": "music", "description": "Compose songs, tracks, or soundscapes with AI." },
+    { "slug": "voice-generation", "name": "Voice generation", "kind": "category", "group": "audio", "description": "Create synthetic speech and expressive voices." },
+    { "slug": "coding-assistant", "name": "Coding assistant", "kind": "category", "group": "coding", "description": "Write, understand, debug, and refactor software." },
+    { "slug": "app-builder", "name": "App builder", "kind": "category", "group": "coding", "description": "Build working applications from prompts or visual workflows." },
+    { "slug": "software-testing", "name": "Software testing", "kind": "category", "group": "coding", "description": "Test software, inspect defects, and verify releases." },
+    { "slug": "devops-monitoring", "name": "DevOps and monitoring", "kind": "category", "group": "coding", "description": "Release, observe, and maintain production software." },
+    { "slug": "local-models", "name": "Local models", "kind": "category", "group": "coding", "description": "Run and manage AI models on local hardware." },
+    { "slug": "meeting-assistant", "name": "Meeting assistant", "kind": "category", "group": "productivity", "description": "Prepare, capture, summarize, and follow up meetings." },
+    { "slug": "scheduling", "name": "Scheduling", "kind": "category", "group": "productivity", "description": "Coordinate calendars, availability, and appointments." },
+    { "slug": "workflow-automation", "name": "Workflow automation", "kind": "category", "group": "agents", "description": "Connect steps and let agents execute repeatable work." },
+    { "slug": "ad-creative", "name": "Ad creative", "kind": "category", "group": "marketing", "description": "Create and iterate advertising concepts and assets." },
+    { "slug": "social-media", "name": "Social media", "kind": "category", "group": "marketing", "description": "Plan, create, and manage social content." },
+    { "slug": "business-research", "name": "Business research", "kind": "category", "group": "research", "description": "Investigate markets, companies, strategy, and evidence." },
+    { "slug": "legal-research", "name": "Legal research", "kind": "category", "group": "research", "description": "Find and review legal authority with traceable sources." },
+    { "slug": "document-analysis", "name": "Document analysis", "kind": "category", "group": "research", "description": "Extract, compare, and reason over documents." },
+    { "slug": "knowledge-management", "name": "Knowledge management", "kind": "category", "group": "productivity", "description": "Organize and retrieve personal or team knowledge." },
+    { "slug": "customer-support", "name": "Customer support", "kind": "category", "group": "business", "description": "Answer customers and operate support workflows." },
+    { "slug": "personalized-gifts", "name": "Personalized gifts", "kind": "category", "group": "lifestyle", "description": "Create personal gifts from memories, preferences, or stories." },
+    { "slug": "web-app", "name": "Web app", "kind": "interface" },
+    { "slug": "desktop-app", "name": "Desktop app", "kind": "interface" },
+    { "slug": "browser-extension", "name": "Browser extension", "kind": "interface" },
+    { "slug": "api", "name": "API", "kind": "interface" },
+    { "slug": "open-source", "name": "Open source", "kind": "attribute" },
+    { "slug": "local-ai", "name": "Local AI", "kind": "attribute" },
+    { "slug": "local-first", "name": "Local first", "kind": "attribute" },
+    { "slug": "multilingual", "name": "Multilingual", "kind": "attribute" },
+    { "slug": "free-plan", "name": "Free plan", "kind": "attribute" },
+    { "slug": "no-code", "name": "No-code", "kind": "attribute" }
+  ],
+  "tools": [
+    {
+      "slug": "zen-whisper",
+      "name": "Zen Whisper",
+      "tagline": "Local-first Mac dictation and transcription that types into your existing apps.",
+      "description": "Zen Whisper runs core speech recognition on Apple Silicon Macs, supports dictation at the active cursor, and can transcribe uploaded media. Its official documentation distinguishes on-device recognition from optional network-backed features.",
+      "websiteUrl": "https://www.zenproducts.ai/apps/zen-whisper",
+      "canonicalDomain": "zenproducts.ai",
+      "pricingModel": "freemium",
+      "primaryCategory": "audio",
+      "categories": ["writing", "audio", "productivity"],
+      "tags": ["dictation", "transcription", "desktop-app", "local-first", "multilingual", "free-plan"],
+      "editorPick": true,
+      "firstSeenAt": "2026-08-06T00:00:00Z",
+      "sourceUrl": "https://www.zenproducts.ai/posts/mac-dictation-that-stays-on-your-mac",
+      "discoveredVia": "Product Hunt August 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products/zen-whisper"
+    },
+    {
+      "slug": "lispr",
+      "name": "Lispr",
+      "tagline": "Push-to-talk dictation and translation that writes into your current desktop app.",
+      "description": "Lispr provides cursor-level voice dictation on macOS and Windows, with speech input across nearly 100 languages and optional translation into 32 output languages. Its cloud transcription service encrypts audio in transit and discards it after transcription by default.",
+      "websiteUrl": "https://lispr.ai/",
+      "canonicalDomain": "lispr.ai",
+      "pricingModel": "freemium",
+      "primaryCategory": "audio",
+      "categories": ["writing", "audio", "productivity"],
+      "tags": ["dictation", "transcription", "translation", "desktop-app", "multilingual", "free-plan"],
+      "editorPick": false,
+      "firstSeenAt": "2026-07-09T00:00:00Z",
+      "sourceUrl": "https://lispr.ai/windows/",
+      "discoveredVia": "Product Hunt July 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products/lispr"
+    },
+    {
+      "slug": "playyy",
+      "name": "Playyy",
+      "tagline": "Generate and edit campaign visuals on a layer-aware AI canvas.",
+      "description": "Playyy combines text-to-image generation with an editable canvas for refining elements, removing backgrounds, expanding images, and adapting visual assets to different formats.",
+      "websiteUrl": "https://playyy.ai/",
+      "canonicalDomain": "playyy.ai",
+      "pricingModel": "freemium",
+      "primaryCategory": "image",
+      "categories": ["image", "marketing"],
+      "tags": ["image-generation", "image-editing", "web-app", "free-plan", "no-code"],
+      "editorPick": false,
+      "firstSeenAt": "2026-08-22T00:00:00Z",
+      "sourceUrl": "https://playyy.ai/",
+      "discoveredVia": "Toolify Just launched",
+      "discoveryUrl": "https://www.toolify.ai/new"
+    },
+    {
+      "slug": "miora",
+      "name": "Miora",
+      "tagline": "Build brand-consistent campaign assets with a creative agent, editable canvas, and memory.",
+      "description": "Miora combines a free-form canvas, a creative agent, reusable skills, and memory for producing brand visual systems and campaign assets across image, video, UI, and 3D workflows.",
+      "websiteUrl": "https://miora.design/",
+      "canonicalDomain": "miora.design",
+      "pricingModel": "freemium",
+      "primaryCategory": "image",
+      "categories": ["image", "video", "marketing"],
+      "tags": ["image-generation", "brand-design", "video-generation", "web-app", "free-plan", "no-code"],
+      "editorPick": false,
+      "firstSeenAt": "2026-07-12T00:00:00Z",
+      "sourceUrl": "https://miora.design/docs",
+      "discoveredVia": "Product Hunt July 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products/miora-2"
+    },
+    {
+      "slug": "capptivo",
+      "name": "Capptivo",
+      "tagline": "Open-source screen recording and editing for polished product demos.",
+      "description": "Capptivo records screens on macOS, Windows, and Linux, then adds cursor-following zoom, annotations, captions, background styling, and multi-format exports in a local desktop editor.",
+      "websiteUrl": "https://capptivo.com/",
+      "canonicalDomain": "capptivo.com",
+      "pricingModel": "free",
+      "primaryCategory": "video",
+      "categories": ["video", "productivity"],
+      "tags": ["screen-recording", "video-editing", "desktop-app", "open-source", "local-first", "free-plan"],
+      "editorPick": true,
+      "firstSeenAt": "2026-08-08T00:00:00Z",
+      "sourceUrl": "https://capptivo.com/",
+      "discoveredVia": "Product Hunt August 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products?order=best_rated"
+    },
+    {
+      "slug": "hearsub",
+      "name": "HearSub",
+      "tagline": "Real-time YouTube subtitle translation with synchronized AI dubbing.",
+      "description": "HearSub is a browser extension that translates supported YouTube videos during playback, showing bilingual subtitles and generating synchronized dubbing without requiring a full video upload.",
+      "websiteUrl": "https://hearsub.ai/",
+      "canonicalDomain": "hearsub.ai",
+      "pricingModel": "freemium",
+      "primaryCategory": "audio",
+      "categories": ["audio", "video", "research"],
+      "tags": ["translation", "dubbing", "transcription", "browser-extension", "multilingual", "free-plan"],
+      "editorPick": false,
+      "firstSeenAt": "2026-08-22T00:00:00Z",
+      "sourceUrl": "https://chromewebstore.google.com/detail/hearsub-%E2%80%93-youtube-video-t/jakmaalogdcamibalgapooggepolifip",
+      "discoveredVia": "Toolify Just launched",
+      "discoveryUrl": "https://www.toolify.ai/tool/hearsub"
+    },
+    {
+      "slug": "coldtea",
+      "name": "Coldtea",
+      "tagline": "An agentic development environment spanning code, release testing, and monitoring.",
+      "description": "Coldtea brings coding-agent sessions, task context, plain-language regression tests, and production monitoring into one macOS development environment. Cloud execution is optional and its terminal is available without a paid plan.",
+      "websiteUrl": "https://www.coldtea.ai/",
+      "canonicalDomain": "coldtea.ai",
+      "pricingModel": "freemium",
+      "primaryCategory": "coding",
+      "categories": ["coding", "agents"],
+      "tags": ["coding-assistant", "software-testing", "devops-monitoring", "desktop-app", "local-first", "free-plan"],
+      "editorPick": true,
+      "firstSeenAt": "2026-08-01T00:00:00Z",
+      "sourceUrl": "https://www.coldtea.ai/",
+      "discoveredVia": "Product Hunt August 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products?page=1"
+    },
+    {
+      "slug": "hey-noah",
+      "name": "Hey Noah",
+      "tagline": "An AI executive assistant for scheduling, follow-ups, and meeting logistics.",
+      "description": "Hey Noah coordinates meetings by email or text, checks calendars, handles scheduling back-and-forth, prepares meeting context, and follows through on notes and action items.",
+      "websiteUrl": "https://www.heynoah.io/",
+      "canonicalDomain": "heynoah.io",
+      "pricingModel": "unknown",
+      "primaryCategory": "productivity",
+      "categories": ["productivity", "agents"],
+      "tags": ["meeting-assistant", "scheduling", "workflow-automation", "web-app"],
+      "editorPick": false,
+      "firstSeenAt": "2026-08-05T00:00:00Z",
+      "sourceUrl": "https://www.heynoah.io/",
+      "discoveredVia": "Product Hunt August 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products?page=1"
+    },
+    {
+      "slug": "adant",
+      "name": "AdAnt",
+      "tagline": "Research winning formats and generate batches of short-form social ads with a creative agent.",
+      "description": "AdAnt is an agentic video studio for researching social-ad formats, turning a product link, brief, or reference video into creative directions, and generating batches of short-form variants for TikTok, Instagram Reels, and YouTube Shorts.",
+      "websiteUrl": "https://adant.ai/",
+      "canonicalDomain": "adant.ai",
+      "pricingModel": "freemium",
+      "primaryCategory": "marketing",
+      "categories": ["marketing", "video"],
+      "tags": ["ad-creative", "social-media", "video-generation", "web-app", "api", "free-plan"],
+      "editorPick": false,
+      "firstSeenAt": "2026-08-10T00:00:00Z",
+      "sourceUrl": "https://adant.ai/",
+      "discoveredVia": "Product Hunt August 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products/adant-ai"
+    },
+    {
+      "slug": "decisity",
+      "name": "Decisity",
+      "tagline": "Source-traceable strategy analysis and board-ready deliverables.",
+      "description": "Decisity structures strategy work from a brief and uploaded documents through specialist analysis, review, and export. Its official product pages state that claims link back to source documents or public URLs.",
+      "websiteUrl": "https://decisity.com/en",
+      "canonicalDomain": "decisity.com",
+      "pricingModel": "contact_sales",
+      "primaryCategory": "research",
+      "categories": ["research", "productivity"],
+      "tags": ["business-research", "document-analysis", "web-app"],
+      "editorPick": true,
+      "firstSeenAt": "2026-08-09T00:00:00Z",
+      "sourceUrl": "https://decisity.com/en/how-it-works",
+      "discoveredVia": "Product Hunt August 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products?parentTopic=data-analytics&topic=business-intelligence"
+    },
+    {
+      "slug": "vaquill-ai",
+      "name": "Vaquill AI",
+      "tagline": "Research and review legal documents with citations linked to the underlying authority.",
+      "description": "Vaquill AI supports legal research, contract review, compliance checks, and document chat for legal and corporate teams. Its research workflow returns verified citations and source passages from documents and case law.",
+      "websiteUrl": "https://www.vaquill.ai/",
+      "canonicalDomain": "vaquill.ai",
+      "pricingModel": "free_trial",
+      "primaryCategory": "research",
+      "categories": ["research", "productivity"],
+      "tags": ["legal-research", "document-analysis", "web-app", "api"],
+      "editorPick": false,
+      "firstSeenAt": "2026-08-03T00:00:00Z",
+      "sourceUrl": "https://app.vaquill.ai/pricing",
+      "discoveredVia": "Toolify recent listings",
+      "discoveryUrl": "https://www.toolify.ai/tool/vaquill-ai/"
+    },
+    {
+      "slug": "soloop",
+      "name": "Soloop",
+      "tagline": "An approval-first agent workspace for solo founders building demand.",
+      "description": "Soloop proposes one next move, waits for founder approval, and delegates research, social, or coding work to named agents while returning results to a shared workspace.",
+      "websiteUrl": "https://www.soloop.io/",
+      "canonicalDomain": "soloop.io",
+      "pricingModel": "unknown",
+      "primaryCategory": "agents",
+      "categories": ["agents", "productivity", "marketing", "coding"],
+      "tags": ["workflow-automation", "business-research", "coding-assistant", "web-app"],
+      "editorPick": false,
+      "firstSeenAt": "2026-08-11T00:00:00Z",
+      "sourceUrl": "https://www.soloop.io/about",
+      "discoveredVia": "Product Hunt August 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products/soloop"
+    },
+    {
+      "slug": "lumichats-offline",
+      "name": "LumiChats Offline",
+      "tagline": "Run and chat with local language models on Windows without a GPU.",
+      "description": "LumiChats Offline is a free Windows application for running GGUF language models locally, including private document chat with on-device embeddings and no required cloud connection.",
+      "websiteUrl": "https://lumichats.com/docs",
+      "canonicalDomain": "lumichats.com",
+      "pricingModel": "free",
+      "primaryCategory": "coding",
+      "categories": ["coding", "research", "productivity"],
+      "tags": ["local-models", "knowledge-management", "desktop-app", "open-source", "local-ai", "local-first", "free-plan"],
+      "editorPick": false,
+      "firstSeenAt": "2026-08-07T00:00:00Z",
+      "sourceUrl": "https://lumichats.com/docs",
+      "discoveredVia": "Product Hunt August 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products?order=best_rated"
+    },
+    {
+      "slug": "testmu-ai",
+      "name": "TestMu AI",
+      "tagline": "AI-assisted quality engineering across browsers, devices, and test frameworks.",
+      "description": "TestMu AI provides a cloud for authoring, executing, analyzing, and healing software tests across browser automation frameworks and real devices, with natural-language agent tooling available for selected workflows.",
+      "websiteUrl": "https://www.testmuai.com/",
+      "canonicalDomain": "testmuai.com",
+      "pricingModel": "freemium",
+      "primaryCategory": "coding",
+      "categories": ["coding", "agents"],
+      "tags": ["software-testing", "web-app", "api", "free-plan"],
+      "editorPick": false,
+      "firstSeenAt": "2026-08-13T00:00:00Z",
+      "sourceUrl": "https://www.testmuai.com/agentic-cloud/",
+      "discoveredVia": "Product Hunt August 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/products/lambdatest"
+    },
+    {
+      "slug": "superflow-ai",
+      "name": "Superflow AI",
+      "tagline": "Run reusable QA checklists against live or staging websites and pin findings to the page.",
+      "description": "Superflow AI turns a review checklist into QA agents that inspect websites for issues such as accessibility, broken links, spelling, and social metadata, then return screenshot-backed findings for human sign-off.",
+      "websiteUrl": "https://usesuperflow.ai/",
+      "canonicalDomain": "usesuperflow.ai",
+      "pricingModel": "freemium",
+      "primaryCategory": "coding",
+      "categories": ["coding", "productivity", "agents"],
+      "tags": ["software-testing", "web-app", "free-plan", "no-code"],
+      "editorPick": false,
+      "firstSeenAt": "2026-08-18T00:00:00Z",
+      "sourceUrl": "https://usesuperflow.ai/pricing",
+      "discoveredVia": "Product Hunt August 2026 listings",
+      "discoveryUrl": "https://www.producthunt.com/categories/testing-and-qa?order=recent_launches"
+    },
+    {
+      "slug": "zawa",
+      "name": "Zawa",
+      "tagline": "Generate editable brand kits and visual marketing assets from a brief.",
+      "description": "Zawa creates brand identity directions, logos, palettes, typography, mockups, posters, and social assets from a business description, with reusable brand guidelines for later designs.",
+      "websiteUrl": "https://zawa.ai/",
+      "canonicalDomain": "zawa.ai",
+      "pricingModel": "freemium",
+      "primaryCategory": "image",
+      "categories": ["image", "marketing"],
+      "tags": ["brand-design", "image-generation", "web-app", "free-plan", "no-code"],
+      "editorPick": false,
+      "firstSeenAt": "2026-08-22T00:00:00Z",
+      "sourceUrl": "https://zawa.ai/ai-branding-design",
+      "discoveredVia": "Toolify Just launched",
+      "discoveryUrl": "https://www.toolify.ai/new"
+    }
+  ],
+  "collections": [
+    {
+      "slug": "local-first-work",
+      "name": "Keep more work on your device",
+      "description": "Local-first tools for dictation, model use, and media production.",
+      "tools": ["zen-whisper", "lumichats-offline", "capptivo"]
+    },
+    {
+      "slug": "ship-with-agent-support",
+      "name": "Ship with agent support",
+      "description": "Tools that connect coding, testing, and approval-led execution.",
+      "tools": ["coldtea", "testmu-ai", "superflow-ai", "soloop"]
+    },
+    {
+      "slug": "make-campaign-visuals",
+      "name": "Make a campaign visual system",
+      "description": "Create images, brand assets, and short-form advertising content.",
+      "tools": ["playyy", "zawa", "miora", "adant"]
+    },
+    {
+      "slug": "work-across-languages",
+      "name": "Work across languages",
+      "description": "Translate, dub, dictate, and review multilingual material.",
+      "tools": ["hearsub", "zen-whisper", "lispr", "lumichats-offline"]
+    },
+    {
+      "slug": "founder-operating-stack",
+      "name": "A focused founder operating stack",
+      "description": "Coordinate people, choose the next move, and keep product delivery moving.",
+      "tools": ["hey-noah", "soloop", "coldtea"]
+    },
+    {
+      "slug": "evidence-before-output",
+      "name": "Evidence before output",
+      "description": "Research and quality tools that keep sources or test proof close to the result.",
+      "tools": ["decisity", "vaquill-ai", "testmu-ai", "hearsub"]
+    }
+  ],
+  "tasks": [
+    {
+      "slug": "create-a-short-product-video",
+      "name": "Create a short product video",
+      "outcome": "Produce a short video that explains or promotes a product.",
+      "guidance": "Choose the production method before the tool: use generated actors for repeatable ad variants, record the real product when trust depends on its interface, or begin with a brand system when consistency across channels matters most.",
+      "tools": [
+        {
+          "slug": "adant",
+          "bestFor": "you need AI-generated actors and many vertical ad variants quickly",
+          "keyDifference": "Starts from a product link, brief, or reference and combines format research with batch generation for social ads.",
+          "limitation": "Generation is credit-based; paid Pro and Max allowances determine the volume available after the free sign-up credits."
+        },
+        {
+          "slug": "capptivo",
+          "bestFor": "you need to record the real software interface and turn it into a polished demo",
+          "keyDifference": "Records genuine screen flows, then adds cursor zoom, captions, annotations, backgrounds, and multiple export formats.",
+          "limitation": "It records and polishes an existing product experience rather than generating actors, scenes, or product footage."
+        },
+        {
+          "slug": "zawa",
+          "bestFor": "you need product video assets that stay consistent with a wider brand system",
+          "keyDifference": "Carries a generated identity system into product, UGC-style, and social assets alongside the wider campaign kit.",
+          "limitation": "It is a broad creative suite, and its exact free and paid usage limits are not currently public."
+        }
+      ]
+    },
+    {
+      "slug": "create-on-brand-campaign-visuals",
+      "name": "Create on-brand campaign visuals",
+      "outcome": "Produce a consistent set of campaign images and visual assets.",
+      "guidance": "Choose by where consistency should come from: detailed canvas control, a reusable identity system, or an agent that remembers the brand while working across several creative formats.",
+      "tools": [
+        {
+          "slug": "playyy",
+          "bestFor": "you want hands-on control over the layers and details of each campaign image",
+          "keyDifference": "Keeps generated elements editable on a layer-aware canvas so a team can refine and resize the visual direction itself.",
+          "limitation": "Its current public workflow is image-focused; the official page still lists image-to-video as coming soon."
+        },
+        {
+          "slug": "zawa",
+          "bestFor": "you need to create the brand identity before producing the campaign assets",
+          "keyDifference": "Generates the logo, palette, type direction, and guidelines that later assets can reuse across channels.",
+          "limitation": "The suite covers many creative jobs, but exact current free and paid usage limits remain unverified."
+        },
+        {
+          "slug": "miora",
+          "bestFor": "you need one remembered brand direction across image, video, UI, and 3D work",
+          "keyDifference": "Combines memory, reusable skills, and an editable canvas for image, video, UI, and 3D campaign work.",
+          "limitation": "The workflow is credit-based; the free 1,000 sign-up credits expire after 90 days and advanced models are limited."
+        }
+      ]
+    },
+    {
+      "slug": "test-a-web-app-before-release",
+      "name": "Test a web app before release",
+      "outcome": "Find release-blocking web issues and keep evidence close to the fix.",
+      "guidance": "Choose the testing boundary first: an agent-led development loop, broad browser and real-device execution, or a focused checklist review of the pages a client or customer will see.",
+      "tools": [
+        {
+          "slug": "coldtea",
+          "bestFor": "you want QA to stay inside the same agent-led development loop as the code",
+          "keyDifference": "Keeps coding-agent context, plain-language regression tests, review, and production monitoring in one macOS environment.",
+          "limitation": "It is macOS-focused and expects an existing development project plus external coding-agent tooling."
+        },
+        {
+          "slug": "testmu-ai",
+          "bestFor": "you need broad browser, framework, CI, and real-device test coverage",
+          "keyDifference": "Provides cloud infrastructure for authoring, executing, analyzing, and healing tests across a large testing matrix.",
+          "limitation": "It is a full cloud quality-engineering platform, so setup and operational scope are heavier than a focused site review."
+        },
+        {
+          "slug": "superflow-ai",
+          "bestFor": "you need a focused final check of live or staging pages before sign-off",
+          "keyDifference": "Turns a reusable review checklist into agents that pin screenshot-backed accessibility, copy, link, and metadata findings to the page.",
+          "limitation": "It is a review-and-evidence workflow, not a real-device matrix or a code-level automated test runner."
+        }
+      ]
+    },
+    {
+      "slug": "work-with-spoken-content-across-languages",
+      "name": "Work with spoken content across languages",
+      "outcome": "Dictate, transcribe, translate, or understand spoken material across languages.",
+      "guidance": "Choose by where the audio begins and where the result must go: private speech on a Mac, translated YouTube playback, or voice that should become text inside any desktop app.",
+      "tools": [
+        {
+          "slug": "zen-whisper",
+          "bestFor": "you want dictation and media transcription to stay primarily on your Mac",
+          "keyDifference": "Runs core recognition on Apple Silicon and can type at the active cursor or transcribe uploaded media without making cloud processing the default.",
+          "limitation": "It is Mac-focused, and optional network-backed features have different privacy boundaries from core local recognition."
+        },
+        {
+          "slug": "hearsub",
+          "bestFor": "you are watching YouTube in another language and need subtitles or dubbing now",
+          "keyDifference": "Works inside the viewing session, showing bilingual subtitles and synchronized dubbing without a separate full-video upload workflow.",
+          "limitation": "It is a browser-extension workflow for supported YouTube videos, not a general transcription or media-editing application."
+        },
+        {
+          "slug": "lispr",
+          "bestFor": "you want to speak in one language and write translated text into any desktop app",
+          "keyDifference": "Uses push-to-talk input at the active cursor and can translate spoken input before inserting text into the current application.",
+          "limitation": "Transcription requires its cloud service; audio is encrypted and discarded by default but the workflow is not local-first."
+        }
+      ]
+    },
+    {
+      "slug": "turn-documents-into-source-backed-analysis",
+      "name": "Turn documents into source-backed analysis",
+      "outcome": "Analyse documents while keeping important claims traceable to source material.",
+      "guidance": "Choose by the deliverable and confidentiality boundary: an enterprise strategy output, private retrieval on a local Windows machine, or specialist legal analysis tied to authority and source passages.",
+      "tools": [
+        {
+          "slug": "decisity",
+          "bestFor": "you need source-traceable strategy analysis and a board-ready deliverable",
+          "keyDifference": "Structures a brief and uploaded sources through specialist analysis and review, then keeps claims linked to documents or public URLs.",
+          "limitation": "It is a contact-sales enterprise workflow rather than a lightweight self-serve document chat."
+        },
+        {
+          "slug": "lumichats-offline",
+          "bestFor": "your documents must remain on a Windows computer while you question them",
+          "keyDifference": "Runs GGUF models and document embeddings on the device without requiring a GPU or a cloud connection.",
+          "limitation": "It requires Windows 10 or 11 and at least 8 GB RAM; answer quality depends on the local model selected."
+        },
+        {
+          "slug": "vaquill-ai",
+          "bestFor": "you are researching law, reviewing contracts, or checking compliance requirements",
+          "keyDifference": "Returns verified citations and source passages from documents, case law, and other legal authority for specialist review.",
+          "limitation": "The workflow is legal-specific and moves to paid plans after its seven-day trial."
+        }
+      ]
+    }
+  ]
+}

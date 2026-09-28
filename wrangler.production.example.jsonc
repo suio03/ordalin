@@ -1,0 +1,43 @@
+// Copy to wrangler.production.jsonc and configure resources in your own account.
+// Add your custom-domain routes when ready. Store secrets with Wrangler, not here.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "your-directory",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-23",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "vars": {
+    "NEXT_PUBLIC_APP_URL": "https://directory.example.com",
+    "NEXT_PUBLIC_TURNSTILE_SITE_KEY": "",
+    "CLOUDFLARE_ACCESS_TEAM_DOMAIN": ""
+  },
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "your-directory-db",
+      "remote": true,
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "CATALOG_ASSETS",
+      "bucket_name": "your-directory-assets",
+      "remote": true
+    }
+  ],
+  "browser": {
+    "binding": "BROWSER"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

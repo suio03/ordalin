@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ordalin — Logo Exploration</title>
+  <style>
+    :root { --ink:#11110f; --paper:#f3f1eb; --card:#fffefa; --line:#d8d4ca; --muted:#6a675f; --accent:#df5f36; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .page { max-width:1440px; margin:0 auto; padding:64px 48px 80px; }
+    header { display:grid; grid-template-columns:1.1fr .9fr; gap:48px; padding-bottom:34px; border-bottom:1px solid var(--line); }
+    .eyebrow { margin:0 0 16px; font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+    h1 { margin:0; max-width:780px; font:500 clamp(46px,6vw,86px)/.98 Georgia,serif; letter-spacing:-.055em; }
+    .intro { align-self:end; max-width:560px; font-size:17px; line-height:1.55; color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; margin-top:24px; }
+    article { overflow:hidden; background:var(--card); border:1px solid var(--line); border-radius:18px; }
+    .card-head { padding:25px 26px 20px; display:flex; justify-content:space-between; gap:24px; align-items:flex-start; }
+    .number { font:600 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color:var(--accent); }
+    h2 { margin:8px 0 7px; font-size:25px; letter-spacing:-.03em; }
+    .thesis { margin:0; max-width:460px; color:var(--muted); font-size:14px; line-height:1.5; }
+    .tag { flex:none; border:1px solid var(--line); border-radius:999px; padding:7px 10px; font-size:11px; color:var(--muted); }
+    .hero-pair { display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .logo-field { min-height:190px; display:flex; align-items:center; justify-content:center; padding:24px; }
+    .logo-field + .logo-field { border-left:1px solid var(--line); }
+    .logo-field.dark { background:#11110f; }
+    .lockup { display:block; width:100%; max-width:430px; }
+    .dark .lockup { filter:invert(1); }
+    .tests { padding:23px 26px 25px; }
+    .test-label { margin:0 0 12px; color:var(--muted); font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
+    .test-row { display:grid; grid-template-columns:118px 1fr; gap:20px; align-items:center; }
+    .sizes { height:72px; display:flex; align-items:center; gap:13px; }
+    .size { display:grid; place-items:center; color:var(--ink); }
+    .size svg { width:100%; height:100%; overflow:visible; }
+    .s16 { width:16px; height:16px; }.s24 { width:24px; height:24px; }.s32 { width:32px; height:32px; }
+    .nav { min-width:0; height:56px; display:flex; align-items:center; gap:10px; padding:0 15px; border:1px solid var(--line); border-radius:10px; background:#f7f5ef; }
+    .nav .brand { width:98px; height:auto; display:block; }
+    .nav-lines { margin-left:auto; display:flex; gap:8px; }
+    .nav-lines i { width:34px; height:5px; border-radius:5px; background:#d7d3c9; }
+    .notes { display:grid; grid-template-columns:1fr 1fr; gap:18px; padding:0 26px 28px; }
+    dl { margin:0; }
+    dt { margin:0 0 4px; color:var(--muted); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+    dd { margin:0 0 13px; font-size:13px; line-height:1.45; }
+    footer { margin-top:32px; padding-top:22px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:30px; color:var(--muted); font-size:13px; line-height:1.5; }
+    footer strong { color:var(--ink); }
+    @media (max-width:920px) { .page{padding:36px 20px 60px} header{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.hero-pair{grid-template-columns:1fr}.logo-field+.logo-field{border-left:0;border-top:1px solid var(--line)} }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <p class="eyebrow">Ordalin · Logo exploration · Round 01</p>
+        <h1>Ordered discovery,<br>without the noise.</h1>
+      </div>
+      <p class="intro">Four deliberately different monochrome systems for a trustworthy, perceptive AI tools directory. Every direction is tested as a full lockup, reversed mark, compact symbol, and quiet website navigation identity.</p>
+    </header>
+
+    <section class="grid">
+      <article>
+        <div class="card-head"><div><span class="number">01</span><h2>Editorial Cut</h2><p class="thesis">A name-led identity whose custom O is edited open—selective, assured, and deliberately unlike a closed app badge.</p></div><span class="tag">Wordmark first</span></div>
+        <div class="hero-pair"><div class="logo-field"><img class="lockup" src="direction-01-editorial-cut.svg" alt="Editorial Cut primary logo"></div><div class="logo-field dark"><img class="lockup" src="direction-01-editorial-cut.svg" alt="Editorial Cut reversed logo"></div></div>
+        <div class="tests"><p class="test-label">Small-size symbol + navigation context</p><div class="test-row"><div class="sizes">
+          <span class="size s16"><svg viewBox="0 0 220 220"><path fill="currentColor" fill-rule="evenodd" d="M111 32C68 32 39 61 39 110s29 78 72 78c42 0 71-29 71-78 0-15-3-28-9-39l-29 18c3 6 4 13 4 21 0 29-14 48-37 48-24 0-38-19-38-48s14-48 38-48c10 0 19 4 25 11l27-18c-13-15-30-23-52-23Zm0 36c-21 0-33 16-33 42s12 42 33 42c20 0 32-16 32-42s-12-42-32-42Z"/></svg></span>
+          <span class="size s24"><svg viewBox="0 0 220 220"><path fill="currentColor" fill-rule="evenodd" d="M111 32C68 32 39 61 39 110s29 78 72 78c42 0 71-29 71-78 0-15-3-28-9-39l-29 18c3 6 4 13 4 21 0 29-14 48-37 48-24 0-38-19-38-48s14-48 38-48c10 0 19 4 25 11l27-18c-13-15-30-23-52-23Zm0 36c-21 0-33 16-33 42s12 42 33 42c20 0 32-16 32-42s-12-42-32-42Z"/></svg></span>
+          <span class="size s32"><svg viewBox="0 0 220 220"><path fill="currentColor" fill-rule="evenodd" d="M111 32C68 32 39 61 39 110s29 78 72 78c42 0 71-29 71-78 0-15-3-28-9-39l-29 18c3 6 4 13 4 21 0 29-14 48-37 48-24 0-38-19-38-48s14-48 38-48c10 0 19 4 25 11l27-18c-13-15-30-23-52-23Zm0 36c-21 0-33 16-33 42s12 42 33 42c20 0 32-16 32-42s-12-42-32-42Z"/></svg></span>
+        </div><div class="nav"><img class="brand" src="direction-01-editorial-cut.svg" alt=""><span class="nav-lines"><i></i><i></i><i></i></span></div></div></div>
+        <div class="notes"><dl><dt>Semantic source</dt><dd>Editorial judgment: discovering by removing noise.</dd><dt>Signature move</dt><dd>An angled cut opens the O without using a container.</dd></dl><dl><dt>Advantage</dt><dd>Most distinctive, premium, and name-ownable.</dd><dt>Risk</dt><dd>Serif tone may feel less overtly technical.</dd></dl></div>
+      </article>
+
+      <article>
+        <div class="card-head"><div><span class="number">02</span><h2>Open Register</h2><p class="thesis">Two offset registers create a diagonal route: structured enough for inventory, open enough for discovery.</p></div><span class="tag">Symbol + wordmark</span></div>
+        <div class="hero-pair"><div class="logo-field"><img class="lockup" src="direction-02-open-register.svg" alt="Open Register primary logo"></div><div class="logo-field dark"><img class="lockup" src="direction-02-open-register.svg" alt="Open Register reversed logo"></div></div>
+        <div class="tests"><p class="test-label">Small-size symbol + navigation context</p><div class="test-row"><div class="sizes">
+          <span class="size s16"><svg viewBox="0 0 220 220"><path fill="currentColor" d="M38 38h96l-28 32H70v112H38V38Zm144 0v144H86l28-32h36V38h32Z"/></svg></span>
+          <span class="size s24"><svg viewBox="0 0 220 220"><path fill="currentColor" d="M38 38h96l-28 32H70v112H38V38Zm144 0v144H86l28-32h36V38h32Z"/></svg></span>
+          <span class="size s32"><svg viewBox="0 0 220 220"><path fill="currentColor" d="M38 38h96l-28 32H70v112H38V38Zm144 0v144H86l28-32h36V38h32Z"/></svg></span>
+        </div><div class="nav"><img class="brand" src="direction-02-open-register.svg" alt=""><span class="nav-lines"><i></i><i></i><i></i></span></div></div></div>
+        <div class="notes"><dl><dt>Semantic source</dt><dd>Inventory architecture made navigable.</dd><dt>Signature move</dt><dd>Two offset open frames share a diagonal passage.</dd></dl><dl><dt>Advantage</dt><dd>Strong favicon and systematic UI presence.</dd><dt>Risk</dt><dd>Most geometric; could read as enterprise infrastructure.</dd></dl></div>
+      </article>
+
+      <article>
+        <div class="card-head"><div><span class="number">03</span><h2>Clear Passage</h2><p class="thesis">Two calm fields reveal a winding path through the middle—the user promise of moving from abundance to clarity.</p></div><span class="tag">Negative space</span></div>
+        <div class="hero-pair"><div class="logo-field"><img class="lockup" src="direction-03-clear-passage.svg" alt="Clear Passage primary logo"></div><div class="logo-field dark"><img class="lockup" src="direction-03-clear-passage.svg" alt="Clear Passage reversed logo"></div></div>
+        <div class="tests"><p class="test-label">Small-size symbol + navigation context</p><div class="test-row"><div class="sizes">
+          <span class="size s16"><svg viewBox="0 0 220 220"><path fill="currentColor" d="M38 38h77c-22 24-27 49-12 73 14 23 10 48-11 71H38V38Zm144 0v144h-77c22-24 27-49 12-73-14-23-10-48 11-71h54Z"/></svg></span>
+          <span class="size s24"><svg viewBox="0 0 220 220"><path fill="currentColor" d="M38 38h77c-22 24-27 49-12 73 14 23 10 48-11 71H38V38Zm144 0v144h-77c22-24 27-49 12-73-14-23-10-48 11-71h54Z"/></svg></span>
+          <span class="size s32"><svg viewBox="0 0 220 220"><path fill="currentColor" d="M38 38h77c-22 24-27 49-12 73 14 23 10 48-11 71H38V38Zm144 0v144h-77c22-24 27-49 12-73-14-23-10-48 11-71h54Z"/></svg></span>
+        </div><div class="nav"><img class="brand" src="direction-03-clear-passage.svg" alt=""><span class="nav-lines"><i></i><i></i><i></i></span></div></div></div>
+        <div class="notes"><dl><dt>Semantic source</dt><dd>Clarity emerging between competing options.</dd><dt>Signature move</dt><dd>A soft, asymmetric corridor cut through two fields.</dd></dl><dl><dt>Advantage</dt><dd>Human, memorable, and visually perceptive.</dd><dt>Risk</dt><dd>Needs careful refinement to avoid an optical-illusion feel.</dd></dl></div>
+      </article>
+
+      <article>
+        <div class="card-head"><div><span class="number">04</span><h2>Ordinal Thread</h2><p class="thesis">One line moves through an open o and rises into a d-like stem: sequence made continuous, without arrows or nodes.</p></div><span class="tag">Monogram + wordmark</span></div>
+        <div class="hero-pair"><div class="logo-field"><img class="lockup" src="direction-04-ordinal-thread.svg" alt="Ordinal Thread primary logo"></div><div class="logo-field dark"><img class="lockup" src="direction-04-ordinal-thread.svg" alt="Ordinal Thread reversed logo"></div></div>
+        <div class="tests"><p class="test-label">Small-size symbol + navigation context</p><div class="test-row"><div class="sizes">
+          <span class="size s16"><svg viewBox="0 0 220 220" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"><path d="M93 71c-13-20-45-20-58 1-12 20-3 50 21 56 22 6 43-11 43-35 0-25-19-43-43-43 17 0 34 0 51 0h37V28v100c0 18 9 28 26 28"/></svg></span>
+          <span class="size s24"><svg viewBox="0 0 220 220" fill="none" stroke="currentColor" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"><path d="M93 71c-13-20-45-20-58 1-12 20-3 50 21 56 22 6 43-11 43-35 0-25-19-43-43-43 17 0 34 0 51 0h37V28v100c0 18 9 28 26 28"/></svg></span>
+          <span class="size s32"><svg viewBox="0 0 220 220" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M93 71c-13-20-45-20-58 1-12 20-3 50 21 56 22 6 43-11 43-35 0-25-19-43-43-43 17 0 34 0 51 0h37V28v100c0 18 9 28 26 28"/></svg></span>
+        </div><div class="nav"><img class="brand" src="direction-04-ordinal-thread.svg" alt=""><span class="nav-lines"><i></i><i></i><i></i></span></div></div></div>
+        <div class="notes"><dl><dt>Semantic source</dt><dd>The name's “ordinal” echo and continuous discovery.</dd><dt>Signature move</dt><dd>A single stroke links an open loop, crossbar, and ascent.</dd></dl><dl><dt>Advantage</dt><dd>Warmest, lightest, and most motion-ready.</dd><dt>Risk</dt><dd>The symbol needs optical cleanup at 16 px.</dd></dl></div>
+      </article>
+    </section>
+
+    <footer><span><strong>Decision prompt:</strong> choose one direction, or at most two finalists to refine.</span><span>Exploratory typography remains live text; production SVGs will be custom-spaced and outlined after selection.</span></footer>
+  </main>
+</body>
+</html>

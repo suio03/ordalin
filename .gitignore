@@ -1,0 +1,43 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js and OpenNext output
+.next/
+.open-next/
+out/
+
+# Cloudflare local state
+.wrangler/
+.ordalin-imports/
+
+# test output
+coverage/
+
+# local environment files
+.env*
+.dev.vars*
+!.env.example
+!.dev.vars.example
+
+# local tooling
+*.tsbuildinfo
+.DS_Store
+
+# Private deployment configuration
+wrangler.production.jsonc
+
+# Credentials, database snapshots and operational exports
+*.pem
+*.key
+*.p12
+*.pfx
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.log
+backups/
+exports/

@@ -1,0 +1,6 @@
+packages:
+  - "workers/*"
+
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver

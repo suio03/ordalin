@@ -1,0 +1,5 @@
+{
+  "name": "ordalin-catalog-capture",
+  "compatibility_date": "2026-09-23",
+  "browser": { "binding": "BROWSER", "remote": true }
+}

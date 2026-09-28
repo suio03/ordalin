@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Ordalin social avatar</title>
+  <desc id="desc">White Ordalin Editorial Cut symbol on charcoal.</desc>
+  <rect width="512" height="512" rx="96" fill="#111111"/>
+  <path fill="#FFFFFF" fill-rule="evenodd" d="M111 32C68 32 39 61 39 110s29 78 72 78c42 0 71-29 71-78 0-15-3-28-9-39l-29 18c3 6 4 13 4 21 0 29-14 48-37 48-24 0-38-19-38-48s14-48 38-48c10 0 19 4 25 11l27-18c-13-15-30-23-52-23Zm0 36c-21 0-33 16-33 42s12 42 33 42c20 0 32-16 32-42s-12-42-32-42Z" transform="translate(-1) scale(2.35)"/>
+</svg>

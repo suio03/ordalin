@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ordalin — Quiet Radar Round 02</title>
+  <style>
+    :root { --page:#e8ece9; --ink:#14201d; --muted:#65716d; --line:rgba(20,32,29,.15); --accent:#147754; --paper:#f8faf8; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:radial-gradient(circle at 8% 0%,#fff,transparent 30rem),var(--page); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; -webkit-font-smoothing:antialiased; }
+    a { color:inherit; }
+    a:focus-visible { outline:3px solid #1f60d3; outline-offset:4px; }
+    .wrap { width:min(1540px,calc(100% - 40px)); margin-inline:auto; }
+    .eyebrow { margin:0; color:var(--muted); font:650 10px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.15em; text-transform:uppercase; }
+    .masthead { min-height:66vh; display:grid; grid-template-rows:auto 1fr auto; padding:24px 0 38px; border-bottom:1px solid var(--line); }
+    .topline { display:flex; justify-content:space-between; gap:20px; }
+    .hero { align-self:center; display:grid; grid-template-columns:1.2fr .8fr; gap:90px; padding:72px 0; }
+    h1 { margin:0; font-size:clamp(58px,7.5vw,126px); font-weight:520; letter-spacing:-.07em; line-height:.84; }
+    .intro { align-self:end; margin:0; color:var(--muted); font-size:20px; line-height:1.5; }
+    .meta { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .meta div { padding-top:13px; border-top:1px solid var(--line); }
+    .meta strong { display:block; margin-top:7px; font-size:13px; }
+    section { padding:80px 0; border-bottom:1px solid var(--line); }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:40px; margin-bottom:34px; }
+    .section-head h2 { margin:6px 0 0; font-size:clamp(34px,4vw,60px); font-weight:540; letter-spacing:-.05em; }
+    .section-head p:last-child { max-width:500px; margin:0; color:var(--muted); line-height:1.55; }
+    .frames { display:grid; grid-template-columns:minmax(0,1fr) 430px; gap:28px; align-items:start; }
+    .frame-card { min-width:0; padding:12px; border:1px solid rgba(255,255,255,.8); border-radius:28px; background:rgba(255,255,255,.65); box-shadow:0 22px 68px rgba(42,68,61,.1); }
+    .frame-label { height:44px; display:flex; align-items:center; justify-content:space-between; gap:18px; padding:0 8px; color:var(--muted); font-size:11px; }
+    .frame-label a { color:var(--ink); text-underline-offset:3px; }
+    .desktop-viewport { position:relative; width:100%; aspect-ratio:16/10; overflow:hidden; border-radius:18px; background:#edf3f1; }
+    .desktop-viewport iframe { position:absolute; inset:0; width:1440px; height:900px; border:0; transform-origin:top left; }
+    .mobile-viewport { width:406px; height:860px; margin:auto; overflow:hidden; border:8px solid #17211e; border-radius:40px; background:#edf3f1; box-shadow:0 18px 42px rgba(20,32,29,.16); }
+    .mobile-viewport iframe { width:390px; height:844px; border:0; }
+    .principles { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--line); border-radius:22px; overflow:hidden; background:rgba(255,255,255,.45); }
+    .principles article { min-height:210px; padding:23px; border-right:1px solid var(--line); }
+    .principles article:last-child { border-right:0; }
+    .index { color:var(--accent); font:600 13px ui-monospace,monospace; }
+    .principles h3 { margin:42px 0 9px; font-size:18px; }
+    .principles p { margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+    .states { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+    .state { min-height:170px; padding:19px; border:1px solid rgba(255,255,255,.82); border-radius:18px; background:rgba(255,255,255,.55); }
+    .state strong { display:block; margin:30px 0 8px; font-size:15px; }
+    .state p { margin:0; color:var(--muted); font-size:12px; line-height:1.45; }
+    .decision { display:grid; grid-template-columns:1.1fr .9fr; gap:70px; align-items:end; }
+    .decision h2 { margin:0; font-size:clamp(48px,6vw,92px); font-weight:520; line-height:.94; letter-spacing:-.06em; }
+    .decision p { margin:0; color:var(--muted); font-size:18px; line-height:1.55; }
+    .decision a { color:var(--ink); text-underline-offset:4px; }
+    footer { display:flex; justify-content:space-between; gap:24px; padding:30px 0 54px; color:var(--muted); font-size:11px; }
+    @media(max-width:1120px){.frames{grid-template-columns:1fr}.mobile-viewport{margin:0 auto}.principles{grid-template-columns:1fr 1fr}.principles article:nth-child(2){border-right:0}.principles article:nth-child(-n+2){border-bottom:1px solid var(--line)}.states{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:680px){.wrap{width:calc(100% - 24px)}.hero,.decision{grid-template-columns:1fr;gap:35px}.meta{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}.principles,.states{grid-template-columns:1fr}.principles article{border-right:0;border-bottom:1px solid var(--line)}.frames{gap:18px}section{padding:60px 0}}
+    @media(max-width:450px){.mobile-viewport{margin-left:0;transform:scale(.88);transform-origin:top left}.frame-card:has(.mobile-viewport){height:815px;overflow:hidden}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+  <header class="masthead wrap">
+    <div class="topline"><p class="eyebrow">Ordalin · Selected direction refinement</p><p class="eyebrow">23 Aug 2026 / Round 02</p></div>
+    <div class="hero"><h1>Quiet<br>Radar</h1><p class="intro">The approved direction, tightened into a calm, high-contrast discovery system. One responsive homepage now demonstrates both the 1440px product entry and its 390px transformation.</p></div>
+    <div class="meta"><div><span class="eyebrow">Preserved</span><strong>Search-first orientation and mineral atmosphere</strong></div><div><span class="eyebrow">Improved</span><strong>Contrast, density, state clarity, mobile order</strong></div><div><span class="eyebrow">Scope</span><strong>Light-theme homepage only</strong></div></div>
+  </header>
+
+  <main>
+    <section>
+      <div class="wrap">
+        <div class="section-head"><div><p class="eyebrow">01 / Responsive proof</p><h2>One system, two viewports</h2></div><p>Both frames load the same responsive prototype. Use search, Today/New, category, pricing, Reset, and keyboard focus inside either frame.</p></div>
+        <div class="frames">
+          <article class="frame-card"><div class="frame-label"><span>Desktop · 1440 × 900 first viewport</span><a href="quiet-radar.html">Open full page ↗</a></div><div class="desktop-viewport"><iframe src="quiet-radar.html" title="Quiet Radar desktop homepage"></iframe></div></article>
+          <article class="frame-card"><div class="frame-label"><span>Compact · 390 × 844</span><a href="quiet-radar.html">Open responsive page ↗</a></div><div class="mobile-viewport"><iframe src="quiet-radar.html" title="Quiet Radar mobile homepage"></iframe></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head"><div><p class="eyebrow">02 / Refinement</p><h2>What became more precise</h2></div><p>The atmosphere remains quiet, but usability no longer depends on low contrast or decorative transparency.</p></div>
+        <div class="principles">
+          <article><span class="index">01</span><h3>Search without a gate</h3><p>The search field anchors the page while twelve real example tools remain browseable without a query.</p></article>
+          <article><span class="index">02</span><h3>Visible truth signals</h3><p>Category, pricing, and check date stay subordinate but readable; invented ratings and engagement are absent.</p></article>
+          <article><span class="index">03</span><h3>Solid quiet layers</h3><p>Depth comes from color, border, and spacing. The interface does not rely on blur or continuous repainting.</p></article>
+          <article><span class="index">04</span><h3>Mobile reordering</h3><p>Collections follow the feed, then Editor Picks and methodology—matching the approved MVP mobile hierarchy.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head"><div><p class="eyebrow">03 / Primary interaction</p><h2>Search and narrow</h2></div><p>The primary interaction has five explicit states. Feedback begins immediately; no network or animation is required to understand the result.</p></div>
+        <div class="states">
+          <article class="state"><span class="index">01</span><strong>Ready</strong><p>All twelve examples visible; Today selected; result count announced.</p></article>
+          <article class="state"><span class="index">02</span><strong>Focused</strong><p>Strong blue focus ring; `/` moves keyboard focus directly to search.</p></article>
+          <article class="state"><span class="index">03</span><strong>Narrowed</strong><p>Typing, category, and pricing update rows and result count immediately.</p></article>
+          <article class="state"><span class="index">04</span><strong>Empty</strong><p>Explicit “No tools found” message suggests changing term or filter.</p></article>
+          <article class="state"><span class="index">05</span><strong>Reset</strong><p>Reset restores All and returns focus to search; Escape clears a focused query.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap decision"><h2>Quiet Radar is the approved main theme.</h2><p>The durable implementation foundation now lives in <a href="../../docs/design-system.md">design-system.md</a>, <a href="../../docs/tokens.json">tokens.json</a>, and <a href="../../docs/design-tokens.css">design-tokens.css</a>. This page remains the visual reference for the final decision.</p></div>
+    </section>
+  </main>
+
+  <footer class="wrap"><span>Ordalin · Quiet Radar approved reference</span><span>Approved 23 Aug 2026</span></footer>
+  <script>
+    const desktopFrame = document.querySelector('.desktop-viewport');
+    const desktopIframe = desktopFrame.querySelector('iframe');
+    function sizeDesktopFrame() { const scale = desktopFrame.clientWidth / 1440; desktopIframe.style.transform = `scale(${scale})`; }
+    sizeDesktopFrame(); window.addEventListener('resize', sizeDesktopFrame);
+  </script>
+</body>
+</html>
