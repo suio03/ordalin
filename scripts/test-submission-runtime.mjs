@@ -38,7 +38,7 @@ try {
   const db = await mf.getD1Database('DB');
   for (const file of (await readdir(resolve(root, 'migrations'))).filter(name => name.endsWith('.sql')).sort()) {
     const sql = await readFile(resolve(root, 'migrations', file), 'utf8');
-    for (const statement of sql.split('--> statement-breakpoint').filter(value => value.trim())) await db.exec(statement.replace(/\n/g, ' '));
+    for (const statement of sql.split('--> statement-breakpoint').filter(value => value.trim())) await db.exec(statement.split('\n').filter(line => !line.trimStart().startsWith('--')).join(' '));
   }
   await db.prepare("INSERT INTO categories (id, slug, name, description, sort_order, is_active) VALUES ('test-category', 'runtime-group', 'Productivity', '', 1, 1)").run();
   await db.prepare("INSERT INTO tags (id, slug, name, kind, category_group_id, description, is_active) VALUES ('test-tag', 'runtime-meeting', 'Meeting notes', 'category', 'test-category', '', 1)").run();
