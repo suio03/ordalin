@@ -30,18 +30,24 @@ export async function renderedFetchClient() {
   });
   let rendered = 0;
 
-  async function render(url: string) {
-    const response = await proxy.env.BROWSER.quickAction("content", {
+  async function render(url: string, maxBytes = MAX_RENDERED_BYTES) {
+    const request = (waitUntil: "networkidle2" | "load") => proxy.env.BROWSER.quickAction("content", {
       url,
-      gotoOptions: { waitUntil: "networkidle2", timeout: 20_000 },
+      gotoOptions: { waitUntil, timeout: 20_000 },
       waitForTimeout: 1_500,
       rejectResourceTypes: ["image", "media", "font"],
     });
+    let response = await request("networkidle2");
+    // Sites with endless analytics traffic never go network-idle; retry once on the load event.
+    if (!response.ok) {
+      await response.body?.cancel();
+      response = await request("load");
+    }
     const body = await response.json().catch(() => null) as { success?: boolean; result?: unknown } | null;
     if (!response.ok || !body?.success || typeof body.result !== "string") {
       throw new Error(`Cloudflare rendering returned HTTP ${response.status} for ${url}`);
     }
-    if (new TextEncoder().encode(body.result).byteLength > MAX_RENDERED_BYTES) throw new Error(`Rendered page exceeds ${MAX_RENDERED_BYTES} bytes`);
+    if (new TextEncoder().encode(body.result).byteLength > maxBytes) throw new Error(`Rendered page exceeds ${maxBytes} bytes`);
     rendered += 1;
     return body.result;
   }
@@ -56,5 +62,5 @@ export async function renderedFetchClient() {
     return new Response(body, { status: 200, headers: { "content-type": "text/html; charset=utf-8" } });
   };
 
-  return { fetcher, renderedPages: () => rendered, close: () => proxy.dispose() };
+  return { fetcher, render, renderedPages: () => rendered, close: () => proxy.dispose() };
 }
