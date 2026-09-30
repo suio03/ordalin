@@ -12,7 +12,6 @@
 - Follow `docs/design-system.md` for the approved **Quiet Radar** product design language.
 - Use `docs/tokens.json` as the platform-neutral token source and `docs/design-tokens.css` as the web adapter.
 - Follow `brand/BRAND_GUIDELINES.md` for the approved **Editorial Cut** logo; do not redraw or retype it.
-- Treat `design-exploration/` and `logo-exploration/` as decision history. Rejected directions are not implementation options.
 
 ## Implementation boundaries
 

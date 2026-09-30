@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" role="img" aria-labelledby="title desc">
-  <title id="title">Ordalin — Open Register</title>
-  <desc id="desc">Two offset editorial registers create an open diagonal route.</desc>
-  <g fill="#111111">
-    <path d="M38 38h96l-28 32H70v112H38V38Z"/>
-    <path d="M182 38v144H86l28-32h36V38h32Z"/>
-    <text x="218" y="149" font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="76" font-weight="600" letter-spacing="-3">Ordalin</text>
-  </g>
-</svg>

@@ -6,7 +6,7 @@ Logo system: **Editorial Cut**
 Platform: desktop-first responsive web product
 Appearance: System, Light, and Dark; System is the default
 
-This document is the durable visual and interaction specification for Ordalin. If an exploration artifact conflicts with this document, follow this document and the semantic token files beside it.
+This document is the durable visual and interaction specification for Ordalin. If an implementation conflicts with this document, follow this document and the semantic token files beside it.
 
 ## 1. Product expression
 
@@ -38,8 +38,7 @@ The defining idea is **quiet orientation**: users should understand where they a
 | --- | --- |
 | Platform-neutral token source | `tokens.json` |
 | Web CSS adapter | `design-tokens.css` |
-| Approved responsive homepage | `../design-exploration/round-02/quiet-radar.html` |
-| Desktop/mobile review board | `../design-exploration/round-02/review.html` |
+| Homepage component contract | `homepage-component-contract.md` |
 | Logo rules and assets | `../brand/BRAND_GUIDELINES.md` |
 | Product scope and homepage contract | `../MVP_PLAN.md` |
 
@@ -338,4 +337,4 @@ Use the standard easing `cubic-bezier(.2,.7,.2,1)`. Motion communicates state or
 
 ## 14. Reference attribution
 
-The design research is documented in `../design-exploration/research.md`. Quiet Radar combines principles observed in Cosmos (search and provenance), Are.na (intentional discovery), and Linear (disciplined state hierarchy) without copying their signature layouts, icons, imagery, or brand systems. Direct-peer and interaction research included Futurepedia, Toolify, Product Hunt, AlternativeTo, G2, Raindrop.io, and Monocle.
+Quiet Radar combines principles observed in Cosmos (search and provenance), Are.na (intentional discovery), and Linear (disciplined state hierarchy) without copying their signature layouts, icons, imagery, or brand systems. Direct-peer and interaction research included Futurepedia, Toolify, Product Hunt, AlternativeTo, G2, Raindrop.io, and Monocle.

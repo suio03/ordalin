@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" role="img" aria-labelledby="title desc">
-  <title id="title">Ordalin — Editorial Cut finalist</title>
-  <desc id="desc">A refined open O with a precise editorial insert and serif wordmark.</desc>
-  <g fill="none" stroke="#111111" stroke-linecap="square" stroke-linejoin="round">
-    <path d="M148 59C132 38 99 32 72 45 41 60 28 95 37 130 47 168 81 190 116 183 151 176 174 144 168 108" stroke-width="28"/>
-  </g>
-  <path fill="#111111" d="m133 73 34-22 12 19-34 22-12-19Z"/>
-  <text x="204" y="157" fill="#111111" font-family="Georgia, 'Times New Roman', serif" font-size="92" letter-spacing="-3.6">rdalin</text>
-</svg>

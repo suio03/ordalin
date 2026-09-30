@@ -41,7 +41,6 @@ invent engagement data.
 - Appearance modes: **System**, **Light**, and **Dark**. System is the default;
   explicit choices persist locally and apply before first paint.
 - Design source of truth: `docs/design-system.md`, with semantic values in `docs/tokens.json` and `docs/design-tokens.css`.
-- Responsive homepage reference: `design-exploration/round-02/quiet-radar.html`.
 
 Exploration artifacts document how the decision was reached but are not alternative implementation specifications.
 

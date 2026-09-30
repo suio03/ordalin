@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" role="img" aria-labelledby="title desc">
-  <title id="title">Ordalin — Ordinal Thread</title>
-  <desc id="desc">A continuous monoline joins an open o to a rising d-like stem.</desc>
-  <g fill="none" stroke="#111111" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M93 71c-13-20-45-20-58 1-12 20-3 50 21 56 22 6 43-11 43-35 0-25-19-43-43-43 17 0 34 0 51 0h37V28v100c0 18 9 28 26 28"/>
-  </g>
-  <text x="218" y="149" fill="#111111" font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="76" font-weight="450" letter-spacing="-2">Ordalin</text>
-</svg>

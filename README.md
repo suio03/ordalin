@@ -55,12 +55,10 @@ measurement milestone.
 | MVP scope, routes, data, ranking, and operations | `MVP_PLAN.md` |
 | Submission, outbound-link, logo, and website-preview behavior | `docs/catalog-enrichment.md` |
 | Guide authoring and future time-archive behavior | `docs/guides.md` |
-| Phase B.5 task coverage and validation cohort | `docs/task-coverage-map.md` |
 | Product design language and component rules | `docs/design-system.md` |
 | Platform-neutral semantic design tokens | `docs/tokens.json` |
 | Web token adapter | `docs/design-tokens.css` |
 | Logo construction and usage | `brand/BRAND_GUIDELINES.md` |
-| Final responsive homepage reference | `design-exploration/round-02/quiet-radar.html` |
 
 Exploration folders preserve decision evidence. They are not alternative active specifications: use the approved files above when implementing the product.
 
