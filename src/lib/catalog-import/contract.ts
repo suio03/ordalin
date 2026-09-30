@@ -3,9 +3,11 @@ import type { CatalogAnalysis, CatalogTaxonomy } from "../catalog-analysis/contr
 import type { CatalogEnrichmentCandidate } from "../catalog-enrichment/contract";
 
 export type DirectoryProvider = Extract<SourceProvider, "product_hunt" | "toolify">;
+/** Directory discovery, or an operator-supplied official URL (`manual`). */
+export type ImportProvider = DirectoryProvider | Extract<SourceProvider, "manual">;
 
 export type DiscoveredCatalogUrl = {
-  provider: DirectoryProvider;
+  provider: ImportProvider;
   externalId: string;
   discoveryUrl: string;
   websiteUrl: string;
@@ -15,6 +17,8 @@ export type CatalogImportBundle = DiscoveredCatalogUrl & {
   preparedAt: string;
   candidate: CatalogEnrichmentCandidate;
   analysis: CatalogAnalysis | null;
+  /** Crawl failures the operator checked in a browser: added as evidence, or recorded as holding no official content. */
+  browserEvidence?: Array<{ requestedUrl: string; url: string; resolvedWarning: string; unavailableReason: string | null; capturedAt: string }>;
 };
 
 export type CatalogImportManifest = {

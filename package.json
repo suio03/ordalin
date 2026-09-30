@@ -24,6 +24,8 @@
     "catalog:logos": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/backfill-tool-logos.ts",
     "catalog:screenshots": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/backfill-tool-screenshots.ts",
     "imports:discover": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/discover-catalog-imports.ts",
+    "imports:browser-evidence": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/add-browser-evidence.ts",
+    "imports:prepare": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/prepare-manual-imports.ts",
     "imports:apply": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/apply-catalog-import.ts",
     "imports:screenshots": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/capture-import-screenshots.ts",
     "test:submissions:runtime": "node scripts/test-submission-runtime.mjs",

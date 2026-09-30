@@ -15,13 +15,19 @@ export async function serverScreenshotClient() {
     close: () => proxy.dispose(),
     async capture(websiteUrl: string) {
       const website = await assertPublicDns(websiteUrl);
-      const response = await proxy.env.BROWSER.quickAction("screenshot", {
+      const shoot = (waitUntil: "networkidle2" | "load") => proxy.env.BROWSER.quickAction("screenshot", {
         url: website.href,
         viewport: { width: 1440, height: 900, deviceScaleFactor: 1 },
-        gotoOptions: { waitUntil: "networkidle2", timeout: 20_000 },
+        gotoOptions: { waitUntil, timeout: 20_000 },
         waitForTimeout: 1_500,
         screenshotOptions: { type: "png", fullPage: false, captureBeyondViewport: false },
       });
+      let response = await shoot("networkidle2");
+      // Sites with endless analytics traffic never go network-idle; retry once on the load event.
+      if (response.status === 422) {
+        await response.body?.cancel();
+        response = await shoot("load");
+      }
       if (!response.ok) {
         await response.body?.cancel();
         throw new Error(`Cloudflare screenshot returned HTTP ${response.status}. Check Browser binding access for the logged-in Wrangler account.`);

@@ -38,6 +38,8 @@ const ROLE_MATCHERS: Array<[EnrichmentEvidencePage["role"], RegExp]> = [
   ["privacy", /\bprivacy\b/i],
 ];
 
+const NON_HTML_PATH = /\.(?:pdf|zip|docx?|xlsx?|pptx?|csv|png|jpe?g|gif|svg|webp|mp[34]|mov)$/i;
+
 async function fetchText(
   initialUrl: URL,
   fetcher: typeof fetch,
@@ -275,13 +277,14 @@ export async function enrichCatalogSite(input: string, options: EnrichmentOption
             url.hash = "";
             return { url, role: link.role };
           })
-          .filter((link) => withinSite(link.url));
+          // Evidence must be HTML over HTTPS; skip documents and media before fetching.
+          .filter((link) => link.url.protocol === "https:" && !NON_HTML_PATH.test(link.url.pathname) && withinSite(link.url));
         for (const discovery of discoveries) {
           if (!seen.has(discovery.url.href) && !queue.some((item) => item.url.href === discovery.url.href) && queue.length < 120) queue.push(discovery);
         }
       }
     } catch (error) {
-      warnings.push(`${queued.role}: ${error instanceof Error ? error.message : "fetch failed"}`);
+      warnings.push(`${queued.role}: ${queued.url.href}: ${error instanceof Error ? error.message : "fetch failed"}`);
     }
   }
 

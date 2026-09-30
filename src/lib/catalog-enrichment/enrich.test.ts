@@ -60,3 +60,15 @@ it("researches pricing before feature navigation and follows linked help article
   expect(requested).toContain("https://docs.example.com/robots.txt");
   expect(requested.some(url => url.includes("outsider.example"))).toBe(false);
 });
+
+it("skips document and plain-HTTP links instead of recording crawl warnings", async () => {
+  const requested: string[] = [];
+  const fetcher = async (input: string | URL | Request) => {
+    const url = String(input); requested.push(url);
+    if (url.endsWith("/robots.txt")) return new Response("User-agent: *\nDisallow:");
+    return new Response('<h1>Example</h1><a href="/security-report.pdf">Security</a><a href="http://example.com/privacy">Privacy</a>', { headers: { "content-type": "text/html" } });
+  };
+  const result = await enrichCatalogSite("https://example.com/", { research: true, fetcher: fetcher as typeof fetch });
+  expect(result.warnings).toEqual([]);
+  expect(requested.some(url => url.endsWith(".pdf") || url.startsWith("http:"))).toBe(false);
+});

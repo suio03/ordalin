@@ -9,7 +9,7 @@ type Category = { slug: string; name: string };
 type Tag = { slug: string; name: string; kind: TagKind; groupSlug: string | null };
 type ImportItem = {
   id: string;
-  provider: "product_hunt" | "toolify";
+  provider: "product_hunt" | "toolify" | "manual";
   discoveryUrl: string;
   websiteUrl: string;
   canonicalDomain: string;

@@ -10,6 +10,7 @@ import sharp from "sharp";
 import { enrichCatalogSite } from "../src/lib/catalog-enrichment/index.ts";
 import { assertPublicHttpsUrl } from "../src/lib/catalog-enrichment/url-policy.ts";
 import { publicFetch } from "./lib/public-fetch.ts";
+import { logoScore, measureVisibleLogo } from "./lib/logo-choice.ts";
 
 const execute = promisify(execFile);
 const projectRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -153,8 +154,11 @@ async function fetchLogo(input: string) {
 }
 
 async function webpLogo(input: Uint8Array) {
-  return sharp(input, { density: 256, limitInputPixels: 25_000_000, animated: false })
-    .rotate()
+  const source = sharp(input, { density: 256, limitInputPixels: 25_000_000, animated: false }).rotate();
+  // Drop transparent padding so the mark fills the tile; opaque tiles keep their background.
+  const { hasAlpha } = await source.metadata();
+  const trimmed = hasAlpha ? sharp(await source.trim({ threshold: 0 }).toBuffer()) : source;
+  return trimmed
     .resize(448, 448, {
       fit: "contain",
       background: { r: 0, g: 0, b: 0, alpha: 0 },
@@ -236,16 +240,25 @@ try {
       }
     }
     if (stored) continue;
+    // Compare every usable candidate so a square icon wins over a wide wordmark.
+    let best: { bytes: Uint8Array; sourceUrl: string; score: number } | null = null;
     for (const candidate of await candidates(tool)) {
       try {
         const fetched = await fetchLogo(candidate);
-        const converted = await webpLogo(fetched.bytes);
-        const key = await storeLogo(tool, converted, fetched.sourceUrl, directory);
-        console.log(`  ${dryRun ? "would use" : "stored"} ${fetched.sourceUrl} -> ${key}`);
-        stored = true;
-        break;
+        const score = logoScore(await measureVisibleLogo(fetched.bytes));
+        if (!best || score > best.score) best = { ...fetched, score };
       } catch (error) {
         console.warn(`  skipped ${candidate}: ${error instanceof Error ? error.message : "unknown error"}`);
+      }
+    }
+    if (best) {
+      try {
+        const converted = await webpLogo(best.bytes);
+        const key = await storeLogo(tool, converted, best.sourceUrl, directory);
+        console.log(`  ${dryRun ? "would use" : "stored"} ${best.sourceUrl} (score ${best.score.toFixed(2)}) -> ${key}`);
+        stored = true;
+      } catch (error) {
+        console.warn(`  failed ${best.sourceUrl}: ${error instanceof Error ? error.message : "unknown error"}`);
       }
     }
     if (!stored) failures.push(tool.name);

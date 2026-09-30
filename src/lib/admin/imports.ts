@@ -4,7 +4,7 @@ import type { CatalogEnrichmentCandidate } from "@/lib/catalog-enrichment/contra
 
 type ImportRow = {
   id: string;
-  provider: "product_hunt" | "toolify";
+  provider: "product_hunt" | "toolify" | "manual";
   external_id: string;
   discovery_url: string;
   website_url: string;

@@ -8,9 +8,10 @@ import { checkResearchedProfile } from "../src/lib/catalog-profile/contract.ts";
 import { decideCatalogAnalysis } from "../src/lib/catalog-analysis/gate.ts";
 import { parseCatalogAnalysis, type CatalogTaxonomy } from "../src/lib/catalog-analysis/contract.ts";
 import { assertPublicHttpsUrl } from "../src/lib/catalog-enrichment/url-policy.ts";
-import type { CatalogImportBundle, CatalogImportManifest, DirectoryProvider } from "../src/lib/catalog-import/contract.ts";
+import type { CatalogImportBundle, CatalogImportManifest, ImportProvider } from "../src/lib/catalog-import/contract.ts";
 import { catalogDayBounds } from "../src/lib/catalog-import/schedule.ts";
 import { databaseMode, d1File, d1Query, sqlNullable, sqlText } from "./lib/wrangler.ts";
+import { assertStatementFits, storedCandidate } from "./lib/stored-evidence.ts";
 
 const execute = promisify(execFile);
 const projectRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -100,7 +101,7 @@ function parseBundle(value: unknown): CatalogImportBundle {
   if (!value || typeof value !== "object") throw new Error("Import bundle is not an object.");
   const record = value as Partial<CatalogImportBundle>;
   if (record.schemaVersion !== 1) throw new Error("Unsupported import bundle version.");
-  if (record.provider !== "toolify" && record.provider !== "product_hunt") throw new Error("Unsupported directory provider.");
+  if (record.provider !== "toolify" && record.provider !== "product_hunt" && record.provider !== "manual") throw new Error("Unsupported import provider.");
   if (!record.externalId || !record.discoveryUrl || !record.websiteUrl || !record.preparedAt) throw new Error("Import bundle metadata is incomplete.");
   assertPublicHttpsUrl(record.discoveryUrl);
   const website = assertPublicHttpsUrl(record.websiteUrl);
@@ -200,7 +201,7 @@ async function recordWithoutTool(
   const now = Math.floor(Date.now() / 1000);
   const importId = `import_${crypto.randomUUID()}`;
   await d1File(projectRoot, mode, [
-    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, ${sqlText(status)}, ${sqlText(JSON.stringify(bundle.candidate))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, NULL, ${sqlNullable(errorSummary)}, ${now}, ${now}, ${now}, ${now})`,
+    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, ${sqlText(status)}, ${sqlText(JSON.stringify(storedCandidate(bundle.candidate, bundle.analysis)))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, NULL, ${sqlNullable(errorSummary)}, ${now}, ${now}, ${now}, ${now})`,
     `INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (${sqlText(`event_${crypto.randomUUID()}`)}, 'import_candidate', ${sqlText(importId)}, ${sqlText(status === "skipped" ? "skip" : "analyze")}, 'codex-schedule', ${sqlText(JSON.stringify({ provider: bundle.provider, reasons }))}, ${now})`,
   ]);
 }
@@ -223,7 +224,7 @@ async function skipPreparedTool(
 
 type OrphanedImportRow = {
   import_id: string;
-  provider: DirectoryProvider;
+  provider: ImportProvider;
   tool_id: string | null;
   decision_reasons_json: string;
 };
@@ -337,11 +338,11 @@ async function applyBundle(filename: string, batchContext: BatchContext | null):
     `INSERT INTO tools (id, slug, name, tagline, description, website_url, canonical_domain, pricing_model, status, primary_category_id, logo_asset_key, screenshot_asset_key, is_editor_pick, source_first_seen_at, published_at, last_checked_at, created_at, updated_at) VALUES (${sqlText(toolId)}, ${sqlText(slug)}, ${sqlText(name)}, ${sqlText(tagline)}, ${sqlText(description)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, ${sqlText(bundle.analysis!.pricingModel)}, 'pending_review', ${sqlText(primaryCategory.id)}, NULL, NULL, 0, ${now}, NULL, ${now}, ${now}, ${now})`,
     ...selectedCategories.map((category) => `INSERT INTO tool_categories (tool_id, category_id, is_primary) VALUES (${sqlText(toolId)}, ${sqlText(category.id)}, ${category.id === primaryCategory.id ? 1 : 0})`),
     ...selectedTags.map((tag) => `INSERT INTO tool_tags (tool_id, tag_id) VALUES (${sqlText(toolId)}, ${sqlText(tag.id)})`),
-    `INSERT INTO tool_sources (id, tool_id, provider, external_id, source_url, raw_json, first_seen_at, last_seen_at) VALUES (${sqlText(`source_${crypto.randomUUID()}`)}, ${sqlText(toolId)}, ${sqlText(bundle.provider as DirectoryProvider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(JSON.stringify(bundle))}, ${now}, ${now})`,
-    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, 'pending_review', ${sqlText(JSON.stringify(bundle.candidate))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, ${sqlText(toolId)}, NULL, ${now}, ${now}, ${now}, ${now})`,
+    `INSERT INTO tool_sources (id, tool_id, provider, external_id, source_url, raw_json, first_seen_at, last_seen_at) VALUES (${sqlText(`source_${crypto.randomUUID()}`)}, ${sqlText(toolId)}, ${sqlText(bundle.provider as ImportProvider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(JSON.stringify({ ...bundle, candidate: storedCandidate(bundle.candidate, bundle.analysis) }))}, ${now}, ${now})`,
+    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, 'pending_review', ${sqlText(JSON.stringify(storedCandidate(bundle.candidate, bundle.analysis)))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, ${sqlText(toolId)}, NULL, ${now}, ${now}, ${now}, ${now})`,
     `INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (${sqlText(`event_${crypto.randomUUID()}`)}, 'import_candidate', ${sqlText(importId)}, 'analyze', 'codex-schedule', ${sqlText(JSON.stringify({ provider: bundle.provider, decision: decision.outcome, reasons }))}, ${now})`,
   ];
-  await d1File(projectRoot, mode, statements);
+  await d1File(projectRoot, mode, statements.map((statement) => assertStatementFits(statement, `${bundle.candidate.canonicalDomain} import statement`)));
 
   let screenshotAssetKey: string | null = null;
   try {

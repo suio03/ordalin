@@ -50,6 +50,13 @@
       "when": 1787642684775,
       "tag": "0006_open_supernaut",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1790767402442,
+      "tag": "0007_category_tags_phase2",
+      "breakpoints": true
     }
   ]
 }
