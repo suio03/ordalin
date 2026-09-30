@@ -84,9 +84,15 @@ Turnstile site key and Access team domain in `wrangler.production.jsonc`.
 Add your custom-domain routes if desired. This file is ignored by Git; never
 put API keys or secret values in it.
 
-Production deploys run from a maintainer machine with `pnpm run deploy`
-(`pnpm deploy` is a built-in pnpm command, not this script). No Git-connected
-deployment pipeline is used, so pushing to `main` does not deploy.
+Pushing to `main` deploys production through Cloudflare Workers Builds:
+build command `pnpm run build:production`, deploy command
+`pnpm run deploy:production`. The clean checkout has no private configuration,
+so the build variable `ORDALIN_WRANGLER_CONFIG` holds
+`base64 < wrangler.production.jsonc`; update it whenever that file changes.
+Keep builds for non-production branches disabled; previews would bind
+production D1 and R2. Apply D1 migrations before pushing code that needs them.
+A maintainer can still deploy manually with `pnpm run deploy` (`pnpm deploy`
+is a built-in pnpm command, not this script).
 
 `pnpm run deploy`, `pnpm preview`, remote database scripts and remote import/backfill
 scripts explicitly use this private file. Direct Wrangler commands must include

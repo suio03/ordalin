@@ -38,12 +38,15 @@
 
 ## Deployment
 
-- Production deploys run only from a maintainer machine with `pnpm run deploy`,
-  which reads the ignored `wrangler.production.jsonc`. `pnpm deploy` is a
-  built-in pnpm command and does not run this script.
-- No Git-connected pipeline deploys this repository; pushing to `main` runs CI
-  only. Do not reconnect Cloudflare Workers Builds or add CI deploy steps: a
-  clean checkout falls back to the demo `wrangler.jsonc`.
+- Cloudflare Workers Builds deploys the `ordalin` Worker on every push to
+  `main` (`pnpm run build:production`, then `pnpm run deploy:production`). The
+  build variable `ORDALIN_WRANGLER_CONFIG` holds the base64-encoded
+  `wrangler.production.jsonc`; the file itself stays out of Git. Non-production
+  branch builds stay disabled because previews would bind production D1/R2.
+- Pushing to `main` is a production deploy: apply migrations first when a
+  change needs them, and push only when the maintainer asks.
+- A maintainer can still deploy manually with `pnpm run deploy`. `pnpm deploy`
+  is a built-in pnpm command and does not run this script.
 - Do not rename the demo Worker in `wrangler.jsonc` or merge automated PRs
   that change it to match production.
 - Deploy only when the maintainer asks, then verify the live homepage,

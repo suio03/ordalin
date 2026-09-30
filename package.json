@@ -13,6 +13,8 @@
     "test:watch": "vitest",
     "preview": "opennextjs-cloudflare build --config wrangler.production.jsonc && opennextjs-cloudflare preview --config wrangler.production.jsonc --remote",
     "deploy": "opennextjs-cloudflare build --config wrangler.production.jsonc && opennextjs-cloudflare deploy --config wrangler.production.jsonc",
+    "build:production": "node scripts/write-production-config.mjs && opennextjs-cloudflare build --config wrangler.production.jsonc",
+    "deploy:production": "opennextjs-cloudflare deploy --config wrangler.production.jsonc",
     "cf-typegen": "wrangler types --config wrangler.production.example.jsonc --env-interface CloudflareEnv cloudflare-env.d.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply DB --local --config wrangler.jsonc --persist-to .wrangler/demo",
