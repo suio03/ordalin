@@ -95,6 +95,8 @@ export type ToolListOptions = {
   tagSlug?: string;
   sort?: CatalogueSort;
   editorPicksOnly?: boolean;
+  /** Editor picks first, then newest. Used by homepage shelves. */
+  featuredFirst?: boolean;
 };
 
 export type PaginatedTools = {
@@ -374,7 +376,7 @@ export async function listPublishedTools(
   const joinSql = joins.join(" ");
   const orderSql = options.sort === "oldest"
     ? "t.published_at ASC, t.name COLLATE NOCASE ASC"
-    : "t.published_at DESC, t.name COLLATE NOCASE ASC";
+    : `${options.featuredFirst ? "t.is_editor_pick DESC, " : ""}t.published_at DESC, t.name COLLATE NOCASE ASC`;
   const countStatement = database.prepare(
     `SELECT COUNT(DISTINCT t.id) AS total
      FROM tools t ${joinSql}
@@ -451,7 +453,7 @@ export const getToolBySlug = cache(
           (SELECT source_url FROM tool_sources source
            WHERE source.tool_id = t.id ORDER BY source.last_seen_at DESC LIMIT 1) AS source_url,
           (SELECT raw_json FROM tool_sources source WHERE source.tool_id = t.id AND source.provider = 'submission' ORDER BY source.last_seen_at DESC LIMIT 1) AS submission_json,
-          (SELECT raw_json FROM tool_sources source WHERE source.tool_id = t.id AND source.provider IN ('toolify', 'product_hunt') ORDER BY source.last_seen_at DESC LIMIT 1) AS import_json
+          (SELECT raw_json FROM tool_sources source WHERE source.tool_id = t.id AND source.provider IN ('toolify', 'product_hunt', 'manual') ORDER BY source.last_seen_at DESC LIMIT 1) AS import_json
          FROM tools t
          JOIN categories c ON c.id = t.primary_category_id
          LEFT JOIN tool_tags tt ON tt.tool_id = t.id
@@ -731,4 +733,86 @@ export async function listSitemapEntries() {
     collections: collectionsResult.results,
     tasks: tasksResult.results,
   };
+}
+
+export type EditorialTool = ToolCard & {
+  pricingSummary: string | null;
+  platforms: string[];
+  freeLimits: string[];
+  checkedAt: string | null;
+};
+
+const toolCardSelect = `SELECT t.id, t.slug, t.name, t.tagline, t.website_url, t.canonical_domain,
+    t.pricing_model, t.logo_asset_key, t.published_at, t.last_checked_at,
+    t.is_editor_pick, c.slug AS category_slug, c.name AS category_name,
+    (SELECT GROUP_CONCAT(tag.name) FROM tool_tags tt
+     JOIN tags tag ON tag.id = tt.tag_id AND tag.is_active = 1
+     WHERE tt.tool_id = t.id) AS tag_names,
+    CASE WHEN EXISTS (
+      SELECT 1 FROM tool_sources source
+      WHERE source.tool_id = t.id AND source.provider = 'submission'
+    ) THEN 'submission' ELSE (
+      SELECT provider FROM tool_sources source
+      WHERE source.tool_id = t.id ORDER BY source.last_seen_at DESC LIMIT 1
+    ) END AS source_provider`;
+
+export const listPublishedToolSlugs = cache(async (): Promise<Set<string>> => {
+  const database = await getDatabase();
+  const result = await database
+    .prepare("SELECT slug FROM tools WHERE status = 'published'")
+    .all<{ slug: string }>();
+  return new Set(result.results.map((row) => row.slug));
+});
+
+/** Published tools named by an editorial page, with facts from their researched profile. */
+export async function listEditorialTools(slugs: string[]): Promise<Map<string, EditorialTool>> {
+  const unique = [...new Set(slugs)];
+  if (!unique.length) return new Map();
+  const database = await getDatabase();
+  const result = await database
+    .prepare(
+      `${toolCardSelect},
+        (SELECT raw_json FROM tool_sources source
+         WHERE source.tool_id = t.id AND source.provider IN ('toolify', 'product_hunt', 'manual')
+         ORDER BY source.last_seen_at DESC LIMIT 1) AS import_json
+       FROM tools t
+       JOIN categories c ON c.id = t.primary_category_id
+       WHERE t.status = 'published' AND t.slug IN (${unique.map(() => "?").join(", ")})`,
+    )
+    .bind(...unique)
+    .all<ToolRow & { import_json: string | null }>();
+  return new Map(result.results.map((row) => {
+    const profile = readResearchedProfile(row.import_json);
+    return [row.slug, {
+      ...mapTool(row),
+      pricingSummary: profile?.pricingSummary.text ?? null,
+      platforms: profile?.platforms.map((item) => item.text) ?? [],
+      freeLimits: profile?.freeLimits.map((item) => item.text) ?? [],
+      checkedAt: profile?.checkedAt ?? null,
+    }];
+  }));
+}
+
+/** Tools sharing the most concrete categories with one tool, newest first on ties. */
+export async function listRelatedTools(slug: string, limit = 6): Promise<ToolCard[]> {
+  const database = await getDatabase();
+  const result = await database
+    .prepare(
+      `${toolCardSelect}
+       FROM tools source_tool
+       JOIN tool_tags source_tt ON source_tt.tool_id = source_tool.id
+       JOIN tags source_tag ON source_tag.id = source_tt.tag_id
+        AND source_tag.kind = 'category' AND source_tag.is_active = 1
+       JOIN tool_tags shared_tt ON shared_tt.tag_id = source_tag.id
+       JOIN tools t ON t.id = shared_tt.tool_id
+        AND t.status = 'published' AND t.id <> source_tool.id
+       JOIN categories c ON c.id = t.primary_category_id
+       WHERE source_tool.slug = ? AND source_tool.status = 'published'
+       GROUP BY t.id
+       ORDER BY COUNT(*) DESC, t.is_editor_pick DESC, t.published_at DESC
+       LIMIT ?`,
+    )
+    .bind(slug, limit)
+    .all<ToolRow>();
+  return result.results.map(mapTool);
 }

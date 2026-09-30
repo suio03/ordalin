@@ -49,19 +49,19 @@ The defining idea is **quiet orientation**: users should understand where they a
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `surfacePrimary` | `#EDF3F1` | `#101714` | Page ground; never a card accent. |
-| `surfaceRaised` | `#F8FBFA` | `#171F1C` | Search, panels, prominent controls. |
-| `surfaceMuted` | `#E1EAE7` | `#202A26` | Selected tabs, tool marks, quiet grouping. |
-| `surfaceAccent` | `#D7E5E1` | `#293630` | Collection fields and category context. |
-| `surfaceInput` | `#FFFFFF` | `#111916` | Form fields and selected controls. |
+| `surfacePrimary` | `#E9EFEC` | `#1C2522` | Page ground; never a card accent. |
+| `surfaceRaised` | `#FFFFFF` | `#29342F` | Cards, search, panels, prominent controls; must read one clear step above the page ground. |
+| `surfaceMuted` | `#EEF3F1` | `#35413C` | Selected tabs, tool marks, quiet grouping. |
+| `surfaceAccent` | `#DCE7E3` | `#3C4A45` | Collection fields and category context. |
+| `surfaceInput` | `#FFFFFF` | `#232D29` | Form fields and selected controls. |
 | `textPrimary` | `#14201D` | `#EEF5F2` | Primary copy, headings, important icons. |
 | `textSecondary` | `#56645F` | `#B3C0BB` | Supporting descriptions and inactive controls. |
-| `textTertiary` | `#65726D` | `#8F9D98` | Metadata only; do not use below 10 px. |
-| `textOnStrong` | `#FFFFFF` | `#101714` | Text on inverted primary controls. |
-| `borderSubtle` | `#14201D24` | `#EAF4F01F` | Dividers and ordinary panel boundaries. |
-| `borderStrong` | `#14201D47` | `#EAF4F03D` | Emphasized boundaries. |
+| `textTertiary` | `#5D6A65` | `#9EACA7` | Metadata only; do not use below 10 px. |
+| `textOnStrong` | `#FFFFFF` | `#1C2522` | Text on inverted primary controls. |
+| `borderSubtle` | `#14201D24` | `#EAF4F024` | Dividers and ordinary panel boundaries. |
+| `borderStrong` | `#14201D47` | `#EAF4F047` | Emphasized boundaries. |
 | `accentPrimary` | `#147754` | `#5BC095` | Active, freshness, verified-positive state. |
-| `accentSoft` | `#D9EEE6` | `#193C2F` | Positive-state background. |
+| `accentSoft` | `#D9EEE6` | `#1F4536` | Positive-state background. |
 | `accentText` | `#2F5549` | `#98DDBE` | Text paired with `accentSoft`. |
 | `focusRing` | `#1F60D3` | `#78A9FF` | Keyboard focus only; never replaced by green. |
 | `danger` | `#A63F32` | `#EF8D7F` | Destructive or error state only. |
@@ -69,21 +69,23 @@ The defining idea is **quiet orientation**: users should understand where they a
 
 Measured WCAG contrast on the principal surfaces:
 
-- `textPrimary` on `surfacePrimary`: 14.90:1.
-- `textSecondary` on `surfaceRaised`: 5.96:1.
-- `textTertiary` on `surfaceRaised`: 4.82:1.
-- `accentPrimary` on `surfaceRaised`: 5.31:1.
+- `textPrimary` on `surfacePrimary`: 14.37:1.
+- `textSecondary` on `surfaceRaised`: 6.21:1.
+- `textTertiary` on `surfaceRaised`: 5.65:1.
+- `textTertiary` on `surfacePrimary`: 4.85:1.
+- `accentPrimary` on `surfaceRaised`: 5.53:1.
 - white on `accentPrimary`: 5.53:1.
-- `focusRing` on `surfaceRaised`: 5.49:1.
+- `focusRing` on `surfaceRaised`: 5.72:1.
 
 Measured dark-mode contrast on the principal surfaces:
 
-- `textPrimary` on `surfacePrimary`: 16.44:1.
-- `textSecondary` on `surfaceRaised`: 8.95:1.
-- `textTertiary` on `surfaceRaised`: 5.96:1.
-- `accentPrimary` on `surfaceRaised`: 7.54:1.
-- `textOnStrong` on `textPrimary`: 16.44:1.
-- `focusRing` on `surfaceRaised`: 7.14:1.
+- `textPrimary` on `surfacePrimary`: 14.19:1.
+- `textSecondary` on `surfaceRaised`: 6.87:1.
+- `textTertiary` on `surfaceRaised`: 5.48:1.
+- `textTertiary` on `surfaceMuted`: 4.52:1.
+- `accentPrimary` on `surfaceRaised`: 5.79:1.
+- `textOnStrong` on `textPrimary`: 14.19:1.
+- `focusRing` on `surfaceRaised`: 5.48:1.
 
 Large atmospheric fields may use low-opacity mineral blue, but they are decorative backgrounds only. Never place text directly on an uncontrolled gradient stop.
 
@@ -165,6 +167,7 @@ Do not simply shrink the desktop three-column grid.
 - Ordinary border: 1 px `borderSubtle`.
 - Strong border: 1 px `borderStrong`.
 - Use `shadowSoft` only on raised hero/search/panels. Never stack multiple prominent shadows.
+- Hierarchy uses three steps: page ground (`surfacePrimary`), cards and panels (`surfaceRaised` + `borderSubtle` + `shadowCard`), and quiet fills inside cards (`surfaceMuted`). Sections are separated by spacing and heading size, not stacked hairlines.
 - Translucency is optional. Every surface must remain correct as an opaque solid color.
 
 ## 8. Logo, icons, and imagery

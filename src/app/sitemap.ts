@@ -1,22 +1,42 @@
 import type { MetadataRoute } from "next";
 import { listPublishedGuides } from "@/lib/guides";
-import { listSitemapEntries } from "@/lib/repositories/catalog";
+import {
+  editorialHref,
+  editorialIsComplete,
+  editorialKinds,
+  editorialPaths,
+  listEditorialPages,
+} from "@/lib/editorial";
+import { listPublishedToolSlugs, listSitemapEntries } from "@/lib/repositories/catalog";
 
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const [entries, guides] = await Promise.all([
+  const [entries, guides, publishedTools] = await Promise.all([
     listSitemapEntries(),
     listPublishedGuides(),
+    listPublishedToolSlugs(),
   ]);
+  // Only pages production serves as indexable: published and fully backed by the catalogue.
+  const editorial = listEditorialPages().filter(
+    (page) => page.status === "published" && editorialIsComplete(page, publishedTools),
+  );
+  const editorialHubs = editorialKinds.filter((kind) => editorial.some((page) => page.kind === kind));
   const fixed: MetadataRoute.Sitemap = [
     { url: baseUrl, changeFrequency: "daily", priority: 1 },
+    { url: `${baseUrl}/tools`, changeFrequency: "daily", priority: 0.9 },
     { url: `${baseUrl}/tasks`, changeFrequency: "weekly", priority: 0.85 },
     { url: `${baseUrl}/collections`, changeFrequency: "weekly", priority: 0.8 },
     ...(guides.length
       ? [{ url: `${baseUrl}/guides`, changeFrequency: "weekly" as const, priority: 0.7 }]
       : []),
+    ...editorialHubs.map((kind) => ({
+      url: `${baseUrl}${editorialPaths[kind]}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    })),
+    { url: `${baseUrl}/about/how-we-review`, changeFrequency: "monthly", priority: 0.4 },
   ];
 
   return [
@@ -49,6 +69,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/tasks/${entry.slug}`,
       lastModified: new Date(entry.updated_at * 1000),
       changeFrequency: "weekly" as const,
+      priority: 0.8,
+    })),
+    ...editorial.map((page) => ({
+      url: `${baseUrl}${editorialHref(page)}`,
+      lastModified: new Date(`${page.updatedAt ?? page.publishedAt}T00:00:00Z`),
+      changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
     ...guides.map((guide) => ({

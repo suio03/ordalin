@@ -58,7 +58,7 @@ export default async function GuidesPage() {
               published, use the live catalogue or start from a specific goal.
             </p>
             <div className={styles.emptyActions}>
-              <Link href="/">Browse AI tools</Link>
+              <Link href="/tools">Browse AI tools</Link>
               <Link href="/tasks">Find tools by goal</Link>
             </div>
           </div>

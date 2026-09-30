@@ -10,7 +10,7 @@ vi.mock("@/lib/repositories/catalog", () => ({
 }));
 
 import { listPublishedTools, getCategoryBySlug, getBrowseCategory } from "@/lib/repositories/catalog";
-import Home, { generateMetadata as homeMetadata } from "./page";
+import Home, { generateMetadata as homeMetadata } from "./tools/page";
 import Category, { generateMetadata as categoryMetadata } from "./categories/[slug]/page";
 import BrowseCategory, { generateMetadata as browseMetadata } from "./categories/[slug]/[categorySlug]/page";
 
@@ -26,11 +26,11 @@ const category = (page: string) => ({ params: Promise.resolve({ slug: "coding" }
 const browse = (page: string) => ({ params: Promise.resolve({ slug: "coding", categorySlug: "coding-assistant" }), searchParams: Promise.resolve({ page }) });
 
 describe("catalogue pagination SEO", () => {
-  it("indexes pure homepage pagination with its own canonical", async () => {
+  it("indexes pure all-tools pagination with its own canonical", async () => {
     expect(await homeMetadata(home({ page: "2" }))).toMatchObject({
-      alternates: { canonical: "/?page=2" }, robots: { index: true, follow: true },
+      alternates: { canonical: "/tools?page=2" }, robots: { index: true, follow: true },
     });
-    expect(await homeMetadata(home({ page: "1" }))).toMatchObject({ alternates: { canonical: "/" } });
+    expect(await homeMetadata(home({ page: "1" }))).toMatchObject({ alternates: { canonical: "/tools" } });
   });
 
   it.each([{ q: "code" }, { category: "coding" }, { pricing: "free" }, { sort: "oldest" }])(

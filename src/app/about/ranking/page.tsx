@@ -41,7 +41,7 @@ export default function RankingPage() {
         <section>
           <h2>Corrections</h2>
           <p>Product details change. Each profile shows when its website or official source was last checked. Existing domains cannot be anonymously overwritten through the submission form; corrections to existing records remain a manual catalogue operation until ownership claims are introduced.</p>
-          <p><Link href="/collections">Browse curated collections</Link> or <Link href="/">explore the tool catalogue</Link>.</p>
+          <p><Link href="/collections">Browse curated collections</Link> or <Link href="/tools">explore the tool catalogue</Link>.</p>
         </section>
       </div>
     </main>

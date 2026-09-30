@@ -34,6 +34,7 @@ export function DirectoryExplorer({
   editorPicks,
   collections,
   initialState,
+  basePath = "/tools",
 }: {
   categories: DirectoryCategory[];
   tools: ToolCard[];
@@ -43,6 +44,7 @@ export function DirectoryExplorer({
   editorPicks: ToolCard[];
   collections: CollectionSummary[];
   initialState: ExplorerState;
+  basePath?: string;
 }) {
   const router = useRouter();
   const searchRef = useRef<HTMLInputElement>(null);
@@ -57,7 +59,7 @@ export function DirectoryExplorer({
     if (state.pricing !== "all") params.set("pricing", state.pricing);
     if (state.sort === "oldest") params.set("sort", state.sort);
     const search = params.toString();
-    return search ? `/?${search}` : "/";
+    return search ? `${basePath}?${search}` : basePath;
   }
 
   function updateCatalogue(next: Partial<ExplorerState>) {
@@ -82,18 +84,18 @@ export function DirectoryExplorer({
         params.delete("q");
         params.delete("page");
         const search = params.toString();
-        router.push(search ? `/?${search}` : "/", { scroll: false });
+        router.push(search ? `${basePath}?${search}` : basePath, { scroll: false });
         searchRef.current?.blur();
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [router]);
+  }, [basePath, router]);
 
   function resetFilters() {
     if (searchRef.current) searchRef.current.value = "";
-    router.push("/", { scroll: false });
+    router.push(basePath, { scroll: false });
     searchRef.current?.focus();
   }
 
@@ -101,18 +103,18 @@ export function DirectoryExplorer({
     <main className={styles.main}>
       <section className={styles.hero} aria-labelledby="home-title">
         <div>
-          <p className={styles.eyebrow}>Website-checked AI tool directory</p>
-          <h1 id="home-title">Find the right AI tool, without the noise.</h1>
+          <p className={styles.eyebrow}>All AI tools</p>
+          <h1 id="home-title">Browse the full catalogue.</h1>
           <p className={styles.intro}>
-            Clear facts, useful categories, and edited paths through newly
-            released tools.
+            Every published tool, with pricing, category, and the date its
+            official website was last checked.
           </p>
         </div>
         <form
           className={styles.searchBox}
           role="search"
           aria-label="Search tools"
-          action="/"
+          action={basePath}
           method="get"
           onSubmit={(event) => {
             event.preventDefault();
@@ -238,7 +240,7 @@ export function DirectoryExplorer({
               <Pagination
                 page={page}
                 totalPages={totalPages}
-                pathname="/"
+                pathname={basePath}
                 searchParams={{
                   q: initialState.query || undefined,
                   category: category === "all" ? undefined : category,

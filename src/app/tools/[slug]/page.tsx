@@ -10,10 +10,15 @@ import { formatCheckedDate, formatPricingModel } from "@/lib/catalog";
 import { catalogAssetUrl } from "@/lib/catalog-assets";
 import { catalogWebsiteOutboundUrl, catalogWebsiteRel } from "@/lib/catalog-links";
 import { ToolMark } from "@/components/directory/tool-mark";
+import { EditorialCard } from "@/components/editorial/editorial-parts";
+import { ToolRow } from "@/components/directory/tool-row";
+import { listLiveEditorialForTool } from "@/lib/editorial/load";
 import {
   getToolBySlug,
+  listRelatedTools,
   listTasksForTool,
 } from "@/lib/repositories/catalog";
+import editorialStyles from "@/components/editorial/editorial.module.css";
 import styles from "@/components/directory/catalog-page.module.css";
 
 export const dynamic = "force-dynamic";
@@ -41,9 +46,11 @@ export async function generateMetadata({ params }: ToolParams): Promise<Metadata
 
 export default async function ToolPage({ params }: ToolParams) {
   const slug = (await params).slug;
-  const [tool, relatedTasks] = await Promise.all([
+  const [tool, relatedTasks, relatedTools, featuredIn] = await Promise.all([
     getToolBySlug(slug),
     listTasksForTool(slug),
+    listRelatedTools(slug),
+    listLiveEditorialForTool(slug),
   ]);
   if (!tool) notFound();
 
@@ -171,6 +178,38 @@ export default async function ToolPage({ params }: ToolParams) {
                     </dl>
                   </article>
                 ))}
+              </div>
+            </section>
+          ) : null}
+
+          {featuredIn.pages.length ? (
+            <section className={styles.fitSection} aria-labelledby="featured-in-title">
+              <header className={styles.fitHeader}>
+                <div>
+                  <p className={styles.eyebrow}>Editorial</p>
+                  <h2 id="featured-in-title">Featured in</h2>
+                </div>
+                <p>Shortlists, alternatives and comparisons that include {tool.name}.</p>
+              </header>
+              <div className={editorialStyles.cardGrid}>
+                {featuredIn.pages.slice(0, 6).map((page) => (
+                  <EditorialCard key={`${page.kind}/${page.slug}`} page={page} tools={featuredIn.tools} />
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          {relatedTools.length ? (
+            <section className={styles.fitSection} aria-labelledby="related-tools-title">
+              <header className={styles.fitHeader}>
+                <div>
+                  <p className={styles.eyebrow}>Similar tools</p>
+                  <h2 id="related-tools-title">Tools like {tool.name}</h2>
+                </div>
+                <p>Published tools that share its categories.</p>
+              </header>
+              <div className={styles.relatedList}>
+                {relatedTools.map((related) => <ToolRow key={related.slug} tool={related} />)}
               </div>
             </section>
           ) : null}

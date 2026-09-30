@@ -49,7 +49,7 @@ function applyTheme(preference: ThemePreference) {
     .forEach((element) =>
       element.setAttribute(
         "content",
-        resolvedTheme === "dark" ? "#101714" : "#edf3f1",
+        resolvedTheme === "dark" ? "#1c2522" : "#e9efec",
       ),
     );
 }

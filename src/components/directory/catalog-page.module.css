@@ -455,3 +455,13 @@
 .editorialLogo { border-radius: var(--radius-panel); object-fit: contain; width: 100%; max-width: 72px; height: auto; }
 
 .submittedDetail { white-space: pre-line; }
+
+.relatedList {
+  display: grid;
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface-raised);
+  overflow: hidden;
+}
+
+.relatedList > article:last-child { border-bottom: 0; }

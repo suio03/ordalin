@@ -17,11 +17,13 @@
 ## Implementation boundaries
 
 - Support System, Light, and Dark appearance modes. System is the default; preserve the user's explicit choice and prevent a wrong-theme first paint.
-- Keep the homepage search-first but not search-only; useful inventory must be visible without entering a query.
+- Keep the homepage search-first but not search-only; useful inventory must be visible without entering a query. The homepage is a category sidebar beside a column of shelves; the full catalogue lives at `/tools`.
 - Use semantic tokens instead of introducing visual one-off values.
+- Build hierarchy with three surface steps (page ground, raised cards and panels with `shadowCard`, quiet fills inside cards); keep raised surfaces clearly distinct from the ground in both themes.
 - Green communicates active, freshness, or verified-positive state; it is not decorative brand fill.
 - Do not add AI sparkles, glowing gradients, robots, literal radar graphics, blur-heavy glass, or fictional engagement metrics.
-- Preserve the approved mobile order: search, horizontal categories, catalogue filters and results, Collections, then editorial picks.
+- Preserve the approved mobile orders. Homepage: search, horizontal categories, editorial shortlists, newest tools, category-group shelves (Find by goal and Collections live in the desktop sidebar and the mobile header menu). `/tools`: search, horizontal categories, catalogue filters and results, Collections, then editor picks.
+- Editorial pages (`/best`, `/alternatives`, `/compare`) follow `docs/editorial-standard.md`. Write new articles as `status: "draft"`; only the maintainer publishes them.
 
 ## Local verification
 

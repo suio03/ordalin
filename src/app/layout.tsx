@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "light dark",
-  themeColor: "#edf3f1",
+  themeColor: "#e9efec",
 };
 
 const themeInitializationScript = `
@@ -50,7 +50,7 @@ const themeInitializationScript = `
     document.querySelectorAll('meta[name="theme-color"]').forEach(function (themeColor) {
       themeColor.setAttribute(
         "content",
-        resolved === "dark" ? "#101714" : "#edf3f1"
+        resolved === "dark" ? "#1c2522" : "#e9efec"
       );
     });
   })();

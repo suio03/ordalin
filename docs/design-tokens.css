@@ -2,14 +2,14 @@
   color-scheme: light;
 
   /* Color */
-  --color-surface-primary: #edf3f1;
-  --color-surface-raised: #f8fbfa;
-  --color-surface-muted: #e1eae7;
-  --color-surface-accent: #d7e5e1;
+  --color-surface-primary: #e9efec;
+  --color-surface-raised: #ffffff;
+  --color-surface-muted: #eef3f1;
+  --color-surface-accent: #dce7e3;
   --color-surface-input: #ffffff;
   --color-text-primary: #14201d;
   --color-text-secondary: #56645f;
-  --color-text-tertiary: #65726d;
+  --color-text-tertiary: #5d6a65;
   --color-text-on-strong: #ffffff;
   --color-border-subtle: #14201d24;
   --color-border-strong: #14201d47;
@@ -72,7 +72,7 @@
   --focus-width: 3px;
   --focus-offset: 3px;
   --shadow-soft: 0 18px 54px #2a443d17;
-  --shadow-card: 0 10px 30px #2a443d0d;
+  --shadow-card: 0 1px 2px #14201d0f, 0 6px 18px #2a443d12;
 
   /* Motion */
   --motion-fast: 120ms;
@@ -94,25 +94,25 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-surface-primary: #101714;
-  --color-surface-raised: #171f1c;
-  --color-surface-muted: #202a26;
-  --color-surface-accent: #293630;
-  --color-surface-input: #111916;
+  --color-surface-primary: #1c2522;
+  --color-surface-raised: #29342f;
+  --color-surface-muted: #35413c;
+  --color-surface-accent: #3c4a45;
+  --color-surface-input: #232d29;
   --color-text-primary: #eef5f2;
   --color-text-secondary: #b3c0bb;
-  --color-text-tertiary: #8f9d98;
-  --color-text-on-strong: #101714;
-  --color-border-subtle: #eaf4f01f;
-  --color-border-strong: #eaf4f03d;
+  --color-text-tertiary: #9eaca7;
+  --color-text-on-strong: #1c2522;
+  --color-border-subtle: #eaf4f024;
+  --color-border-strong: #eaf4f047;
   --color-accent-primary: #5bc095;
-  --color-accent-soft: #193c2f;
+  --color-accent-soft: #1f4536;
   --color-accent-text: #98ddbe;
   --color-focus-ring: #78a9ff;
   --color-danger: #ef8d7f;
   --color-logo-charcoal: #ffffff;
   --shadow-soft: 0 18px 54px #00000052;
-  --shadow-card: 0 10px 30px #0000003d;
+  --shadow-card: inset 0 1px 0 #ffffff0a, 0 1px 2px #00000040, 0 8px 24px #00000038;
 }
 
 @media (prefers-reduced-motion: reduce) {

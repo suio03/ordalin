@@ -89,13 +89,18 @@ Architecture:
 
 | Route | Purpose | Indexing |
 | --- | --- | --- |
-| / | Navigation Radar: searchable, filterable catalogue, rankings and collections | Index |
+| / | Shelf homepage: search, categories, editorial shortlists, newest tools, one shelf per category group, goals and collections | Index |
+| /tools | Full searchable, filterable, paginated catalogue (the former homepage catalogue) | Index unfiltered pages; filters noindex |
+| /best, /best/[slug] | Editorial best-of hub and shortlists (see `docs/editorial-standard.md`) | Index when published and complete |
+| /alternatives, /alternatives/[slug] | Editorial alternatives to a well-known tool | Index when published and complete |
+| /compare, /compare/[slug] | Editorial head-to-head comparisons (`<left>-vs-<right>`) | Index when published and complete |
+| /about/how-we-review | Public editorial and research policy | Index |
 | /tools/[slug] | One canonical tool profile | Index when published |
 | /categories/[group] | Category-group index and paginated catalogue | Index when sufficiently populated |
 | /categories/[group]/[category] | Concrete category and matching tools | Index when sufficiently populated |
 | /tasks | Controlled task index | Index when useful task pages exist |
 | /tasks/[slug] | Editorial decision page for one concrete outcome | Index with unique copy and at least three verified tools |
-| /new | Permanent redirect to the homepage catalogue | Redirect |
+| /new | Permanent redirect to /tools | Redirect |
 | /guides | Evidence-led guide index | Noindex while empty; index when guides exist |
 | /guides/[slug] | One static MDX decision guide | Index when published |
 | /collections | Curated collection index | Index |
@@ -107,43 +112,54 @@ Architecture:
 | /api/* | Mutations and internal endpoints | Disallow |
 
 Filter parameters must not create indexable URL combinations. Categories, tasks,
-and collections are the controlled SEO landing pages.
+collections and editorial pages are the controlled SEO landing pages. Old homepage
+catalogue URLs (`/?q=`, `category`, `pricing`, `sort`, `page`) permanently redirect
+to the same query on `/tools`.
 
-## 4. Navigation Radar homepage contract
+## 4. Homepage and catalogue contract
 
-Desktop:
+The homepage (`/`) is a category sidebar beside a column of shelves; the full
+Navigation Radar catalogue lives at `/tools`. Desktop layout:
 
-    Global navigation
-    Compact promise + search
-    ┌────────────────┬───────────────────────────────┬────────────────────┐
-    │ Categories     │ Paginated tool catalogue      │ Editor Picks       │
-    │                │ filters + date-added sort     │ Collections        │
-    └────────────────┴───────────────────────────────┴────────────────────┘
+- promise and search (submits to `/tools?q=`) above the two columns;
+- a sticky sidebar panel listing All tools and every category group with its
+  published tool count, then Browse links (Find by goal, Collections, Best-of
+  lists, Comparisons — each only when it has content);
+- a content column of editorial shortlists (only when live editorial pages
+  exist), newest tools, then one four-tool shelf per category group: editor
+  picks first, then newest, with links to the group page and its best-of list
+  when one is live.
 
-Until real first-party save data exists, the right module is Editor Picks or Popular on Product Hunt with its source stated. It must not display fictional Most Saved data.
+Mobile and DOM order of the homepage:
 
-Mobile order:
-
-1. navigation and search
-2. horizontally scrollable top categories
-3. catalogue filters and paginated tool list
-4. collections
-5. editorial picks
+1. compact promise and search
+2. horizontally scrollable category groups (counts and Browse links hidden;
+   Find by goal and Collections stay reachable through the header menu)
+3. editorial shortlists
+4. newest tools
+5. category-group shelves
 
 Homepage rules:
 
-- show at least 10–12 real tools without requiring search;
-- default to newest-first publication order and allow oldest-first sorting;
-- keep the hero compact so inventory starts in the first viewport;
-- cards show logo, name, factual purpose, category, pricing model, freshness, and Visit;
+- show real tools in the first viewport without requiring search;
+- shelves show logo, name, factual purpose, pricing model and Editor pick state;
+- counts come from D1; never show fictional popularity, saves or trending data;
 - sponsored inventory is absent in MVP;
-- submission remains a persistent secondary action;
-- pagination is URL-addressable; do not use infinite scroll as the only path.
+- submission remains a persistent secondary action.
+
+`/tools` keeps the previous catalogue rules: newest-first by default with
+oldest-first sorting, URL-addressable pagination, filters and search, and the
+mobile order search, categories, filters and results, collections, editor picks.
 
 ### Public navigation
 
-- Primary navigation shows Find by goal, Collections, and Search, with Submit a
-  tool as the secondary action.
+- Primary navigation shows All tools, Best of, Compare, Find by goal and
+  Collections, with Submit a tool as the secondary action. Best of and Compare
+  appear only when their hubs have visible pages.
+  At 820 px and below the links move into a header menu button; Submit a tool
+  stays visible beside it.
+- The footer lists Browse, Best of, Compare (when content exists) and Ordalin
+  (How we review, Submit a tool, GitHub).
 - Do not expose About ranking in the header, footer, or homepage sidebar.
 - Hide Guides navigation until useful articles are available and its entry is
   approved for release. Empty Guides remains noindex and outside the sitemap.
@@ -437,7 +453,10 @@ controls exist.
 - redirect historical slugs after renaming;
 - only published tools appear in pages, search, structured data, and sitemaps;
 - search/filter combinations are noindex;
-- paginate category and New pages with crawlable links;
+- paginate category and `/tools` pages with crawlable links;
+- editorial pages (best, alternatives, compare) follow `docs/editorial-standard.md`:
+  they are indexable only when published and every required tool is published;
+  drafts render only in local preview and never enter the sitemap;
 - keep Guides `noindex` and out of the sitemap until the first article is
   published; published MDX guides use canonical Article metadata and factual
   internal links rather than bulk-generated news copy;
