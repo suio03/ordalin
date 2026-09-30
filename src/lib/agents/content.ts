@@ -3,12 +3,16 @@ import { displayName, getAgent } from "./data";
 
 // Pages synced from agentsversus. Every claim traces to a source in agents.json.
 
-export const { hub: HUB, comparisons: COMPARISONS, agentPages: AGENT_PAGES, pricingPages: PRICING_PAGES, alternativesPages: ALTERNATIVES_PAGES, bestPages: BEST_PAGES } =
-  REGISTRY;
+export const {
+  overview: OVERVIEW,
+  hubs: HUBS,
+  comparisons: COMPARISONS, agentPages: AGENT_PAGES, pricingPages: PRICING_PAGES, alternativesPages: ALTERNATIVES_PAGES, bestPages: BEST_PAGES,
+} = REGISTRY;
 
 /** All AI agent pages live under /agents, apart from Ordalin's own editorial /compare, /best and /alternatives. */
 export const agentsPath = {
-  hub: "/agents",
+  overview: "/agents",
+  hub: (key: string) => `/agents/${key}`,
   methodology: "/agents/methodology",
   agent: (slug: string) => `/agents/${slug}`,
   compare: (pair: string) => `/agents/compare/${pair}`,
@@ -29,7 +33,8 @@ export const comparisonTitle = (sides: string[]) => sides.map((s) => displayName
 
 /** Every /agents URL, for the sitemap. */
 export const allAgentsPaths = () => [
-  agentsPath.hub,
+  agentsPath.overview,
+  ...Object.keys(HUBS).map(agentsPath.hub),
   ...Object.keys(COMPARISONS).map(agentsPath.compare),
   ...Object.keys(AGENT_PAGES).map(agentsPath.agent),
   ...Object.keys(PRICING_PAGES).map(agentsPath.pricing),

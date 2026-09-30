@@ -4,7 +4,10 @@
 import type { AgentsRegistry } from "@/lib/agents/content-types";
 
 export const REGISTRY: AgentsRegistry = {
-  hub: () => import("./hub.mdx"),
+  overview: () => import("./overview.mdx"),
+  hubs: {
+    "personal": () => import("./personal.mdx"),
+  },
   comparisons: {
     "muse-vs-dots": { sides: ["meta-muse","chatgpt-dots"], kind: "agent", load: () => import("./compare/muse-vs-dots.mdx") },
     "muse-vs-dots-vs-grok-bot": { sides: ["meta-muse","chatgpt-dots","grok-bot"], kind: "agent", load: () => import("./compare/muse-vs-dots-vs-grok-bot.mdx") },

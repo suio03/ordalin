@@ -52,7 +52,17 @@ export type BestMeta = {
   faq: FaqItem[];
 };
 
-/** Copy for the /agents overview: "Most compared" cards, agent-vs-chatbot table and FAQ. */
+/** Copy for the /agents overview. Comparisons and guides are listed from the registry. */
+export type OverviewMeta = {
+  title: string;
+  description: string;
+  heading: string;
+  intro: string;
+  /** One card per agent type; `href` is its hub, `channel` picks the agents counted on the card. */
+  categories: { channel: string; href: string; title: string; blurb: string }[];
+};
+
+/** Copy for an agent-type hub such as /agents/personal: "Most compared" cards, agent-vs-chatbot table and FAQ. */
 export type HubMeta = {
   title: string;
   description: string;
@@ -65,7 +75,9 @@ export type Mod<M> = { default: ComponentType; meta: M };
 type Load<M> = () => Promise<Mod<M>>;
 
 export type AgentsRegistry = {
-  hub: Load<HubMeta>;
+  overview: Load<OverviewMeta>;
+  /** Agent-type hubs by key; each renders at /agents/<key>. */
+  hubs: Record<string, Load<HubMeta>>;
   /** `kind: "assistant"` compares general chatbots and uses the chatbot spec rows. */
   comparisons: Record<string, { sides: string[]; kind: "agent" | "assistant"; load: Load<CompareMeta> }>;
   agentPages: Record<string, Load<AgentMeta>>;
