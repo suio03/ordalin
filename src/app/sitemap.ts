@@ -7,6 +7,8 @@ import {
   editorialPaths,
   listEditorialPages,
 } from "@/lib/editorial";
+import { allAgentsPaths } from "@/lib/agents/content";
+import { CHECKED_ON } from "@/lib/agents/data";
 import { listPublishedToolSlugs, listSitemapEntries } from "@/lib/repositories/catalog";
 
 export const dynamic = "force-dynamic";
@@ -39,8 +41,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/about/how-we-review`, changeFrequency: "monthly", priority: 0.4 },
   ];
 
+  // AI agent pages synced from agentsversus, dated by their last fact check.
+  const agents: MetadataRoute.Sitemap = allAgentsPaths().map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: CHECKED_ON,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
   return [
     ...fixed,
+    ...agents,
     ...entries.tools.map((entry) => ({
       url: `${baseUrl}/tools/${entry.slug}`,
       lastModified: new Date(entry.updated_at * 1000),
