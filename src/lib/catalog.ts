@@ -50,3 +50,18 @@ export function formatCheckedDate(timestamp: number | null) {
 export function formatPricingModel(value: string) {
   return pricingLabels[value as PricingModel] ?? pricingLabels.unknown;
 }
+
+type TitleTag = { kind: string; name: string; groupSlug: string | null };
+
+/** "AdAnt — AI Video Generation": the tool's main use, taken from a category tag in its primary group. */
+export function toolPageTitle(tool: { name: string; primaryCategory: { slug: string; name: string }; tagDetails: TitleTag[] }) {
+  const categories = tool.tagDetails
+    .filter((tag) => tag.kind === "category")
+    .sort((a, b) => a.name.localeCompare(b.name));
+  const use = categories.find((tag) => tag.groupSlug === tool.primaryCategory.slug)?.name
+    ?? categories[0]?.name
+    ?? tool.primaryCategory.name;
+  if (!use) return tool.name;
+  const label = use.replace(/\b(?!and\b)\w/g, (letter) => letter.toUpperCase());
+  return `${tool.name} — ${/^AI\b/.test(label) ? label : `AI ${label}`}`;
+}

@@ -6,7 +6,7 @@ import { ProfileCitation, ToolProfileContent, ToolProfileNav } from "@/component
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { formatCheckedDate, formatPricingModel } from "@/lib/catalog";
+import { formatCheckedDate, formatPricingModel, toolPageTitle } from "@/lib/catalog";
 import { catalogAssetUrl } from "@/lib/catalog-assets";
 import { catalogWebsiteOutboundUrl, catalogWebsiteRel } from "@/lib/catalog-links";
 import { ToolMark } from "@/components/directory/tool-mark";
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: ToolParams): Promise<Metadata
   if (!tool) return {};
   const profile = getToolProfile(tool.slug);
   return {
-    title: profile ? { absolute: `${profile.title} | Ordalin` } : tool.name,
+    title: profile ? { absolute: `${profile.title} | Ordalin` } : toolPageTitle(tool),
     description: profile?.description ?? tool.researchedProfile?.overview.text ?? tool.tagline,
     ...(profile ? {
       openGraph: {
