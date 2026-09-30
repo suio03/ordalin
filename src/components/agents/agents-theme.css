@@ -1,0 +1,115 @@
+/* AI agent pages (/agents, synced from agentsversus). Their Tailwind classes use the
+   AgentsVersus token names, mapped here onto Ordalin's tokens so light and dark themes follow Ordalin.
+   Side colours: first agent blue, second orange, third violet. */
+
+:root {
+  --av-side-a: #1d4ed8;
+  --av-side-b: #c2410c;
+  --av-side-c: #6d28d9;
+}
+
+:root[data-theme="dark"] {
+  --av-side-a: #8fb0ff;
+  --av-side-b: #ff9a62;
+  --av-side-c: #bfa4ff;
+}
+
+@theme inline {
+  --color-paper: var(--color-surface-primary);
+  --color-surface: var(--color-surface-raised);
+  --color-surface-2: var(--color-surface-muted);
+  --color-chip: var(--color-surface-accent);
+  --color-ink: var(--color-text-primary);
+  --color-ink-2: var(--color-text-primary);
+  --color-muted: var(--color-text-tertiary);
+  --color-muted-2: var(--color-text-secondary);
+  --color-line: var(--color-border-subtle);
+  --color-line-soft: var(--color-border-subtle);
+  --color-ok: var(--color-accent-primary);
+  --color-side-a: var(--av-side-a);
+  --color-side-b: var(--av-side-b);
+  --color-side-c: var(--av-side-c);
+  /* Verdict and quick-pick panels stay dark in both themes. */
+  --color-night: #16181d;
+  --color-night-2: #23262e;
+  --color-on-night: #f6f5f1;
+  --color-side-a-deep: #1f2a4a;
+  --color-side-a-soft: #9db8ff;
+  --color-side-b-deep: #3a2418;
+  --color-side-b-soft: #ffb488;
+  --color-side-c-deep: #2b2145;
+  --color-side-c-soft: #cdb8ff;
+  --font-serif: var(--font-family-interface);
+  --font-mono: var(--font-family-metadata);
+}
+
+@layer base {
+  .av-root a {
+    color: var(--color-side-a);
+    text-decoration: none;
+  }
+  .av-root a:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Long-form editorial text (MDX). */
+.prose-av {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--color-text-primary);
+}
+.prose-av > * + * {
+  margin-top: 1em;
+}
+.prose-av h1 {
+  font-weight: var(--font-weight-display);
+  font-size: 44px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.prose-av h2 {
+  font-weight: var(--font-weight-heading);
+  font-size: 28px;
+  line-height: 1.2;
+  margin-top: 1.6em;
+}
+.prose-av h3 {
+  font-weight: 700;
+  font-size: 19px;
+  margin-top: 1.4em;
+}
+.prose-av ul {
+  list-style: disc;
+  padding-left: 1.3em;
+}
+.prose-av ol {
+  list-style: decimal;
+  padding-left: 1.3em;
+}
+.prose-av li + li {
+  margin-top: 0.35em;
+}
+.prose-av strong {
+  font-weight: var(--font-weight-strong);
+}
+.prose-av .table-wrap {
+  overflow-x: auto;
+}
+.prose-av table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.prose-av th,
+.prose-av td {
+  text-align: left;
+  vertical-align: top;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.prose-av th {
+  font-weight: 700;
+}

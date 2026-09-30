@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../../docs/design-tokens.css";
+@import "../components/agents/agents-theme.css";
 
 *,
 *::before,

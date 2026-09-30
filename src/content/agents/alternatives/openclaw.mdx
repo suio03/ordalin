@@ -1,0 +1,91 @@
+export const meta = {
+  title: "OpenClaw Alternatives (2026): Hosted and Self-Hosted Agents Compared",
+  description:
+    "Self-hosted: Hermes Agent, NanoClaw, ZeroClaw, nanobot. No setup: Poke, Meta Muse. Hosted by AI labs: Dots, Spark, Grok Bot. What each trades vs OpenClaw.",
+  intro:
+    "The closest OpenClaw alternative is Hermes Agent, which is also open source and self-hosted; if you don't want to run anything yourself, Poke and Meta Muse are hosted and free to start. OpenClaw is free, MIT-licensed and runs on your own computer or server, and you talk to it from WhatsApp, Telegram, iMessage, Slack and 20+ other chat apps. That same design is why people look elsewhere: you install and maintain it, you pay for hosting and a model API, and by default its tools run on the machine it's installed on. Below are six alternatives grouped by what you want to change, then three smaller self-hosted projects.",
+  reasons: [
+    { reason: "I want to stay open source and self-hosted", picks: ["hermes-agent"] },
+    { reason: "I don't want to install or maintain anything", picks: ["poke", "meta-muse"] },
+    { reason: "I don't want tools running on my own machine", picks: ["meta-muse", "chatgpt-dots", "grok-bot"] },
+    { reason: "I want to start free", picks: ["meta-muse", "poke"] },
+    { reason: "My work lives in Google apps", picks: ["gemini-spark"] },
+    { reason: "I want to keep messaging it from chat apps", picks: ["hermes-agent", "poke", "chatgpt-dots"] },
+  ],
+  entries: [
+    {
+      slug: "hermes-agent",
+      why: "The closest like-for-like swap. Nous Research's Hermes Agent is also MIT-licensed and self-hosted, works with any model (Nous Portal, OpenRouter, OpenAI or a custom endpoint), and you reach it from Telegram, Discord, Slack, WhatsApp, Signal or the command line. Its docs describe it building reusable skills from experience and keeping its own memory, and it can run commands in local, Docker, SSH or cloud sandboxes.",
+      tradeoff: "You still host it and pay for the model. Fewer chat apps than OpenClaw, and no official iOS or Android app listed.",
+    },
+    {
+      slug: "poke",
+      why: "The no-setup version of \"an assistant you text.\" Poke is a hosted service with a free tier that includes most features. It works with Gmail, Outlook, calendars and contacts, plus Notion, GitHub and Linear.",
+      tradeoff: "Closed source and hosted by its maker, so your data lives with them. Paid plans are Pro ($19/mo) and Ultra ($199/mo plus usage).",
+    },
+    {
+      slug: "meta-muse",
+      why: "A hosted agent you can start for free. Meta says Muse browses the web, fills in forms, sends email, books travel and makes purchases, and it checks with you before sensitive actions like sending an email or making a purchase. It runs in a dedicated cloud machine, not on your computer.",
+      tradeoff: "US only for now, closed source, and it uses Meta's own model. You can't swap in Claude or a local model the way you can with OpenClaw.",
+    },
+    {
+      slug: "chatgpt-dots",
+      why: "For people who already live in ChatGPT. A dot has its own cloud computer and browser, runs scheduled tasks, and you can message it from Slack or Microsoft Teams as well as the ChatGPT apps. You write Custom Rules for what it may do alone.",
+      tradeoff: "Needs ChatGPT Pro ($100/mo and up) or Business Premium. OpenAI models only.",
+    },
+    {
+      slug: "gemini-spark",
+      why: "For people whose email, calendar and files are in Google. Spark runs multi-step tasks across Gmail, Calendar, Drive and Docs in Google's cloud and keeps working when your laptop is closed. App connections are off until you turn them on.",
+      tradeoff: "Needs Google AI Pro ($19.99/mo) or Ultra, and only in select countries. Gemini models only.",
+    },
+    {
+      slug: "grok-bot",
+      why: "A hosted agent with apps for Mac, Windows, Linux, iPhone, iPad and Android. Each bot gets a persistent cloud computer with a browser, filesystem and terminal. SpaceXAI publishes a specific list of actions it asks you to approve first, including purchases, deleting data and accepting legal terms.",
+      tradeoff: "Paid only: SuperGrok ($30/mo) or a Cursor plan (from $20/mo). Usage is counted separately and resets weekly.",
+    },
+  ],
+  faq: [
+    {
+      q: "What is the best open-source alternative to OpenClaw?",
+      a: "Hermes Agent from Nous Research is the closest match. Like OpenClaw it's MIT-licensed and self-hosted, lets you choose the model, and you talk to it from chat apps such as Telegram, Discord, Slack, WhatsApp and Signal. Smaller open-source options are NanoClaw (each agent in its own container), ZeroClaw (a single Rust binary) and nanobot (Python, with a web UI).",
+    },
+    {
+      q: "Is there an OpenClaw alternative that doesn't need a server?",
+      a: "Yes. Poke and Meta Muse are hosted services with free tiers, so there's nothing to install. ChatGPT Dots, Gemini Spark and Grok Bot are also hosted, but need a paid plan.",
+    },
+    {
+      q: "Is OpenClaw free?",
+      a: "The software is free and MIT-licensed, and its README says there's no paid tier, hosted service or token. You pay for wherever you run it and for the model API you connect.",
+    },
+    {
+      q: "Why do people say OpenClaw needs care around security?",
+      a: "By default its tools run on the machine it's installed on, and anyone who can message it is sending it input. OpenClaw's own docs say to treat inbound messages as untrusted and to read its security guide before exposing it remotely. Direct-message channels need a pairing approval first.",
+    },
+    {
+      q: "Which alternatives let me keep using WhatsApp or Telegram?",
+      a: "Hermes Agent supports Telegram, Discord, Slack, WhatsApp and Signal. ChatGPT Dots can be messaged from Slack and Microsoft Teams, and Poke is something you text.",
+    },
+  ],
+};
+
+## More self-hosted options
+
+These smaller open-source projects also give you a personal agent you run yourself and message from chat apps. Facts come from each project's GitHub README.
+
+### NanoClaw
+
+[NanoClaw](https://github.com/nanocoai/nanoclaw) is an MIT-licensed agent where each agent runs in its own Linux container, so its tools don't run directly on your machine. It is built on Anthropic's Claude Agent SDK; other providers such as Codex, OpenCode and Ollama are added through skills. You reach it from Slack, Telegram, Discord, WhatsApp, iMessage or the command line. Setup installs Node, pnpm and Docker.
+
+### ZeroClaw
+
+[ZeroClaw](https://github.com/zeroclaw-labs/zeroclaw) is a single Rust binary, dual-licensed MIT or Apache 2.0. It works with Anthropic, OpenAI, Ollama and about 20 other providers, connects to 30+ channels including Discord, Telegram, Matrix, email and webhooks, and has shell, browser, HTTP and MCP tools. It runs on Linux, macOS, Windows, FreeBSD and Docker.
+
+### nanobot
+
+[nanobot](https://github.com/HKUDS/nanobot) is an MIT-licensed Python agent from HKUDS that runs in a web UI or terminal. It connects to Telegram, Discord, Slack, WeChat, email, Mattermost, Microsoft Teams, Feishu and more, with long-term memory, MCP tools and scheduled tasks. Its docs include a setup guide for people without a technical background.
+
+## How we picked
+
+We started from what OpenClaw does: a personal agent you install yourself and message from chat apps. Then we sorted the alternatives by the part of that design they change: who hosts it, whose model it uses, and where its tools run. Prices and features come from each maker's own pages, and every claim above links back to them in the sources list.
+
+We didn't rank on hands-on testing yet. Where a maker hasn't published something, such as regions or free-tier limits, we say so rather than guess.

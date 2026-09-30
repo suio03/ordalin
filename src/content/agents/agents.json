@@ -1,0 +1,492 @@
+{
+  "checkedOn": "2026-09-30",
+  "agents": [
+    {
+      "slug": "meta-muse",
+      "name": "Muse",
+      "display_name": "Meta Muse",
+      "vendor": "Meta",
+      "channel": "personal",
+      "category": "personal agent",
+      "launch_date": "2026-09-08",
+      "official_url": "https://muse.ai",
+      "access": {
+        "free_tier": "yes — free with a usage limit that refreshes (limit not stated officially)",
+        "paid_plans": [
+          {
+            "name": "Power",
+            "price_usd_month": "20",
+            "usage": "500M Muse tokens / week"
+          },
+          {
+            "name": "Max",
+            "price_usd_month": "100",
+            "usage": "3B Muse tokens / week"
+          }
+        ],
+        "billing_note": "Renews monthly on the purchase anniversary until cancelled; cancel any time. Sign in with a Meta account",
+        "subscription_note": "Subscriptions in limited testing; not available in all locations; 18+"
+      },
+      "platforms": {
+        "ios": true,
+        "android": true,
+        "web": true,
+        "glasses": "coming soon"
+      },
+      "regions": "US (rolling out)",
+      "actions": "browse web, fill forms, send email, book travel, purchases, negotiate on user's behalf",
+      "connectors_notable": [
+        "Link (Stripe)",
+        "Shop Pay",
+        "1Password"
+      ],
+      "execution": "Muse Secure VM — dedicated cloud VM holding agent + user data; Sentinel agent must approve anything that reaches the internet",
+      "safety": "Checks with the person before sensitive actions like sending an email or making a purchase",
+      "privacy": {
+        "training": "Users can opt out of interactions being used to train Meta's models",
+        "confidential_compute": "Muse Confidential VM, user-held key — announced for later in 2026 (not live)"
+      },
+      "model": "Muse Spark",
+      "sources": [
+        "https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/",
+        "https://www.meta.com/help/subscriptions/1021145227643680/"
+      ]
+    },
+    {
+      "slug": "chatgpt-dots",
+      "name": "dots",
+      "display_name": "ChatGPT Dots",
+      "vendor": "OpenAI",
+      "channel": "personal",
+      "category": "personal agent (inside ChatGPT)",
+      "launch_date": "2026-09-29",
+      "official_url": "https://openai.com/index/introducing-dots/",
+      "access": {
+        "free_tier": "no",
+        "required_plan_for_agent": "ChatGPT Pro or Business Premium (Enterprise/Edu/Healthcare: beta, admin-enabled)",
+        "paid_plans": [
+          {
+            "name": "Pro 100",
+            "price_usd_month": "100"
+          },
+          {
+            "name": "Pro 200",
+            "price_usd_month": "200",
+            "note": "open to new sign-ups again; new subscriptions get a lower usage allowance"
+          },
+          {
+            "name": "Pro 500",
+            "price_usd_month": "500",
+            "note": "includes Astra Ultrafast"
+          }
+        ],
+        "included": "First dot included at no extra cost; plan includes an allowance for deeper work (extended limits first month). Extra dots: 'in the future', price not announced",
+        "billing_note": "Pro is monthly only; no annual billing. Pro 200 is open to new subscriptions again, with a lower usage allowance for new subscribers; grandfathered Pro 200 subscribers keep their previous allowance through 2026-10-29"
+      },
+      "platforms": {
+        "web_desktop": true,
+        "desktop_app": true,
+        "mobile_app": "chat after setup; cannot create a dot on mobile",
+        "mobile_web": false,
+        "slack": true,
+        "teams": true,
+        "sms": "limited beta, US Pro only"
+      },
+      "regions": "'eligible markets' (list linked, not yet captured)",
+      "actions": "own cloud computer + browser; connected apps; scheduled/recurring tasks; proactive background research (read-only tools); optional access to user's laptop",
+      "connectors_count": "4,000+ apps via plugins",
+      "execution": "Own cloud computer; user can open it to inspect work",
+      "safety": "Auto-review of account-affecting actions; Custom Rules (act / act if pre-approved / ask / hand off); sensitive tasks like password change always stay with user; monitoring can pause the dot",
+      "privacy": {
+        "training": "Personal plans: user controls whether dot conversations/work improve models. Business/Enterprise/Edu not used by default. No direct training on proactive research or dot's notes",
+        "delete_data": "Reset deletes dot, conversations, memories, scheduled tasks; disconnecting an app does not delete data already obtained"
+      },
+      "model": "GPT-6 Astra",
+      "sources": [
+        "https://openai.com/index/introducing-dots/",
+        "https://help.openai.com/en/articles/20001530-getting-started-with-your-dot",
+        "https://help.openai.com/en/articles/9793128-about-chatgpt-pro-tiers",
+        "https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus"
+      ]
+    },
+    {
+      "slug": "grok-bot",
+      "name": "Grok Bot",
+      "vendor": "SpaceXAI (formerly xAI) — also distributed via Cursor",
+      "channel": "personal",
+      "category": "work agent",
+      "launch_date": "2026-08-11",
+      "official_url": "https://x.ai/bot",
+      "access": {
+        "free_tier": "no",
+        "required_plan_for_agent": "SuperGrok / SuperGrok Plus / SuperGrok Heavy / X Premium+ (linked), Cursor Pro / Pro+ / Ultra, Cursor Teams; Enterprise",
+        "paid_plans": [
+          {
+            "name": "SuperGrok",
+            "price_usd_month": "30"
+          },
+          {
+            "name": "SuperGrok Plus",
+            "price_usd_month": "100"
+          },
+          {
+            "name": "SuperGrok Heavy",
+            "price_usd_month": "unknown"
+          },
+          {
+            "name": "Cursor Pro",
+            "price_usd_month": "20"
+          },
+          {
+            "name": "Cursor Teams",
+            "price_usd_month": "40 / user"
+          }
+        ],
+        "usage_note": "Grok Bot has its own usage, separate from Grok/Cursor plans; resets weekly; overage via Cursor on-demand usage"
+      },
+      "platforms": {
+        "macos": true,
+        "windows": true,
+        "linux": true,
+        "ios": true,
+        "ipad": true,
+        "android": true
+      },
+      "regions": "unknown",
+      "actions": "multi-step work across apps and websites; computer control; connectors; learns workflows from demonstration; bots coordinate with each other",
+      "execution": "Persistent cloud computer per bot (browser, filesystem, terminal) on Cursor's cloud; optional execution on your own computer (ask each time / always / never)",
+      "safety": "Asks for approval before sending messages, publishing, purchases and transfers, deleting data, changing permissions, production changes, accepting legal terms; Auto Review rules (ask-first wins)",
+      "privacy": {
+        "training": "Follows your Cursor account privacy settings; Legacy Privacy Mode not supported",
+        "delete_data": "Deleting a bot doesn't remove files or sessions on its shared computer; retention follows Cursor terms"
+      },
+      "model": "unknown",
+      "sources": [
+        "https://x.ai/news/introducing-grok-bot",
+        "https://docs.x.ai/grok-bot/overview",
+        "https://docs.x.ai/grok-bot/approvals-security-and-privacy",
+        "https://cursor.com/help/grok-bot/plans",
+        "https://x.ai/pricing",
+        "https://cursor.com/pricing"
+      ]
+    },
+    {
+      "slug": "openclaw",
+      "name": "OpenClaw",
+      "vendor": "OpenClaw Foundation (501(c)(3)); created by Peter Steinberger",
+      "channel": "personal",
+      "category": "open-source self-hosted personal agent",
+      "launch_date": "unknown",
+      "official_url": "https://openclaw.ai",
+      "access": {
+        "free_tier": "software free; you pay hosting + model API",
+        "paid_plans": []
+      },
+      "platforms": {
+        "macos": true,
+        "windows": true,
+        "linux": true,
+        "ios": true,
+        "android": true
+      },
+      "messaging": [
+        "Discord",
+        "iMessage",
+        "Slack",
+        "Teams",
+        "Telegram",
+        "WhatsApp",
+        "Google Chat",
+        "Signal",
+        "20+ more"
+      ],
+      "actions": "personal assistant you message from chat apps; runs tools on the machine it's installed on",
+      "execution": "Runs on your own computer or server (Node.js 24.16+ or 26.1+, Docker or Nix); tools execute on the host by default",
+      "safety": "DM channels need a pairing approval; docs say treat inbound messages as untrusted input and read the security guide before exposing it remotely",
+      "privacy": {
+        "training": "Depends on the model provider you connect; OpenClaw itself has no hosted service"
+      },
+      "model": "swappable — Claude, Codex, local models",
+      "license": "MIT",
+      "repo": "https://github.com/openclaw/openclaw",
+      "sources": [
+        "https://github.com/openclaw/openclaw"
+      ]
+    },
+    {
+      "slug": "lindy",
+      "name": "Lindy",
+      "vendor": "Lindy",
+      "channel": "personal",
+      "category": "work agent (email/inbox assistant)",
+      "launch_date": "unknown",
+      "official_url": "https://www.lindy.ai",
+      "access": {
+        "free_tier": "7-day free trial",
+        "paid_plans": [
+          {
+            "name": "Plus",
+            "price_usd_month": "29.99",
+            "per": "user",
+            "credits": "3k / user / mo"
+          },
+          {
+            "name": "Pro",
+            "price_usd_month": "99.99",
+            "per": "user",
+            "credits": "15k / user / mo"
+          },
+          {
+            "name": "Max",
+            "price_usd_month": "199.99",
+            "per": "user",
+            "credits": "35k / user / mo"
+          },
+          {
+            "name": "Enterprise",
+            "price_usd_month": "contact sales"
+          }
+        ]
+      },
+      "regions": "unknown",
+      "sources": [
+        "https://www.lindy.ai/pricing"
+      ]
+    },
+    {
+      "slug": "gemini-spark",
+      "name": "Gemini Spark",
+      "vendor": "Google",
+      "channel": "personal",
+      "category": "personal agent",
+      "launch_date": "2026-05-19 (announced; US beta for Ultra first)",
+      "official_url": "https://gemini.google/overview/agent/spark/",
+      "access": {
+        "free_tier": "no",
+        "required_plan_for_agent": "Google AI Pro or Ultra, 18+, select countries (also select business users)",
+        "paid_plans": [
+          {
+            "name": "Google AI Pro",
+            "price_usd_month": "19.99"
+          },
+          {
+            "name": "Google AI Ultra",
+            "price_usd_month": "99.99"
+          },
+          {
+            "name": "Google AI Ultra (20x)",
+            "price_usd_month": "199.99"
+          }
+        ]
+      },
+      "platforms": {
+        "web": true,
+        "mobile_app": true,
+        "macos": "beta, Google AI Ultra"
+      },
+      "regions": "Select countries (launched in the US, then India, Australia and Canada, among others)",
+      "actions": "multi-step tasks across Gmail, Calendar, Drive, Docs, Sheets and other Google apps; runs in the background 24/7; can run tasks on your Mac",
+      "connectors_notable": [
+        "Gmail",
+        "Google Calendar",
+        "Google Drive",
+        "Canva",
+        "Dropbox",
+        "Instacart",
+        "OpenTable",
+        "Zillow Rentals",
+        "custom MCP"
+      ],
+      "execution": "Google's cloud; keeps working when your laptop is closed or your phone is locked",
+      "safety": "Designed to ask you first before high-stakes actions like spending money or sending emails; app connections are off by default",
+      "model": "Gemini 3.5 Flash at launch",
+      "sources": [
+        "https://gemini.google/overview/agent/spark/",
+        "https://blog.google/innovation-and-ai/products/gemini-app/next-evolution-gemini-app/",
+        "https://blog.google/innovation-and-ai/products/gemini-app/gemini-spark-updates-june-2026/",
+        "https://gemini.google/us/subscriptions/?hl=en"
+      ]
+    },
+    {
+      "slug": "instinct",
+      "name": "Instinct",
+      "vendor": "Instinct (founder Noah Shinn)",
+      "channel": "personal",
+      "category": "personal agent (SMS-first, no app)",
+      "launch_date": "2026-08 (invite-only)",
+      "official_url": "https://instinct.com",
+      "access": {
+        "paid_plans": "unknown"
+      },
+      "sources": [
+        "https://techcrunch.com/2026/09/28/viral-ai-agent-instinct-raises-1b-series-c-at-a-10b-valuation/"
+      ]
+    },
+    {
+      "slug": "poke",
+      "name": "Poke",
+      "vendor": "The Interaction Company (joined Cognition, 2026-07 per press)",
+      "channel": "personal",
+      "category": "personal agent (texting)",
+      "official_url": "https://poke.com",
+      "access": {
+        "free_tier": "yes — most features included",
+        "paid_plans": [
+          {
+            "name": "Pro",
+            "price_usd_month": "19"
+          },
+          {
+            "name": "Ultra",
+            "price_usd_month": "199",
+            "note": "plus pay-as-you-go usage"
+          }
+        ]
+      },
+      "actions": "email (Gmail, Outlook), calendars, contacts; Notion, GitHub, Linear; builds and deploys simple websites; Ultra: Poke Human sends real-world tasks to a person",
+      "execution": "Hosted service; you text it",
+      "sources": [
+        "https://poke.com/faq"
+      ]
+    },
+    {
+      "slug": "hermes-agent",
+      "name": "Hermes Agent",
+      "vendor": "Nous Research",
+      "channel": "personal",
+      "category": "open-source self-hosted agent",
+      "official_url": "https://hermes-agent.nousresearch.com/",
+      "access": {
+        "free_tier": "software free; model/hosting costs vary",
+        "paid_plans": []
+      },
+      "platforms": {
+        "linux": true,
+        "macos": true,
+        "windows": true
+      },
+      "messaging": [
+        "Telegram",
+        "Discord",
+        "Slack",
+        "WhatsApp",
+        "Signal",
+        "CLI"
+      ],
+      "actions": "creates reusable skills from experience; keeps its own memory; runs commands in local, Docker, SSH or cloud sandboxes",
+      "execution": "Self-hosted: your computer, a VPS, a GPU cluster or serverless",
+      "safety": "Command approval, DM pairing and container isolation (per docs)",
+      "model": "any — Nous Portal, OpenRouter, OpenAI or a custom endpoint",
+      "license": "MIT",
+      "sources": [
+        "https://github.com/nousresearch/hermes-agent"
+      ]
+    },
+    {
+      "slug": "chatgpt",
+      "name": "ChatGPT",
+      "vendor": "OpenAI",
+      "channel": "assistant",
+      "category": "AI assistant (chatbot)",
+      "launch_date": "2022-11-30",
+      "official_url": "https://chatgpt.com",
+      "access": {
+        "free_tier": "yes",
+        "paid_plans": [
+          {
+            "name": "Go",
+            "price_usd_month": "8",
+            "note": "US price; localized elsewhere"
+          },
+          {
+            "name": "Plus",
+            "price_usd_month": "20"
+          },
+          {
+            "name": "Pro 100",
+            "price_usd_month": "100"
+          },
+          {
+            "name": "Pro 200",
+            "price_usd_month": "200",
+            "note": "open to new sign-ups again; new subscriptions get a lower usage allowance"
+          },
+          {
+            "name": "Pro 500",
+            "price_usd_month": "500",
+            "note": "includes Astra Ultrafast"
+          }
+        ],
+        "billing_note": "Plus and Pro are billed monthly; no annual billing"
+      },
+      "platforms": {
+        "web": true,
+        "ios": true,
+        "android": true,
+        "macos": "Apple silicon, macOS 14+",
+        "windows": true
+      },
+      "features": "Free: chat with limits. Go: 10x Free's messages, uploads and image creation. Plus: voice, image generation, file analysis, deep research, Codex. Pro: most capable Pro model, dots agent, early access to new tools",
+      "ads": "Free and Go may show ads (testing began in the US); Plus, Pro, Business and Enterprise are ad-free",
+      "privacy": {
+        "training": "OpenAI may use conversations to improve models; you can opt out at any time in Data Controls"
+      },
+      "model": "GPT-5.6 Luna on Free and Go; GPT-5.6 Sol on paid plans; GPT-6 Pro (GPT-6 Astra) on Pro and Business",
+      "sources": [
+        "https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus",
+        "https://openai.com/index/introducing-chatgpt-go/",
+        "https://help.openai.com/en/articles/9793128-about-chatgpt-pro-tiers",
+        "https://openai.com/chatgpt/download/",
+        "https://help.openai.com/en/articles/20001354-gpt-56-and-gpt-6-pro-in-chatgpt"
+      ]
+    },
+    {
+      "slug": "grok",
+      "name": "Grok",
+      "vendor": "SpaceXAI (formerly xAI)",
+      "channel": "assistant",
+      "category": "AI assistant (chatbot)",
+      "launch_date": "unknown",
+      "official_url": "https://grok.com",
+      "access": {
+        "free_tier": "yes — within limits",
+        "paid_plans": [
+          {
+            "name": "SuperGrok Lite",
+            "price_usd_month": "unknown"
+          },
+          {
+            "name": "SuperGrok",
+            "price_usd_month": "30"
+          },
+          {
+            "name": "SuperGrok Plus",
+            "price_usd_month": "100"
+          },
+          {
+            "name": "SuperGrok Heavy",
+            "price_usd_month": "unknown"
+          }
+        ]
+      },
+      "platforms": {
+        "web": true,
+        "ios": true,
+        "android": true,
+        "x": true
+      },
+      "features": "Free: real-time web and X search, voice mode, connectors. SuperGrok: Grok 4.6, higher limits, Expert, image and video generation, Grok Bot. SuperGrok Plus: 1080p video, much higher usage, priority access",
+      "ads": "unknown",
+      "privacy": {
+        "training": "On grok.com, Settings → Data → Improve the Model lets you opt out; Private Chat is excluded from training. On X, a Privacy & Safety setting controls it"
+      },
+      "model": "Grok 4.6 in the Grok apps; Grok 4.7 (Sep 21, 2026) in Cursor, Grok Build and the API",
+      "sources": [
+        "https://x.ai/pricing",
+        "https://x.ai/legal/faq",
+        "https://help.x.com/en/using-x/about-grok",
+        "https://x.ai/news/grok-4-7"
+      ]
+    }
+  ]
+}

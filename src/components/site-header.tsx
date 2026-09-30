@@ -11,6 +11,7 @@ function primaryNavigation() {
     { href: "/tools", label: "All tools" },
     ...(listEditorialPages("best").length ? [{ href: "/best", label: "Best of" }] : []),
     ...(listEditorialPages("compare").length ? [{ href: "/compare", label: "Compare" }] : []),
+    { href: "/agents", label: "AI agents" },
     { href: "/tasks", label: "Find by goal" },
     { href: "/collections", label: "Collections" },
   ];
