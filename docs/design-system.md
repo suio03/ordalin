@@ -54,6 +54,7 @@ The defining idea is **quiet orientation**: users should understand where they a
 | `surfaceMuted` | `#EEF3F1` | `#35413C` | Selected tabs, tool marks, quiet grouping. |
 | `surfaceAccent` | `#DCE7E3` | `#3C4A45` | Collection fields and category context. |
 | `surfaceInput` | `#FFFFFF` | `#232D29` | Form fields and selected controls. |
+| `surfaceLogo` | `#FFFFFF` | `#E6ECE9` | Tile behind raster tool logos; stays light in Dark so dark marks remain legible. |
 | `textPrimary` | `#14201D` | `#EEF5F2` | Primary copy, headings, important icons. |
 | `textSecondary` | `#56645F` | `#B3C0BB` | Supporting descriptions and inactive controls. |
 | `textTertiary` | `#5D6A65` | `#9EACA7` | Metadata only; do not use below 10 px. |

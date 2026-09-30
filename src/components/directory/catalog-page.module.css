@@ -452,7 +452,7 @@
   .collectionCard:hover { transform: none; }
 }
 
-.editorialLogo { border-radius: var(--radius-panel); object-fit: contain; width: 100%; max-width: 72px; height: auto; }
+.editorialLogo { background: var(--color-surface-logo); border-radius: var(--radius-panel); object-fit: contain; width: 100%; max-width: 72px; height: auto; }
 
 .submittedDetail { white-space: pre-line; }
 

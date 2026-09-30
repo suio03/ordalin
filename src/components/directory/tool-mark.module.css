@@ -38,7 +38,7 @@
   height: 100%;
   padding: 8%;
   object-fit: contain;
-  background: var(--color-surface-raised);
+  background: var(--color-surface-logo);
 }
 
 @media (max-width: 560px) {

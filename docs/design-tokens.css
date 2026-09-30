@@ -7,6 +7,7 @@
   --color-surface-muted: #eef3f1;
   --color-surface-accent: #dce7e3;
   --color-surface-input: #ffffff;
+  --color-surface-logo: #ffffff;
   --color-text-primary: #14201d;
   --color-text-secondary: #56645f;
   --color-text-tertiary: #5d6a65;
@@ -99,6 +100,7 @@
   --color-surface-muted: #35413c;
   --color-surface-accent: #3c4a45;
   --color-surface-input: #232d29;
+  --color-surface-logo: #e6ece9;
   --color-text-primary: #eef5f2;
   --color-text-secondary: #b3c0bb;
   --color-text-tertiary: #9eaca7;
