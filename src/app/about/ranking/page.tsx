@@ -25,7 +25,7 @@ export default function RankingPage() {
           <h2>How a tool is included</h2>
           <p>Toolify and Product Hunt help us discover candidates. Product facts come from the official website. Discovered tools are published automatically when checks for an AI product, supporting evidence, pricing, category fit, and a website preview pass. Candidates with missing, conflicting, or unsupported information are skipped.</p>
           <p>Automatically published profiles are labelled “Website-checked tool profile”. These checks establish support for the listed website facts; they do not test product performance or constitute an editorial recommendation. Editor Picks and Collections are selected manually.</p>
-          <p>A public submitter can begin with an official website, correct the extracted facts, choose a product mark, and confirm publication. A new unique-domain profile is published after validation and labelled “Submitted tool profile”.</p>
+          <p>A public submitter can begin with an official website, correct the extracted facts, choose a product mark, and confirm publication. A new unique-domain submission is not published straight away: Ordalin first researches the official website to the same standard as every other listing, then publishes it.</p>
         </section>
         <section>
           <h2>How lists are ordered</h2>

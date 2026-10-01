@@ -22,3 +22,16 @@ export function submissionErrorResponse(error: unknown) {
     { status: 500 },
   );
 }
+
+export type KnownTool = { slug: string; name: string; status: string };
+
+/** Only a published listing is linked; a submission still in review has no public page yet. */
+export function knownToolError(tool: KnownTool) {
+  if (tool.status === "published") {
+    return new SubmissionError(`${tool.name} is already listed on Ordalin.`, 409, "duplicate_domain", { existingTool: { slug: tool.slug, name: tool.name } });
+  }
+  if (tool.status === "pending_review" || tool.status === "imported") {
+    return new SubmissionError(`${tool.name} has already been submitted and is being reviewed.`, 409, "duplicate_domain");
+  }
+  return new SubmissionError(`${tool.name} cannot be submitted again.`, 409, "duplicate_domain");
+}

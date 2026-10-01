@@ -54,7 +54,8 @@ export default async function ToolPage({ params }: ToolParams) {
   const interfaces = tool.tagDetails.filter((tag) => tag.kind === "interface");
   const attributes = tool.tagDetails.filter((tag) => tag.kind === "attribute");
   const screenshotUrl = profile?.screenshot ?? catalogAssetUrl(tool.screenshotAssetKey);
-  const isSubmitted = tool.sourceProvider === "submission";
+  // A researched submission reads like any reviewed listing; only rel="ugc" still marks where it came from.
+  const isSubmitted = tool.sourceProvider === "submission" && !research;
   const isAutomatedImport = tool.sourceProvider === "toolify" || tool.sourceProvider === "product_hunt";
   const profileLabel = isSubmitted
     ? "Submitted tool profile"

@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = withSocial({
   alternates: { canonical: "/submit" },
   title: "Submit a tool",
-  description: "Check, confirm, and publish a new AI tool on Ordalin.",
+  description: "Check, confirm, and submit a new AI tool to Ordalin.",
 });
 
 export default async function SubmitPage() {
@@ -26,7 +26,7 @@ export default async function SubmitPage() {
         <p className={styles.eyebrow}>Free submission</p>
         <h1>Start with the official website.</h1>
         <p>
-          Ordalin gathers public facts and images. Edit anything, preview the complete profile, and publish when you are happy with it.
+          Ordalin gathers public facts and images. Edit anything, preview the profile, and submit it. We research every tool before it goes live.
         </p>
       </header>
       {process.env.NODE_ENV === "development" ? <p role="status">Local preview uses production data in read-only mode. Submissions are disabled.</p> : <SubmitFlow

@@ -18,8 +18,13 @@ const argument = (name: string) => process.argv.find((arg) => arg.startsWith(`--
 const listFile = argument("file");
 const inline = argument("urls")?.split(",") ?? [];
 const fromFile = listFile ? (await readFile(path.resolve(listFile), "utf8")).split("\n") : [];
-const urls = [...inline, ...fromFile].map((line) => line.replace(/#.*/, "").trim()).filter(Boolean);
-if (!urls.length) throw new Error("Provide --urls=https://a.example,https://b.example or --file=<one URL per line>.");
+// Visitor submissions wait hidden as pending_review until a researched bundle publishes them.
+const inReview = "SELECT t.website_url, t.canonical_domain FROM tools t WHERE t.status = 'pending_review' AND EXISTS (SELECT 1 FROM tool_sources s WHERE s.tool_id = t.id AND s.provider = 'submission')";
+const submissions = process.argv.includes("--submissions")
+  ? (await d1Query<{ website_url: string }>(projectRoot, mode, `${inReview} ORDER BY t.created_at`)).map((row) => row.website_url)
+  : [];
+const urls = [...submissions, ...inline, ...fromFile].map((line) => line.replace(/#.*/, "").trim()).filter(Boolean);
+if (!urls.length) throw new Error("Provide --submissions, --urls=https://a.example,https://b.example or --file=<one URL per line>.");
 if (urls.length > 10) throw new Error("Prepare at most 10 official websites per manifest.");
 // --render: replace JavaScript-shell pages with Cloudflare server-side renders.
 const renderer = process.argv.includes("--render") ? await renderedFetchClient() : null;
@@ -39,7 +44,7 @@ async function taxonomy(): Promise<CatalogTaxonomy> {
 }
 
 const existing = new Set(
-  (await d1Query<{ canonical_domain: string }>(projectRoot, mode, "SELECT canonical_domain FROM tools UNION SELECT canonical_domain FROM import_candidates"))
+  (await d1Query<{ canonical_domain: string }>(projectRoot, mode, `SELECT canonical_domain FROM (SELECT canonical_domain FROM tools UNION SELECT canonical_domain FROM import_candidates) WHERE canonical_domain NOT IN (SELECT canonical_domain FROM (${inReview}))`))
     .map((row) => row.canonical_domain.toLowerCase()),
 );
 const preparedAt = new Date().toISOString();

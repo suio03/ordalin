@@ -183,6 +183,19 @@ async function duplicate(bundle: CatalogImportBundle) {
   `))[0] ?? null;
 }
 
+type SubmittedTool = { id: string; slug: string; screenshot_asset_key: string | null };
+
+// A visitor submission is stored hidden; the researched bundle for its domain completes and publishes it.
+async function pendingSubmission(bundle: CatalogImportBundle) {
+  return (await d1Query<SubmittedTool>(projectRoot, mode, `
+    SELECT t.id, t.slug, t.screenshot_asset_key FROM tools t
+    WHERE t.canonical_domain = ${sqlText(bundle.candidate.canonicalDomain)}
+      AND t.status = 'pending_review'
+      AND EXISTS (SELECT 1 FROM tool_sources s WHERE s.tool_id = t.id AND s.provider = 'submission')
+    LIMIT 1
+  `))[0] ?? null;
+}
+
 async function runAssetScript(script: "catalog:logos" | "catalog:screenshots", toolId: string, screenshotFile?: string) {
   const result = await execute("pnpm", [script, "--", mode, `--tool-id=${toolId}`, "--include-pending", ...(screenshotFile ? [`--screenshot-file=${screenshotFile}`] : [])], {
     cwd: projectRoot,
@@ -276,7 +289,8 @@ async function applyBundle(filename: string, batchContext: BatchContext | null):
       throw new Error(`${filename} does not belong to ${path.relative(projectRoot, batchContext.manifestPath)}.`);
     }
   }
-  if (await duplicate(bundle)) {
+  const submitted = await pendingSubmission(bundle);
+  if (!submitted && await duplicate(bundle)) {
     console.log(`${bundle.candidate.canonicalDomain}: already known, no-op`);
     return "duplicate";
   }
@@ -299,6 +313,10 @@ async function applyBundle(filename: string, batchContext: BatchContext | null):
     }
     bundle.analysis!.profile = research.profile;
   }
+  if (submitted && decision.outcome !== "auto_publish") {
+    // Never skip a visitor's submission permanently; it waits for a better bundle.
+    throw new Error(`Submitted tool needs a publishable analysis: ${decision.reasons.join(" ")}`);
+  }
   if (decision.outcome === "skip") {
     await recordWithoutTool(bundle, "skipped", decision.reasons, null);
     console.log(`${bundle.candidate.canonicalDomain}: skipped permanently (${decision.reasons.length} deterministic reason${decision.reasons.length === 1 ? "" : "s"})`);
@@ -308,7 +326,9 @@ async function applyBundle(filename: string, batchContext: BatchContext | null):
   const screenshotDirectory = process.argv.find(arg => arg.startsWith("--screenshot-dir="))?.slice("--screenshot-dir=".length)
     ?? path.join(path.dirname(resolvedFilename), "screenshots");
   // Fail before any production write if the browser screenshot is not ready.
-  const screenshotFile = await reviewedImportScreenshot(screenshotDirectory, bundle.candidate.canonicalDomain, bundle.websiteUrl);
+  const screenshotFile = submitted?.screenshot_asset_key
+    ? undefined
+    : await reviewedImportScreenshot(screenshotDirectory, bundle.candidate.canonicalDomain, bundle.websiteUrl);
 
   const categoryBySlug = new Map(catalog.categories.map((category) => [category.slug, category]));
   const tagBySlug = new Map(catalog.tags.map((tag) => [tag.slug, tag]));
@@ -329,11 +349,14 @@ async function applyBundle(filename: string, batchContext: BatchContext | null):
   const name = cleanText(bundle.analysis!.name || bundle.candidate.identity.name?.value || bundle.candidate.canonicalDomain, 80);
   const tagline = cleanText(bundle.analysis!.tagline || bundle.candidate.identity.tagline?.value || "Review the official website before publishing this catalogue entry.", 180);
   const description = cleanText(bundle.analysis!.description || bundle.candidate.evidencePages[0]?.excerpt || tagline, 1_200);
+  const reasons = [...decision.reasons];
+  if (submitted) {
+    return completeSubmission(bundle, submitted, { name, tagline, description, primaryCategory, selectedCategories, selectedTags, reasons, screenshotFile });
+  }
   const toolId = `tool_${crypto.randomUUID()}`;
   const importId = `import_${crypto.randomUUID()}`;
   const slug = await uniqueSlug(name, bundle.candidate.canonicalDomain);
   const now = Math.floor(Date.now() / 1000);
-  const reasons = [...decision.reasons];
   const statements = [
     `INSERT INTO tools (id, slug, name, tagline, description, website_url, canonical_domain, pricing_model, status, primary_category_id, logo_asset_key, screenshot_asset_key, is_editor_pick, source_first_seen_at, published_at, last_checked_at, created_at, updated_at) VALUES (${sqlText(toolId)}, ${sqlText(slug)}, ${sqlText(name)}, ${sqlText(tagline)}, ${sqlText(description)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, ${sqlText(bundle.analysis!.pricingModel)}, 'pending_review', ${sqlText(primaryCategory.id)}, NULL, NULL, 0, ${now}, NULL, ${now}, ${now}, ${now})`,
     ...selectedCategories.map((category) => `INSERT INTO tool_categories (tool_id, category_id, is_primary) VALUES (${sqlText(toolId)}, ${sqlText(category.id)}, ${category.id === primaryCategory.id ? 1 : 0})`),
@@ -386,6 +409,54 @@ async function applyBundle(filename: string, batchContext: BatchContext | null):
     `INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (${sqlText(`event_${crypto.randomUUID()}`)}, 'import_candidate', ${sqlText(importId)}, 'auto_publish', 'codex-schedule', ${sqlText(JSON.stringify({ toolId, screenshotAssetKey, reasons: [] }))}, ${publishedAt})`,
   ]);
   console.log(`${bundle.candidate.canonicalDomain}: published automatically at /tools/${slug}`);
+  return "published";
+}
+
+type Completion = {
+  name: string;
+  tagline: string;
+  description: string;
+  primaryCategory: CategoryRow;
+  selectedCategories: CategoryRow[];
+  selectedTags: TagRow[];
+  reasons: string[];
+  screenshotFile: string | undefined;
+};
+
+// Assets are filled first and the listing is rewritten in one write, so a failure leaves the submission hidden and retryable.
+async function completeSubmission(bundle: CatalogImportBundle, tool: SubmittedTool, values: Completion): Promise<ApplyOutcome> {
+  const { name, tagline, description, primaryCategory, selectedCategories, selectedTags, reasons, screenshotFile } = values;
+  const domain = bundle.candidate.canonicalDomain;
+  if (screenshotFile) await runAssetScript("catalog:screenshots", tool.id, screenshotFile);
+  const asset = (await d1Query<{ screenshot_asset_key: string | null }>(projectRoot, mode, `SELECT screenshot_asset_key FROM tools WHERE id = ${sqlText(tool.id)} LIMIT 1`))[0];
+  if (!asset?.screenshot_asset_key) throw new Error(`${domain}: screenshot capture did not store an asset; the submission stays in review.`);
+  try {
+    await runAssetScript("catalog:logos", tool.id);
+  } catch (error) {
+    console.warn(`${domain}: logo unavailable; text fallback will be used (${error instanceof Error ? error.message : "unknown error"})`);
+  }
+
+  const importId = `import_${crypto.randomUUID()}`;
+  const toolId = sqlText(tool.id);
+  const publishedAt = Math.floor(Date.now() / 1000);
+  const categoryNames = selectedCategories.map((category) => category.name).join(" ");
+  const tagNames = selectedTags.map((tag) => tag.name).join(" ");
+  const stored = storedCandidate(bundle.candidate, bundle.analysis);
+  const statements = [
+    `DELETE FROM tool_categories WHERE tool_id = ${toolId}`,
+    `DELETE FROM tool_tags WHERE tool_id = ${toolId}`,
+    ...selectedCategories.map((category) => `INSERT INTO tool_categories (tool_id, category_id, is_primary) VALUES (${toolId}, ${sqlText(category.id)}, ${category.id === primaryCategory.id ? 1 : 0})`),
+    ...selectedTags.map((tag) => `INSERT INTO tool_tags (tool_id, tag_id) VALUES (${toolId}, ${sqlText(tag.id)})`),
+    `INSERT INTO tool_sources (id, tool_id, provider, external_id, source_url, raw_json, first_seen_at, last_seen_at) VALUES (${sqlText(`source_${crypto.randomUUID()}`)}, ${toolId}, ${sqlText(bundle.provider as ImportProvider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(JSON.stringify({ ...bundle, candidate: stored }))}, ${publishedAt}, ${publishedAt})`,
+    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(domain)}, 'published', ${sqlText(JSON.stringify(stored))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, ${toolId}, NULL, ${publishedAt}, ${publishedAt}, ${publishedAt}, ${publishedAt})`,
+    `UPDATE tools SET name = ${sqlText(name)}, tagline = ${sqlText(tagline)}, description = ${sqlText(description)}, pricing_model = ${sqlText(bundle.analysis!.pricingModel)}, primary_category_id = ${sqlText(primaryCategory.id)}, status = 'published', published_at = ${publishedAt}, last_checked_at = ${publishedAt}, updated_at = ${publishedAt} WHERE id = ${toolId} AND status = 'pending_review'`,
+    `DELETE FROM tools_fts WHERE tool_id = ${toolId}`,
+    `INSERT INTO tools_fts (tool_id, name, tagline, description, category_names, tag_names) VALUES (${toolId}, ${sqlText(name)}, ${sqlText(tagline)}, ${sqlText(description)}, ${sqlText(categoryNames)}, ${sqlText(tagNames)})`,
+    `UPDATE submissions SET status = 'accepted', moderation_note = 'Published with a researched profile', updated_at = ${publishedAt} WHERE canonical_domain = ${sqlText(domain)} AND status = 'pending'`,
+    `INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (${sqlText(`event_${crypto.randomUUID()}`)}, 'import_candidate', ${sqlText(importId)}, 'auto_publish', 'codex-schedule', ${sqlText(JSON.stringify({ toolId: tool.id, submission: true, screenshotAssetKey: asset.screenshot_asset_key }))}, ${publishedAt})`,
+  ];
+  await d1File(projectRoot, mode, statements.map((statement) => assertStatementFits(statement, `${domain} submission statement`)));
+  console.log(`${domain}: researched submission published at /tools/${tool.slug}`);
   return "published";
 }
 

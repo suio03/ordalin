@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { toolMark } from "@/lib/catalog";
 import styles from "./submit.module.css";
 
-type Props = { slug: string; name: string; tagline: string; logoSrc: string | null };
+type Props = { name: string; tagline: string; logoSrc: string | null };
 
 const confettiTokens = ["--color-accent-primary", "--color-accent-text", "--color-accent-soft", "--color-text-primary", "--color-focus-ring"];
 
@@ -58,36 +58,26 @@ function burst(canvas: HTMLCanvasElement) {
   return () => cancelAnimationFrame(frame);
 }
 
-export function SubmitSuccess({ slug, name, tagline, logoSrc }: Props) {
+export function SubmitSuccess({ name, tagline, logoSrc }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [copied, setCopied] = useState(false);
-  const path = `/tools/${slug}`;
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
     return canvas.current ? burst(canvas.current) : undefined;
   }, []);
 
-  async function copyLink() {
-    try {
-      await navigator.clipboard.writeText(new URL(path, window.location.origin).href);
-      setCopied(true); setTimeout(() => setCopied(false), 2000);
-    } catch { /* Clipboard can be blocked; the link stays visible below. */ }
-  }
-
   return (
     <section className={styles.success} aria-live="polite">
       <canvas ref={canvas} className={styles.confetti} aria-hidden="true" />
-      <p className={styles.successStatus}><span aria-hidden="true" />Published</p>
-      <h2>{name} is live on Ordalin.</h2>
-      <p className={styles.successLead}>Thanks for submitting. The listing is labelled as submitted information and can now be found across the catalogue.</p>
+      <p className={styles.successStatus}><span aria-hidden="true" />Submitted</p>
+      <h2>Thanks — {name} is in review.</h2>
+      <p className={styles.successLead}>Before a tool goes live, Ordalin researches its official website for features, pricing, free limits and platforms, the same as every listing in the catalogue. {name} will appear once its profile is complete.</p>
       <div className={styles.successCard}>
         {logoSrc ? <Image className={styles.previewLogo} src={logoSrc} alt="" width={56} height={56} unoptimized /> : <span className={styles.previewLogo}>{toolMark(name)}</span>}
-        <div><strong>{name}</strong><p>{tagline}</p><small>ordalin.com{path}</small></div>
+        <div><strong>{name}</strong><p>{tagline}</p></div>
       </div>
       <div className={styles.successActions}>
-        <Link className={styles.publishButton} href={path}>View your listing →</Link>
-        <button type="button" onClick={copyLink}>{copied ? "Link copied" : "Copy link"}</button>
+        <Link className={styles.publishButton} href="/tools">Browse the catalogue →</Link>
         <a href="/submit">Submit another tool</a>
       </div>
     </section>

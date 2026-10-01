@@ -2,7 +2,7 @@ import { submissionFormData } from "@/lib/submissions/body";
 import { confirmProfile, readDetailFields } from "@/lib/submissions/profile";
 import { getCloudflareEnv, getCloudflareRuntime } from "@/lib/cloudflare";
 import { validateSubmissionLogo, validateSubmissionScreenshot } from "@/lib/submissions/image";
-import { SubmissionError, submissionErrorResponse } from "@/lib/submissions/http";
+import { knownToolError, SubmissionError, submissionErrorResponse, type KnownTool } from "@/lib/submissions/http";
 import { parseSubmissionDraftPayload } from "@/lib/submissions/draft";
 import { actorHash, clientAddress, consumeSubmissionLimit, submissionHashSalt } from "@/lib/submissions/request";
 import { verifyTurnstile } from "@/lib/submissions/turnstile";
@@ -49,12 +49,10 @@ export async function POST(request: Request) {
     const confirmed = confirmProfile(candidate, analysis, input, details, screenshotChoice as "captured" | "uploaded" | "none");
 
     const duplicate = await env.DB
-      .prepare("SELECT slug, name FROM tools WHERE canonical_domain = ? LIMIT 1")
+      .prepare("SELECT slug, name, status FROM tools WHERE canonical_domain = ? LIMIT 1")
       .bind(draft.canonical_domain)
-      .first<{ slug: string; name: string }>();
-    if (duplicate) {
-      throw new SubmissionError(`${duplicate.name} is already listed on Ordalin.`, 409, "duplicate_domain", { existingTool: duplicate });
-    }
+      .first<KnownTool>();
+    if (duplicate) throw knownToolError(duplicate);
 
     const categoryRows = await env.DB
       .prepare(`SELECT id, slug, name FROM categories WHERE is_active = 1 AND slug IN (${sqlPlaceholders(input.categorySlugs.length)})`)
@@ -102,12 +100,12 @@ export async function POST(request: Request) {
         customMetadata: { width: "1440", height: "900", source: screenshotChoice === "captured" ? "website-preview" : "public-submission" },
       });
     }
-    const categoryNames = categoryRows.results.map((category) => category.name).join(" ");
-    const tagNames = tagRows.results.map((tag) => tag.name).join(" ");
+    // The submission stays hidden until Ordalin researches it to the catalogue
+    // profile standard; `pnpm imports:apply` publishes it (docs/catalog-enrichment.md).
     const statements = [
       env.DB
-        .prepare("INSERT INTO tools (id, slug, name, tagline, description, website_url, canonical_domain, pricing_model, status, primary_category_id, logo_asset_key, screenshot_asset_key, is_editor_pick, source_first_seen_at, published_at, last_checked_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, 0, ?, ?, ?, ?, ?)")
-        .bind(toolId, slug, input.name, input.tagline, input.description, draft.website_url, draft.canonical_domain, input.pricingModel, primaryCategory.id, storedLogoKey, storedScreenshotKey, now, now, candidate.evidencePages.length ? Math.floor(Date.parse(candidate.fetchedAt) / 1000) : null, now, now),
+        .prepare("INSERT INTO tools (id, slug, name, tagline, description, website_url, canonical_domain, pricing_model, status, primary_category_id, logo_asset_key, screenshot_asset_key, is_editor_pick, source_first_seen_at, published_at, last_checked_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending_review', ?, ?, ?, 0, ?, NULL, ?, ?, ?)")
+        .bind(toolId, slug, input.name, input.tagline, input.description, draft.website_url, draft.canonical_domain, input.pricingModel, primaryCategory.id, storedLogoKey, storedScreenshotKey, now, candidate.evidencePages.length ? Math.floor(Date.parse(candidate.fetchedAt) / 1000) : null, now, now),
       ...categoryRows.results.map((category) =>
         env.DB
           .prepare("INSERT INTO tool_categories (tool_id, category_id, is_primary) VALUES (?, ?, ?)")
@@ -120,21 +118,18 @@ export async function POST(request: Request) {
         .prepare("INSERT INTO tool_sources (id, tool_id, provider, external_id, source_url, raw_json, first_seen_at, last_seen_at) VALUES (?, ?, 'submission', ?, ?, ?, ?, ?)")
         .bind(`source_${crypto.randomUUID()}`, toolId, input.draftId, candidate.websiteUrl, JSON.stringify({ ...payload, confirmed }), now, now),
       env.DB
-        .prepare("INSERT INTO submissions (id, submitted_name, website_url, canonical_domain, contact_email, description, suggested_category_id, status, turnstile_metadata_json, moderation_note, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'accepted', ?, ?, ?, ?)")
-        .bind(submissionId, input.name, draft.website_url, draft.canonical_domain, input.contactEmail, input.description, primaryCategory.id, JSON.stringify({ success: true, action: turnstile.action ?? null, hostname: turnstile.hostname ?? null }), "Automatically published after submitter confirmation", now, now),
+        .prepare("INSERT INTO submissions (id, submitted_name, website_url, canonical_domain, contact_email, description, suggested_category_id, status, turnstile_metadata_json, moderation_note, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?)")
+        .bind(submissionId, input.name, draft.website_url, draft.canonical_domain, input.contactEmail, input.description, primaryCategory.id, JSON.stringify({ success: true, action: turnstile.action ?? null, hostname: turnstile.hostname ?? null }), "Awaiting a researched profile before publication", now, now),
       env.DB
-        .prepare("INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (?, 'tool', ?, 'publish', ?, ?, ?)")
-        .bind(`event_${crypto.randomUUID()}`, toolId, `public-submission:${hash.slice(0, 12)}`, JSON.stringify({ submissionId, mode: "automatic", analysisSchemaVersion: analysis.schemaVersion }), now),
-      env.DB
-        .prepare("INSERT INTO tools_fts (tool_id, name, tagline, description, category_names, tag_names) VALUES (?, ?, ?, ?, ?, ?)")
-        .bind(toolId, input.name, input.tagline, input.description, categoryNames, tagNames),
+        .prepare("INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (?, 'tool', ?, 'submit', ?, ?, ?)")
+        .bind(`event_${crypto.randomUUID()}`, toolId, `public-submission:${hash.slice(0, 12)}`, JSON.stringify({ submissionId, mode: "review", analysisSchemaVersion: analysis.schemaVersion }), now),
       env.DB
         .prepare("UPDATE submission_drafts SET status = 'published', updated_at = ? WHERE id = ? AND status = 'pending'")
         .bind(now, input.draftId),
     ];
     await env.DB.batch(statements);
     committed = true;
-    return Response.json({ slug, url: `/tools/${slug}`, previewStatus: storedScreenshotKey ? "ready" : "none" }, { status: 201 });
+    return Response.json({ status: "in_review" }, { status: 202 });
   } catch (error) {
     if (!committed && (storedLogoKey || storedScreenshotKey)) {
       try {

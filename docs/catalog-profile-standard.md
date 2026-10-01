@@ -92,8 +92,9 @@ reads and validates it directly; no database migration is required.
 
 The import CLI rejects an otherwise publishable basic-only bundle before it
 creates a tool or import record. Research gaps can therefore be repaired and
-retried without overwriting existing tools. Public user submissions retain their
-separate confirmation and optional-detail flow.
+retried without overwriting existing tools. Public user submissions stay hidden
+until a researched bundle for their domain passes the same check; see
+`docs/catalog-enrichment.md`.
 
 Existing basic-only records do not gain researched detail automatically. Backfill
 requires a separate explicit task to research and update those existing tools.

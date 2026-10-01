@@ -70,8 +70,12 @@ try {
   assert.equal(response.status, 400, 'an upload must not claim captured provenance');
   response = await dispatch('http://localhost/publish', { method: 'POST', headers, body: form('runtime-uploaded', 'uploaded') });
   const publication = await response.json();
-  assert.equal(response.status, 201, JSON.stringify(publication));
-  const tool = await db.prepare('SELECT * FROM tools WHERE slug = ?').bind(publication.slug).first();
+  assert.equal(response.status, 202, JSON.stringify(publication));
+  assert.deepEqual(publication, { status: 'in_review' }, 'no public listing exists yet');
+  const tool = await db.prepare('SELECT * FROM tools WHERE canonical_domain = ?').bind('runtime-uploaded.example').first();
+  assert.equal(tool.status, 'pending_review', 'a submission stays hidden until it is researched');
+  assert.equal(tool.published_at, null);
+  assert.equal((await db.prepare("SELECT status FROM submissions WHERE canonical_domain = 'runtime-uploaded.example'").first()).status, 'pending');
   assert.ok(tool.screenshot_asset_key);
   assert.equal(tool.last_checked_at, null, 'manual completion must not imply a website check');
   assert.deepEqual(Buffer.from(await (await bucket.get(tool.screenshot_asset_key)).arrayBuffer()), bytes);
@@ -82,9 +86,9 @@ try {
   assert.equal(response.status, 200, await response.clone().text());
   const captured = await response.arrayBuffer();
   response = await dispatch('http://localhost/publish', { method: 'POST', headers, body: form('runtime-captured', 'captured', captured) });
-  assert.equal(response.status, 201, await response.clone().text());
+  assert.equal(response.status, 202, await response.clone().text());
   response = await dispatch('http://localhost/runtime-captured', { method: 'POST', headers });
-  assert.equal(response.status, 410, 'published drafts cannot capture again');
+  assert.equal(response.status, 410, 'submitted drafts cannot capture again');
   await draft('runtime-limited');
   for (let i = 0; i < 3; i++) {
     response = await dispatch('http://localhost/runtime-limited', { method: 'POST', headers });
@@ -93,5 +97,5 @@ try {
   }
   response = await dispatch('http://localhost/runtime-limited', { method: 'POST', headers });
   assert.equal(response.status, 429);
-  console.log('workerd: private capture, multipart uploads, provenance, D1 publication, exact R2 image and capture limit passed');
+  console.log('workerd: private capture, multipart uploads, provenance, hidden D1 submission, exact R2 image and capture limit passed');
 } finally { await mf.dispose(); }

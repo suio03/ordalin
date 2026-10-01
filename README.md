@@ -16,8 +16,8 @@ on `ordalin.com`. The Navigation Radar homepage, category and tool pages,
 paginated catalogue, collections, deterministic search, metadata, sitemap, and robots rules run
 from the production D1 catalogue. Public submission starts from the official
 website, uses a low-cost OpenAI model to prefill editable facts, accepts a
-crawled or uploaded product mark, publishes a new unique-domain profile, and
-captures a fixed 1440 × 900 first-viewport website preview.
+crawled or uploaded product mark, captures a fixed 1440 × 900 first-viewport
+website preview, and holds the new profile for research before it is published.
 
 The direct-live import pipeline and Cloudflare Access-protected
 `/admin/imports` queue are deployed. The local Codex Schedule runner can prepare

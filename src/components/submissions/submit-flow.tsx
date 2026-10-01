@@ -120,7 +120,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey }: { categories:
   const [existingTool, setExistingTool] = useState<ExistingTool | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [publishedSlug, setPublishedSlug] = useState("");
+  const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState("");
   const [tagline, setTagline] = useState("");
   const [description, setDescription] = useState("");
@@ -258,21 +258,21 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey }: { categories:
       for (const [key, value] of Object.entries(fields)) form.set(key, value);
       if (screenshot) form.set("screenshotFile", screenshot);
       if (preparedLogo) form.set("logoFile", preparedLogo);
-      const value = await responseJson(await fetch("/api/submissions/publish", { method: "POST", body: form }));
-      setPublishedSlug(String(value.slug));
+      await responseJson(await fetch("/api/submissions/publish", { method: "POST", body: form }));
+      setSubmitted(true);
     } catch (caught) {
       setError(messageFrom(caught)); setTurnstileToken(""); setTurnstileVersion((version) => version + 1);
     } finally { setBusy(false); }
   }
 
-  if (publishedSlug) return <SubmitSuccess slug={publishedSlug} name={name} tagline={tagline} logoSrc={preparedLogoPreview} />;
+  if (submitted) return <SubmitSuccess name={name} tagline={tagline} logoSrc={preparedLogoPreview} />;
 
   return (
     <div className={styles.flow}>
       <ol className={styles.steps} aria-label="Submission progress">
         <li aria-current={draft ? undefined : "step"}><span>01</span> Check website</li>
         <li aria-current={draft && !reviewing ? "step" : undefined}><span>02</span> Edit profile</li>
-        <li aria-current={reviewing ? "step" : undefined}><span>03</span> Preview & publish</li>
+        <li aria-current={reviewing ? "step" : undefined}><span>03</span> Preview & submit</li>
       </ol>
       {!draft ? (
         <section className={styles.urlStage}>
@@ -287,7 +287,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey }: { categories:
           <div className={styles.stageNotes}>
             <p><span>01</span> We inspect a small set of public pages.</p>
             <p><span>02</span> Existing domains cannot be submitted again.</p>
-            <p><span>03</span> Nothing is published until you confirm it.</p>
+            <p><span>03</span> Nothing is sent until you confirm it.</p>
           </div>
         </section>
       ) : (
@@ -387,11 +387,11 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey }: { categories:
             <p className={styles.previewMeta}>{tags.filter(tag => tagSlugs.includes(tag.slug)).map(tag => tag.name).join(" · ")}</p>
           </article> : null}
           <section hidden={!reviewing} className={styles.publishSection} aria-labelledby="publish-title">
-            <div><p className={styles.stepLabel}>Final confirmation</p><h3 id="publish-title">Publish submitted information</h3><p>This creates a public listing immediately. Existing domains cannot be overwritten through this form.</p></div>
+            <div><p className={styles.stepLabel}>Final confirmation</p><h3 id="publish-title">Submit for review</h3><p>Ordalin researches the official website before the listing goes live. Existing domains cannot be overwritten through this form.</p></div>
             <label className={styles.emailField}><span>Private contact email</span><input type="email" value={contactEmail} onChange={(event) => setContactEmail(event.target.value)} required /><small>Used only if Ordalin needs to contact you about this listing.</small></label>
             <div className={styles.turnstile}><TurnstileBox key={turnstileVersion} siteKey={turnstileSiteKey} onToken={handleToken} /></div>
             {error ? <div className={styles.error} role="alert">{error}</div> : null}
-            <button className={styles.publishButton} type="submit" disabled={busy || captureBusy || !reviewing || !turnstileToken || selectedBrowseCategoryCount === 0 || !hasPrimaryGroupCategory}>{busy ? "Publishing…" : `Publish ${name || "tool"} →`}</button>
+            <button className={styles.publishButton} type="submit" disabled={busy || captureBusy || !reviewing || !turnstileToken || selectedBrowseCategoryCount === 0 || !hasPrimaryGroupCategory}>{busy ? "Submitting…" : `Submit ${name || "tool"} →`}</button>
           </section>
         </form>
       )}

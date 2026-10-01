@@ -22,7 +22,7 @@ The MVP contains:
 - controlled task-led decision pages
 - search and deterministic filters
 - paginated chronological catalogue and curated collections
-- website-first free submission with submitter confirmation and automatic publication
+- website-first free submission with submitter confirmation, published after back-office research
 - daily Product Hunt discovery with deterministic automatic publication and permanent exception skipping
 - internal moderation for imported and existing catalogue records
 - sitemap, robots rules, metadata, and structured data
@@ -387,16 +387,18 @@ Public submission:
 - normalize the domain before duplicate detection;
 - stop duplicate domains and link to the existing profile rather than allowing an
   anonymous overwrite;
-- automatically publish a new unique domain after validation and explicit
-  submitter confirmation;
+- store a new unique domain hidden (`pending_review`) after validation and
+  explicit submitter confirmation; publish it only after Ordalin researches it to
+  the catalogue profile standard;
 - capture one fixed 1440 × 900 desktop first viewport before confirmation; allow
   up to three capture attempts per draft, a validated upload, or no screenshot;
-- show a complete profile preview before the final publish action, and publish
+- show a complete profile preview before the final submit action, and keep
   the exact confirmed screenshot without recapturing;
 - a failed website read or screenshot capture permits manual completion;
 - store confirmed optional fields and server-owned field provenance in the
   submission tool_sources.raw_json envelope; edits lose website-source attribution;
-- label these profiles as submitted information, never editorially verified;
+- a researched submission is labelled like any reviewed listing and keeps
+  `rel="ugc"` on its outbound link;
 - disclose how the contact email is used.
 
 Admin review:

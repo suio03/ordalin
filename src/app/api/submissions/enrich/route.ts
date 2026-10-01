@@ -5,7 +5,7 @@ import {
 } from "@/lib/catalog-analysis";
 import { loadCatalogTaxonomy } from "@/lib/catalog-analysis/taxonomy";
 import { enrichCatalogSite } from "@/lib/catalog-enrichment/enrich";
-import { SubmissionError, submissionErrorResponse } from "@/lib/submissions/http";
+import { knownToolError, SubmissionError, submissionErrorResponse, type KnownTool } from "@/lib/submissions/http";
 import { actorHash, clientAddress, consumeSubmissionLimit, submissionHashSalt } from "@/lib/submissions/request";
 import { canonicalWebsite } from "@/lib/submissions/validation";
 
@@ -38,17 +38,10 @@ export async function POST(request: Request) {
     await consumeSubmissionLimit(env.DB, hash, "enrich", 10);
 
     const duplicate = await env.DB
-      .prepare("SELECT slug, name FROM tools WHERE canonical_domain = ? LIMIT 1")
+      .prepare("SELECT slug, name, status FROM tools WHERE canonical_domain = ? LIMIT 1")
       .bind(requested.canonicalDomain)
-      .first<{ slug: string; name: string }>();
-    if (duplicate) {
-      throw new SubmissionError(
-        `${duplicate.name} is already listed on Ordalin.`,
-        409,
-        "duplicate_domain",
-        { existingTool: duplicate },
-      );
-    }
+      .first<KnownTool>();
+    if (duplicate) throw knownToolError(duplicate);
 
     const candidate = await enrichCatalogSite(requested.url.href).catch(() => ({
       schemaVersion: 1 as const, status: "pending_review" as const,
@@ -58,17 +51,10 @@ export async function POST(request: Request) {
       warnings: ["We could not read this website. You can fill in the profile and upload images yourself."],
     }));
     const postFetchDuplicate = await env.DB
-      .prepare("SELECT slug, name FROM tools WHERE canonical_domain = ? LIMIT 1")
+      .prepare("SELECT slug, name, status FROM tools WHERE canonical_domain = ? LIMIT 1")
       .bind(candidate.canonicalDomain)
-      .first<{ slug: string; name: string }>();
-    if (postFetchDuplicate) {
-      throw new SubmissionError(
-        `${postFetchDuplicate.name} is already listed on Ordalin.`,
-        409,
-        "duplicate_domain",
-        { existingTool: postFetchDuplicate },
-      );
-    }
+      .first<KnownTool>();
+    if (postFetchDuplicate) throw knownToolError(postFetchDuplicate);
 
     const taxonomy = await loadCatalogTaxonomy(env.DB);
     let analysis = fallbackCatalogAnalysis(candidate, taxonomy);

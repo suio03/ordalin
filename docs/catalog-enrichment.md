@@ -27,7 +27,9 @@ remain deferred.
 
 Profile presentation is source-aware. Manual catalogue records may use
 `Reviewed tool profile`; Toolify and Product Hunt imports use
-`Website-checked tool profile`; public submissions use `Submitted tool profile`.
+`Website-checked tool profile`. A public submission is published only after
+back-office research, so it uses `Reviewed tool profile`; `Submitted tool
+profile` remains only for older submissions published without research.
 The overview shows pricing, availability, and primary group once. The factual
 description is followed immediately by the website preview in the primary
 detail column, before any real task-specific decision notes. Profiles without
@@ -110,8 +112,9 @@ provided.
 
 ### Website preview capture and backfill
 
-After a confirmed public submission publishes, Cloudflare Browser Rendering
-captures the official website in the background. The preview is always the
+During a public submission, Cloudflare Browser Rendering captures the official
+website before confirmation; when a submission arrives without one, the
+back-office import captures it before publication. The preview is always the
 first desktop viewport at 1440 × 900 and device scale factor 1; it is not a
 full-page screenshot. Ordalin requests WebP at quality 82, rejects files over
 4 MB or with unexpected dimensions, stores the result under an immutable
@@ -139,11 +142,29 @@ generated catalogue entry.
 
 The public `/submit` workflow persists the same candidate as a short-lived
 private draft. The submitter corrects the public fields, chooses a discovered
-image, uploads a replacement, or keeps the letter fallback, then explicitly
-publishes a new unique-domain profile. Submitted profiles are labelled
-`Website checked` and `Submitted information`; they are not presented as
-editorially reviewed. Existing canonical domains stop at duplicate detection
-and cannot be overwritten anonymously.
+image, uploads a replacement, or keeps the letter fallback, then submits a new
+unique-domain profile for review. The submission is stored as a hidden
+`pending_review` tool and a `pending` submission; nothing is public yet.
+Existing canonical domains stop at duplicate detection and cannot be
+overwritten anonymously; a domain already in review is reported as such.
+
+Ordalin then researches the submission to `docs/catalog-profile-standard.md`
+in the back office:
+
+```bash
+pnpm imports:prepare -- --remote --submissions --output-dir=<dir>
+# analysis.profile written and verified in each bundle, then:
+pnpm imports:screenshots -- --manifest=<dir>/manifest.json
+pnpm imports:apply -- --remote --manifest=<dir>/manifest.json --publish-limit=20 --daily-publish-limit=20 <bundles>
+```
+
+`--submissions` adds every submitted domain still in review (at most 10 URLs
+per manifest in total). Apply recognises the pending submitted tool, keeps its
+slug, mark and confirmed screenshot, replaces the facts and taxonomy with the
+researched analysis, publishes it, and marks the submission `accepted`. A
+submission is never skipped permanently: an incomplete profile or failed
+screenshot throws and leaves it hidden for a later retry. Published
+submissions count toward the daily publish limit.
 
 Submission URLs pass through the same canonical cleaning before enrichment or
 deduplication. A submitted profile remains `ugc` even if another source later
