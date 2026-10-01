@@ -33,23 +33,46 @@ async function responseJson(response: Response) {
   return value;
 }
 
+// createImageBitmap cannot decode SVG blobs, so SVG logos go through an <img> element.
+async function decodeLogo(blob: Blob): Promise<{ source: CanvasImageSource; width: number; height: number; close: () => void }> {
+  if (blob.type !== "image/svg+xml" && !(blob instanceof File && blob.name.toLowerCase().endsWith(".svg"))) {
+    try {
+      const bitmap = await createImageBitmap(blob);
+      return { source: bitmap, width: bitmap.width, height: bitmap.height, close: () => bitmap.close() };
+    } catch { /* Fall through to the <img> decoder. */ }
+  }
+  const url = URL.createObjectURL(blob);
+  const element = new window.Image();
+  try {
+    element.src = url;
+    await element.decode();
+  } catch {
+    URL.revokeObjectURL(url);
+    throw new Error("This logo could not be read. Choose another logo or upload a PNG.");
+  }
+  // SVGs without intrinsic dimensions report 0; draw them as a square.
+  const width = element.naturalWidth || 512;
+  const height = element.naturalHeight || 512;
+  return { source: element, width, height, close: () => URL.revokeObjectURL(url) };
+}
+
 async function logoWebp(source: File | string) {
   const blob = typeof source === "string" ? await fetch(source).then((response) => {
     if (!response.ok) throw new Error("The selected logo could not be prepared.");
     return response.blob();
   }) : source;
   if (blob.size > 10_000_000) throw new Error("Choose an image smaller than 10 MB.");
-  const bitmap = await createImageBitmap(blob);
+  const image = await decodeLogo(blob);
   const canvas = document.createElement("canvas");
   canvas.width = 512;
   canvas.height = 512;
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Your browser could not prepare this image.");
-  const scale = Math.min(448 / bitmap.width, 448 / bitmap.height);
-  const width = bitmap.width * scale;
-  const height = bitmap.height * scale;
-  context.drawImage(bitmap, (512 - width) / 2, (512 - height) / 2, width, height);
-  bitmap.close();
+  const scale = Math.min(448 / image.width, 448 / image.height);
+  const width = image.width * scale;
+  const height = image.height * scale;
+  context.drawImage(image.source, (512 - width) / 2, (512 - height) / 2, width, height);
+  image.close();
   const webp = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/webp", 0.9));
   if (!webp) throw new Error("Your browser could not convert this image to WebP.");
   return new File([webp], "tool-logo.webp", { type: "image/webp" });
@@ -77,7 +100,7 @@ function messageFrom(error: unknown) {
 }
 
 export function SubmitFlow({ categories, tags, turnstileSiteKey }: { categories: Category[]; tags: Tag[]; turnstileSiteKey?: string }) {
-  const [details, setDetails] = useState<Record<DetailField, string>>({ features: "", pricingDetails: "", useCases: "", limitations: "" });
+  const [details, setDetails] = useState<Record<DetailField, string>>({ features: "", pricingDetails: "", useCases: "" });
   const [preparedLogo, setPreparedLogo] = useState<File | null>(null);
   const preparedLogoPreview = useMemo(() => preparedLogo ? URL.createObjectURL(preparedLogo) : null, [preparedLogo]);
   useEffect(() => () => { if (preparedLogoPreview) URL.revokeObjectURL(preparedLogoPreview); }, [preparedLogoPreview]);

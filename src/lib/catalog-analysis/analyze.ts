@@ -52,8 +52,8 @@ export async function analyzeCatalogCandidate(
   const baseSchema = catalogAnalysisJsonSchema(taxonomy);
   const detailSchema = { type: "object", additionalProperties: false, properties: Object.fromEntries(detailFields.map(key => [key, {
     type: "object", additionalProperties: false,
-    properties: { text: { type: "string", maxLength: 1200 }, sourceUrl: { type: "string" }, quote: { type: "string", maxLength: 500 } },
-    required: ["text", "sourceUrl", "quote"],
+    properties: { text: { type: "string", maxLength: 1200 }, sourceUrl: { type: "string" } },
+    required: ["text", "sourceUrl"],
   }])), required: [...detailFields] };
   const schema = options.includeDetails ? { ...baseSchema, properties: { ...baseSchema.properties, details: detailSchema }, required: [...baseSchema.required, "details"] } : baseSchema;
   try {
@@ -68,7 +68,7 @@ export async function analyzeCatalogCandidate(
         store: false,
         reasoning: { effort: "none" },
         max_output_tokens: options.includeDetails ? 4_000 : 2_000,
-        prompt_cache_key: options.includeDetails ? "ordalin-submission-profile-v1" : "ordalin-catalog-analysis-v1",
+        prompt_cache_key: options.includeDetails ? "ordalin-submission-profile-v3" : "ordalin-catalog-analysis-v1",
         ...(options.safetyIdentifier ? { safety_identifier: options.safetyIdentifier.slice(0, 64) } : {}),
         instructions: [
           "You create factual English catalogue records for Ordalin from evidence fetched from one official product website.",
@@ -76,7 +76,7 @@ export async function analyzeCatalogCandidate(
           "Do not use source-directory copy as evidence and do not invent capabilities, prices, customers, rankings, or limitations.",
           "Choose only the supplied category and tag slugs. Use concise factual prose, not marketing superlatives.",
           "If a required claim is missing, contradictory, or ambiguous, keep the closest supportable value and add a precise needsReviewReasons entry.",
-          "When details are requested, supply concise features, pricing plan differences and free limits, explicit use cases, and explicitly stated limitations. Each section needs a verbatim supporting quote and its fetched page URL. Use empty strings when unsupported. Never infer limitations from missing information. Separate items with newlines. Do not write editorial recommendations or comparisons.",
+          "When details are requested, supply concise features, pricing (plan names, prices, included credits or usage, and any free tier limits), and use cases (who it is for or the jobs and scenarios the site names). Fill a section whenever the fetched pages state it; a pricing page or a list of audiences and scenarios counts. Page text is scraped and messy; rewrite it into clean, correctly spaced prose, but copy every number (prices, credits, limits, percentages) exactly as the page states it and never calculate new ones. Give the URL of the fetched page that supports each section. Use empty strings only when no fetched page supports the section. Separate items with newlines. Do not write editorial recommendations or comparisons.",
           "Evidence arrays must contain only URLs present in the fetched official-page evidence.",
         ].join("\n"),
         input: JSON.stringify({
