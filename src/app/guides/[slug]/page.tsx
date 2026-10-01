@@ -11,8 +11,6 @@ import styles from "../guides.module.css";
 
 type GuideParams = { params: Promise<{ slug: string }> };
 
-export const dynamicParams = false;
-
 export async function generateStaticParams() {
   const guides = await listPublishedGuides();
   return guides.map((guide) => ({ slug: guide.slug }));
@@ -20,7 +18,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: GuideParams): Promise<Metadata> {
   const guide = await getPublishedGuide((await params).slug);
-  if (!guide) return {};
+  if (!guide) notFound();
   return withSocial({
     title: guide.title,
     description: guide.description,
