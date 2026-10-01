@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AgentCard } from "@/components/agents/agent-card";
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { topic } = await params;
   if (!BEST_PAGES[topic]) notFound();
   const { meta } = await BEST_PAGES[topic]();
-  return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/best/${topic}` } };
+  return withSocial({ title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/best/${topic}` } });
 }
 
 export default async function BestPage({ params }: Props) {

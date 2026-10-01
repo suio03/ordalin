@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import { SubmitFlow } from "@/components/submissions/submit-flow";
 import {
   listSubmissionCategoryGroups,
@@ -8,11 +9,11 @@ import styles from "@/components/submissions/submit.module.css";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocial({
   alternates: { canonical: "/submit" },
   title: "Submit a tool",
   description: "Check, confirm, and publish a new AI tool on Ordalin.",
-};
+});
 
 export default async function SubmitPage() {
   const [categories, tags] = await Promise.all([

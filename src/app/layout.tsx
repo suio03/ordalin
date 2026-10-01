@@ -1,5 +1,6 @@
 import { Analytics } from "@/components/analytics";
 import type { Metadata, Viewport } from "next";
+import { defaultSocialImage } from "@/lib/seo";
 import { SiteFooter, SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
@@ -13,6 +14,9 @@ export const metadata: Metadata = {
   },
   description:
     "A website-checked AI tools directory that helps you browse broadly or find three tools that fit a specific goal.",
+  // Fallback for routes without page-level social tags; withSocial() fills the rest.
+  openGraph: { type: "website", siteName: "Ordalin", images: [defaultSocialImage] },
+  twitter: { card: "summary_large_image", images: [defaultSocialImage.url] },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },

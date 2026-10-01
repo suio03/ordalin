@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumb } from "@/components/agents/breadcrumb";
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   if (!AGENT_PAGES[slug]) notFound();
   const { meta } = await AGENT_PAGES[slug]();
-  return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/${slug}` } };
+  return withSocial({ title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/${slug}` } });
 }
 
 export default async function AgentPage({ params }: Props) {

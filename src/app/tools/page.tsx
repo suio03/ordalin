@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { DirectoryExplorer } from "@/components/directory/directory-explorer";
@@ -56,12 +57,12 @@ export async function generateMetadata({ searchParams }: ToolsProps): Promise<Me
   await getCatalogue(query, category, pricing, sort, page);
   const hasFilters = ["q", "category", "pricing", "sort"]
     .some((key) => Boolean(firstSearchParam(params[key])));
-  return {
+  return withSocial({
     title: page > 1 ? `All AI tools — page ${page}` : "All AI tools",
     description: "Browse every published AI tool on Ordalin with pricing, category and official-website check dates.",
     alternates: { canonical: !hasFilters && page > 1 ? `/tools?page=${page}` : "/tools" },
     robots: { index: !hasFilters, follow: true },
-  };
+  });
 }
 
 export default async function ToolsPage({ searchParams }: ToolsProps) {

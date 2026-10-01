@@ -1,6 +1,7 @@
 import { ResearchCitations, ResearchedProfileContent } from "@/components/directory/researched-profile-content";
 import { detailFields, detailLabels } from "@/lib/submissions/profile";
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import { getToolProfile } from "@/content/tool-profiles/granola";
 import { ProfileCitation, ToolProfileContent, ToolProfileNav } from "@/components/directory/tool-profile-content";
 import Image from "next/image";
@@ -29,19 +30,12 @@ export async function generateMetadata({ params }: ToolParams): Promise<Metadata
   const tool = await getToolBySlug((await params).slug);
   if (!tool) return {};
   const profile = getToolProfile(tool.slug);
-  return {
+  const screenshot = profile?.screenshot ?? catalogAssetUrl(tool.screenshotAssetKey);
+  return withSocial({
     title: profile ? { absolute: `${profile.title} | Ordalin` } : toolPageTitle(tool),
     description: profile?.description ?? tool.researchedProfile?.overview.text ?? tool.tagline,
-    ...(profile ? {
-      openGraph: {
-        type: "website", title: `${profile.title} | Ordalin`,
-        description: profile.description, url: `/tools/${tool.slug}`, siteName: "Ordalin",
-        images: [{ url: profile.screenshot, width: 1440, height: 900, alt: "Granola product website" }],
-      },
-      twitter: { card: "summary_large_image", title: profile.title, description: profile.description, images: [profile.screenshot] },
-    } : {}),
     alternates: { canonical: `/tools/${tool.slug}` },
-  };
+  }, screenshot ? { url: screenshot, width: 1440, height: 900, alt: `${tool.name} website` } : undefined);
 }
 
 export default async function ToolPage({ params }: ToolParams) {

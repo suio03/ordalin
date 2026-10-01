@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -21,11 +22,11 @@ type TaskParams = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: TaskParams): Promise<Metadata> {
   const task = await getTaskBySlug((await params).slug);
   if (!task) return {};
-  return {
+  return withSocial({
     title: task.name,
     description: task.outcome,
     alternates: { canonical: `/tasks/${task.slug}` },
-  };
+  });
 }
 
 export default async function TaskPage({ params }: TaskParams) {

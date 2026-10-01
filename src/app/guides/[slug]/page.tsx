@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -20,7 +21,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: GuideParams): Promise<Metadata> {
   const guide = await getPublishedGuide((await params).slug);
   if (!guide) return {};
-  return {
+  return withSocial({
     title: guide.title,
     description: guide.description,
     alternates: { canonical: `/guides/${guide.slug}` },
@@ -32,7 +33,7 @@ export async function generateMetadata({ params }: GuideParams): Promise<Metadat
       modifiedTime: `${guide.updatedAt ?? guide.publishedAt}T00:00:00Z`,
       authors: [guide.author],
     },
-  };
+  });
 }
 
 export default async function GuidePage({ params }: GuideParams) {

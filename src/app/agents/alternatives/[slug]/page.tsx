@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AgentCard } from "@/components/agents/agent-card";
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   if (!ALTERNATIVES_PAGES[slug]) notFound();
   const { meta } = await ALTERNATIVES_PAGES[slug]();
-  return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/alternatives/${slug}` } };
+  return withSocial({ title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/alternatives/${slug}` } });
 }
 
 export default async function AlternativesPage({ params }: Props) {

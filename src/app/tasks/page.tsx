@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { listTasks } from "@/lib/repositories/catalog";
 import catalogStyles from "@/components/directory/catalog-page.module.css";
@@ -6,12 +7,12 @@ import styles from "@/components/tasks/task-page.module.css";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocial({
   title: "Find AI tools by goal",
   description:
     "Choose what you want to accomplish, then compare three reviewed AI tools that can help you do it.",
   alternates: { canonical: "/tasks" },
-};
+});
 
 export default async function TasksPage() {
   const tasks = await listTasks();

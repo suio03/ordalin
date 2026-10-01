@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { AgentsTable } from "@/components/agents/agents-table";
 import { Breadcrumb } from "@/components/agents/breadcrumb";
@@ -9,7 +10,7 @@ import { CHECKED_ON } from "@/lib/agents/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { meta } = await HUBS.personal();
-  return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: agentsPath.hub("personal") } };
+  return withSocial({ title: { absolute: meta.title }, description: meta.description, alternates: { canonical: agentsPath.hub("personal") } });
 }
 
 export default async function PersonalAgentsPage() {

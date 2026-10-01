@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { Pagination } from "@/components/directory/pagination";
 import { ToolList } from "@/components/directory/tool-list";
@@ -14,11 +15,11 @@ import styles from "@/components/directory/catalog-page.module.css";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocial({
   title: "Search AI tools",
   description: "Search published AI tools by purpose, category, pricing model, and interface.",
   robots: { index: false, follow: true },
-};
+});
 
 type SearchParams = Record<string, string | string[] | undefined>;
 

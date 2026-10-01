@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import styles from "@/components/directory/catalog-page.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocial({
   robots: { index: false, follow: true },
   alternates: { canonical: "/about/ranking" },
   title: "Ranking and disclosure",
   description: "How Ordalin checks, includes, labels, and orders AI tools.",
-};
+});
 
 export default function RankingPage() {
   return (

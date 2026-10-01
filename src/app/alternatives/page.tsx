@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { EditorialHub } from "@/components/editorial/editorial-hub";
+import { editorialHubMetadata } from "@/lib/editorial/metadata";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "AI tool alternatives",
-  description: "Considered replacements for well-known AI tools, with the reasons people switch and where each alternative fits better or worse.",
-  alternates: { canonical: "/alternatives" },
-};
+export function generateMetadata(): Promise<Metadata> {
+  return editorialHubMetadata("alternatives", "AI tool alternatives", "Considered replacements for well-known AI tools, with the reasons people switch and where each alternative fits better or worse.");
+}
 
 export default function AlternativesHubPage() {
   return (

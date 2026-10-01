@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { ToolMark } from "@/components/directory/tool-mark";
@@ -19,11 +20,11 @@ export const dynamic = "force-dynamic";
 
 const legacyCatalogueParams = ["q", "category", "pricing", "sort", "page"];
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocial({
   title: { absolute: "Ordalin — find the right AI tool for the job" },
   description: "Browse AI tools by category, read which ones suit which jobs, and compare options with pricing and platforms checked against official websites.",
   alternates: { canonical: "/" },
-};
+});
 
 type HomeProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import styles from "@/components/directory/catalog-page.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocial({
   alternates: { canonical: "/about/how-we-review" },
   title: "How we review AI tools",
   description: "How Ordalin researches tool profiles, writes best-of lists, alternatives and comparisons, and keeps facts tied to official sources.",
-};
+});
 
 export default function HowWeReviewPage() {
   return (

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import { cache } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -32,7 +33,7 @@ export async function generateMetadata({ params, searchParams }: CategoryParams)
   const slug = (await params).slug;
   const page = parsePage((await searchParams).page);
   const { category } = await getCategoryPage(slug, page);
-  return {
+  return withSocial({
     title: `${category.name} AI tools`,
     description: category.description,
     alternates: { canonical: `/categories/${slug}${page > 1 ? `?page=${page}` : ""}` },
@@ -40,7 +41,7 @@ export async function generateMetadata({ params, searchParams }: CategoryParams)
       category.publishedToolCount >= indexableCategoryMinimum
         ? { index: true, follow: true }
         : { index: false, follow: true },
-  };
+  });
 }
 
 export default async function CategoryPage({

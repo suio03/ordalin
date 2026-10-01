@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { formatGuideDate, listPublishedGuides } from "@/lib/guides";
 import styles from "./guides.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const guides = await listPublishedGuides();
-  return {
+  return withSocial({
     title: "Guides",
     description: "Practical, evidence-led guidance for choosing and using AI tools.",
     alternates: { canonical: "/guides" },
     robots: guides.length ? undefined : { index: false, follow: true },
-  };
+  });
 }
 
 export default async function GuidesPage() {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { allAgents, displayName, getAgent } from "@/lib/agents/data";
 import { agentsPath, ALTERNATIVES_PAGES, BEST_PAGES, COMPARISONS, comparisonTitle, OVERVIEW, PRICING_PAGES } from "@/lib/agents/content";
@@ -6,7 +7,7 @@ import { CHECKED_ON } from "@/lib/agents/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { meta } = await OVERVIEW();
-  return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: agentsPath.overview } };
+  return withSocial({ title: { absolute: meta.title }, description: meta.description, alternates: { canonical: agentsPath.overview } });
 }
 
 type LinkCard = { href: string; title: string; note: string };

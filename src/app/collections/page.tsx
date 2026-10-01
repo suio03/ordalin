@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { listCollections } from "@/lib/repositories/catalog";
 import styles from "@/components/directory/catalog-page.module.css";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocial({
   alternates: { canonical: "/collections" },
   title: "AI tool collections",
   description: "Curated, practical paths through the reviewed Ordalin catalogue.",
-};
+});
 
 export default async function CollectionsPage() {
   const collections = await listCollections();

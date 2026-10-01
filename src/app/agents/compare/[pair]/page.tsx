@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumb } from "@/components/agents/breadcrumb";
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { pair } = await params;
   if (!COMPARISONS[pair]) notFound();
   const { meta } = await COMPARISONS[pair].load();
-  return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/compare/${pair}` } };
+  return withSocial({ title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/compare/${pair}` } });
 }
 
 type Card = { href: string; title: string; note: string; external?: string };

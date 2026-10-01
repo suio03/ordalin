@@ -1,8 +1,10 @@
-export const metadata = {
+import { withSocial } from "@/lib/seo";
+
+export const metadata = withSocial({
   title: "How We Check AI Agent Facts",
   description: "Where Ordalin's AI agent facts come from, what \"Not stated\" means, and how we keep agent pages current.",
   alternates: { canonical: "/agents/methodology" },
-};
+});
 
 <div className="prose-av mx-auto max-w-[760px] px-4 pt-12 md:px-10">
 

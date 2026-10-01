@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { EditorialHub } from "@/components/editorial/editorial-hub";
+import { editorialHubMetadata } from "@/lib/editorial/metadata";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Best AI tools",
-  description: "Shortlists of the best AI tools for a specific job, with who each one suits, who should skip it, and facts checked against official sources.",
-  alternates: { canonical: "/best" },
-};
+export function generateMetadata(): Promise<Metadata> {
+  return editorialHubMetadata("best", "Best AI tools", "Shortlists of the best AI tools for a specific job, with who each one suits, who should skip it, and facts checked against official sources.");
+}
 
 export default function BestHubPage() {
   return (

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ToolList } from "@/components/directory/tool-list";
@@ -15,11 +16,11 @@ type CollectionParams = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: CollectionParams): Promise<Metadata> {
   const collection = await getCollectionBySlug((await params).slug);
   return collection
-    ? {
+    ? withSocial({
         title: collection.name,
         description: collection.description,
         alternates: { canonical: `/collections/${collection.slug}` },
-      }
+      })
     : {};
 }
 
