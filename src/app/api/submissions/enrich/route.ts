@@ -81,6 +81,7 @@ export async function POST(request: Request) {
           safetyIdentifier: hash,
         });
       } catch (error) {
+        analysis.needsReviewReasons = ["Automatic analysis failed; review every generated field."];
         console.warn("OpenAI submission analysis failed; using the evidence fallback", {
           domain: candidate.canonicalDomain,
           error: error instanceof Error ? error.message : "unknown error",

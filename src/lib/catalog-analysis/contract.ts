@@ -117,7 +117,7 @@ export function catalogAnalysisJsonSchema(taxonomy: CatalogTaxonomy) {
   const tagSlugs = taxonomy.tags.map((tag) => tag.slug);
   const evidence = {
     type: "array",
-    items: { type: "string", format: "uri" },
+    items: { type: "string" },
     maxItems: 6,
   } as const;
 
