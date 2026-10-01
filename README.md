@@ -55,6 +55,7 @@ measurement milestone.
 | MVP scope, routes, data, ranking, and operations | `MVP_PLAN.md` |
 | Submission, outbound-link, logo, and website-preview behavior | `docs/catalog-enrichment.md` |
 | Guide authoring and future time-archive behavior | `docs/guides.md` |
+| Page titles, canonical, robots and share tags | `docs/seo.md` |
 | Product design language and component rules | `docs/design-system.md` |
 | Platform-neutral semantic design tokens | `docs/tokens.json` |
 | Web token adapter | `docs/design-tokens.css` |

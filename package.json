@@ -24,6 +24,8 @@
     "seed:remote": "wrangler d1 execute DB --remote --file seed/catalog.sql --config wrangler.production.jsonc",
     "enrich:tool": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/enrich-tool.ts",
     "catalog:logos": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/backfill-tool-logos.ts",
+    "seo:check": "node scripts/check-page-meta.mjs",
+    "og:default": "node scripts/generate-og-default.mjs",
     "catalog:screenshots": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/backfill-tool-screenshots.ts",
     "imports:discover": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/discover-catalog-imports.ts",
     "imports:browser-evidence": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/add-browser-evidence.ts",

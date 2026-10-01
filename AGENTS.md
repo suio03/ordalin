@@ -22,6 +22,7 @@
 - Green communicates active, freshness, or verified-positive state; it is not decorative brand fill.
 - Do not add AI sparkles, glowing gradients, robots, literal radar graphics, blur-heavy glass, or fictional engagement metrics.
 - Preserve the approved mobile orders. Homepage: search, horizontal categories, editorial shortlists, newest tools, category-group shelves (Find by goal and Collections live in the desktop sidebar and the mobile header menu). `/tools`: search, horizontal categories, catalogue filters and results, Collections, then editor picks.
+- Page metadata (titles, canonical, robots, share tags) follows `docs/seo.md`; wrap new indexable pages in `withSocial()`.
 - Editorial pages (`/best`, `/alternatives`, `/compare`) follow `docs/editorial-standard.md`. Write new articles as `status: "draft"`; only the maintainer publishes them.
 
 ## Local verification

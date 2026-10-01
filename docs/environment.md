@@ -94,6 +94,17 @@ production D1 and R2. Apply D1 migrations before pushing code that needs them.
 A maintainer can still deploy manually with `pnpm run deploy` (`pnpm deploy`
 is a built-in pnpm command, not this script).
 
+After a push, confirm the build for that commit before checking the site:
+
+```bash
+cf builds list --external-script-id <worker id>
+```
+
+Read `build_outcome` and `build_trigger_metadata.commit_hash`. The Worker id is
+the `id` that `cf workers list` shows for the production Worker. Then verify
+the live homepage, `/submit`, sitemap and canonical URL, and run
+`pnpm seo:check https://ordalin.com` (`docs/seo.md`).
+
 `pnpm run deploy`, `pnpm preview`, remote database scripts and remote import/backfill
 scripts explicitly use this private file. Direct Wrangler commands must include
 `--config wrangler.production.jsonc`, including secret management:

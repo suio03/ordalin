@@ -59,10 +59,11 @@ findings are a point-in-time review, not a security guarantee for later changes.
 
 - The repository is public. CI runs verification only with read-only
   repository permissions; it does not deploy.
-- Production deploys run locally with `pnpm run deploy`, which reads the ignored
-  `wrangler.production.jsonc`. Cloudflare Workers Builds is not connected: a
-  clean checkout deliberately has no production configuration, and building it
-  would fall back to the local demo configuration.
+- Production deploys through Cloudflare Workers Builds on every push to `main`.
+  A clean checkout still has no production configuration: the build writes
+  `wrangler.production.jsonc` from the `ORDALIN_WRANGLER_CONFIG` build variable
+  (see `docs/environment.md`). Branch builds stay disabled. `pnpm run deploy`
+  remains the manual fallback.
 - GitHub private vulnerability reporting, secret scanning and push protection
   are enabled.
 

@@ -90,9 +90,9 @@ Architecture:
 | --- | --- | --- |
 | / | Shelf homepage: search, categories, editorial shortlists, newest tools, one shelf per category group, goals and collections | Index |
 | /tools | Full searchable, filterable, paginated catalogue (the former homepage catalogue) | Index unfiltered pages; filters noindex |
-| /best, /best/[slug] | Editorial best-of hub and shortlists (see `docs/editorial-standard.md`) | Index when published and complete |
-| /alternatives, /alternatives/[slug] | Editorial alternatives to a well-known tool | Index when published and complete |
-| /compare, /compare/[slug] | Editorial head-to-head comparisons (`<left>-vs-<right>`) | Index when published and complete |
+| /best, /best/[slug] | Editorial best-of hub and shortlists (see `docs/editorial-standard.md`) | Articles: index when published and complete. Hub: noindex until it lists one |
+| /alternatives, /alternatives/[slug] | Editorial alternatives to a well-known tool | Articles: index when published and complete. Hub: noindex until it lists one |
+| /compare, /compare/[slug] | Editorial head-to-head comparisons (`<left>-vs-<right>`) | Articles: index when published and complete. Hub: noindex until it lists one |
 | /about/how-we-review | Public editorial and research policy | Index |
 | /tools/[slug] | One canonical tool profile | Index when published |
 | /categories/[group] | Category-group index and paginated catalogue | Index when sufficiently populated |
@@ -462,6 +462,9 @@ controls exist.
 - reserve `/archive/[year]/[month]` for a future added-to-Ordalin archive derived
   from `tools.published_at`; do not add schema or expose thin month pages now;
 - generate sitemap entries from D1 and split when volume requires it;
+- every indexable page has a self-referencing canonical plus Open Graph and
+  Twitter tags derived from its own title and description (`docs/seo.md`);
+  tool pages share their website screenshot, other pages the default image;
 - use SoftwareApplication structured data only for verified facts;
 - never emit fabricated ratings, prices, reviews, or usage data;
 - write factual, distinct descriptions rather than copying vendor text;

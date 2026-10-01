@@ -14,8 +14,10 @@ category, collection, or Find by goal pages without inventing product claims.
   hidden; restore navigation only when useful content and its release are approved.
 - `/guides/[slug]` is a static article route. Only registered guides with
   `status: "published"` receive a route and sitemap entry.
-- Drafts and unknown slugs return 404. `dynamicParams = false` prevents runtime
-  filesystem lookup on Cloudflare Workers.
+- Drafts and unknown slugs return 404 through `notFound()`. Guides are bundled
+  with static imports, so Workers never reads the filesystem. Do not add
+  `dynamicParams = false`: without an incremental cache it makes every guide
+  404 in production (see `docs/seo.md`).
 - Published guides emit canonical metadata, Article Open Graph fields, and
   Schema.org `Article` structured data.
 
