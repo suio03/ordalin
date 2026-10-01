@@ -113,6 +113,7 @@ Use local system fonts to keep the product fast and neutral:
 | --- | --- | --- | --- | --- |
 | Homepage promise | 61/60 px | 39/39 px | 520 | Tracking `-0.058em`; maximum two lines. |
 | Section heading | 23/28 px | 21/26 px | 580 | Short, factual labels. |
+| Shelf heading | 18/22 px | 18/22 px | 580 | Homepage shelf titles; many stack on one page. |
 | Panel heading | 15/19 px | 15/19 px | 640 | Sentence case. |
 | Tool name | 14/19 px | 14/19 px | 650 | Never truncate the name. |
 | Body | 15/23 px | 13/20 px | 400 | Maximum comfortable line length 65 characters. |
