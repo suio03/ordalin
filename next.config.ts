@@ -17,9 +17,15 @@ const withMDX = createMDX();
 const useProductionPreview = process.env.NODE_ENV === "development"
   && process.env.ORDALIN_DEMO !== "1"
   && existsSync("wrangler.production.jsonc");
-initOpenNextCloudflareForDev({
+const devContextReady = initOpenNextCloudflareForDev({
   configPath: useProductionPreview ? "wrangler.production.jsonc" : "wrangler.jsonc",
   ...(useProductionPreview ? {} : { persist: { path: ".wrangler/demo/v3" } }),
 });
 
-export default withMDX(nextConfig);
+// Wait for the context before serving: until it exists, OpenNext falls back to
+// the default wrangler.jsonc and an empty local D1, so the first request fails
+// while the remote production connection is still starting.
+export default async function config(): Promise<NextConfig> {
+  await devContextReady;
+  return withMDX(nextConfig);
+}
