@@ -54,6 +54,17 @@
 
 .byline a { color: inherit; text-underline-offset: 3px; }
 
+.disclosure {
+  max-width: 68ch;
+  margin: var(--space-md) 0 0;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-small);
+  color: var(--color-text-secondary);
+  background: var(--color-surface-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-body);
+}
+
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 260px;

@@ -132,8 +132,12 @@ export default async function Home({ searchParams }: HomeProps) {
           {guides.length ? (
             <section className={styles.shelf} aria-labelledby="guides-title">
               <div className={styles.shelfHeader}>
-                <h2 id="guides-title">Start with a shortlist</h2>
-                <div className={styles.shelfLinks}><Link href="/best">All best-of lists →</Link></div>
+                <h2 id="guides-title">Guides to start with</h2>
+                <div className={styles.shelfLinks}>
+                  {editorial.pages.some((page) => page.kind === "best") ? <Link href="/best">Best-of lists →</Link> : null}
+                  {editorial.pages.some((page) => page.kind === "alternatives") ? <Link href="/alternatives">Alternatives →</Link> : null}
+                  {editorial.pages.some((page) => page.kind === "compare") ? <Link href="/compare">Comparisons →</Link> : null}
+                </div>
               </div>
               <div className={styles.guideGrid}>
                 {guides.map((page) => <EditorialCard key={editorialHref(page)} page={page} tools={editorial.tools} />)}

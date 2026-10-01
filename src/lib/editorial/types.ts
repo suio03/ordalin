@@ -28,6 +28,8 @@ type EditorialBase = {
   /** Meta description and card summary, 70–170 characters. */
   description: string;
   author: string;
+  /** Plain statement of any ownership or commercial tie to a named tool, shown under the byline. */
+  disclosure?: string;
   publishedAt: string;
   updatedAt?: string;
   status: EditorialStatus;

@@ -25,6 +25,9 @@ export function validateEditorialPage(page: EditorialPage): string[] {
     errors.push(`${where}: description must be 70–170 characters.`);
   }
   if (!page.author.trim()) errors.push(`${where}: author is required.`);
+  if (page.disclosure !== undefined && page.disclosure.trim().length < 20) {
+    errors.push(`${where}: disclosure must say what the relationship is.`);
+  }
   for (const [field, value] of [["publishedAt", page.publishedAt], ["updatedAt", page.updatedAt]] as const) {
     if (value !== undefined && (!datePattern.test(value) || Number.isNaN(Date.parse(`${value}T00:00:00Z`)))) {
       errors.push(`${where}: ${field} must use YYYY-MM-DD.`);

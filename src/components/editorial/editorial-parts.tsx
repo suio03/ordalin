@@ -66,6 +66,11 @@ export function EditorialHero({
           <span aria-hidden="true">·</span>
           <Link href="/about/how-we-review">How we review</Link>
         </p>
+        {page.disclosure ? (
+          <p className={styles.disclosure} role="note">
+            <strong>Disclosure:</strong> {page.disclosure}
+          </p>
+        ) : null}
         {children}
       </header>
     </>

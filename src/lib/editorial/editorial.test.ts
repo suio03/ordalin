@@ -76,6 +76,11 @@ describe("validateEditorialPage", () => {
     expect(errors.join("\n")).toMatch(/not a pick/);
   });
 
+  it("rejects an empty disclosure", () => {
+    expect(validateEditorialPage({ ...bestPage, disclosure: " " }).join("\n")).toMatch(/disclosure/);
+    expect(validateEditorialPage({ ...bestPage, disclosure: "Scribix and Ordalin share an owner." })).toEqual([]);
+  });
+
   it("requires compare slugs to name both sides", () => {
     const errors = validateEditorialPage({
       ...bestPage,
