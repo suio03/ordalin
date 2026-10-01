@@ -8,13 +8,13 @@ import { capitalize, displayName, formatPrice, getAgent, paidPlans, stated } fro
 import { agentHref, PRICING_PAGES } from "@/lib/agents/content";
 import { CHECKED_ON, outbound } from "@/lib/agents/site";
 
-export const dynamicParams = false;
 export const generateStaticParams = () => Object.keys(PRICING_PAGES).map((slug) => ({ slug }));
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  if (!PRICING_PAGES[slug]) notFound();
   const { meta } = await PRICING_PAGES[slug].load();
   return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/pricing/${slug}` } };
 }

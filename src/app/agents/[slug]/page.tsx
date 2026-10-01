@@ -12,13 +12,13 @@ import { AGENT_PAGES, ALTERNATIVES_PAGES, comparisonsWith, PRICING_PAGES } from 
 import { absoluteUrl, CHECKED_ON, outbound } from "@/lib/agents/site";
 import { NOT_STATED_NOTE, specRows } from "@/lib/agents/specs";
 
-export const dynamicParams = false;
 export const generateStaticParams = () => Object.keys(AGENT_PAGES).map((slug) => ({ slug }));
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  if (!AGENT_PAGES[slug]) notFound();
   const { meta } = await AGENT_PAGES[slug]();
   return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/${slug}` } };
 }

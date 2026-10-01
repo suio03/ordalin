@@ -13,13 +13,13 @@ import { SIDES } from "@/lib/agents/sides";
 import { absoluteUrl, CHECKED_ON, outbound } from "@/lib/agents/site";
 import { assistantSpecRows, NOT_STATED_NOTE, specRows } from "@/lib/agents/specs";
 
-export const dynamicParams = false;
 export const generateStaticParams = () => Object.keys(COMPARISONS).map((pair) => ({ pair }));
 
 type Props = { params: Promise<{ pair: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { pair } = await params;
+  if (!COMPARISONS[pair]) notFound();
   const { meta } = await COMPARISONS[pair].load();
   return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/compare/${pair}` } };
 }

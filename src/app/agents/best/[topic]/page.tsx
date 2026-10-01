@@ -12,13 +12,13 @@ import { displayName, getAgent } from "@/lib/agents/data";
 import { BEST_PAGES } from "@/lib/agents/content";
 import { absoluteUrl, CHECKED_ON } from "@/lib/agents/site";
 
-export const dynamicParams = false;
 export const generateStaticParams = () => Object.keys(BEST_PAGES).map((topic) => ({ topic }));
 
 type Props = { params: Promise<{ topic: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { topic } = await params;
+  if (!BEST_PAGES[topic]) notFound();
   const { meta } = await BEST_PAGES[topic]();
   return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/best/${topic}` } };
 }

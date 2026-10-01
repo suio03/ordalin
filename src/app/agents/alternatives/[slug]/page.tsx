@@ -11,13 +11,13 @@ import { displayName, getAgent } from "@/lib/agents/data";
 import { ALTERNATIVES_PAGES } from "@/lib/agents/content";
 import { absoluteUrl, CHECKED_ON } from "@/lib/agents/site";
 
-export const dynamicParams = false;
 export const generateStaticParams = () => Object.keys(ALTERNATIVES_PAGES).map((slug) => ({ slug }));
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  if (!ALTERNATIVES_PAGES[slug]) notFound();
   const { meta } = await ALTERNATIVES_PAGES[slug]();
   return { title: { absolute: meta.title }, description: meta.description, alternates: { canonical: `/agents/alternatives/${slug}` } };
 }
