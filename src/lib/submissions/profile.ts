@@ -26,18 +26,21 @@ function numbers(value: string) {
 
 // The AI rewrites messy page text into clean prose, so wording is not compared.
 // Every section must cite a fetched page, and every number it states (prices,
-// credits, limits) must appear on that page.
+// credits, limits) must appear somewhere on the fetched site; a features list
+// often cites the homepage but repeats limits from the pricing page.
 export function supportedDetails(value: unknown, candidate: CatalogEnrichmentCandidate): ExtractedDetails {
   const result = emptyDetails();
   if (!value || typeof value !== "object") return result;
+  const siteNumbers = numbers(candidate.evidencePages.flatMap(page => [page.title, page.description, ...page.headings, page.excerpt]).join(" "));
   for (const key of detailFields) {
     const item = (value as Record<string, ExtractedDetail>)[key];
     if (!item || typeof item.text !== "string" || typeof item.sourceUrl !== "string") continue;
     const text = item.text.trim().slice(0, 1200);
     const page = candidate.evidencePages.find(page => page.url === item.sourceUrl);
     if (!text || !page) continue;
-    const pageNumbers = numbers([page.title, page.description, ...page.headings, page.excerpt].join(" "));
-    if ([...numbers(text)].every(number => pageNumbers.has(number))) result[key] = { text, sourceUrl: page.url };
+    const unsupported = [...numbers(text)].filter(number => !siteNumbers.has(number));
+    if (!unsupported.length) result[key] = { text, sourceUrl: page.url };
+    else console.warn("Dropped a generated submission detail with numbers absent from the site", { section: key, unsupported });
   }
   return result;
 }

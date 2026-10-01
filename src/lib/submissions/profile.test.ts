@@ -28,6 +28,13 @@ describe("confirmed submission provenance", () => {
     expect(result.pricingDetails.text).toContain("US$12.50/month");
     expect(result.useCases.text).toBe("");
   });
+  it("accepts numbers stated on another fetched page", () => {
+    const pricing = { ...candidate.evidencePages[0], url: "https://example.com/pricing", role: "pricing" as const, excerpt: "Up to 15 5-second videos" };
+    const site = { ...candidate, evidencePages: [candidate.evidencePages[0], pricing] };
+    const details = emptyDetails();
+    details.features = { text: "Generate 5-second videos.", sourceUrl: candidate.websiteUrl };
+    expect(supportedDetails(details, site).features.text).toBe("Generate 5-second videos.");
+  });
   it("removes website provenance when a submitter rewrites a field", () => {
     const analysis = fallbackCatalogAnalysis(candidate, { categories: [], tags: [] });
     analysis.details = emptyDetails();

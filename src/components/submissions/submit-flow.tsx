@@ -8,6 +8,7 @@ import type { TagKind } from "@/domain/catalog";
 import type { CatalogAnalysis } from "@/lib/catalog-analysis";
 import type { CatalogEnrichmentCandidate } from "@/lib/catalog-enrichment/contract";
 import { detailFields, detailLabels, type DetailField } from "@/lib/submissions/profile";
+import { SubmitSuccess } from "./submit-success";
 import { TurnstileBox } from "./turnstile-box";
 import styles from "./submit.module.css";
 
@@ -264,13 +265,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey }: { categories:
     } finally { setBusy(false); }
   }
 
-  if (publishedSlug) return (
-    <section className={styles.success} aria-live="polite">
-      <p className={styles.stepLabel}>Published</p><h2>The tool is now live.</h2>
-      <p>The listing is labelled as submitted information and can now be found across the catalogue.</p>
-      <Link href={`/tools/${publishedSlug}`}>Open the tool profile →</Link>
-    </section>
-  );
+  if (publishedSlug) return <SubmitSuccess slug={publishedSlug} name={name} tagline={tagline} logoSrc={preparedLogoPreview} />;
 
   return (
     <div className={styles.flow}>
