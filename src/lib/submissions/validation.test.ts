@@ -30,6 +30,13 @@ describe("submission validation", () => {
     expect(result.url.href).toBe("https://www.example.com/product?plan=pro");
   });
 
+  it("accepts a bare domain and upgrades http", () => {
+    expect(canonicalWebsite("pixfy.io").url.href).toBe("https://pixfy.io/");
+    expect(canonicalWebsite(" http://www.pixfy.io/app ").url.href).toBe("https://www.pixfy.io/app");
+    expect(() => canonicalWebsite("pixfy")).toThrow(SubmissionError);
+    expect(() => canonicalWebsite("ftp://pixfy.io")).toThrow(SubmissionError);
+  });
+
   it("returns a client-facing error for unsafe websites", () => {
     expect(() => canonicalWebsite("https://127.0.0.1/admin")).toThrow(SubmissionError);
   });

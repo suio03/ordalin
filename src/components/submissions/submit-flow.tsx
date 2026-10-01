@@ -172,7 +172,9 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey }: { categories:
   }
 
   async function checkWebsite(event: FormEvent) {
-    event.preventDefault(); setBusy(true); setError(""); setExistingTool(null);
+    event.preventDefault(); setError(""); setExistingTool(null);
+    if (!websiteUrl.trim()) { setError("Enter your product's website, like your-product.com."); return; }
+    setBusy(true);
     try {
       const value = await responseJson(await fetch("/api/submissions/enrich", {
         method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ websiteUrl }),
@@ -256,19 +258,19 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey }: { categories:
       </ol>
       {!draft ? (
         <section className={styles.urlStage}>
-          <form onSubmit={checkWebsite}>
+          <form onSubmit={checkWebsite} noValidate>
             <label htmlFor="website">Official product website</label>
             <div className={styles.urlControl}>
-              <input id="website" type="url" inputMode="url" placeholder="https://your-product.com" value={websiteUrl} onChange={(event) => setWebsiteUrl(event.target.value)} required />
+              <input id="website" type="text" inputMode="url" autoComplete="url" autoCapitalize="none" spellCheck={false} placeholder="your-product.com" value={websiteUrl} onChange={(event) => setWebsiteUrl(event.target.value)} aria-invalid={error ? true : undefined} aria-describedby={error ? "website-error" : undefined} />
               <button type="submit" disabled={busy}>{busy ? "Checking…" : "Check website →"}</button>
             </div>
+            {error ? <div id="website-error" className={styles.error} role="alert">{error}{existingTool ? <Link href={`/tools/${existingTool.slug}`}>View {existingTool.name} →</Link> : null}</div> : null}
           </form>
           <div className={styles.stageNotes}>
             <p><span>01</span> We inspect a small set of public pages.</p>
             <p><span>02</span> Existing domains cannot be submitted again.</p>
             <p><span>03</span> Nothing is published until you confirm it.</p>
           </div>
-          {error ? <div className={styles.error} role="alert">{error}{existingTool ? <Link href={`/tools/${existingTool.slug}`}>View {existingTool.name} →</Link> : null}</div> : null}
         </section>
       ) : (
         <form className={styles.reviewForm} onSubmit={publish}>

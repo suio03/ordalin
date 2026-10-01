@@ -26,16 +26,24 @@ function slugList(value: FormDataEntryValue | null, label: string, max: number) 
   }
 }
 
+// Accept a bare domain such as "pixfy.io" and upgrade http:// to https://.
+export function websiteInputUrl(input: string) {
+  const trimmed = input.trim();
+  if (/^http:\/\//i.test(trimmed)) return `https://${trimmed.slice(7)}`;
+  return /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
 export function canonicalWebsite(input: string) {
   try {
-    const url = cleanCatalogWebsiteUrl(assertPublicHttpsUrl(input));
+    const url = cleanCatalogWebsiteUrl(assertPublicHttpsUrl(websiteInputUrl(input)));
+    if (!url.hostname.includes(".")) throw new Error("Website needs a full domain");
     return {
       url,
       canonicalDomain: url.hostname.toLowerCase().replace(/^www\./, ""),
     };
   } catch {
     throw new SubmissionError(
-      "Enter a public HTTPS product website without credentials or a custom port.",
+      "Enter a public product website, like your-product.com.",
       400,
       "invalid_website",
     );
