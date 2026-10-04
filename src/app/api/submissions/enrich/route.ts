@@ -79,8 +79,8 @@ export async function POST(request: Request) {
     const draftId = crypto.randomUUID();
     await env.DB.batch([
       env.DB
-        .prepare("UPDATE submission_drafts SET status = 'expired', updated_at = ? WHERE status = 'pending' AND expires_at <= ?")
-        .bind(now, now),
+        .prepare("DELETE FROM submission_drafts WHERE status != 'published' AND expires_at <= ?")
+        .bind(now),
       env.DB
         .prepare(
           "INSERT INTO submission_drafts (id, website_url, canonical_domain, candidate_json, actor_hash, status, expires_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?)",
