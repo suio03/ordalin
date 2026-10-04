@@ -7,6 +7,7 @@ import { EditorialCard } from "@/components/editorial/editorial-parts";
 import { formatPricingModel } from "@/lib/catalog";
 import { editorialHref, type EditorialPage } from "@/lib/editorial";
 import { listLiveEditorial } from "@/lib/editorial/load";
+import { pinnedHomepageGuides } from "@/content/editorial";
 import {
   listCategories,
   listCollections,
@@ -80,7 +81,11 @@ export default async function Home({ searchParams }: HomeProps) {
         page.kind === "best" && page.groupSlug === group.slug),
     })),
   );
-  const guides = editorial.pages.slice(0, 3);
+  const pinRank = (page: EditorialPage) => {
+    const rank = pinnedHomepageGuides.indexOf(editorialHref(page));
+    return rank === -1 ? pinnedHomepageGuides.length : rank;
+  };
+  const guides = [...editorial.pages].sort((left, right) => pinRank(left) - pinRank(right)).slice(0, 3);
 
   return (
     <main className={styles.main}>

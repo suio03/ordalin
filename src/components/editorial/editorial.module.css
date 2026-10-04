@@ -549,6 +549,7 @@
 
 .cardMarks {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   margin-top: auto;
@@ -557,6 +558,7 @@
 
 .cardMarks small {
   margin-left: var(--space-xs);
+  white-space: nowrap;
   color: var(--color-text-tertiary);
   font-family: var(--font-family-metadata);
   font-size: var(--font-size-metadata);
