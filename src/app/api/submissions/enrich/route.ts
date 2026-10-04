@@ -79,7 +79,7 @@ export async function POST(request: Request) {
     const draftId = crypto.randomUUID();
     await env.DB.batch([
       env.DB
-        .prepare("DELETE FROM submission_drafts WHERE status != 'published' AND expires_at <= ?")
+        .prepare("DELETE FROM submission_drafts WHERE expires_at <= ?")
         .bind(now),
       env.DB
         .prepare(
