@@ -1,0 +1,73 @@
+export const meta = {
+  title: "Is Meta Muse Safe? Privacy, Mac Access and Data Controls (2026)",
+  description:
+    "What Meta Muse can access, what it asks before acting, how training and deletion work, and the Mac Messages dispute behind Apple's Full Disk Access change.",
+  answer:
+    "Muse has the safeguards you'd expect from a personal agent: it runs in its own cloud VM, asks before sensitive actions like sending email or buying things, and lets you delete its data. The bigger risk is the Mac app. With Full Disk Access turned on, Muse can reach your files and apps like Messages and Mail, and Apple has since said that level of access is getting riskier with AI agents. Meta also uses your Muse chats to train its models unless you turn that off.",
+  checkedOn: "2026-10-06",
+  sources: [
+    "https://developer.apple.com/news/?id=p6zjojqw",
+    "https://www.inc.com/jason-aten/metas-new-muse-ai-agent-read-my-private-messages-i-never-asked-it-to/91408202",
+  ],
+  faq: [
+    {
+      q: "Is Meta Muse safe to use?",
+      a: "For errands on your phone or the web, Muse works like other big-company agents: it asks before sensitive actions and you control its data. Be more careful with the Mac app, which needs Full Disk Access and can read apps like Messages and Mail once you allow it.",
+    },
+    {
+      q: "Can Meta Muse read my iMessages?",
+      a: "Only through the Mac app, and Meta says only if you allow it. The Mac app needs macOS Full Disk Access, and each local app, such as Messages, is set to Off, Read only or Read and interact. An Inc. columnist reported in September 2026 that Muse read his Messages with Full Disk Access off; Meta disputes that.",
+    },
+    {
+      q: "Does Meta train its AI on my Muse chats?",
+      a: "By default, yes. The \"Help improve our AI models\" setting is on when you first use Muse. You can turn it off in Data controls. Meta says it removes some personal details, such as names, email addresses and phone numbers, when the setting is on.",
+    },
+    {
+      q: "How do I delete my Muse data?",
+      a: "You can delete single messages, side chats and files. Resetting Muse permanently deletes everything, including chat history, and can't be undone. Deleting your Meta account also deletes your Muse data. You can download your data first from Settings → Data controls.",
+    },
+    {
+      q: "What is Apple changing about Full Disk Access?",
+      a: "On October 2, 2026, Apple said it will add controls so that apps can only get Full Disk Access with \"very explicit user action\", citing the growing risk from AI agents. Apple hasn't said when or in which macOS version.",
+    },
+  ],
+};
+
+## What Muse can access
+
+Muse does its work in **Muse Secure VM**, a dedicated cloud computer that holds the agent and your data. Meta says a separate agent, Sentinel, must approve anything that reaches the internet.
+
+On your phone and the web, Muse reaches your accounts through **connectors** you add, such as Link (Stripe), Shop Pay and 1Password.
+
+The **Mac app** goes further. It can find and organise files on your Mac and read information from apps that keep their data locally, such as iMessage, Notes, Reminders, Mail and Calendar. To do that, it needs three macOS permissions:
+
+- **Full Disk Access**, to find, read or update files
+- **Automation**, to act on apps that store information locally
+- **Notifications**, to tell you when a task is done
+
+Meta says Muse only uses the files and app information you ask it to work with. Full Disk Access itself covers every file on the Mac.
+
+## What it asks before acting
+
+You pick how often Muse checks with you:
+
+- **Ask for some actions:** it asks before every write action and important read actions.
+- **Always ask:** it asks before any action.
+
+When it asks, you can allow once, for the task, for the site, for that connector in future, or deny. On the Mac, deleted files go to the Trash, so you can restore them.
+
+## The Messages dispute and Apple's response
+
+On September 19, 2026, Inc. columnist Jason Aten [reported](https://www.inc.com/jason-aten/metas-new-muse-ai-agent-read-my-private-messages-i-never-asked-it-to/91408202) that Muse had synced his Messages database even though Full Disk Access was turned off on his Mac. Meta disputes this. Its executives said Muse can read Messages only after you turn on both Full Disk Access and the Messages connector in the Muse app, and that macOS protections can't be bypassed even if the app had a bug. Neither side has published a technical explanation, so we can't say which account is right.
+
+On October 2, Apple [announced](https://developer.apple.com/news/?id=p6zjojqw) that it will tighten Full Disk Access. Apple didn't name Muse. It said some developers use the permission "in ways that could put users at risk", and that "as AI agents become increasingly capable and autonomous, the risks associated with this level of access will grow substantially." Granting it will require "very explicit user action". Apple hasn't given a date.
+
+## How to use Muse more safely
+
+1. **Skip the Mac app unless you need it.** Errands, shopping and research work from the phone and web apps without access to your Mac.
+2. **On a Mac, keep local apps on Off or Read only.** Change them in Muse's Settings → File System Access, or remove the Full Disk Access, Automation and Notifications permissions in System Settings → Privacy & Security.
+3. **Use Always ask** while you're getting to know it.
+4. **Turn off model training** in Data controls if you don't want your chats used.
+5. **Review connectors** you no longer use, and reset Muse if you want everything gone.
+
+Muse isn't the only agent that needs broad access. ChatGPT dots can optionally use your laptop, and Grok Bot can run on your own computer; see how they compare in [Meta Muse vs ChatGPT Dots vs Grok Bot](/agents/compare/muse-vs-dots-vs-grok-bot).

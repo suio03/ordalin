@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/agents/json-ld";
 import { Sources } from "@/components/agents/sources";
 import { SpecTable } from "@/components/agents/spec-table";
 import { displayName, getAgent } from "@/lib/agents/data";
-import { AGENT_PAGES, ALTERNATIVES_PAGES, comparisonsWith, PRICING_PAGES } from "@/lib/agents/content";
+import { AGENT_PAGES, ALTERNATIVES_PAGES, comparisonsWith, PRICING_PAGES, SAFETY_PAGES } from "@/lib/agents/content";
 import { absoluteUrl, CHECKED_ON, outbound } from "@/lib/agents/site";
 import { NOT_STATED_NOTE, specRows } from "@/lib/agents/specs";
 
@@ -70,7 +70,7 @@ export default async function AgentPage({ params }: Props) {
           <SpecTable heads={[{ name, color: "var(--color-night)", initial: agent.name[0].toUpperCase() }]} rows={specRows([agent])} footnote={NOT_STATED_NOTE} />
         </section>
 
-        {(comparisons.length > 0 || slug in PRICING_PAGES || slug in ALTERNATIVES_PAGES) && (
+        {(comparisons.length > 0 || slug in PRICING_PAGES || slug in ALTERNATIVES_PAGES || slug in SAFETY_PAGES) && (
           <section className="flex flex-col gap-4">
             <h2 className="font-serif text-[30px] font-medium md:text-[36px]">Compare and price</h2>
             <div className="grid gap-4 md:grid-cols-3">
@@ -87,6 +87,11 @@ export default async function AgentPage({ params }: Props) {
               {slug in ALTERNATIVES_PAGES && (
                 <Link href={`/agents/alternatives/${slug}`} className="rounded-2xl border border-line bg-surface p-5 font-bold text-ink hover:no-underline">
                   {name} alternatives →
+                </Link>
+              )}
+              {slug in SAFETY_PAGES && (
+                <Link href={`/agents/safety/${slug}`} className="rounded-2xl border border-line bg-surface p-5 font-bold text-ink hover:no-underline">
+                  Is {name} safe? →
                 </Link>
               )}
             </div>

@@ -31,6 +31,7 @@
         "ios": true,
         "android": true,
         "web": true,
+        "macos": true,
         "glasses": "coming soon"
       },
       "regions": "US (rolling out)",
@@ -41,15 +42,19 @@
         "1Password"
       ],
       "execution": "Muse Secure VM — dedicated cloud VM holding agent + user data; Sentinel agent must approve anything that reaches the internet",
-      "safety": "Checks with the person before sensitive actions like sending an email or making a purchase",
+      "safety": "Checks with the person before sensitive actions like sending an email or making a purchase; approval modes: Ask for some actions (every write and important read) or Always ask",
       "privacy": {
         "training": "Users can opt out of interactions being used to train Meta's models",
-        "confidential_compute": "Muse Confidential VM, user-held key — announced for later in 2026 (not live)"
+        "confidential_compute": "Muse Confidential VM, user-held key — announced for later in 2026 (not live)",
+        "delete_data": "Delete single messages, side chats and files; Reset Muse permanently deletes everything, including chat history; deleting the Meta account deletes Muse data"
       },
       "model": "Muse Spark",
       "sources": [
         "https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/",
-        "https://www.meta.com/help/subscriptions/1021145227643680/"
+        "https://www.meta.com/help/subscriptions/1021145227643680/",
+        "https://www.meta.com/help/artificial-intelligence/1126304576638594/",
+        "https://www.meta.com/help/artificial-intelligence/1385290430137537/",
+        "https://www.meta.com/help/artificial-intelligence/2225571704857152/"
       ]
     },
     {

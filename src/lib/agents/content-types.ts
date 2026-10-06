@@ -52,6 +52,18 @@ export type BestMeta = {
   faq: FaqItem[];
 };
 
+/** "Is X safe?" pages. Facts come from the maker's own pages plus the extra `sources` listed here. */
+export type SafetyMeta = {
+  title: string;
+  description: string;
+  answer: string;
+  /** Date this page's facts were last checked, when newer than the site-wide check. */
+  checkedOn?: string;
+  /** Pages this article cites beyond the agent's entry in agents.json. */
+  sources: string[];
+  faq: FaqItem[];
+};
+
 /** Copy for the /agents overview. Comparisons and guides are listed from the registry. */
 export type OverviewMeta = {
   title: string;
@@ -85,4 +97,5 @@ export type AgentsRegistry = {
   pricingPages: Record<string, { planPrefix: string; compareWith: string[]; load: Load<PricingMeta> }>;
   alternativesPages: Record<string, Load<AlternativesMeta>>;
   bestPages: Record<string, Load<BestMeta>>;
+  safetyPages: Record<string, Load<SafetyMeta>>;
 };

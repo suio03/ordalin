@@ -17,6 +17,7 @@ export const REGISTRY: AgentsRegistry = {
   agentPages: {
     "meta-muse": () => import("./agents/meta-muse.mdx"),
     "chatgpt-dots": () => import("./agents/chatgpt-dots.mdx"),
+    "grok-bot": () => import("./agents/grok-bot.mdx"),
   },
   pricingPages: {
     "meta-muse": { planPrefix: "Muse", compareWith: ["chatgpt-dots","gemini-spark","grok-bot","poke","lindy"], load: () => import("./pricing/meta-muse.mdx") },
@@ -27,5 +28,8 @@ export const REGISTRY: AgentsRegistry = {
   },
   bestPages: {
     "ai-personal-assistants": () => import("./best/ai-personal-assistants.mdx"),
+  },
+  safetyPages: {
+    "meta-muse": () => import("./safety/meta-muse.mdx"),
   },
 };
