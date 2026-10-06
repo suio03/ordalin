@@ -3,6 +3,7 @@ import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { Pagination } from "@/components/directory/pagination";
 import { ToolList } from "@/components/directory/tool-list";
+import { SearchTracker } from "@/components/search-tracker";
 import { pricingModels } from "@/domain/catalog";
 import { formatPricingModel, parsePage } from "@/lib/catalog";
 import {
@@ -55,6 +56,7 @@ export default async function SearchPage({
 
   return (
     <main className={`${styles.main} ${styles.wide}`}>
+      <SearchTracker query={query} total={result.total} page={result.page} />
       <header className={styles.pageHeader}>
         <div>
           <p className={styles.eyebrow}>Deterministic catalogue search</p>

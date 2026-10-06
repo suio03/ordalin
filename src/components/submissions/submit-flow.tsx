@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { toolMark } from "@/lib/catalog";
 import type { TagKind } from "@/domain/catalog";
 import type { CatalogAnalysis } from "@/lib/catalog-analysis";
@@ -204,6 +205,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey }: { categories:
         method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ websiteUrl }),
       }));
       const next = value as unknown as Draft;
+      trackEvent("Submission Started");
       activeDraft.current = next.draftId;
       setDraft(next); setReviewing(false); setLogoUpload(null); setScreenshot(null); setScreenshotChoice("none"); setCaptureAttempts(0);
       setDetails(Object.fromEntries(detailFields.map(key => [key, next.analysis.details?.[key]?.text ?? ""])) as Record<DetailField, string>);
@@ -259,6 +261,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey }: { categories:
       if (screenshot) form.set("screenshotFile", screenshot);
       if (preparedLogo) form.set("logoFile", preparedLogo);
       await responseJson(await fetch("/api/submissions/publish", { method: "POST", body: form }));
+      trackEvent("Submission Sent");
       setSubmitted(true);
     } catch (caught) {
       setError(messageFrom(caught)); setTurnstileToken(""); setTurnstileVersion((version) => version + 1);

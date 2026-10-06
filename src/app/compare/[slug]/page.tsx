@@ -65,7 +65,7 @@ export default async function ComparePage({ params }: Params) {
                   <div className={styles.pickActions}>
                     <span className={styles.checked}><span aria-hidden="true" />{checkedLabel(tool)}</span>
                     <Link href={`/tools/${tool.slug}`}>Profile</Link>
-                    <a href={catalogWebsiteOutboundUrl(tool.websiteUrl)} target="_blank" rel={catalogWebsiteRel(tool.sourceProvider)}>Visit ↗</a>
+                    <a href={catalogWebsiteOutboundUrl(tool.websiteUrl)} data-tool={tool.slug} data-placement="compare" target="_blank" rel={catalogWebsiteRel(tool.sourceProvider)}>Visit ↗</a>
                   </div>
                 </div>
               );

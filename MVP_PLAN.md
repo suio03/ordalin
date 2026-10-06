@@ -430,8 +430,10 @@ Baseline pageview collection is implemented with the dedicated `ordalin.com`
 Plausible site on `actone.app` and Ordalin's GA4 web stream. Trackers load after
 hydration only on the production domains and initialize once; local and preview
 hosts send no events. Deployment and dashboard reception are separate checks.
-See `docs/environment.md#website-analytics` for configuration. The conversion
-signals below are product requirements, not claims of implemented custom events.
+See `docs/environment.md#website-analytics` for configuration. Plausible custom
+events cover outbound visits, tool-profile progression, searches (with result
+buckets) and the submission funnel; repeat visits come from Plausible's built-in
+reports. GA4 stays page-view only.
 
 Ordalin is an outbound discovery product. A visitor who finds a suitable tool
 and leaves through its official link may have completed the intended job.

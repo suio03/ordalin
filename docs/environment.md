@@ -210,6 +210,33 @@ Only `ordalin.com` and `www.ordalin.com` load analytics scripts. Localhost,
 workers.dev and other preview hosts send no events. Trackers initialize once;
 Plausible handles History API navigation and GA4 uses Enhanced Measurement.
 Keep GA4 page views on browser-history changes enabled and do not add duplicate
-manual page_view events. No Clarity, user IDs, form values or custom business
-events are added by this integration. Verify reception on the production site
-after deployment; local checks intentionally cannot populate these dashboards.
+manual page_view events. No Clarity, user IDs or form values are collected.
+Verify reception on the production site after deployment; local checks
+intentionally cannot populate these dashboards.
+
+### Custom events (Plausible only)
+
+Business events go to Plausible through `trackEvent()` in `src/lib/analytics.ts`;
+GA4 receives page views only. One delegated click listener covers links, so
+server components only add `data-*` attributes.
+
+| Event | Props | Fired when |
+|---|---|---|
+| `Outbound Click` | `tool`, `placement` | a link tagged `utm_source=ordalin` is clicked |
+| `Tool Open` | `tool`, `from`, `search` | an internal link to `/tools/[slug]` is clicked |
+| `Search` | `query`, `results` | a new non-empty query renders its first page (`/tools`, `/search`) |
+| `Submission Started` | — | the submit website check returns a draft |
+| `Submission Sent` | — | a submission is accepted for review |
+
+- `placement` comes from `data-placement` (`profile`, `row`, `task`, `compare`,
+  `editorial`), falling back to the page's first path segment; `tool` comes from
+  `data-tool`, falling back to the official hostname. Tag new official-site links
+  with both.
+- `query` is trimmed, lower-cased and cut to 100 characters; `results` is a
+  bucket (`0`, `1-5`, `6-20`, `21+`). Filter and pagination changes for the same
+  query are not new searches.
+- Same-tab outbound links wait for Plausible's callback (at most 1 s) before
+  leaving, because the script sends with XHR.
+- Goals and custom properties are managed with `bin/plausible-admin` in the
+  self-hosted analytics repository (`docs/events/ordalin.json`). When adding an
+  event or prop here, run `events sync` / `properties add` for `ordalin.com` too.

@@ -28,6 +28,8 @@ export function ToolRow({ tool }: { tool: ToolCard }) {
       <a
         className={styles.visit}
         href={catalogWebsiteOutboundUrl(tool.websiteUrl)}
+        data-tool={tool.slug}
+        data-placement="row"
         target="_blank"
         rel={catalogWebsiteRel(tool.sourceProvider)}
         aria-label={`Visit ${tool.name} website`}

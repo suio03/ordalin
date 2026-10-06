@@ -9,6 +9,7 @@ import type {
   CollectionSummary,
   ToolCard,
 } from "@/lib/repositories/catalog";
+import { SearchTracker } from "@/components/search-tracker";
 import { Pagination } from "./pagination";
 import { ToolRow } from "./tool-row";
 import styles from "./explorer.module.css";
@@ -101,6 +102,7 @@ export function DirectoryExplorer({
 
   return (
     <main className={styles.main}>
+      <SearchTracker query={initialState.query} total={total} page={page} />
       <section className={styles.hero} aria-labelledby="home-title">
         <div>
           <p className={styles.eyebrow}>All AI tools</p>

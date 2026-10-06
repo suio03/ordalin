@@ -102,6 +102,8 @@ export default async function TaskPage({ params }: TaskParams) {
                   <a
                     className={styles.visitLink}
                     href={catalogWebsiteOutboundUrl(option.websiteUrl)}
+                    data-tool={option.slug}
+                    data-placement="task"
                     target="_blank"
                     rel={catalogWebsiteRel(option.sourceProvider)}
                   >

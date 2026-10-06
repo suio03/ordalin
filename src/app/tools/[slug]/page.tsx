@@ -101,6 +101,8 @@ export default async function ToolPage({ params }: ToolParams) {
         <a
           className={styles.primaryAction}
           href={catalogWebsiteOutboundUrl(tool.websiteUrl)}
+          data-tool={tool.slug}
+          data-placement="profile"
           target="_blank"
           rel={catalogWebsiteRel(tool.sourceProvider)}
         >
