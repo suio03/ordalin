@@ -28,12 +28,14 @@ describe("catalogue presentation helpers", () => {
 
   it("titles tool pages by their main use in the primary category", () => {
     const tag = (name: string, groupSlug: string | null, kind = "category") => ({ kind, name, groupSlug });
-    const tool = (tagDetails: ReturnType<typeof tag>[]) => ({ name: "AdAnt", primaryCategory: { slug: "video", name: "Video & Animation" }, tagDetails });
+    const tool = (tagDetails: ReturnType<typeof tag>[]) => ({ slug: "adant", name: "AdAnt", primaryCategory: { slug: "video", name: "Video & Animation" }, tagDetails });
     expect(toolPageTitle(tool([tag("Social media", "marketing"), tag("Video generation", "video"), tag("Ad creative", "marketing")])))
       .toBe("AdAnt — AI Video Generation");
     expect(toolPageTitle(tool([tag("DevOps and monitoring", "coding"), tag("Web", null, "interface")])))
       .toBe("AdAnt — AI DevOps and Monitoring");
     expect(toolPageTitle(tool([tag("SEO", "marketing")]))).toBe("AdAnt — AI SEO");
     expect(toolPageTitle(tool([]))).toBe("AdAnt — AI Video & Animation");
+    const flux = { ...tool([tag("Video editing", "video"), tag("Video generation", "video")]), slug: "flux-3", name: "FLUX 3" };
+    expect(toolPageTitle(flux)).toBe("FLUX 3 — AI Video Generation");
   });
 });

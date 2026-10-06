@@ -56,12 +56,18 @@ export function formatPricingModel(value: string) {
 
 type TitleTag = { kind: string; name: string; groupSlug: string | null };
 
+/** Title use for tools whose first category tag alphabetically is not their main use, keyed by tool slug. */
+const titleUseOverrides: Record<string, string> = {
+  "flux-3": "Video generation",
+};
+
 /** "AdAnt — AI Video Generation": the tool's main use, taken from a category tag in its primary group. */
-export function toolPageTitle(tool: { name: string; primaryCategory: { slug: string; name: string }; tagDetails: TitleTag[] }) {
+export function toolPageTitle(tool: { slug: string; name: string; primaryCategory: { slug: string; name: string }; tagDetails: TitleTag[] }) {
   const categories = tool.tagDetails
     .filter((tag) => tag.kind === "category")
     .sort((a, b) => a.name.localeCompare(b.name));
-  const use = categories.find((tag) => tag.groupSlug === tool.primaryCategory.slug)?.name
+  const use = titleUseOverrides[tool.slug]
+    ?? categories.find((tag) => tag.groupSlug === tool.primaryCategory.slug)?.name
     ?? categories[0]?.name
     ?? tool.primaryCategory.name;
   if (!use) return tool.name;
