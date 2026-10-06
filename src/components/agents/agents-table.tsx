@@ -25,6 +25,7 @@ export function AgentsTable({ agents }: { agents: Agent[] }) {
               <tr key={a.slug} className="border-t border-line-soft align-top">
                 <td className="px-5 py-3 font-semibold">
                   {link.internal ? <Link href={link.href}>{displayName(a)}</Link> : <a href={outbound(link.href)} rel="noopener">{displayName(a)} ↗</a>}
+                  {a.checked_on && <div className="text-[12px] font-normal text-muted">Checked <time dateTime={a.checked_on}>{a.checked_on}</time></div>}
                 </td>
                 <td className="px-5 py-3">{vendorShort(a)}</td>
                 <td className="px-5 py-3">{capitalize(a.category)}</td>

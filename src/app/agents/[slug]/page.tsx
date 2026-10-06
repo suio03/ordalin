@@ -45,8 +45,13 @@ export default async function AgentPage({ params }: Props) {
               <a href={outbound(agent.official_url)} rel="noopener" className="text-[15px] font-semibold">
                 Official site ↗
               </a>
+              {agent.catalogue_slug && (
+                <Link href={`/tools/${agent.catalogue_slug}`} className="text-[15px] font-semibold">
+                  Full catalogue profile, pricing and sources →
+                </Link>
+              )}
             </div>
-            <Checked on={CHECKED_ON}>
+            <Checked on={agent.checked_on ?? CHECKED_ON}>
               <div>{agent.sources.length} official sources</div>
             </Checked>
           </div>

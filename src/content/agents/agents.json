@@ -492,6 +492,64 @@
         "https://help.x.com/en/using-x/about-grok",
         "https://x.ai/news/grok-4-7"
       ]
+    },
+    {
+      "slug": "hark-pro",
+      "name": "Hark Pro",
+      "vendor": "Hark Labs",
+      "channel": "personal",
+      "category": "personal agent",
+      "launch_date": "2026-10-06",
+      "official_url": "https://hark.com/",
+      "checked_on": "2026-10-07",
+      "catalogue_slug": "hark",
+      "access": {
+        "free_tier": "yes — all features included, with a usage cap; exact allowance and reset schedule not publicly stated",
+        "paid_plans": [
+          {
+            "name": "Hark Pro²",
+            "price_usd_month": "20",
+            "usage": "2× usage",
+            "note": "Advertised dollar price; checkout determines currency and local price"
+          },
+          {
+            "name": "Hark Pro³",
+            "price_usd_month": "100",
+            "usage": "10× usage",
+            "note": "Advertised dollar price; checkout determines currency and local price"
+          }
+        ],
+        "included": "All features are offered in every plan; paid tiers increase usage",
+        "billing_note": "Monthly paid subscriptions renew automatically; website cancellation at least 24 hours before period end. Optional auto top-up with a user-set amount and ceiling. App-store prices may differ",
+        "subscription_note": "18+, or the higher minimum age required locally"
+      },
+      "platforms": {
+        "web": true,
+        "ios": true,
+        "android": true
+      },
+      "regions": "unknown",
+      "actions": "browser errands and purchases; calendar and email work; Projects with files; custom Panels; suggested Action Buttons; repeatable Specialties; scheduled and conditional tasks",
+      "connectors_notable": [
+        "Google Workspace",
+        "Microsoft 365"
+      ],
+      "execution": "Handoff runs on a cloud computer; Hark's launch article says up to six browsers at once",
+      "safety": "By default asks before spending money or sending communications, unless you grant standing permission; watch and cancel browser actions; scheduled tasks can be paused or cancelled",
+      "privacy": {
+        "training": "Terms permit content use for improvement and development; safety/compliance training and quality assurance may continue after opt-out. Third-party model providers may not train on your content",
+        "delete_data": "Ask Hark to review, edit or delete memories. Delete Account in Settings → Profile; legal and security retention exceptions apply"
+      },
+      "model": "Handoff for computer use; full model lineup not stated",
+      "sources": [
+        "https://hark.com/",
+        "https://hark.com/pricing",
+        "https://hark.com/using-hark",
+        "https://hark.com/articles/introducing-hark-pro",
+        "https://hark.com/security",
+        "https://hark.com/terms",
+        "https://hark.com/privacy-policy"
+      ]
     }
   ]
 }

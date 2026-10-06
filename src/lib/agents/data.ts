@@ -23,6 +23,9 @@ export type Agent = {
   category: string;
   launch_date?: string;
   official_url: string;
+  /** Per-agent updates do not change the baseline date for other researched entries. */
+  checked_on?: string;
+  catalogue_slug?: string;
   access?: {
     free_tier?: string;
     required_plan_for_agent?: string;

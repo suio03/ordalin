@@ -8,7 +8,7 @@ import {
   listEditorialPages,
 } from "@/lib/editorial";
 import { allAgentsPaths } from "@/lib/agents/content";
-import { CHECKED_ON } from "@/lib/agents/data";
+import { allAgents, CHECKED_ON } from "@/lib/agents/data";
 import { indexableModelsMinimum, modelTagSlug } from "@/lib/catalog";
 import { listPublishedToolSlugs, listPublishedTools, listSitemapEntries } from "@/lib/repositories/catalog";
 
@@ -47,9 +47,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // AI agent pages synced from agentsversus, dated by their last fact check.
+  const agentDates = new Map(allAgents().map((agent) => [`/agents/${agent.slug}`, agent.checked_on ?? CHECKED_ON]));
   const agents: MetadataRoute.Sitemap = allAgentsPaths().map((path) => ({
     url: `${baseUrl}${path}`,
-    lastModified: CHECKED_ON,
+    lastModified: agentDates.get(path) ?? CHECKED_ON,
     changeFrequency: "weekly" as const,
     priority: 0.7,
   }));

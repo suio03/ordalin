@@ -62,7 +62,7 @@ export default async function AgentsOverviewPage() {
         <h1 className="font-serif text-[40px] leading-[1.05] font-medium tracking-[-0.02em] md:text-[60px]">{meta.heading}</h1>
         <p className="text-[18px] leading-normal text-ink-2 md:text-[20px]">{meta.intro}</p>
         <div className="font-mono text-[13px] text-muted-2">
-          {agents.length} agents tracked · {comparisons.length} comparisons · checked {CHECKED_ON} ·{" "}
+          {agents.length} agents tracked · {comparisons.length} comparisons · baseline checked {CHECKED_ON} ·{" "}
           <Link href={agentsPath.methodology}>How we check</Link>
         </div>
       </section>

@@ -35,7 +35,7 @@ export default async function PersonalAgentsPage() {
           from each maker&apos;s own pages. When a maker doesn&apos;t say, we write &quot;Not stated&quot; instead of guessing.
         </p>
         <div className="font-mono text-[13px] text-muted-2">
-          {agents.length} personal agents tracked · checked {CHECKED_ON} · <Link href={agentsPath.methodology}>How we check</Link>
+          {agents.length} personal agents tracked · baseline checked {CHECKED_ON} · individual updates dated below · <Link href={agentsPath.methodology}>How we check</Link>
         </div>
       </section>
 
