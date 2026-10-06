@@ -104,8 +104,8 @@ export async function POST(request: Request) {
     // profile standard; `pnpm imports:apply` publishes it (docs/catalog-enrichment.md).
     const statements = [
       env.DB
-        .prepare("INSERT INTO tools (id, slug, name, tagline, description, website_url, canonical_domain, pricing_model, status, primary_category_id, logo_asset_key, screenshot_asset_key, is_editor_pick, source_first_seen_at, published_at, last_checked_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending_review', ?, ?, ?, 0, ?, NULL, ?, ?, ?)")
-        .bind(toolId, slug, input.name, input.tagline, input.description, draft.website_url, draft.canonical_domain, input.pricingModel, primaryCategory.id, storedLogoKey, storedScreenshotKey, now, candidate.evidencePages.length ? Math.floor(Date.parse(candidate.fetchedAt) / 1000) : null, now, now),
+        .prepare("INSERT INTO tools (id, slug, name, tagline, description, website_url, canonical_domain, canonical_key, pricing_model, status, primary_category_id, logo_asset_key, screenshot_asset_key, is_editor_pick, source_first_seen_at, published_at, last_checked_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending_review', ?, ?, ?, 0, ?, NULL, ?, ?, ?)")
+        .bind(toolId, slug, input.name, input.tagline, input.description, draft.website_url, draft.canonical_domain, draft.canonical_domain, input.pricingModel, primaryCategory.id, storedLogoKey, storedScreenshotKey, now, candidate.evidencePages.length ? Math.floor(Date.parse(candidate.fetchedAt) / 1000) : null, now, now),
       ...categoryRows.results.map((category) =>
         env.DB
           .prepare("INSERT INTO tool_categories (tool_id, category_id, is_primary) VALUES (?, ?, ?)")
@@ -139,7 +139,7 @@ export async function POST(request: Request) {
         // A content-hashed orphan is safe and can be removed by maintenance.
       }
     }
-    if (error instanceof Error && /UNIQUE constraint failed: tools\.canonical_domain/i.test(error.message)) {
+    if (error instanceof Error && /UNIQUE constraint failed: tools\.canonical_(domain|key)/i.test(error.message)) {
       return submissionErrorResponse(new SubmissionError("This website is already listed on Ordalin.", 409, "duplicate_domain"));
     }
     return submissionErrorResponse(error);

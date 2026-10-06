@@ -2,6 +2,9 @@ import type { PricingModel } from "@/domain/catalog";
 
 export const cataloguePageSize = 12;
 export const indexableCategoryMinimum = 15;
+/** Tools tagged with this attribute are listed on /models; the page is indexable from three. */
+export const modelTagSlug = "ai-model";
+export const indexableModelsMinimum = 3;
 
 export type CatalogueSort = "newest" | "oldest";
 

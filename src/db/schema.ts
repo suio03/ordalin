@@ -42,6 +42,8 @@ export const tools = sqliteTable(
     description: text("description").notNull(),
     websiteUrl: text("website_url").notNull(),
     canonicalDomain: text("canonical_domain").notNull(),
+    /** Duplicate identity: the domain, or domain + path for one model page of a multi-model vendor. */
+    canonicalKey: text("canonical_key"),
     pricingModel: text("pricing_model", { enum: pricingModels }).notNull(),
     status: text("status", { enum: toolStatuses })
       .notNull()
@@ -62,7 +64,8 @@ export const tools = sqliteTable(
   },
   (table) => [
     uniqueIndex("tools_slug_unique").on(table.slug),
-    uniqueIndex("tools_canonical_domain_unique").on(table.canonicalDomain),
+    index("tools_canonical_domain").on(table.canonicalDomain),
+    uniqueIndex("tools_canonical_key_unique").on(table.canonicalKey),
     index("tools_status_published").on(table.status, table.publishedAt),
     index("tools_category_status_published").on(
       table.primaryCategoryId,
@@ -349,6 +352,7 @@ export const importCandidates = sqliteTable(
     discoveryUrl: text("discovery_url").notNull(),
     websiteUrl: text("website_url").notNull(),
     canonicalDomain: text("canonical_domain").notNull(),
+    canonicalKey: text("canonical_key"),
     status: text("status", { enum: importCandidateStatuses })
       .notNull()
       .default("discovered"),
@@ -367,7 +371,8 @@ export const importCandidates = sqliteTable(
       table.provider,
       table.externalId,
     ),
-    uniqueIndex("import_candidates_domain_unique").on(table.canonicalDomain),
+    index("import_candidates_domain").on(table.canonicalDomain),
+    uniqueIndex("import_candidates_key_unique").on(table.canonicalKey),
     index("import_candidates_status_updated").on(table.status, table.updatedAt),
     index("import_candidates_tool").on(table.toolId),
   ],

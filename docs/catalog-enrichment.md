@@ -158,6 +158,20 @@ pnpm imports:screenshots -- --manifest=<dir>/manifest.json
 pnpm imports:apply -- --remote --manifest=<dir>/manifest.json --publish-limit=20 --daily-publish-limit=20 <bundles>
 ```
 
+Models are imported the same way and tagged `ai-model`, which lists them on
+`/models`. A vendor can ship several models from one domain, so prepare a
+model's own page with `--model`:
+
+```bash
+pnpm imports:prepare -- --remote --model --urls=https://bfl.ai/models/flux-3-video --output-dir=<dir>
+```
+
+`--model` keys the candidate by domain + path (`canonical_key`), so other model
+pages on the same domain stay importable while the same page stays a duplicate.
+It needs the model's own page rather than the vendor homepage, and takes one
+URL per domain per batch. Without `--model`, any existing entry on the domain
+counts as a duplicate.
+
 `--submissions` adds every submitted domain still in review (at most 10 URLs
 per manifest in total). Apply recognises the pending submitted tool, keeps its
 slug, mark and confirmed screenshot, replaces the facts and taxonomy with the

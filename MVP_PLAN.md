@@ -95,6 +95,7 @@ Architecture:
 | /compare, /compare/[slug] | Editorial head-to-head comparisons (`<left>-vs-<right>`) | Articles: index when published and complete. Hub: noindex until it lists one |
 | /about/how-we-review | Public editorial and research policy | Index |
 | /tools/[slug] | One canonical tool profile | Index when published |
+| /models | Listing of tools tagged `ai-model`; their profiles stay at /tools/[slug] | Index from three published models |
 | /categories/[group] | Category-group index and paginated catalogue | Index when sufficiently populated |
 | /categories/[group]/[category] | Concrete category and matching tools | Index when sufficiently populated |
 | /tasks | Controlled task index | Index when useful task pages exist |
@@ -238,7 +239,7 @@ Use application-generated text IDs and integer Unix timestamps, following fablep
 
 - id, slug, name
 - tagline, description
-- website_url, canonical_domain
+- website_url, canonical_domain, canonical_key
 - pricing_model
 - status: imported, pending_review, published, rejected, or archived
 - primary_category_id
@@ -250,7 +251,8 @@ Use application-generated text IDs and integer Unix timestamps, following fablep
 Constraints:
 
 - unique slug
-- unique normalized canonical_domain for ordinary products
+- unique canonical_key: the normalized canonical domain for ordinary products, or
+  domain + path for one model page of a multi-model vendor (`bfl.ai/models/flux-3-video`)
 - indexes on status/published date, category/status/published date, and editor-pick/status
 
 **categories**

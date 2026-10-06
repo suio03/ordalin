@@ -69,7 +69,8 @@
     { "slug": "local-first", "name": "Local first", "kind": "attribute" },
     { "slug": "multilingual", "name": "Multilingual", "kind": "attribute" },
     { "slug": "free-plan", "name": "Free plan", "kind": "attribute" },
-    { "slug": "no-code", "name": "No-code", "kind": "attribute" }
+    { "slug": "no-code", "name": "No-code", "kind": "attribute" },
+    { "slug": "ai-model", "name": "AI model", "kind": "attribute", "description": "A generative or foundation model used through an API or playground, rather than a finished app." }
   ],
   "tools": [
     {

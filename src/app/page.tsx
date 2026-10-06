@@ -4,7 +4,7 @@ import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { ToolMark } from "@/components/directory/tool-mark";
 import { EditorialCard } from "@/components/editorial/editorial-parts";
-import { formatPricingModel } from "@/lib/catalog";
+import { formatPricingModel, modelTagSlug } from "@/lib/catalog";
 import { editorialHref, type EditorialPage } from "@/lib/editorial";
 import { listLiveEditorial } from "@/lib/editorial/load";
 import { pinnedHomepageGuides } from "@/content/editorial";
@@ -66,9 +66,10 @@ export default async function Home({ searchParams }: HomeProps) {
     permanentRedirect(`/tools?${query}`);
   }
 
-  const [groups, latest, collections, tasks, editorial] = await Promise.all([
+  const [groups, latest, models, collections, tasks, editorial] = await Promise.all([
     listCategories(),
     listPublishedTools({ pageSize: 4 }),
+    listPublishedTools({ tagSlug: modelTagSlug, pageSize: 1 }),
     listCollections(),
     listTasks(),
     listLiveEditorial(),
@@ -125,6 +126,7 @@ export default async function Home({ searchParams }: HomeProps) {
           <nav className={styles.sidebarMore} aria-label="More ways to browse">
             <p className={styles.label}>Browse</p>
             <ul>
+              {models.total ? <li><Link href="/models">AI models</Link></li> : null}
               {tasks.length ? <li><Link href="/tasks">Find by goal</Link></li> : null}
               {collections.length ? <li><Link href="/collections">Collections</Link></li> : null}
               {editorial.pages.some((page) => page.kind === "best") ? <li><Link href="/best">Best-of lists</Link></li> : null}

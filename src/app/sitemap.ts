@@ -9,16 +9,18 @@ import {
 } from "@/lib/editorial";
 import { allAgentsPaths } from "@/lib/agents/content";
 import { CHECKED_ON } from "@/lib/agents/data";
-import { listPublishedToolSlugs, listSitemapEntries } from "@/lib/repositories/catalog";
+import { indexableModelsMinimum, modelTagSlug } from "@/lib/catalog";
+import { listPublishedToolSlugs, listPublishedTools, listSitemapEntries } from "@/lib/repositories/catalog";
 
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const [entries, guides, publishedTools] = await Promise.all([
+  const [entries, guides, publishedTools, models] = await Promise.all([
     listSitemapEntries(),
     listPublishedGuides(),
     listPublishedToolSlugs(),
+    listPublishedTools({ tagSlug: modelTagSlug, pageSize: 1 }),
   ]);
   // Only pages production serves as indexable: published and fully backed by the catalogue.
   const editorial = listEditorialPages().filter(
@@ -30,6 +32,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/tools`, changeFrequency: "daily", priority: 0.9 },
     { url: `${baseUrl}/tasks`, changeFrequency: "weekly", priority: 0.85 },
     { url: `${baseUrl}/collections`, changeFrequency: "weekly", priority: 0.8 },
+    ...(models.total >= indexableModelsMinimum
+      ? [{ url: `${baseUrl}/models`, changeFrequency: "weekly" as const, priority: 0.8 }]
+      : []),
     ...(guides.length
       ? [{ url: `${baseUrl}/guides`, changeFrequency: "weekly" as const, priority: 0.7 }]
       : []),

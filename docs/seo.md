@@ -34,6 +34,7 @@ The import quality of `analysis.profile` and screenshots therefore decides how t
 | `/best`, `/alternatives`, `/compare` hubs | `noindex, follow` until the kind has a published, complete article (`editorialHubMetadata`); the sitemap uses the same condition |
 | Editorial articles | Indexable only when published and complete (`editorialMetadata`) |
 | `/guides` | `noindex, follow` while no guide is published |
+| `/models` | `noindex, follow` below `indexableModelsMinimum` (3) published `ai-model` tools; the sitemap uses the same condition |
 | `/search`, `/about/ranking`, `/admin/*` | `noindex` |
 
 `robots.ts` disallows only `/admin/` and `/api/`. `/search` must stay crawlable so crawlers can read its `noindex`.

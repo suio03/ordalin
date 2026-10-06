@@ -107,6 +107,9 @@ function parseBundle(value: unknown): CatalogImportBundle {
   const website = assertPublicHttpsUrl(record.websiteUrl);
   if (!record.candidate || record.candidate.schemaVersion !== 1) throw new Error("Website evidence is missing.");
   if (normalizeDomain(website.hostname) !== record.candidate.canonicalDomain) throw new Error("Bundle website and evidence domain do not match.");
+  if (record.canonicalKey !== undefined && (record.canonicalKey !== record.candidate.canonicalDomain && !record.canonicalKey.startsWith(`${record.candidate.canonicalDomain}/`))) {
+    throw new Error("Bundle canonicalKey must be the evidence domain or a path on it.");
+  }
   if (!record.analysis) throw new Error("analysis is null; Codex must analyze this bundle before it can be applied.");
   return { ...record, analysis: parseCatalogAnalysis(record.analysis) } as CatalogImportBundle;
 }
@@ -131,7 +134,7 @@ async function loadBatchContext(): Promise<BatchContext | null> {
     if (value.preparedAt !== manifest.preparedAt || !value.candidate?.canonicalDomain) {
       throw new Error(`${filename} does not belong to the selected manifest.`);
     }
-    return value.candidate.canonicalDomain;
+    return value.canonicalKey ?? value.candidate.canonicalDomain;
   }));
   return { manifest, manifestPath, allowedFiles, domains: [...new Set(domains)] };
 }
@@ -142,7 +145,7 @@ async function publishedCountForBatch(context: BatchContext) {
   const rows = await d1Query<{ count: number }>(projectRoot, mode, `
     SELECT COUNT(*) AS count
     FROM import_candidates
-    WHERE status = 'published' AND canonical_domain IN (${domains})
+    WHERE status = 'published' AND canonical_key IN (${domains})
   `);
   return Number(rows[0]?.count ?? 0);
 }
@@ -172,13 +175,15 @@ async function uniqueSlug(name: string, domain: string) {
   throw new Error("A unique tool slug could not be created.");
 }
 
+const identityKey = (bundle: CatalogImportBundle) => bundle.canonicalKey ?? bundle.candidate.canonicalDomain;
+
 async function duplicate(bundle: CatalogImportBundle) {
   return (await d1Query<{ id: string }>(projectRoot, mode, `
     SELECT id FROM import_candidates
       WHERE (provider = ${sqlText(bundle.provider)} AND external_id = ${sqlText(bundle.externalId)})
-         OR canonical_domain = ${sqlText(bundle.candidate.canonicalDomain)}
+         OR canonical_key = ${sqlText(identityKey(bundle))}
     UNION ALL
-    SELECT id FROM tools WHERE canonical_domain = ${sqlText(bundle.candidate.canonicalDomain)}
+    SELECT id FROM tools WHERE canonical_key = ${sqlText(identityKey(bundle))}
     LIMIT 1
   `))[0] ?? null;
 }
@@ -214,7 +219,7 @@ async function recordWithoutTool(
   const now = Math.floor(Date.now() / 1000);
   const importId = `import_${crypto.randomUUID()}`;
   await d1File(projectRoot, mode, [
-    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, ${sqlText(status)}, ${sqlText(JSON.stringify(storedCandidate(bundle.candidate, bundle.analysis)))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, NULL, ${sqlNullable(errorSummary)}, ${now}, ${now}, ${now}, ${now})`,
+    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, canonical_key, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, ${sqlText(identityKey(bundle))}, ${sqlText(status)}, ${sqlText(JSON.stringify(storedCandidate(bundle.candidate, bundle.analysis)))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, NULL, ${sqlNullable(errorSummary)}, ${now}, ${now}, ${now}, ${now})`,
     `INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (${sqlText(`event_${crypto.randomUUID()}`)}, 'import_candidate', ${sqlText(importId)}, ${sqlText(status === "skipped" ? "skip" : "analyze")}, 'codex-schedule', ${sqlText(JSON.stringify({ provider: bundle.provider, reasons }))}, ${now})`,
   ]);
 }
@@ -358,11 +363,11 @@ async function applyBundle(filename: string, batchContext: BatchContext | null):
   const slug = await uniqueSlug(name, bundle.candidate.canonicalDomain);
   const now = Math.floor(Date.now() / 1000);
   const statements = [
-    `INSERT INTO tools (id, slug, name, tagline, description, website_url, canonical_domain, pricing_model, status, primary_category_id, logo_asset_key, screenshot_asset_key, is_editor_pick, source_first_seen_at, published_at, last_checked_at, created_at, updated_at) VALUES (${sqlText(toolId)}, ${sqlText(slug)}, ${sqlText(name)}, ${sqlText(tagline)}, ${sqlText(description)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, ${sqlText(bundle.analysis!.pricingModel)}, 'pending_review', ${sqlText(primaryCategory.id)}, NULL, NULL, 0, ${now}, NULL, ${now}, ${now}, ${now})`,
+    `INSERT INTO tools (id, slug, name, tagline, description, website_url, canonical_domain, canonical_key, pricing_model, status, primary_category_id, logo_asset_key, screenshot_asset_key, is_editor_pick, source_first_seen_at, published_at, last_checked_at, created_at, updated_at) VALUES (${sqlText(toolId)}, ${sqlText(slug)}, ${sqlText(name)}, ${sqlText(tagline)}, ${sqlText(description)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, ${sqlText(identityKey(bundle))}, ${sqlText(bundle.analysis!.pricingModel)}, 'pending_review', ${sqlText(primaryCategory.id)}, NULL, NULL, 0, ${now}, NULL, ${now}, ${now}, ${now})`,
     ...selectedCategories.map((category) => `INSERT INTO tool_categories (tool_id, category_id, is_primary) VALUES (${sqlText(toolId)}, ${sqlText(category.id)}, ${category.id === primaryCategory.id ? 1 : 0})`),
     ...selectedTags.map((tag) => `INSERT INTO tool_tags (tool_id, tag_id) VALUES (${sqlText(toolId)}, ${sqlText(tag.id)})`),
     `INSERT INTO tool_sources (id, tool_id, provider, external_id, source_url, raw_json, first_seen_at, last_seen_at) VALUES (${sqlText(`source_${crypto.randomUUID()}`)}, ${sqlText(toolId)}, ${sqlText(bundle.provider as ImportProvider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(JSON.stringify({ ...bundle, candidate: storedCandidate(bundle.candidate, bundle.analysis) }))}, ${now}, ${now})`,
-    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, 'pending_review', ${sqlText(JSON.stringify(storedCandidate(bundle.candidate, bundle.analysis)))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, ${sqlText(toolId)}, NULL, ${now}, ${now}, ${now}, ${now})`,
+    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, canonical_key, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(bundle.candidate.canonicalDomain)}, ${sqlText(identityKey(bundle))}, 'pending_review', ${sqlText(JSON.stringify(storedCandidate(bundle.candidate, bundle.analysis)))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, ${sqlText(toolId)}, NULL, ${now}, ${now}, ${now}, ${now})`,
     `INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (${sqlText(`event_${crypto.randomUUID()}`)}, 'import_candidate', ${sqlText(importId)}, 'analyze', 'codex-schedule', ${sqlText(JSON.stringify({ provider: bundle.provider, decision: decision.outcome, reasons }))}, ${now})`,
   ];
   await d1File(projectRoot, mode, statements.map((statement) => assertStatementFits(statement, `${bundle.candidate.canonicalDomain} import statement`)));
@@ -448,7 +453,7 @@ async function completeSubmission(bundle: CatalogImportBundle, tool: SubmittedTo
     ...selectedCategories.map((category) => `INSERT INTO tool_categories (tool_id, category_id, is_primary) VALUES (${toolId}, ${sqlText(category.id)}, ${category.id === primaryCategory.id ? 1 : 0})`),
     ...selectedTags.map((tag) => `INSERT INTO tool_tags (tool_id, tag_id) VALUES (${toolId}, ${sqlText(tag.id)})`),
     `INSERT INTO tool_sources (id, tool_id, provider, external_id, source_url, raw_json, first_seen_at, last_seen_at) VALUES (${sqlText(`source_${crypto.randomUUID()}`)}, ${toolId}, ${sqlText(bundle.provider as ImportProvider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(JSON.stringify({ ...bundle, candidate: stored }))}, ${publishedAt}, ${publishedAt})`,
-    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(domain)}, 'published', ${sqlText(JSON.stringify(stored))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, ${toolId}, NULL, ${publishedAt}, ${publishedAt}, ${publishedAt}, ${publishedAt})`,
+    `INSERT INTO import_candidates (id, provider, external_id, discovery_url, website_url, canonical_domain, canonical_key, status, candidate_json, analysis_json, decision_reasons_json, tool_id, error_summary, discovered_at, analyzed_at, created_at, updated_at) VALUES (${sqlText(importId)}, ${sqlText(bundle.provider)}, ${sqlText(bundle.externalId)}, ${sqlText(bundle.discoveryUrl)}, ${sqlText(bundle.websiteUrl)}, ${sqlText(domain)}, ${sqlText(identityKey(bundle))}, 'published', ${sqlText(JSON.stringify(stored))}, ${sqlText(JSON.stringify(bundle.analysis))}, ${sqlText(JSON.stringify(reasons))}, ${toolId}, NULL, ${publishedAt}, ${publishedAt}, ${publishedAt}, ${publishedAt})`,
     `UPDATE tools SET name = ${sqlText(name)}, tagline = ${sqlText(tagline)}, description = ${sqlText(description)}, pricing_model = ${sqlText(bundle.analysis!.pricingModel)}, primary_category_id = ${sqlText(primaryCategory.id)}, status = 'published', published_at = ${publishedAt}, last_checked_at = ${publishedAt}, updated_at = ${publishedAt} WHERE id = ${toolId} AND status = 'pending_review'`,
     `DELETE FROM tools_fts WHERE tool_id = ${toolId}`,
     `INSERT INTO tools_fts (tool_id, name, tagline, description, category_names, tag_names) VALUES (${toolId}, ${sqlText(name)}, ${sqlText(tagline)}, ${sqlText(description)}, ${sqlText(categoryNames)}, ${sqlText(tagNames)})`,

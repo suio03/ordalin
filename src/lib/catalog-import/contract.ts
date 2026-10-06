@@ -17,6 +17,8 @@ export type CatalogImportBundle = DiscoveredCatalogUrl & {
   preparedAt: string;
   candidate: CatalogEnrichmentCandidate;
   analysis: CatalogAnalysis | null;
+  /** Duplicate identity (`catalogIdentityKey`); absent means the bare canonical domain. Set to domain + path for one model page of a multi-model vendor. */
+  canonicalKey?: string;
   /** Crawl failures the operator checked in a browser: added as evidence, or recorded as holding no official content. */
   browserEvidence?: Array<{ requestedUrl: string; url: string; resolvedWarning: string; unavailableReason: string | null; capturedAt: string }>;
 };

@@ -6,6 +6,7 @@ import { assertPublicHttpsUrl } from "../src/lib/catalog-enrichment/url-policy.t
 import type { CatalogTaxonomy } from "../src/lib/catalog-analysis/contract.ts";
 import type { CatalogImportBundle, CatalogImportManifest } from "../src/lib/catalog-import/contract.ts";
 import { catalogRunStamp } from "../src/lib/catalog-import/schedule.ts";
+import { catalogIdentityKey } from "../src/lib/catalog-identity.ts";
 import { databaseMode, d1Query } from "./lib/wrangler.ts";
 import { publicFetch } from "./lib/public-fetch.ts";
 import { renderedFetchClient } from "./lib/rendered-fetch.ts";
@@ -28,6 +29,10 @@ if (!urls.length) throw new Error("Provide --submissions, --urls=https://a.examp
 if (urls.length > 10) throw new Error("Prepare at most 10 official websites per manifest.");
 // --render: replace JavaScript-shell pages with Cloudflare server-side renders.
 const renderer = process.argv.includes("--render") ? await renderedFetchClient() : null;
+// --model: each URL is one model page of a multi-model vendor, keyed by domain + path
+// so the vendor's other models stay importable. One domain per batch keeps filenames unique.
+const modelPages = process.argv.includes("--model");
+if (modelPages && submissions.length) throw new Error("--model applies to operator URLs, not visitor submissions.");
 const outputDirectory = path.resolve(projectRoot, argument("output-dir") ?? `.ordalin-imports/queue/${catalogRunStamp()}-manual`);
 
 type CategoryRow = { slug: string; name: string; description: string };
@@ -44,9 +49,11 @@ async function taxonomy(): Promise<CatalogTaxonomy> {
 }
 
 const existing = new Set(
-  (await d1Query<{ canonical_domain: string }>(projectRoot, mode, `SELECT canonical_domain FROM (SELECT canonical_domain FROM tools UNION SELECT canonical_domain FROM import_candidates) WHERE canonical_domain NOT IN (SELECT canonical_domain FROM (${inReview}))`))
-    .map((row) => row.canonical_domain.toLowerCase()),
+  (await d1Query<{ canonical_key: string }>(projectRoot, mode, `SELECT canonical_key FROM (SELECT canonical_key FROM tools UNION SELECT canonical_key FROM import_candidates) WHERE canonical_key IS NOT NULL AND canonical_key NOT IN (SELECT canonical_domain FROM (${inReview}))`))
+    .map((row) => row.canonical_key.toLowerCase()),
 );
+const existingDomains = new Set([...existing].map((key) => key.split("/", 1)[0]));
+const batchDomains = new Set<string>();
 const preparedAt = new Date().toISOString();
 const stats = { fetched: 0, duplicates: 0, failed: 0, prepared: 0 };
 const files: string[] = [];
@@ -56,27 +63,33 @@ for (const input of urls) {
   stats.fetched += 1;
   try {
     const url = assertPublicHttpsUrl(input);
-    if (existing.has(url.hostname.toLowerCase().replace(/^www\./, ""))) {
+    if (existing.has(catalogIdentityKey(url, { withPath: modelPages }))) {
       stats.duplicates += 1;
-      console.log(`${url.hostname}: already in the catalogue or import history`);
+      console.log(`${catalogIdentityKey(url, { withPath: modelPages })}: already in the catalogue or import history`);
       continue;
     }
     const candidate = await enrichCatalogSite(url.href, { fetcher: renderer?.fetcher ?? publicFetch, research: true, maxBytesPerPage: 1_000_000 });
-    if (existing.has(candidate.canonicalDomain)) {
+    const canonicalKey = catalogIdentityKey(candidate.websiteUrl, { withPath: modelPages });
+    if (existing.has(canonicalKey) || (!modelPages && existingDomains.has(candidate.canonicalDomain))) {
       stats.duplicates += 1;
-      console.log(`${candidate.canonicalDomain}: already in the catalogue or import history`);
+      console.log(`${canonicalKey}: already in the catalogue or import history`);
       continue;
     }
-    existing.add(candidate.canonicalDomain);
+    if (batchDomains.has(candidate.canonicalDomain)) throw new Error(`${candidate.canonicalDomain} is already in this batch; prepare its other model pages in a separate batch.`);
+    if (modelPages && canonicalKey === candidate.canonicalDomain) throw new Error(`${input}: --model needs the model's own page URL, not the vendor homepage.`);
+    if (modelPages && existingDomains.has(candidate.canonicalDomain)) console.log(`${candidate.canonicalDomain}: the vendor already has catalogue entries; confirm ${canonicalKey} is a different model.`);
+    existing.add(canonicalKey);
+    batchDomains.add(candidate.canonicalDomain);
     const bundle: CatalogImportBundle = {
       schemaVersion: 1,
       preparedAt,
       provider: "manual",
-      externalId: `url:${candidate.canonicalDomain}`,
+      externalId: `url:${canonicalKey}`,
       discoveryUrl: candidate.websiteUrl,
       websiteUrl: candidate.websiteUrl,
       candidate,
       analysis: null,
+      ...(modelPages ? { canonicalKey } : {}),
     };
     const filename = `manual-${candidate.canonicalDomain.replace(/[^a-z0-9-]+/gi, "-").toLowerCase()}.json`;
     await writeFile(path.join(outputDirectory, filename), `${JSON.stringify(bundle, null, 2)}\n`, "utf8");

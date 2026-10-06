@@ -12,6 +12,7 @@ function primaryNavigation() {
     ...(listEditorialPages("best").length ? [{ href: "/best", label: "Best of" }] : []),
     ...(listEditorialPages("compare").length ? [{ href: "/compare", label: "Compare" }] : []),
     { href: "/agents", label: "AI agents" },
+    { href: "/models", label: "AI models" },
     { href: "/tasks", label: "Find by goal" },
     { href: "/collections", label: "Collections" },
   ];
@@ -55,6 +56,7 @@ export function SiteFooter() {
       title: "Browse",
       links: [
         { href: "/tools", label: "All tools" },
+        { href: "/models", label: "AI models" },
         { href: "/tasks", label: "Find by goal" },
         { href: "/collections", label: "Collections" },
         { href: "/search", label: "Advanced search" },
