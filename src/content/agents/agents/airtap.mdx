@@ -1,0 +1,43 @@
+export const meta = {
+  title: "Airtap: Cloud Phone AI Agent, Free Access, Features and Privacy",
+  description:
+    "Airtap is a personal AI agent you text. It runs a cloud Android phone to work your real mobile apps. See access, routines, supported devices and privacy.",
+  summary:
+    "Airtap is a personal AI agent from Airtap AI Inc. that you message over iMessage, RCS, SMS or Telegram. Instead of a browser, it drives a dedicated Android phone in the cloud, signed in to your own apps, to clip coupons, book classes, track prices or post to social apps, then texts you the result. Jobs can be saved as scheduled routines. It is free during the current release with a daily usage cap, and new sign-ups need an invite. This profile is based on official pages, not hands-on testing.",
+  bestFor: [
+    "Errands that only exist inside mobile apps, such as coupons, card offers and in-app bookings",
+    "iPhone users who want app automation without owning an Android phone",
+    "Recurring phone chores you want to run overnight on a schedule",
+  ],
+  notFor: [
+    "Anyone without an invite: sign-ups are currently invite only",
+    "Business or commercial use: the terms limit it to personal, non-commercial use",
+    "People who need a published usage allowance or future pricing before committing",
+  ],
+  faq: [
+    {
+      q: "Is Airtap free?",
+      a: "Yes, for now. Airtap says it is free while the product is being built, with a daily usage cap whose size is not published. Its terms describe this first release as free with full access to available features and say paid subscription tiers are planned for a later release. No prices have been announced.",
+    },
+    {
+      q: "How does Airtap work without an app?",
+      a: "You text it. Your first message over iMessage, RCS, SMS or Telegram creates an account and a dedicated Android phone in the cloud. You sign in to your own apps on that phone, and the agent taps, types and scrolls through them to finish your request. A web app at airtap.ai/app streams the phone screen live and shows every step.",
+    },
+    {
+      q: "Does Airtap work on iPhone?",
+      a: "Yes. iPhone users message it over iMessage, and the apps run on the cloud phone, so you don't need an Android device. The optional AutoPilot app, which lets Airtap control your own phone, is Android only and installed as a sideloaded APK.",
+    },
+    {
+      q: "What are Airtap routines?",
+      a: "A routine is a task saved to run automatically on a schedule. After a task worth repeating, Airtap offers to save it. Its template library includes coupon clipping, a morning email and calendar briefing, Instacart grocery carts and flight price tracking across Skyscanner, Kayak and Google Flights.",
+    },
+    {
+      q: "Can Claude, Codex or OpenClaw use Airtap?",
+      a: "Yes. Airtap publishes a single SKILLS.md file that teaches an agent to operate a phone. Load it into Claude, Codex, OpenClaw or another compatible runtime and assign it a cloud phone or a connected device.",
+    },
+    {
+      q: "Does Airtap see my passwords, and who processes my data?",
+      a: "Airtap says it never sees or stores your credentials, the agent is blocked from reading password and card fields, each cloud phone runs in an isolated container and sessions are wiped on logout. Task text, conversation history and cloud-phone screenshots are shared with Google (Gemini), Anthropic, xAI, OpenAI, Groq and AssemblyAI to run tasks; the privacy policy says they do not train on it. The terms allow anonymized, aggregated usage data to be used for model improvement.",
+    },
+  ],
+};

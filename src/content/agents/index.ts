@@ -15,6 +15,7 @@ export const REGISTRY: AgentsRegistry = {
     "grok-vs-chatgpt": { sides: ["grok","chatgpt"], kind: "assistant", load: () => import("./compare/grok-vs-chatgpt.mdx") },
   },
   agentPages: {
+    "airtap": () => import("./agents/airtap.mdx"),
     "hark-pro": () => import("./agents/hark-pro.mdx"),
     "meta-muse": () => import("./agents/meta-muse.mdx"),
     "chatgpt-dots": () => import("./agents/chatgpt-dots.mdx"),

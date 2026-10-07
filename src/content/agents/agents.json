@@ -550,6 +550,51 @@
         "https://hark.com/terms",
         "https://hark.com/privacy-policy"
       ]
+    },
+    {
+      "slug": "airtap",
+      "name": "Airtap",
+      "vendor": "Airtap AI Inc.",
+      "channel": "personal",
+      "category": "personal agent (texting, cloud phone)",
+      "official_url": "https://airtap.ai/",
+      "checked_on": "2026-10-07",
+      "catalogue_slug": "airtap",
+      "access": {
+        "free_tier": "yes — free during the current release, with a daily usage cap; cap size not published. Invite only",
+        "paid_plans": [],
+        "billing_note": "Terms say paid subscription tiers are planned for a future release; no prices published",
+        "subscription_note": "18+; personal, non-commercial use only"
+      },
+      "platforms": {
+        "web": true,
+        "ios": true,
+        "android": true
+      },
+      "messaging": [
+        "iMessage",
+        "RCS",
+        "SMS",
+        "Telegram"
+      ],
+      "regions": "unknown",
+      "actions": "operates real mobile apps on a cloud Android phone: clips coupons and card offers, books classes and reservations, tracks prices, posts to social apps, orders rides and groceries; saved routines run on a schedule",
+      "execution": "A dedicated Android phone in the cloud, always on and signed in to your apps; optional AutoPilot app (Android, sideloaded) controls your own phone. A SKILLS.md file lets Claude, Codex or OpenClaw drive an Airtap phone",
+      "safety": "You sign in to your own apps; Airtap says it never sees or stores passwords, the agent is blocked from reading password and card fields, each phone runs in an isolated container and sessions are wiped on logout. Web app shows a live view and step history",
+      "privacy": {
+        "training": "Task text, conversation history and cloud-phone screenshots go to Google (Gemini), Anthropic, xAI, OpenAI, Groq and AssemblyAI, which the policy says do not train on it. Terms allow anonymized, aggregated usage data for model improvement",
+        "delete_data": "Data processed on your device is kept up to 30 days unless a routine stores results; usage logs up to 12 months; early deletion on request"
+      },
+      "model": "Third-party models from Google (Gemini), Anthropic, xAI, OpenAI, Groq and AssemblyAI; routing not stated",
+      "sources": [
+        "https://airtap.ai/",
+        "https://airtap.ai/about-us",
+        "https://airtap.ai/technology",
+        "https://airtap.ai/support",
+        "https://airtap.ai/routine-templates",
+        "https://airtap.ai/terms",
+        "https://airtap.ai/privacy"
+      ]
     }
   ]
 }
