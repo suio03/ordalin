@@ -61,6 +61,19 @@ it("researches pricing before feature navigation and follows linked help article
   expect(requested.some(url => url.includes("outsider.example"))).toBe(false);
 });
 
+it("skips subdomains whose robots.txt refuses crawling without a warning, but still warns for the official site", async () => {
+  const requested: string[] = [];
+  const fetcher = async (input: string | URL | Request) => {
+    const url = String(input); requested.push(url);
+    if (url === "https://beta.example.com/robots.txt") return new Response("User-agent: *\nDisallow: /");
+    if (url === "https://example.com/robots.txt") return new Response("User-agent: *\nDisallow: /pricing");
+    return new Response('<h1>Example</h1><a href="https://beta.example.com/">Try the beta docs</a><a href="/pricing">Pricing</a>', { headers: { "content-type": "text/html" } });
+  };
+  const result = await enrichCatalogSite("https://example.com/", { research: true, fetcher: fetcher as typeof fetch });
+  expect(result.warnings).toEqual(["robots.txt disallows /pricing"]);
+  expect(requested).not.toContain("https://beta.example.com/");
+});
+
 it("skips document and plain-HTTP links instead of recording crawl warnings", async () => {
   const requested: string[] = [];
   const fetcher = async (input: string | URL | Request) => {

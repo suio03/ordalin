@@ -235,7 +235,8 @@ export async function enrichCatalogSite(input: string, options: EnrichmentOption
     seen.add(queued.url.href);
     if (!robotsByOrigin.has(queued.url.origin)) robotsByOrigin.set(queued.url.origin, await getRobots(queued.url.origin, fetcher, timeoutMs));
     if (!robotsAllows(robotsByOrigin.get(queued.url.origin) ?? "", queued.url.pathname)) {
-      warnings.push(`robots.txt disallows ${queued.url.pathname}`);
+      // A subdomain that opts out of crawling (beta app, API console) just isn't evidence; only the official site's own refusals block review.
+      if (pages.length === 0 || sameSite(canonicalUrl, queued.url)) warnings.push(`robots.txt disallows ${queued.url.pathname}`);
       continue;
     }
     try {
