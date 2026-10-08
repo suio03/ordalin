@@ -7,13 +7,14 @@ export const haikuVsLuna: ComparePage = {
   description: "Claude Haiku 5.5 and GPT-6 Luna list the same base API price. We compare long-prompt pricing, context, tools, platforms and limits.",
   author: "Ordalin",
   publishedAt: "2026-10-08",
+  updatedAt: "2026-10-08",
   status: "published",
   groupSlug: "coding",
   intro: [
     "Claude Haiku 5.5 (Anthropic) and GPT-6 Luna (OpenAI, often searched as \"Luna 6\") are each vendor's smallest current model, built for cheap, high-volume work such as classification, summaries and subagents. Both list $0.10 per million input tokens and $0.50 per million output tokens for ordinary prompts, so the choice comes down to what happens with long prompts, which tools and clouds you need, and how much agentic work you expect from a small model.",
-    "This comparison is based on Anthropic's Haiku 5.5 launch page and OpenAI's GPT-6 Luna model and pricing documentation, checked on the dates shown. We did not run the same workloads through both models, and the two vendors publish different benchmarks, so we do not rank their quality against each other.",
+    "This comparison is based on Anthropic's Haiku 5.5 launch page, models overview and pricing documentation, and OpenAI's GPT-6 Luna model and pricing documentation, checked on the dates shown. We did not run the same workloads through both models, and the two vendors publish different benchmarks, so we do not rank their quality against each other.",
   ],
-  verdict: "Choose GPT-6 Luna if your prompts often run past 100K tokens, you want half-price Batch or Flex processing, or you need built-in hosted tools on a documented 1.05M-token context. Choose Claude Haiku 5.5 if you already build on Claude or need it on AWS, Google Cloud or Azure, and want a fast subagent or browser-use model alongside Sonnet 5.5 or Opus 5.5.",
+  verdict: "Both have roughly 1M tokens of context, 128K output and half-price batch processing, so the deciding factors are long prompts, tools and where you work. Choose GPT-6 Luna if your prompts often run past 100K tokens or you want hosted tools such as web search and code interpreter through the Responses API. Choose Claude Haiku 5.5 if you already build on Claude, need it on AWS, Google Cloud or Azure, or also want it in the Claude app and Claude Code as a fast subagent alongside Sonnet 5.5 or Opus 5.5.",
   sides: [
     {
       toolSlug: "claude-haiku-5-5",
@@ -21,16 +22,16 @@ export const haikuVsLuna: ComparePage = {
         "You run Claude Sonnet 5.5 or Opus 5.5 and want a cheaper subagent for lookups, summaries and compaction.",
         "You need the model on Amazon Web Services, Google Cloud or Microsoft Azure as well as the vendor's own API.",
         "You are building live customer-support or browser-use agents where latency matters; Anthropic reports 72.4% on an OSWorld 2.1 subset.",
-        "You have a Claude Max or Team subscription, whose monthly API credit can be spent on Haiku 5.5.",
+        "You want the same model in the Claude app, including the Free plan, and in Claude Code.",
       ],
     },
     {
       toolSlug: "gpt-6-luna",
       chooseIf: [
         "Your prompts regularly exceed 100K tokens: Luna keeps its base price up to 272K input tokens, while Haiku 5.5 charges five times more past 100K.",
-        "You can wait for results and want Batch or Flex processing at half the Standard price.",
+        "You want Flex processing at half price as well as Batch, or Fast mode at twice the price for lower latency.",
         "You want hosted web search, file search, code interpreter, computer use and MCP through the Responses API.",
-        "You need a documented 1,050,000-token context window and 128,000 output tokens.",
+        "You need EU data residency for Standard, Flex and Batch processing.",
       ],
     },
   ],
@@ -47,12 +48,12 @@ export const haikuVsLuna: ComparePage = {
     },
     {
       topic: "Discounted processing",
-      left: "The profile does not establish a batch discount.",
+      left: "Batch API at 50% ($0.05 input, $0.25 output; $0.25 and $1.25 over 100K tokens).",
       right: "Batch and Flex at 50% of Standard ($0.05 input, $0.25 output); Fast mode at 2x.",
     },
     {
       topic: "Context and output",
-      left: "Anthropic's launch page does not state the context window or maximum output.",
+      left: "1M-token context window, 128K max output tokens, June 2026 cutoff.",
       right: "1,050,000-token context window, 128,000 max output tokens, May 18, 2026 knowledge cutoff.",
     },
     {
@@ -67,7 +68,7 @@ export const haikuVsLuna: ComparePage = {
     },
     {
       topic: "Where it runs",
-      left: "Claude Platform API (claude-haiku-5-5), Amazon Web Services, Google Cloud and Microsoft Azure.",
+      left: "Claude Platform API (claude-haiku-5-5), Amazon Web Services, Google Cloud and Microsoft Azure, plus the Claude app and Claude Code.",
       right: "OpenAI API (gpt-6-luna), with EU data residency for Standard, Flex and Batch. Not on the API's Free tier.",
     },
     {
@@ -87,7 +88,7 @@ export const haikuVsLuna: ComparePage = {
     },
     {
       question: "Is there a free tier?",
-      answer: "GPT-6 Luna is not available on the OpenAI API's Free usage tier; access starts at the Build tier. Our Haiku 5.5 profile does not establish a free allowance, although Claude Max and Team subscribers get a monthly API credit they can spend on any Claude model.",
+      answer: "Not on either API: both bill API usage per token, and GPT-6 Luna is not available on the OpenAI API's Free usage tier. Claude.ai Free users can select Haiku 5.5 in the Claude app on web, iOS and Android, though Anthropic does not state the usage limits there.",
     },
     {
       question: "Which is better for coding agents?",
