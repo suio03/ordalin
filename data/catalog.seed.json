@@ -42,6 +42,7 @@
     { "slug": "business-research", "name": "Business research", "kind": "category", "group": "research", "description": "Investigate markets, companies, strategy, and evidence." },
     { "slug": "legal-research", "name": "Legal research", "kind": "category", "group": "research", "description": "Find and review legal authority with traceable sources." },
     { "slug": "document-analysis", "name": "Document analysis", "kind": "category", "group": "research", "description": "Extract, compare, and reason over documents." },
+    { "slug": "ai-detection", "name": "AI detection & verification", "kind": "category", "group": "research", "description": "Detect AI-generated text, images, audio, and video, or verify content provenance." },
     { "slug": "knowledge-management", "name": "Knowledge management", "kind": "category", "group": "productivity", "description": "Organize and retrieve personal or team knowledge." },
     { "slug": "customer-support", "name": "Customer support", "kind": "category", "group": "business", "description": "Answer customers and operate support workflows." },
     { "slug": "personalized-gifts", "name": "Personalized gifts", "kind": "category", "group": "lifestyle", "description": "Create personal gifts from memories, preferences, or stories." },

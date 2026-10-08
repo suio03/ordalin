@@ -1,0 +1,6 @@
+-- Research browse tag for tools that detect AI-generated media or verify content provenance.
+INSERT INTO tags (id, slug, name, kind, category_group_id, description, is_active) VALUES ('tag_ai_detection', 'ai-detection', 'AI detection & verification', 'category', 'cat_research', 'Detect AI-generated text, images, audio, and video, or verify content provenance.', 1) ON CONFLICT(slug) DO UPDATE SET name = excluded.name, kind = excluded.kind, category_group_id = excluded.category_group_id, description = excluded.description, is_active = 1;--> statement-breakpoint
+-- SynthID Detector was filed under Document analysis only because this tag did not exist yet.
+INSERT OR IGNORE INTO tool_tags (tool_id, tag_id) SELECT t.id, tag.id FROM tools t JOIN tags tag ON tag.slug = 'ai-detection' WHERE t.canonical_key = 'synthid.com';--> statement-breakpoint
+DELETE FROM tool_tags WHERE tool_id IN (SELECT id FROM tools WHERE canonical_key = 'synthid.com') AND tag_id = (SELECT id FROM tags WHERE slug = 'document-analysis');--> statement-breakpoint
+UPDATE tools_fts SET tag_names = replace(tag_names, 'Document analysis', 'AI detection & verification') WHERE tool_id IN (SELECT id FROM tools WHERE canonical_key = 'synthid.com');

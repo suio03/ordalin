@@ -64,6 +64,13 @@
       "when": 1791282841009,
       "tag": "0008_model_identity",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1791457463449,
+      "tag": "0009_ai_detection_tag",
+      "breakpoints": true
     }
   ]
 }
