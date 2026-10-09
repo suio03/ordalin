@@ -1,7 +1,7 @@
 import { REGISTRY } from "@/content/agents";
 import { displayName, getAgent } from "./data";
 
-// Pages synced from agentsversus. Every claim traces to a source in agents.json.
+// AI agent pages (src/content/agents). Every claim traces to a source in agents.json.
 
 export const {
   overview: OVERVIEW,

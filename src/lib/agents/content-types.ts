@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 
-// Shapes of the pages synced from agentsversus into src/content/agents/.
-// Each MDX file exports `meta` plus an MDX body; the generated index registers them.
+// Shapes of the AI agent pages in src/content/agents/.
+// Each MDX file exports `meta` plus an MDX body; src/content/agents/index.ts registers them.
 
 export type FaqItem = { q: string; a: string };
 

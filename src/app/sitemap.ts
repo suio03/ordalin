@@ -46,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/about/how-we-review`, changeFrequency: "monthly", priority: 0.4 },
   ];
 
-  // AI agent pages synced from agentsversus, dated by their last fact check.
+  // AI agent pages, dated by their last fact check.
   const agentDates = new Map(allAgents().map((agent) => [`/agents/${agent.slug}`, agent.checked_on ?? CHECKED_ON]));
   const agents: MetadataRoute.Sitemap = allAgentsPaths().map((path) => ({
     url: `${baseUrl}${path}`,

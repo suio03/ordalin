@@ -1,5 +1,5 @@
-/* AI agent pages (/agents, synced from agentsversus). Their Tailwind classes use the
-   AgentsVersus token names, mapped here onto Ordalin's tokens so light and dark themes follow Ordalin.
+/* AI agent pages (/agents). Their Tailwind classes use the token names of the former
+   AgentsVersus site, mapped here onto Ordalin's tokens so light and dark themes follow Ordalin.
    Side colours: first agent blue, second orange, third violet. */
 
 :root {

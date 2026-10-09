@@ -1,6 +1,6 @@
-import synced from "@/content/agents/agents.json";
+import source from "@/content/agents/agents.json";
 
-// AI agent facts, synced from agentsversus data/agents.yaml (validated there before every sync).
+// AI agent facts, edited in src/content/agents/agents.json and validated by agents.test.ts.
 // Rule: only official sources fill a field; anything else stays "unknown" and renders as "Not stated".
 
 export type PaidPlan = {
@@ -52,7 +52,7 @@ export type Agent = {
   sources: string[];
 };
 
-const data = synced as unknown as { checkedOn: string; agents: Agent[] };
+const data = source as unknown as { checkedOn: string; agents: Agent[] };
 
 /** Date the agent facts were last checked against official sources. */
 export const CHECKED_ON = data.checkedOn;
