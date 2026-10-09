@@ -66,10 +66,7 @@ batches and any retries from exceeding 20 publications in total.
 
 Ordalin never lists adult or gambling products. The gate
 (`src/lib/catalog-analysis/content-policy.ts`) skips a candidate whose name,
-descriptions or homepage title use adult or gambling terms, and, on `--remote`
-runs, whose domain Cloudflare classifies as adult, gambling, malware, phishing,
-scam or another security threat (`cf intel domains get`). A failed lookup stops
-that candidate without writing, so it stays retryable. A submitted tool that
+descriptions or homepage title use adult or gambling terms. A submitted tool that
 fails this check is not skipped automatically; reject the submission by hand.
 
 ## Deployment configuration

@@ -71,12 +71,6 @@ describe("catalogue automatic publication gate", () => {
       .toEqual(['Prohibited content: gambling ("betting tips").']);
   });
 
-  it("skips domains Cloudflare classifies as adult, gambling or a security threat", () => {
-    expect(decideCatalogAnalysis(candidate, analysis, taxonomy, [{ id: 26, name: "Technology" }]).outcome).toBe("auto_publish");
-    expect(decideCatalogAnalysis(candidate, analysis, taxonomy, [{ id: 99, name: "Gambling" }]).reasons)
-      .toEqual(["Prohibited content: Cloudflare classifies the domain as Gambling."]);
-    expect(decideCatalogAnalysis(candidate, analysis, taxonomy, [{ id: 131, name: "Phishing" }]).outcome).toBe("skip");
-  });
 
   it("does not flag ordinary wording", () => {
     for (const tagline of ["Adult learning courses built with AI.", "Sex education answers for parents.", "Bet on your roadmap with AI planning."]) {

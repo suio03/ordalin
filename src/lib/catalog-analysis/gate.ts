@@ -4,7 +4,7 @@ import type {
   CatalogAnalysisDecision,
   CatalogTaxonomy,
 } from "./contract.ts";
-import { prohibitedContentReasons, type DomainCategory } from "./content-policy.ts";
+import { prohibitedContentReasons } from "./content-policy.ts";
 
 function normalizedUrl(value: string) {
   try {
@@ -20,13 +20,9 @@ export function decideCatalogAnalysis(
   candidate: CatalogEnrichmentCandidate,
   analysis: CatalogAnalysis,
   taxonomy: CatalogTaxonomy,
-  domainCategories: DomainCategory[] = [],
 ): CatalogAnalysisDecision {
   const homepage = candidate.evidencePages.find((page) => page.role === "homepage");
-  const prohibited = prohibitedContentReasons(
-    [analysis.name, analysis.tagline, analysis.description, homepage?.title ?? "", homepage?.description ?? ""],
-    domainCategories,
-  );
+  const prohibited = prohibitedContentReasons([analysis.name, analysis.tagline, analysis.description, homepage?.title ?? "", homepage?.description ?? ""]);
   if (prohibited.length) return { outcome: "skip", reasons: prohibited };
   if (!analysis.isAiTool) {
     return { outcome: "skip", reasons: ["The official website does not establish this as an AI-enabled product."] };

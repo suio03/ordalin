@@ -7,7 +7,6 @@ import { promisify } from "node:util";
 import { checkResearchedProfile } from "../src/lib/catalog-profile/contract.ts";
 import { decideCatalogAnalysis } from "../src/lib/catalog-analysis/gate.ts";
 import { parseCatalogAnalysis, type CatalogTaxonomy } from "../src/lib/catalog-analysis/contract.ts";
-import type { DomainCategory } from "../src/lib/catalog-analysis/content-policy.ts";
 import { assertPublicHttpsUrl } from "../src/lib/catalog-enrichment/url-policy.ts";
 import type { CatalogImportBundle, CatalogImportManifest, ImportProvider } from "../src/lib/catalog-import/contract.ts";
 import { catalogDayBounds } from "../src/lib/catalog-import/schedule.ts";
@@ -225,21 +224,6 @@ async function recordWithoutTool(
   ]);
 }
 
-/**
- * Cloudflare's content categories for the domain, which the gate checks for adult, gambling and threat
- * sites. Production imports fail (and stay retryable) when the lookup does; local runs skip it.
- */
-async function domainCategories(domain: string): Promise<DomainCategory[]> {
-  if (mode !== "--remote") return [];
-  try {
-    const { stdout } = await execute("cf", ["intel", "domains", "get", "--domain", domain, "--skip-dns", "--skip-ranking"], { timeout: 60_000 });
-    const parsed = JSON.parse(stdout) as { content_categories?: DomainCategory[] };
-    return parsed.content_categories ?? [];
-  } catch (error) {
-    throw new Error(`Cloudflare domain category lookup failed for ${domain}: ${error instanceof Error ? error.message : error}`);
-  }
-}
-
 async function skipPreparedTool(
   bundle: CatalogImportBundle,
   importId: string,
@@ -329,7 +313,6 @@ async function applyBundle(filename: string, batchContext: BatchContext | null):
     bundle.candidate,
     bundle.analysis!,
     catalog.publicTaxonomy,
-    await domainCategories(bundle.candidate.canonicalDomain),
   );
   if (decision.outcome === "auto_publish") {
     const research = checkResearchedProfile(bundle.analysis!.profile, bundle.candidate);
