@@ -32,6 +32,7 @@
     "imports:prepare": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/prepare-manual-imports.ts",
     "imports:apply": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/apply-catalog-import.ts",
     "imports:screenshots": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/capture-import-screenshots.ts",
+    "radar": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/radar.ts",
     "test:submissions:runtime": "node scripts/test-submission-runtime.mjs",
     "dev:demo": "ORDALIN_DEMO=1 next dev",
     "demo:setup": "pnpm db:migrate:local && pnpm seed:local",
