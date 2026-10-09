@@ -1,4 +1,5 @@
 import type { EditorialPage } from "@/lib/editorial/types";
+import { aiMusicGenerators } from "./best/ai-music-generators";
 import { longVideoToShortClips } from "./best/ai-tools-long-video-to-short-clips";
 import { haikuVsLuna } from "./compare/claude-haiku-5-5-vs-gpt-6-luna";
 import { heygenVsSynthesia } from "./compare/heygen-vs-synthesia";
@@ -8,7 +9,7 @@ import { demoEditorialPages } from "./demo";
 
 // Add one static import per article so the bundle works on Cloudflare Workers
 // without runtime filesystem reads. Keep each list alphabetical.
-export const bestPages: EditorialPage[] = [longVideoToShortClips];
+export const bestPages: EditorialPage[] = [aiMusicGenerators, longVideoToShortClips];
 export const alternativesPages: EditorialPage[] = [];
 export const comparePages: EditorialPage[] = [haikuVsLuna, heygenVsSynthesia, otterVsFireflies, sunoVsUdio];
 
