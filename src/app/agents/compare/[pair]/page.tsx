@@ -12,7 +12,7 @@ import { displayName, getAgent, vendorShort } from "@/lib/agents/data";
 import { agentHref, ALTERNATIVES_PAGES, COMPARISONS, PRICING_PAGES } from "@/lib/agents/content";
 import { SIDES } from "@/lib/agents/sides";
 import { absoluteUrl, CHECKED_ON, outbound } from "@/lib/agents/site";
-import { assistantSpecRows, NOT_STATED_NOTE, specRows } from "@/lib/agents/specs";
+import { NOT_STATED_NOTE, specRows } from "@/lib/agents/specs";
 
 export const generateStaticParams = () => Object.keys(COMPARISONS).map((pair) => ({ pair }));
 
@@ -35,7 +35,6 @@ export default async function ComparePage({ params }: Props) {
   const agents = entry.sides.map(getAgent);
   const names = agents.map(displayName);
   const sources = [...new Set(agents.flatMap((a) => a.sources))];
-  const isAssistant = entry.kind === "assistant";
   const three = agents.length > 2;
 
   // Next reads: each side's own page, related comparisons, then pricing and alternatives pages.
@@ -59,7 +58,7 @@ export default async function ComparePage({ params }: Props) {
     <main>
       <section className="border-b border-line">
         <div className="mx-auto flex max-w-[1280px] flex-col gap-6 px-4 pt-8 pb-10 md:px-10 md:pt-10">
-          <Breadcrumb items={[...(isAssistant ? [] : [{ href: "/agents", label: "AI agents" }]), { href: `/agents/compare/${pair}`, label: names.join(" vs ") }]} />
+          <Breadcrumb items={[{ href: "/agents", label: "AI agents" }, { href: `/agents/compare/${pair}`, label: names.join(" vs ") }]} />
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div className="flex flex-col gap-4">
               <h1 className={`font-serif leading-[1.02] font-medium tracking-[-0.02em] ${three ? "text-[36px] md:text-[54px]" : "text-[42px] md:text-[64px]"}`}>
@@ -104,7 +103,7 @@ export default async function ComparePage({ params }: Props) {
           </div>
           <SpecTable
             heads={agents.map((a, i) => ({ name: names[i], color: SIDES[i].color, initial: a.name[0].toUpperCase() }))}
-            rows={isAssistant ? assistantSpecRows(agents) : specRows(agents)}
+            rows={specRows(agents)}
             footnote={NOT_STATED_NOTE}
           />
         </section>

@@ -27,7 +27,7 @@ function problems(agent: Record<string, unknown>): string[] {
   unknownKeys(agent, AGENT_KEYS, "");
   for (const key of ["name", "vendor", "category"]) if (typeof agent[key] !== "string" || !agent[key]) out.push(`${key} missing`);
   if (!/^[a-z0-9-]+$/.test(String(agent.slug))) out.push("slug must be kebab-case");
-  if (!["personal", "coding", "assistant"].includes(String(agent.channel))) out.push("channel must be personal, coding or assistant");
+  if (!["personal", "coding"].includes(String(agent.channel))) out.push("channel must be personal or coding");
   if (!isUrl(agent.official_url)) out.push("official_url must be a URL");
   if (agent.repo !== undefined && !isUrl(agent.repo)) out.push("repo must be a URL");
   if (agent.checked_on !== undefined && !DATE.test(String(agent.checked_on))) out.push("checked_on must be YYYY-MM-DD");

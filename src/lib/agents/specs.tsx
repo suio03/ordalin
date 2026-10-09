@@ -38,20 +38,4 @@ export function specRows(agents: Agent[]) {
   ];
 }
 
-/** Rows for general chatbots (ChatGPT, Grok): plans and what they add, not agent execution details. */
-export function assistantSpecRows(agents: Agent[]) {
-  const row = (label: string, get: (a: Agent) => React.ReactNode, mono = false) => ({ label, mono, cells: agents.map(get) });
-  return [
-    row("Maker", (a) => a.vendor),
-    row("Free tier", (a) => notStated(capitalize(stated(a.access?.free_tier)))),
-    row("Paid plans", plansCell),
-    row("Billing", (a) => notStated(stated(a.access?.billing_note))),
-    row("What each plan adds", (a) => notStated(stated(a.features))),
-    row("Where you use it", (a) => notStated(platformList(a).join(", ") || NOT_STATED)),
-    row("Ads", (a) => notStated(stated(a.ads))),
-    row("Training on your data", (a) => notStated(training(a))),
-    row("Model", (a) => notStated(stated(a.model))),
-  ];
-}
-
 export const NOT_STATED_NOTE = "“Not stated” means the maker’s pages don’t say — not that the feature is missing.";

@@ -9,10 +9,9 @@ export const REGISTRY: AgentsRegistry = {
     "personal": () => import("./personal.mdx"),
   },
   comparisons: {
-    "muse-vs-dots": { sides: ["meta-muse","chatgpt-dots"], kind: "agent", load: () => import("./compare/muse-vs-dots.mdx") },
-    "muse-vs-dots-vs-grok-bot": { sides: ["meta-muse","chatgpt-dots","grok-bot"], kind: "agent", load: () => import("./compare/muse-vs-dots-vs-grok-bot.mdx") },
-    "muse-vs-dots-vs-gemini-spark": { sides: ["meta-muse","chatgpt-dots","gemini-spark"], kind: "agent", load: () => import("./compare/muse-vs-dots-vs-gemini-spark.mdx") },
-    "grok-vs-chatgpt": { sides: ["grok","chatgpt"], kind: "assistant", load: () => import("./compare/grok-vs-chatgpt.mdx") },
+    "muse-vs-dots": { sides: ["meta-muse","chatgpt-dots"], load: () => import("./compare/muse-vs-dots.mdx") },
+    "muse-vs-dots-vs-grok-bot": { sides: ["meta-muse","chatgpt-dots","grok-bot"], load: () => import("./compare/muse-vs-dots-vs-grok-bot.mdx") },
+    "muse-vs-dots-vs-gemini-spark": { sides: ["meta-muse","chatgpt-dots","gemini-spark"], load: () => import("./compare/muse-vs-dots-vs-gemini-spark.mdx") },
   },
   agentPages: {
     "airtap": () => import("./agents/airtap.mdx"),

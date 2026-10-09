@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   // Resolve metadata (including pagination bounds) before sending HTTP headers.
   htmlLimitedBots: /.*/,
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
+  // General chatbots are not AI agents; their comparison left /agents on 2026-10-09.
+  redirects: async () => [{ source: "/agents/compare/grok-vs-chatgpt", destination: "/agents/personal", permanent: true }],
 };
 
 const withMDX = createMDX();

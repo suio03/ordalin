@@ -27,14 +27,14 @@ function CardGrid({ cards }: { cards: LinkCard[] }) {
 
 export default async function AgentsOverviewPage() {
   const { meta } = await OVERVIEW();
-  const agents = allAgents().filter((a) => a.channel !== "assistant");
+  const agents = allAgents();
   const comparisons = Object.entries(COMPARISONS);
 
-  const compareCards = (kind: "agent" | "assistant"): LinkCard[] =>
-    comparisons
-      .filter(([, c]) => c.kind === kind)
-      .map(([pair, c]) => ({ href: agentsPath.compare(pair), title: comparisonTitle(c.sides), note: "Price, features and privacy →" }));
-  const chatbotCards = compareCards("assistant");
+  const compareCards: LinkCard[] = comparisons.map(([pair, c]) => ({
+    href: agentsPath.compare(pair),
+    title: comparisonTitle(c.sides),
+    note: "Price, features and privacy →",
+  }));
 
   const bestCards = await Promise.all(
     Object.entries(BEST_PAGES).map(async ([topic, load]) => {
@@ -87,7 +87,7 @@ export default async function AgentsOverviewPage() {
 
       <section className="flex flex-col gap-4">
         <h2 className="font-serif text-[30px] font-medium md:text-[36px]">Agent comparisons</h2>
-        <CardGrid cards={compareCards("agent")} />
+        <CardGrid cards={compareCards} />
       </section>
 
       <section className="flex flex-col gap-4">
@@ -95,12 +95,6 @@ export default async function AgentsOverviewPage() {
         <CardGrid cards={guideCards} />
       </section>
 
-      {chatbotCards.length > 0 && (
-        <section className="flex flex-col gap-4">
-          <h2 className="font-serif text-[30px] font-medium md:text-[36px]">Chatbot comparisons</h2>
-          <CardGrid cards={chatbotCards} />
-        </section>
-      )}
 
       <p className="text-[14px] text-muted">
         Independent. Not affiliated with, endorsed by, or paid by any company whose product appears here. Product names are trademarks of their

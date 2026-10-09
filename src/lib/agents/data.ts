@@ -18,8 +18,7 @@ export type Agent = {
   /** Name as people search it ("Meta Muse"), when the product name alone is ambiguous. */
   display_name?: string;
   vendor: string;
-  /** "assistant" = general chatbots (ChatGPT, Grok), kept for chatbot comparisons and not listed as agents. */
-  channel: "personal" | "coding" | "assistant";
+  channel: "personal" | "coding";
   category: string;
   launch_date?: string;
   official_url: string;

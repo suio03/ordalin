@@ -90,8 +90,7 @@ export type AgentsRegistry = {
   overview: Load<OverviewMeta>;
   /** Agent-type hubs by key; each renders at /agents/<key>. */
   hubs: Record<string, Load<HubMeta>>;
-  /** `kind: "assistant"` compares general chatbots and uses the chatbot spec rows. */
-  comparisons: Record<string, { sides: string[]; kind: "agent" | "assistant"; load: Load<CompareMeta> }>;
+  comparisons: Record<string, { sides: string[]; load: Load<CompareMeta> }>;
   agentPages: Record<string, Load<AgentMeta>>;
   /** `planPrefix` names plans as buyers see them ("ChatGPT Pro", "Muse Power"). */
   pricingPages: Record<string, { planPrefix: string; compareWith: string[]; load: Load<PricingMeta> }>;
