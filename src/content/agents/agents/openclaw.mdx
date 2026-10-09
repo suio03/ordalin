@@ -1,0 +1,43 @@
+export const meta = {
+  title: "OpenClaw: Free Open-Source AI Agent, Setup, Features and Security",
+  description:
+    "OpenClaw is a free, open-source personal AI agent you run on your own machine and message from WhatsApp, Telegram or Slack. See setup, costs and security.",
+  summary:
+    "OpenClaw is an open-source (MIT) personal AI assistant stewarded by the OpenClaw Foundation, an independent 501(c)(3), and created by Peter Steinberger. You run it on your own computer or server and message it from the chat apps you already use, including WhatsApp, Telegram, iMessage, Slack, Discord and Signal. It can organize your inbox, send email, manage your calendar and check you in for flights, and its memory, skills and credentials stay on your hardware. The software is free with no paid tier or hosted service; you pay for your own hosting and model access, and models such as Claude, Codex or local ones are swappable plugins. This profile is based on official pages, not hands-on testing.",
+  bestFor: [
+    "People who want a personal agent they fully control, with memory and credentials on their own hardware",
+    "Using one assistant from WhatsApp, Telegram, iMessage, Slack or another chat app you already use",
+    "Tinkerers who want to choose their own model and extend the agent with skills and plugins",
+  ],
+  notFor: [
+    "Anyone who wants a hosted app that works without installing and running software",
+    "Users unwilling to manage security: tools run on the host by default unless you configure sandboxing",
+    "People who want one predictable monthly price: model and hosting costs depend on what you connect",
+  ],
+  faq: [
+    {
+      q: "Is OpenClaw free?",
+      a: "Yes. OpenClaw is open source under the MIT license and has no paid tier, hosted service or token. You pay for whatever you connect it to: the computer or server it runs on and your model provider’s API or subscription.",
+    },
+    {
+      q: "Who makes OpenClaw?",
+      a: "OpenClaw was created by Peter Steinberger and is developed in the open by the OpenClaw Foundation, an independent 501(c)(3) that employs the core team and signs releases. The project says donors and infrastructure sponsors support the Foundation but do not own or direct the project, and that OpenAI is a donor, not an owner.",
+    },
+    {
+      q: "How do I install and use OpenClaw?",
+      a: "Download a desktop app for macOS, Windows or Linux, which installs everything for you, or use the one-line installer or npm (Node.js 24.16+ or 26.1+). Onboarding checks model access and sets up the Gateway, the local control plane. You then chat through the Control UI or connect channels such as WhatsApp, Telegram, Slack, Discord, Google Chat, Signal and iMessage. Companion apps add voice, camera and device actions on supported platforms, including iOS and Android.",
+    },
+    {
+      q: "Which AI models does OpenClaw use?",
+      a: "The one you choose. Models and agent harnesses, including Claude, Codex and local models, are plugins you can swap without changing anything else. OpenClaw works with hosted and local model providers.",
+    },
+    {
+      q: "Is OpenClaw safe to run?",
+      a: "Its documentation says to treat inbound messages as untrusted input. Chat channels that accept direct messages require you to approve a pairing request from unknown senders by default. Tools run on the host for the main session unless you configure sandboxing, so read the security, exposure and sandboxing guides before connecting other people or exposing the Gateway to the internet.",
+    },
+    {
+      q: "Does OpenClaw send my data anywhere?",
+      a: "Your prompts go to the model provider and chat platforms you configure. OpenClaw says that by default it sends nothing else except a daily version check; anonymous feature statistics are opt-in, and one setting turns off both. What happens to your prompts depends on your model provider’s own policy.",
+    },
+  ],
+};

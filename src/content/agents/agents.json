@@ -184,7 +184,7 @@
       "launch_date": "unknown",
       "official_url": "https://openclaw.ai",
       "access": {
-        "free_tier": "software free; you pay hosting + model API",
+        "free_tier": "yes — free, open-source software with no paid tier, hosted service or token; you pay for your own hosting and model API or subscription",
         "paid_plans": []
       },
       "platforms": {
@@ -205,29 +205,32 @@
         "Signal",
         "20+ more"
       ],
-      "actions": "personal assistant you message from chat apps; runs tools on the machine it's installed on",
-      "execution": "Runs on your own computer or server (Node.js 24.16+ or 26.1+, Docker or Nix); tools execute on the host by default",
+      "actions": "personal assistant you message from chat apps: inbox, email, calendar and flight check-ins; runs tools, skills and plugins on the machine it is installed on; scheduled jobs and reminders",
+      "execution": "Runs on your own computer or server through a local Gateway. Desktop apps for macOS, Windows and Linux install everything; or use the installer, npm (Node.js 24.16+ or 26.1+), Docker or Nix. Tools run on the host for the main session unless you configure sandboxing",
       "safety": "DM channels need a pairing approval; docs say treat inbound messages as untrusted input and read the security guide before exposing it remotely",
       "privacy": {
-        "training": "Depends on the model provider you connect; OpenClaw itself has no hosted service"
+        "training": "Depends on the model provider and chat platforms you connect; OpenClaw has no hosted service. By default it sends only a daily version check; anonymous feature statistics are opt-in and both can be turned off"
       },
       "model": "swappable — Claude, Codex, local models",
       "license": "MIT",
       "repo": "https://github.com/openclaw/openclaw",
       "sources": [
-        "https://github.com/openclaw/openclaw"
-      ]
+        "https://openclaw.ai/",
+        "https://github.com/openclaw/openclaw",
+        "https://docs.openclaw.ai/gateway/security"
+      ],
+      "checked_on": "2026-10-09"
     },
     {
       "slug": "lindy",
       "name": "Lindy",
       "vendor": "Lindy",
       "channel": "personal",
-      "category": "work agent (email/inbox assistant)",
+      "category": "work agent (AI teammate in Slack, inbox and meetings)",
       "launch_date": "unknown",
       "official_url": "https://www.lindy.ai",
       "access": {
-        "free_tier": "7-day free trial",
+        "free_tier": "trial — $50 in free credits for 7 days, no credit card required",
         "paid_plans": [
           {
             "name": "Plus",
@@ -251,12 +254,37 @@
             "name": "Enterprise",
             "price_usd_month": "contact sales"
           }
-        ]
+        ],
+        "usage_note": "Credits refresh each billing cycle and do not roll over; every seat adds its credits to one shared workspace pool. When credits run out, Lindy pauses credit-using actions until the next cycle",
+        "billing_note": "One workspace subscription billed per seat; removed seats stay active through the paid cycle, with no mid-cycle proration"
       },
       "regions": "unknown",
       "sources": [
-        "https://www.lindy.ai/pricing"
-      ]
+        "https://www.lindy.ai/",
+        "https://www.lindy.ai/pricing",
+        "https://www.lindy.ai/security",
+        "https://www.lindy.ai/privacy"
+      ],
+      "checked_on": "2026-10-09",
+      "messaging": [
+        "Slack",
+        "iMessage"
+      ],
+      "actions": "inbox management and replies drafted in your voice; meeting recording, notes, scheduling, prep and follow-up; daily briefs and scheduled routines; research, data analysis, decks and dashboards; 40+ skills plus your own; computer use on Pro and Max",
+      "connectors_notable": [
+        "Gmail",
+        "Slack",
+        "Notion",
+        "HubSpot"
+      ],
+      "connectors_count": "1,500+ integrations, plus MCP",
+      "execution": "Hosted service; works in Slack threads and mentions, iMessage and the web app; Chrome extension available",
+      "safety": "Anything with outside impact (sending an email, updating a ticket, posting to another channel, publishing a doc) waits for approval; read-only lookups from approved sources do not. Every action is logged. Enterprise adds SSO and audit logs",
+      "privacy": {
+        "training": "Lindy says your data is encrypted, never sold and never used to train models, by Lindy or its providers. SOC 2 Type II; HIPAA with a signed BAA on Enterprise",
+        "delete_data": "Request deletion by email; account termination deletes data from active databases, with some retention for fraud prevention and legal requirements"
+      },
+      "model": "Model selection on every plan; most major models available"
     },
     {
       "slug": "gemini-spark",
@@ -266,9 +294,10 @@
       "category": "personal agent",
       "launch_date": "2026-05-19 (announced; US beta for Ultra first)",
       "official_url": "https://gemini.google/overview/agent/spark/",
+      "checked_on": "2026-10-09",
       "access": {
         "free_tier": "no",
-        "required_plan_for_agent": "Google AI Pro or Ultra, 18+, select countries (also select business users)",
+        "required_plan_for_agent": "Google AI Pro or Ultra, 18+, signed in with a personal Google Account (Google also lists select business users); the Mac app beta needs Google AI Ultra",
         "paid_plans": [
           {
             "name": "Google AI Pro",
@@ -289,7 +318,7 @@
         "mobile_app": true,
         "macos": "beta, Google AI Ultra"
       },
-      "regions": "Select countries (launched in the US, then India, Australia and Canada, among others)",
+      "regions": "Wherever the Gemini app is supported, except the European Economic Area, Switzerland, the United Kingdom and Nigeria",
       "actions": "multi-step tasks across Gmail, Calendar, Drive, Docs, Sheets and other Google apps; runs in the background 24/7; can run tasks on your Mac",
       "connectors_notable": [
         "Gmail",
@@ -303,13 +332,17 @@
         "custom MCP"
       ],
       "execution": "Google's cloud; keeps working when your laptop is closed or your phone is locked",
-      "safety": "Designed to ask you first before high-stakes actions like spending money or sending emails; app connections are off by default",
+      "safety": "Designed to ask you first before high-stakes actions like spending money or sending emails; app connections are off by default. Asks before each task that browses the web, you can take over or stop its browser at any time, and schedules can be paused. Google warns a schedule that runs while you are offline may complete an unintended action",
+      "privacy": {
+        "delete_data": "Delete saved remote-browser data (including sign-in cookies) and remote code-execution data in Spark settings; turning Spark off deletes both. Chats are managed in Gemini Apps Activity"
+      },
       "model": "Gemini 3.5 Flash at launch",
       "sources": [
         "https://gemini.google/overview/agent/spark/",
         "https://blog.google/innovation-and-ai/products/gemini-app/next-evolution-gemini-app/",
         "https://blog.google/innovation-and-ai/products/gemini-app/gemini-spark-updates-june-2026/",
-        "https://gemini.google/us/subscriptions/?hl=en"
+        "https://gemini.google/us/subscriptions/?hl=en",
+        "https://support.google.com/gemini/answer/17094507?hl=en"
       ]
     },
     {
@@ -317,42 +350,88 @@
       "name": "Instinct",
       "vendor": "Instinct (founder Noah Shinn)",
       "channel": "personal",
-      "category": "personal agent (SMS-first, no app)",
+      "category": "personal agent (text or call)",
       "launch_date": "2026-08 (invite-only)",
-      "official_url": "https://instinct.com",
+      "official_url": "https://instinct.com/",
+      "checked_on": "2026-10-09",
       "access": {
-        "paid_plans": "unknown"
+        "free_tier": "unknown",
+        "paid_plans": "unknown",
+        "billing_note": "Terms say some features may require fees, charged in U.S. dollars; no prices published. New users join a waitlist and get a text when their spot opens",
+        "subscription_note": "18+"
       },
+      "messaging": [
+        "SMS",
+        "Phone calls"
+      ],
+      "regions": "unknown",
+      "actions": "uses a phone and computer the way a person does: disputing bills, sending gifts, ordering groceries, scheduling doctor's appointments, planning trips; can make purchases on connected services with the payment method you provide",
+      "connectors_notable": [
+        "Gmail",
+        "Google Calendar",
+        "Google Drive",
+        "Google Docs",
+        "Google Sheets",
+        "Google Slides",
+        "Google Tasks"
+      ],
+      "safety": "Terms say Instinct may add confirmation requirements or other controls on certain actions but does not promise they prevent mistakes; actions may not be reversible and you remain responsible for them. Payment details and passwords you share let it act for you; a Vault feature keeps materials out of model training",
+      "privacy": {
+        "training": "Content and usage data may be used to train AI models unless you opt out at app.instinct.com/settings; safety-flagged material can still be used after opt-out. Vault materials and Google Workspace data are never used for training. Shared with third-party AI model providers",
+        "delete_data": "Request deletion of indexed connected-service data at app.instinct.com/workspace (disconnecting alone does not delete it); deleting your account deletes collected Google Workspace data"
+      },
+      "model": "Third-party large language models; providers not named",
       "sources": [
+        "https://instinct.com/",
+        "https://instinct.com/terms",
+        "https://instinct.com/privacy-policy",
         "https://techcrunch.com/2026/09/28/viral-ai-agent-instinct-raises-1b-series-c-at-a-10b-valuation/"
       ]
     },
     {
       "slug": "poke",
       "name": "Poke",
-      "vendor": "The Interaction Company (joined Cognition, 2026-07 per press)",
+      "vendor": "The Interaction Company (joining Cognition)",
       "channel": "personal",
       "category": "personal agent (texting)",
       "official_url": "https://poke.com",
       "access": {
-        "free_tier": "yes — most features included",
+        "free_tier": "yes — free forever, no credit card required; every plan gets all of Poke",
         "paid_plans": [
           {
             "name": "Pro",
-            "price_usd_month": "19"
+            "price_usd_month": "19",
+            "usage": "frontier models for complex tasks, real-time background automations, higher rate limits"
           },
           {
             "name": "Ultra",
             "price_usd_month": "199",
-            "note": "plus pay-as-you-go usage"
+            "usage": "frontier models for every action, highest rate limits, Poke Human",
+            "note": "plus pay-as-you-go usage beyond your credits"
           }
-        ]
+        ],
+        "subscription_note": "13+"
       },
-      "actions": "email (Gmail, Outlook), calendars, contacts; Notion, GitHub, Linear; builds and deploys simple websites; Ultra: Poke Human sends real-world tasks to a person",
+      "actions": "email (Gmail, Outlook), calendars and contacts; reminders and scheduled tasks; proactive updates from connected apps; Recipes for integrations and automations (Notion, GitHub, Linear, Oura and more, or custom MCP); builds and publishes a personal site at yourname.poke.site; Ultra: Poke Human sends real-world tasks to a person",
       "execution": "Hosted service; you text it",
       "sources": [
-        "https://poke.com/faq"
-      ]
+        "https://poke.com/",
+        "https://poke.com/pricing",
+        "https://poke.com/faq",
+        "https://poke.com/privacy",
+        "https://poke.com/terms"
+      ],
+      "checked_on": "2026-10-09",
+      "messaging": [
+        "iMessage",
+        "WhatsApp",
+        "Telegram"
+      ],
+      "safety": "Poke Human operators see only the details a task needs, not your chat history, memories or integrations; real-world expenses are charged at cost from your credit balance",
+      "privacy": {
+        "training": "The privacy policy allows user data to train Poke's AI models; data from users who select Maximum Privacy is not used for model training",
+        "delete_data": "Delete Account at poke.com/settings/privacy; deletion takes up to 24 hours, backups may take longer and legal holds can extend retention"
+      }
     },
     {
       "slug": "hermes-agent",
@@ -362,13 +441,15 @@
       "category": "open-source self-hosted agent",
       "official_url": "https://hermes-agent.nousresearch.com/",
       "access": {
-        "free_tier": "software free; model/hosting costs vary",
-        "paid_plans": []
+        "free_tier": "yes — free, open-source software (MIT); model and hosting costs depend on what you connect",
+        "paid_plans": [],
+        "billing_note": "Optional: Nous Portal plans with monthly model and tool credits (Plus $20, Super $100, Ultra $200 a month; free tier with free models only). Optional Hermes Cloud hosting is billed daily from Nous credit ($0.56 or $1.09 a day running, plus inference)"
       },
       "platforms": {
-        "linux": true,
         "macos": true,
-        "windows": true
+        "windows": true,
+        "linux": true,
+        "android": "Termux"
       },
       "messaging": [
         "Telegram",
@@ -376,16 +457,26 @@
         "Slack",
         "WhatsApp",
         "Signal",
+        "Email",
         "CLI"
       ],
-      "actions": "creates reusable skills from experience; keeps its own memory; runs commands in local, Docker, SSH or cloud sandboxes",
-      "execution": "Self-hosted: your computer, a VPS, a GPU cluster or serverless",
-      "safety": "Command approval, DM pairing and container isolation (per docs)",
+      "actions": "creates and improves reusable skills from experience; keeps persistent memory; natural-language scheduled automations; parallel subagents; web search, browser automation, vision, image generation and text-to-speech",
+      "execution": "Self-hosted on your computer, a VPS, a GPU cluster or serverless, with terminal backends including local, Docker, SSH, Singularity and Modal; desktop apps for macOS and Windows; or an always-on Hermes Cloud agent hosted by Nous",
+      "safety": "Dangerous shell commands need explicit approval (configurable modes, including auto-approve for cron and unattended runs); DM pairing and allowlists control who can talk to the agent; container isolation",
       "model": "any — Nous Portal, OpenRouter, OpenAI or a custom endpoint",
       "license": "MIT",
       "sources": [
-        "https://github.com/nousresearch/hermes-agent"
-      ]
+        "https://hermes-agent.nousresearch.com/",
+        "https://github.com/nousresearch/hermes-agent",
+        "https://hermes-agent.nousresearch.com/docs/user-guide/security",
+        "https://portal.nousresearch.com/cloud",
+        "https://portal.nousresearch.com/business",
+        "https://portal.nousresearch.com/privacy"
+      ],
+      "checked_on": "2026-10-09",
+      "privacy": {
+        "training": "Depends on the model provider you connect. Nous Portal's privacy policy lets you turn on Privacy Mode to opt out of storage and use of certain inference payloads for training"
+      }
     },
     {
       "slug": "hark-pro",
@@ -488,6 +579,51 @@
         "https://airtap.ai/routine-templates",
         "https://airtap.ai/terms",
         "https://airtap.ai/privacy"
+      ]
+    },
+    {
+      "slug": "underdog",
+      "name": "Underdog",
+      "vendor": "Conway Research",
+      "channel": "personal",
+      "category": "personal agent (on-device)",
+      "official_url": "https://underdog.ai/",
+      "checked_on": "2026-10-09",
+      "access": {
+        "free_tier": "yes — free, with no paid plan; Underdog says it will announce any charge before billing anyone. Invite only",
+        "paid_plans": [],
+        "subscription_note": "13+; a personal licence to run the app on your own computers"
+      },
+      "platforms": {
+        "macos": "Apple silicon",
+        "windows": "beta",
+        "ios": "coming soon",
+        "android": "coming soon",
+        "linux": "coming soon"
+      },
+      "regions": "unknown",
+      "actions": "email triage and drafts, calendar, meeting recording and notes, system-wide dictation, chat; a browser agent runs errands in your own browser and prepares sensitive tasks (doctor's appointments, prescription refills, tax paperwork) for your approval",
+      "connectors_notable": [
+        "Gmail",
+        "Google Calendar",
+        "Microsoft Outlook"
+      ],
+      "execution": "Runs on your computer: Underdog's own models (Woof 4B, Saluki 27B, Underdog 27B) handle summaries, drafts, chat and transcription locally; mail syncs directly between your computer and Google or Microsoft. Local MCP and a custom dictation server are optional",
+      "safety": "The browser agent asks before it buys, pays, sends or deletes anything and fills saved passwords without reading them. Mail, calendar and saved logins are encrypted on disk with a device-only key. Naval mode limits network traffic to the servers it needs. Passed an App Defense Alliance CASA Level 1 assessment (Leviathan Security Group, Sep 2026); Google approved its Gmail and Calendar access",
+      "privacy": {
+        "training": "Your content is processed on your device and not sent to any cloud AI service. Underdog's servers hold your account email, membership, an optional daily usage count (no content) and crash reports only if you send them",
+        "delete_data": "Delete memories in Settings; delete your Underdog account from the account page, which deletes the account data it holds. Content on your computer is removed with the app"
+      },
+      "model": "Underdog's own on-device models: Woof 4B, Saluki 27B and Underdog 27B (built on Qwen 3.8 27B)",
+      "sources": [
+        "https://underdog.ai/",
+        "https://underdog.ai/pricing",
+        "https://underdog.ai/security",
+        "https://underdog.ai/privacy",
+        "https://underdog.ai/terms",
+        "https://underdog.ai/team",
+        "https://underdog.ai/backers",
+        "https://underdog.ai/manifesto"
       ]
     }
   ]

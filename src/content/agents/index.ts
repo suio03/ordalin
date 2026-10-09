@@ -19,6 +19,13 @@ export const REGISTRY: AgentsRegistry = {
     "meta-muse": () => import("./agents/meta-muse.mdx"),
     "chatgpt-dots": () => import("./agents/chatgpt-dots.mdx"),
     "grok-bot": () => import("./agents/grok-bot.mdx"),
+    "underdog": () => import("./agents/underdog.mdx"),
+    "gemini-spark": () => import("./agents/gemini-spark.mdx"),
+    "instinct": () => import("./agents/instinct.mdx"),
+    "lindy": () => import("./agents/lindy.mdx"),
+    "poke": () => import("./agents/poke.mdx"),
+    "openclaw": () => import("./agents/openclaw.mdx"),
+    "hermes-agent": () => import("./agents/hermes-agent.mdx"),
   },
   pricingPages: {
     "meta-muse": { planPrefix: "Muse", compareWith: ["chatgpt-dots","gemini-spark","grok-bot","poke","lindy"], load: () => import("./pricing/meta-muse.mdx") },

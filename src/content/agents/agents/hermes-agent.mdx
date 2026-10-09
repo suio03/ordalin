@@ -1,0 +1,43 @@
+export const meta = {
+  title: "Hermes Agent: Free Open-Source AI Agent, Pricing, Features and Safety",
+  description:
+    "Hermes Agent is Nous Research’s free, open-source agent that learns skills and remembers you. Compare self-hosting, Nous Portal plans and Hermes Cloud.",
+  summary:
+    "Hermes Agent is an open-source (MIT) AI agent from Nous Research that learns as it works: it creates reusable skills after complex tasks, improves them during use and keeps persistent memory across sessions. You can run it on your own computer, a VPS, a GPU cluster or serverless infrastructure, use desktop apps for macOS and Windows, or deploy an always-on agent on Hermes Cloud. You talk to it from the terminal, the desktop app, Telegram, Discord, Slack, WhatsApp, Signal or email, with any model provider, including Nous Portal and OpenRouter. The software is free; models and hosting cost extra. This profile is based on official pages, not hands-on testing.",
+  bestFor: [
+    "People who want an agent that builds its own reusable skills and memory over time",
+    "Running an always-on agent on a cheap server or Hermes Cloud and messaging it from Telegram, Slack or WhatsApp",
+    "Unattended scheduled work such as reports, backups and briefings",
+  ],
+  notFor: [
+    "Anyone who wants a polished consumer app with no setup or model choices",
+    "Users who want every action approved: only commands matching dangerous patterns ask first, and unattended runs can auto-approve",
+    "People who need a fixed, all-inclusive price: model, tool and hosting costs depend on usage",
+  ],
+  faq: [
+    {
+      q: "Is Hermes Agent free?",
+      a: "Yes. Hermes Agent is free and open source under the MIT license. Model providers and optional hosted services have their own pricing. Nous Portal has a free tier with free models only and paid plans with monthly model and tool credits: Plus at $20, Super at $100 and Ultra at $200 a month. You can use your own provider instead.",
+    },
+    {
+      q: "What does Hermes Agent do differently?",
+      a: "Nous Research describes a built-in learning loop: the agent creates skills from experience, improves them during use, keeps memory across sessions and can search its past conversations. It also runs natural-language scheduled automations, spawns isolated subagents for parallel work, and can search the web, automate a browser, use vision, generate images and speak.",
+    },
+    {
+      q: "Where can I run Hermes Agent?",
+      a: "On macOS, Windows or Linux through the desktop app or a terminal installer, on Android through Termux, or on a VPS, GPU cluster or serverless backend. Terminal backends include local, Docker, SSH, Singularity and Modal. Hermes Cloud hosts an always-on agent for you, billed daily from Nous credit: $0.56 a day running for Standard or $1.09 for Pro, $0.03 a day when stopped, with inference and tool use charged on top.",
+    },
+    {
+      q: "Which models does Hermes Agent support?",
+      a: "Any model you connect: Nous Portal, OpenRouter, OpenAI, a custom endpoint and many other providers. You can switch models with the hermes model command without changing code.",
+    },
+    {
+      q: "Will Hermes Agent ask before doing something risky?",
+      a: "Before running a command, Hermes checks it against a list of dangerous patterns and asks you to approve any match. Approval modes are configurable, and scheduled or unattended runs can be set to auto-approve. DM pairing and allowlists control who can talk to the agent on messaging platforms, and container backends add isolation.",
+    },
+    {
+      q: "Is there a version for teams?",
+      a: "Yes. Hermes Business is a shared deployment on Nous infrastructure: one central balance with per-member spend caps, a hosted agent for each member and skills shared across the team. Hermes Enterprise runs on infrastructure you control, with SSO, SLAs and onboarding support.",
+    },
+  ],
+};
