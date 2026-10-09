@@ -61,4 +61,26 @@ describe("catalogue automatic publication gate", () => {
   it("skips products the evidence does not establish as AI tools", () => {
     expect(decideCatalogAnalysis(candidate, { ...analysis, isAiTool: false }, taxonomy).outcome).toBe("skip");
   });
+
+  it("skips adult and gambling products before any other check", () => {
+    expect(decideCatalogAnalysis(candidate, { ...analysis, tagline: "Uncensored NSFW AI girlfriend chat with photos." }, taxonomy)).toEqual({
+      outcome: "skip",
+      reasons: ['Prohibited content: adult ("NSFW").'],
+    });
+    expect(decideCatalogAnalysis(candidate, { ...analysis, description: "AI betting tips and sportsbook odds for every match." }, taxonomy).reasons)
+      .toEqual(['Prohibited content: gambling ("betting tips").']);
+  });
+
+  it("skips domains Cloudflare classifies as adult, gambling or a security threat", () => {
+    expect(decideCatalogAnalysis(candidate, analysis, taxonomy, [{ id: 26, name: "Technology" }]).outcome).toBe("auto_publish");
+    expect(decideCatalogAnalysis(candidate, analysis, taxonomy, [{ id: 99, name: "Gambling" }]).reasons)
+      .toEqual(["Prohibited content: Cloudflare classifies the domain as Gambling."]);
+    expect(decideCatalogAnalysis(candidate, analysis, taxonomy, [{ id: 131, name: "Phishing" }]).outcome).toBe("skip");
+  });
+
+  it("does not flag ordinary wording", () => {
+    for (const tagline of ["Adult learning courses built with AI.", "Sex education answers for parents.", "Bet on your roadmap with AI planning."]) {
+      expect(decideCatalogAnalysis(candidate, { ...analysis, tagline }, taxonomy).outcome).toBe("auto_publish");
+    }
+  });
 });
