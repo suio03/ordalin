@@ -28,7 +28,7 @@ export function specRows(agents: Agent[]) {
     row("Free tier", (a) => notStated(capitalize(stated(a.access?.free_tier)))),
     row("Paid plans", plansCell),
     row("Plan needed", (a) => notStated(stated(a.access?.required_plan_for_agent ?? (a.access?.free_tier?.startsWith("yes") ? "Free tier" : undefined)))),
-    row("Where you use it", (a) => notStated(platformList(a).join(", ") || NOT_STATED)),
+    row("Where you use it", (a) => notStated([...platformList(a), ...(a.messaging ?? [])].join(", ") || NOT_STATED)),
     row("Availability", (a) => notStated(stated(a.regions))),
     row("How it runs", (a) => notStated(stated(a.execution))),
     row("What it can do", (a) => notStated(stated(a.actions))),

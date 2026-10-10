@@ -26,6 +26,7 @@ export const REGISTRY: AgentsRegistry = {
     "poke": () => import("./agents/poke.mdx"),
     "openclaw": () => import("./agents/openclaw.mdx"),
     "hermes-agent": () => import("./agents/hermes-agent.mdx"),
+    "tab": () => import("./agents/tab.mdx"),
   },
   pricingPages: {
     "meta-muse": { planPrefix: "Muse", compareWith: ["chatgpt-dots","gemini-spark","grok-bot","poke","lindy"], load: () => import("./pricing/meta-muse.mdx") },

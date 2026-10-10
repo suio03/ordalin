@@ -625,6 +625,44 @@
         "https://underdog.ai/backers",
         "https://underdog.ai/manifesto"
       ]
+    },
+    {
+      "slug": "tab",
+      "name": "Tab",
+      "vendor": "Terrasoft, Inc.",
+      "channel": "personal",
+      "category": "personal agent (texting)",
+      "launch_date": "2026-10-06 (private beta)",
+      "official_url": "https://tab.bot/",
+      "checked_on": "2026-10-11",
+      "access": {
+        "free_tier": "unknown",
+        "paid_plans": "unknown",
+        "billing_note": "No prices published. Tab is in private beta: you join a waitlist with your mobile number, and joining does not guarantee access, timing or pricing",
+        "subscription_note": "18+"
+      },
+      "messaging": [
+        "iMessage",
+        "WhatsApp",
+        "Phone calls"
+      ],
+      "regions": "unknown",
+      "actions": "works from its own computer and browser: research, scheduling, filling forms, turning files into spreadsheets, editing or creating images, audio and video; places phone calls to hotels, doctor's offices, restaurants and vendors, waits on hold and reports back; buys things, books reservations and pays invoices after you approve; tracks orders and deliveries",
+      "execution": "Hosted service; you text it, and it works on its own computer and browser with the accounts you connect",
+      "safety": "Nothing is paid until you approve the exact merchant, items, total and recipient; a checkout is bound to those terms and stops instead of retrying if anything changes or the outcome is unclear. Cards are added through a private link to a separate vault, never in Messages; saved passwords are encrypted with AES-256-GCM and the planning AI only sees a reference. Connected-app write actions are denied unless explicitly enabled. Wallet and checkout are limited beta features",
+      "privacy": {
+        "training": "The privacy policy does not say whether your data is used to train AI models. Tab says it does not sell personal information. Information is shared with service providers such as hosting, messaging and calling, browser automation and payment services",
+        "delete_data": "Ask for access, correction or deletion of your personal information (identity verification may be needed); ask Tab to disconnect an account or stop using a saved credential. Reply STOP to opt out of automated texts"
+      },
+      "model": "unknown",
+      "sources": [
+        "https://tab.bot/",
+        "https://tab.bot/security",
+        "https://tab.bot/privacy",
+        "https://tab.bot/terms",
+        "https://tab.bot/updates",
+        "https://techcrunch.com/2026/10/07/another-personal-ai-assistant-has-launched-meet-tab-which-emerged-from-stealth-with-a-300m-valuation/"
+      ]
     }
   ]
 }
