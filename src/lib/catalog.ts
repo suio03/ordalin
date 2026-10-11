@@ -59,6 +59,7 @@ type TitleTag = { kind: string; name: string; groupSlug: string | null };
 /** Title use for tools whose first category tag alphabetically is not their main use, keyed by tool slug. */
 const titleUseOverrides: Record<string, string> = {
   "flux-3": "Video generation",
+  "yue2-studio": "Music generation",
 };
 
 /** "AdAnt — AI Video Generation": the tool's main use, taken from a category tag in its primary group. */
