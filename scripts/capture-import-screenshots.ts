@@ -7,6 +7,10 @@ import { serverScreenshotClient } from "./lib/server-screenshot.ts";
 const manifestArgument = process.argv.find(arg => arg.startsWith("--manifest="))?.slice("--manifest=".length);
 if (!manifestArgument) throw new Error("Provide --manifest=<manifest.json>. Captures use Cloudflare, never local Chrome.");
 const manifestPath = path.resolve(manifestArgument);
+// --wait=<ms>: extra settle time for homepages that open with an intro animation.
+const waitArgument = process.argv.find(arg => arg.startsWith("--wait="))?.slice("--wait=".length);
+const waitMs = waitArgument ? Number(waitArgument) : undefined;
+if (waitMs !== undefined && !(Number.isInteger(waitMs) && waitMs >= 0 && waitMs <= 15_000)) throw new Error("--wait must be 0–15000 ms.");
 const manifest: CatalogImportManifest = JSON.parse(await readFile(manifestPath, "utf8"));
 const directory = path.join(path.dirname(manifestPath), "screenshots");
 await mkdir(directory, { recursive: true });
@@ -27,7 +31,7 @@ try {
         continue;
       } catch { /* Missing or stale captures are retryable. */ }
       client ??= await serverScreenshotClient();
-      const bytes = await client.capture(bundle.websiteUrl);
+      const bytes = await client.capture(bundle.websiteUrl, waitMs);
       await writeFile(path.join(directory, `${domain}.png`), bytes);
       await writeFile(path.join(directory, `${domain}.json`), JSON.stringify({
         sourceUrl: bundle.websiteUrl, provider: "cloudflare-browser-rendering",

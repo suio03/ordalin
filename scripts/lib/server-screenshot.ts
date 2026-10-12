@@ -13,13 +13,13 @@ export async function serverScreenshotClient() {
   });
   return {
     close: () => proxy.dispose(),
-    async capture(websiteUrl: string) {
+    async capture(websiteUrl: string, waitMs = 1_500) {
       const website = await assertPublicDns(websiteUrl);
       const shoot = (waitUntil: "networkidle2" | "load") => proxy.env.BROWSER.quickAction("screenshot", {
         url: website.href,
         viewport: { width: 1440, height: 900, deviceScaleFactor: 1 },
         gotoOptions: { waitUntil, timeout: 20_000 },
-        waitForTimeout: 1_500,
+        waitForTimeout: waitMs,
         screenshotOptions: { type: "png", fullPage: false, captureBeyondViewport: false },
       });
       let response = await shoot("networkidle2");
