@@ -123,31 +123,28 @@
       "launch_date": "2026-08-11",
       "official_url": "https://x.ai/bot",
       "access": {
-        "free_tier": "no",
-        "required_plan_for_agent": "SuperGrok / SuperGrok Plus / SuperGrok Heavy / X Premium+ (linked), Cursor Pro / Pro+ / Ultra, Cursor Teams; Enterprise",
+        "free_tier": "no — The X Subscription Free and Plus plans do not include Grok Bot",
+        "required_plan_for_agent": "The X Subscription Premium, Super or Ultra; Teams from $30/user/month; Enterprise by quote. Eligible existing SuperGrok and Cursor subscribers can keep their current plans",
         "paid_plans": [
           {
-            "name": "SuperGrok",
-            "price_usd_month": "30"
+            "name": "X Subscription Premium",
+            "price_usd_month": "30",
+            "usage": "4x the Plus shared AI usage pool"
           },
           {
-            "name": "SuperGrok Plus",
-            "price_usd_month": "100"
+            "name": "X Subscription Super",
+            "price_usd_month": "100",
+            "usage": "15x the Plus shared AI usage pool"
           },
           {
-            "name": "SuperGrok Heavy",
-            "price_usd_month": "unknown"
-          },
-          {
-            "name": "Cursor Pro",
-            "price_usd_month": "20"
-          },
-          {
-            "name": "Cursor Teams",
-            "price_usd_month": "40 / user"
+            "name": "X Subscription Ultra",
+            "price_usd_month": "200",
+            "usage": "50x the Plus shared AI usage pool"
           }
         ],
-        "usage_note": "Grok Bot has its own usage, separate from Grok/Cursor plans; resets weekly; overage via Cursor on-demand usage"
+        "usage_note": "On The X Subscription, Grok Bot draws from the shared Grok and Cursor AI usage pool, which refreshes weekly. Top-ups are available; third-party models in Cursor are billed separately at API list prices",
+        "billing_note": "Monthly prices in USD, excluding applicable taxes and fees. Cancel at least 24 hours before renewal to avoid another charge",
+        "subscription_note": "Pricing checked 2026-10-13. New customers start on The X Subscription. Existing SuperGrok, Cursor and X Premium subscribers can keep their current plan, price and features; switching is optional and permanent. Legacy allowances may differ from the shared pool on the new plans"
       },
       "platforms": {
         "macos": true,
@@ -172,7 +169,9 @@
         "https://docs.x.ai/grok-bot/approvals-security-and-privacy",
         "https://cursor.com/help/grok-bot/plans",
         "https://x.ai/pricing",
-        "https://cursor.com/pricing"
+        "https://cursor.com/pricing",
+        "https://x.ai/news/x-subscription",
+        "https://docs.x.ai/x-subscription/overview"
       ]
     },
     {
