@@ -27,6 +27,7 @@ export const REGISTRY: AgentsRegistry = {
     "openclaw": () => import("./agents/openclaw.mdx"),
     "hermes-agent": () => import("./agents/hermes-agent.mdx"),
     "tab": () => import("./agents/tab.mdx"),
+    "kanana-space": () => import("./agents/kanana-space.mdx"),
   },
   pricingPages: {
     "meta-muse": { planPrefix: "Muse", compareWith: ["chatgpt-dots","gemini-spark","grok-bot","poke","lindy"], load: () => import("./pricing/meta-muse.mdx") },

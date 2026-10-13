@@ -52,7 +52,8 @@ export default async function AgentPage({ params }: Props) {
               )}
             </div>
             <Checked on={agent.checked_on ?? CHECKED_ON}>
-              <div>{agent.sources.length} official sources</div>
+              <div>{agent.sources.length} official source{agent.sources.length === 1 ? "" : "s"}</div>
+              {agent.needs_update && <div>Early profile, update pending</div>}
             </Checked>
           </div>
         </div>

@@ -8,6 +8,8 @@ former agentsversus repository on 2026-10-09; edit it directly.
   lists its `sources`. `checkedOn` is the baseline check date; an entry's own
   `checked_on` overrides it after a per-agent re-check. Unconfirmed
   third-party claims never go in this file (the repository is public).
+  `needs_update` marks an early profile (announced, not yet open) and notes
+  what to re-check; the page shows "Early profile, update pending".
 - `<kind>/<key>.mdx`: pages, where kind is `agents`, `compare`, `pricing`,
   `alternatives`, `best` or `safety`. Each exports `meta` plus an MDX body.
   `overview.mdx` renders at `/agents`, `personal.mdx` at `/agents/personal`.

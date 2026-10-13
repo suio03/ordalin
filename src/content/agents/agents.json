@@ -662,6 +662,34 @@
         "https://tab.bot/updates",
         "https://techcrunch.com/2026/10/07/another-personal-ai-assistant-has-launched-meet-tab-which-emerged-from-stealth-with-a-300m-valuation/"
       ]
+    },
+    {
+      "slug": "kanana-space",
+      "name": "Kanana Space",
+      "vendor": "Kakao Corp.",
+      "channel": "personal",
+      "category": "personal agent (in KakaoTalk)",
+      "launch_date": "2026-10-13 (announced; pre-registration)",
+      "official_url": "https://space.kakao.com/",
+      "checked_on": "2026-10-14",
+      "access": {
+        "free_tier": "unknown",
+        "paid_plans": "unknown",
+        "billing_note": "No prices published. Pre-registration is open on mobile. Before the full opening, Kakao lets in selected users in stages; pre-registering does not guarantee access, and people who did not pre-register can also be selected. Selected users are notified from December 2026 through the Kanana Tips channel"
+      },
+      "messaging": [
+        "KakaoTalk"
+      ],
+      "regions": "unknown",
+      "actions": "inside KakaoTalk: replies to friends from a spoken or typed request, briefs your day and adds new plans to your calendar, summarizes unread messages, finds past conversations by remembered words, searches the web and looks up digital cards. Kakao's coming-soon examples include sending money, paying for a gift, finding coupons and finding restaurants you can book",
+      "execution": "Runs inside the KakaoTalk app on smartphones with the latest version; open it by swiping two fingers on most KakaoTalk screens and talk to the Ryan character by voice or text. Tablets and secondary devices may be limited",
+      "safety": "unknown",
+      "privacy": "unknown",
+      "model": "unknown",
+      "sources": [
+        "https://space.kakao.com/"
+      ],
+      "needs_update": "Announced 2026-10-13 with pre-registration only; re-check prices, safety, privacy and regions when the closed beta opens (December 2026)"
     }
   ]
 }

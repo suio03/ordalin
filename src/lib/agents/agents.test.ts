@@ -10,7 +10,7 @@ const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const isUrl = (value: unknown) => typeof value === "string" && /^https?:\/\//.test(value) && URL.canParse(value);
 
 const AGENT_KEYS = new Set([
-  "slug", "name", "display_name", "vendor", "channel", "category", "launch_date", "official_url", "checked_on",
+  "slug", "name", "display_name", "vendor", "channel", "category", "launch_date", "official_url", "checked_on", "needs_update",
   "catalogue_slug", "access", "platforms", "messaging", "regions", "actions", "connectors_notable", "connectors_count",
   "execution", "features", "ads", "safety", "privacy", "model", "license", "repo", "sources",
 ]);
@@ -31,6 +31,7 @@ function problems(agent: Record<string, unknown>): string[] {
   if (!isUrl(agent.official_url)) out.push("official_url must be a URL");
   if (agent.repo !== undefined && !isUrl(agent.repo)) out.push("repo must be a URL");
   if (agent.checked_on !== undefined && !DATE.test(String(agent.checked_on))) out.push("checked_on must be YYYY-MM-DD");
+  if (agent.needs_update !== undefined && (typeof agent.needs_update !== "string" || !agent.needs_update)) out.push("needs_update must be a non-empty note");
   if (agent.catalogue_slug !== undefined && !/^[a-z0-9-]+$/.test(String(agent.catalogue_slug))) out.push("catalogue_slug must be kebab-case");
   const sources = agent.sources;
   if (!Array.isArray(sources) || sources.length === 0 || !sources.every(isUrl)) out.push("sources must be a non-empty list of URLs");

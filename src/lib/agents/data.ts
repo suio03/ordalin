@@ -24,6 +24,8 @@ export type Agent = {
   official_url: string;
   /** Per-agent updates do not change the baseline date for other researched entries. */
   checked_on?: string;
+  /** Placeholder profile (e.g. announced, not yet open) waiting for a full re-check; says what to re-check. */
+  needs_update?: string;
   catalogue_slug?: string;
   access?: {
     free_tier?: string;
