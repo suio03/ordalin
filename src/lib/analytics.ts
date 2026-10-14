@@ -1,6 +1,7 @@
 export const GA_MEASUREMENT_ID = "G-L83JR8ZZRV";
 export const PLAUSIBLE_DOMAIN = "ordalin.com";
 export const PLAUSIBLE_SCRIPT = "https://actone.app/js/script.js";
+export const RECOUNT_SCRIPT = "https://recount.tools/js/script.js";
 
 export function isProductionAnalyticsHost(hostname: string) {
   return hostname === "ordalin.com" || hostname === "www.ordalin.com";
@@ -13,19 +14,24 @@ export function validGaMeasurementId(value: string | undefined) {
 type EventProps = Record<string, string>;
 type PlausibleOptions = { props?: EventProps; callback?: () => void };
 type Plausible = ((event: string, options?: PlausibleOptions) => void) & { q?: unknown[] };
+type Recount = ((event: string, options?: { props?: EventProps }) => void) & { q?: unknown[] };
 
 type AnalyticsWindow = Window & {
   dataLayer?: unknown[];
   gtag?: (...args: unknown[]) => void;
   plausible?: Plausible;
+  recount?: Recount;
 };
 
 export type TrackedEvent = { name: string; props: EventProps };
 
-// Custom events go to Plausible only. `window.plausible` exists only on the
-// production hosts (installAnalytics creates its queue), so this is a no-op elsewhere.
+// Custom events go to Plausible and Recount (Plausible owns the callback).
+// `window.plausible` / `window.recount` exist only on the production hosts
+// (installAnalytics creates their queues), so this is a no-op elsewhere.
 export function trackEvent(name: string, props?: EventProps, callback?: () => void) {
-  const plausible = typeof window === "undefined" ? undefined : (window as AnalyticsWindow).plausible;
+  const browser = typeof window === "undefined" ? undefined : (window as AnalyticsWindow);
+  browser?.recount?.(name, { props });
+  const plausible = browser?.plausible;
   if (!plausible) {
     callback?.();
     return;
@@ -120,12 +126,24 @@ export function installAnalytics(browser: AnalyticsWindow, measurementId?: strin
     // Plausible's documented command queue; the script replays it once loaded.
     const queue: Plausible = (...args) => { (queue.q = queue.q || []).push(args); };
     browser.plausible = browser.plausible || queue;
+    browser.recount = browser.recount || function (...args) {
+      (browser.recount!.q = browser.recount!.q || []).push(args);
+    };
     installClickTracking(browser);
     const script = document.createElement("script");
     script.id = "ordalin-plausible";
     script.defer = true;
     script.dataset.domain = PLAUSIBLE_DOMAIN;
     script.src = PLAUSIBLE_SCRIPT;
+    document.head.appendChild(script);
+  }
+  if (!document.getElementById("ordalin-recount")) {
+    // Cookie mode (default); runs alongside Plausible, so no data-compat.
+    const script = document.createElement("script");
+    script.id = "ordalin-recount";
+    script.defer = true;
+    script.dataset.site = PLAUSIBLE_DOMAIN;
+    script.src = RECOUNT_SCRIPT;
     document.head.appendChild(script);
   }
 

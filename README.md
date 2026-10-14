@@ -41,7 +41,7 @@ guide is published yet, so the empty index remains noindex and outside the
 sitemap. The future month archive is reserved in documentation and will derive
 from existing publication timestamps without a database migration.
 
-Plausible and GA4 pageview tracking are implemented for the production domains
+Plausible, Recount and GA4 pageview tracking are implemented for the production domains
 only. Local and preview hosts do not send analytics. Deployment and actual event
 reception must be verified separately; configuration is in
 [docs/environment.md](docs/environment.md#website-analytics).

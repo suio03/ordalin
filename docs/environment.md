@@ -199,6 +199,11 @@ The root layout loads Plausible and GA4 after hydration, using the same Plausibl
 host as Pixfy (`https://actone.app/js/script.js`) with the separate `ordalin.com`
 site. Its reporting timezone is Australia/Melbourne.
 
+Recount (`https://recount.tools/js/script.js`, `data-site="ordalin.com"`) loads
+alongside Plausible on the same hosts while the two run in parallel. It uses its
+default cookie mode (first-party `rc_vid` and `rc_sid` cookies) and must not use
+`data-compat` while Plausible is still loaded.
+
 The official site's public GA4 web-stream ID remains the default in
 `src/lib/analytics.ts`. `NEXT_PUBLIC_GA_MEASUREMENT_ID` can override it at build
 time; an explicitly empty value disables GA4. This is a public identifier, not a
@@ -208,16 +213,16 @@ site's trackers.
 
 Only `ordalin.com` and `www.ordalin.com` load analytics scripts. Localhost,
 workers.dev and other preview hosts send no events. Trackers initialize once;
-Plausible handles History API navigation and GA4 uses Enhanced Measurement.
+Plausible and Recount handle History API navigation and GA4 uses Enhanced Measurement.
 Keep GA4 page views on browser-history changes enabled and do not add duplicate
 manual page_view events. No Clarity, user IDs or form values are collected.
 Verify reception on the production site after deployment; local checks
 intentionally cannot populate these dashboards.
 
-### Custom events (Plausible only)
+### Custom events (Plausible and Recount)
 
-Business events go to Plausible through `trackEvent()` in `src/lib/analytics.ts`;
-GA4 receives page views only. One delegated click listener covers links, so
+Business events go to Plausible and Recount (same name and props) through
+`trackEvent()` in `src/lib/analytics.ts`; GA4 receives page views only. One delegated click listener covers links, so
 server components only add `data-*` attributes.
 
 | Event | Props | Fired when |
