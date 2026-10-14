@@ -13,7 +13,7 @@ supported by the fetched official website evidence in each bundle.
 
 Directory outbound parameters are discovery metadata, not part of product
 identity. Resolution follows redirects, removes `utm_*`, `ref`, `referrer`,
-`source`, `via`, `affiliate`, `aff`, and fragments from the official URL, and
+`source`, `via`, `affiliate`, `aff`, `dub_id`, and fragments from the official URL, and
 then uses the clean URL for deduplication, crawling, screenshots, and D1. Public
 Visit actions add Ordalin attribution only when rendered, according to
 `docs/catalog-enrichment.md`; the Schedule must never add it to a bundle.

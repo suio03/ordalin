@@ -25,6 +25,7 @@ describe("catalog website links", () => {
         "https://example.com/product?plan=pro&utm_source=toolify&ref=producthunt#pricing",
       ).href,
     ).toBe("https://example.com/product?plan=pro");
+    expect(cleanCatalogWebsiteUrl("https://hirekai.ai/?dub_id=tLbo3v3IEFe7uBuo").href).toBe("https://hirekai.ai/");
   });
 
   it("marks public submissions as user-generated links", () => {

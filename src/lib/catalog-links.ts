@@ -1,4 +1,4 @@
-const TRACKING_PARAMETER = /^(?:utm_|ref$|referrer$|source$|via$|affiliate$|aff$)/i;
+const TRACKING_PARAMETER = /^(?:utm_|ref$|referrer$|source$|via$|affiliate$|aff$|dub_id$)/i;
 
 export function cleanCatalogWebsiteUrl(input: string | URL) {
   const url = new URL(input instanceof URL ? input.href : input);
