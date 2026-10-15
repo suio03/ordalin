@@ -7,7 +7,7 @@ export const udioAlternatives: AlternativesPage = {
   description: "Udio has switched off downloads. Four alternatives compared on downloads, songs with vocals, working from your own audio and release rights.",
   author: "Ordalin",
   publishedAt: "2026-10-15",
-  status: "draft",
+  status: "published",
   groupSlug: "music",
   anchorSlug: "udio",
   intro: [
