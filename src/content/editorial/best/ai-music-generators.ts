@@ -7,6 +7,7 @@ export const aiMusicGenerators: BestPage = {
   description: "Seven AI music generators compared on full songs versus background tracks, editing control, commercial licences and what the free plans allow.",
   author: "Ordalin",
   publishedAt: "2026-10-09",
+  updatedAt: "2026-10-15",
   status: "published",
   groupSlug: "music",
   intro: [
@@ -25,20 +26,20 @@ export const aiMusicGenerators: BestPage = {
       toolSlug: "suno",
       label: "Best for complete songs with vocals",
       bestFor: "Songwriters and hobbyists who want a finished song with vocals from a description or their own lyrics, and a path to keep working on it.",
-      notIdealIf: "You need commercial rights without paying, or many downloads a month on the cheaper plan.",
+      notIdealIf: "You need commercial rights without paying, or more than 20 downloads a month on Pro.",
       summary: [
         "Suno turns a genre, mood, theme or your lyrics into a full track with vocals and instruments, and Remix can change a song's style or lyrics or rebuild it around your own recording. On eligible paid plans it can sing in a voice you record.",
-        "It goes further than most song generators once a track exists. Paid plans split songs into time-aligned stems for another audio workstation, and Premier adds Suno Studio, a browser workstation with MIDI, effects and automation. The free plan gives 50 credits a day but no commercial rights, downloads allowance or stems.",
+        "It goes further than most song generators once a track exists. Paid plans split songs into time-aligned stems for another audio workstation, and Premier adds Suno Studio, a browser workstation with MIDI, effects and automation. Downloads are counted: 20 a month on Pro and 60 on Premier. The free plan gives 50 credits a day and up to 7 lifetime trial downloads for personal use, without commercial rights or stems.",
       ],
     },
     {
       toolSlug: "udio",
       label: "Best for steering a song with reference tracks",
       bestFor: "Musicians who would rather point at a sound than describe it, using one or two reference tracks and a slider to blend them.",
-      notIdealIf: "You want to publish songs built from uploaded audio on Udio itself, or need confirmed stem export.",
+      notIdealIf: "You need to download your songs. Udio has disabled audio, video and stem downloads.",
       summary: [
         "Udio writes songs from a description, lyrics or a reference clip. You can use one or two references as the style, set how strongly they apply and blend them, then extend, remix, inpaint or edit the result. Each prompt returns two songs, and trimming costs no credits.",
-        "The free plan allows three full-length songs a day. Style blending and the Style Library are desktop-only, songs made from uploaded audio cannot be published on udio.com, and our profile does not establish stem export or summarise its commercial licence.",
+        "Since its October 2025 partnership with Universal Music Group, Udio has disabled downloading of audio, video and stems, so songs can be shared only as udio.com links. The free plan allows three full-length songs a day, style blending is desktop-only, and songs made from uploaded audio cannot be published on udio.com.",
       ],
     },
     {
@@ -104,7 +105,7 @@ export const aiMusicGenerators: BestPage = {
     { situation: "I want to sing a part and hear it in another voice", toolSlug: "musicfy" },
   ],
   closing: [
-    "To make songs, start with Suno or Udio. Both have free plans that renew daily, so you can compare them on the same idea before paying. Choose Suno if you want stems and a studio afterwards, and Udio if reference tracks describe your sound better than words.",
+    "To make songs, start with Suno or Udio. Both have free plans that renew daily, so you can compare them on the same idea before paying. Choose Suno if you need to download songs or want stems and a studio afterwards, and Udio if you create and share inside Udio and reference tracks describe your sound better than words.",
     "For background music, decide on the licence first. SOUNDRAW suits creators who also want to release music, Mubert suits long or looping content you will not sell, and Sonilo suits footage that needs scoring to picture. Whatever you pick, read the plan's licence before you monetize a video or distribute a track.",
   ],
   faq: [
