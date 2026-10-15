@@ -116,7 +116,30 @@ export default async function ToolPage({ params }: ToolParams) {
         <div><dt>Primary group</dt><dd>{tool.primaryCategory.name}</dd></div>
       </dl>
 
-      {profile || research ? <ToolProfileNav mobile /> : null}
+      {relatedTools.length ? (
+        <section className={styles.alsoConsider} aria-labelledby="also-consider-title">
+          <header>
+            <h2 id="also-consider-title">Also consider</h2>
+            <a href="#similar-tools">See all {relatedTools.length} similar tools ↓</a>
+          </header>
+          <ul>
+            {relatedTools.slice(0, 3).map((related) => (
+              <li key={related.slug}>
+                <Link href={`/tools/${related.slug}`} data-placement="also-consider">
+                  <ToolMark name={related.name} logoAssetKey={related.logoAssetKey} />
+                  <span className={styles.alsoConsiderText}>
+                    <strong>{related.name}</strong>
+                    <span>{related.tagline}</span>
+                    <small>{formatPricingModel(related.pricingModel)}</small>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {profile || research ? <ToolProfileNav mobile featured={featuredIn.pages.length > 0} similar={relatedTools.length > 0} /> : null}
 
       <div className={styles.detailGrid}>
         <div className={styles.detailContent}>
@@ -180,7 +203,7 @@ export default async function ToolPage({ params }: ToolParams) {
           ) : null}
 
           {featuredIn.pages.length ? (
-            <section className={styles.fitSection} aria-labelledby="featured-in-title">
+            <section className={styles.fitSection} id="featured-in" aria-labelledby="featured-in-title">
               <header className={styles.fitHeader}>
                 <div>
                   <p className={styles.eyebrow}>Editorial</p>
@@ -197,7 +220,7 @@ export default async function ToolPage({ params }: ToolParams) {
           ) : null}
 
           {relatedTools.length ? (
-            <section className={styles.fitSection} aria-labelledby="related-tools-title">
+            <section className={styles.fitSection} id="similar-tools" aria-labelledby="related-tools-title">
               <header className={styles.fitHeader}>
                 <div>
                   <p className={styles.eyebrow}>Similar tools</p>
@@ -212,7 +235,7 @@ export default async function ToolPage({ params }: ToolParams) {
           ) : null}
         </div>
         <aside className={styles.factPanel} aria-labelledby="facts-title">
-          {profile || research ? <ToolProfileNav /> : null}
+          {profile || research ? <ToolProfileNav featured={featuredIn.pages.length > 0} similar={relatedTools.length > 0} /> : null}
           <h2 id="facts-title">{factsLabel}</h2>
           <dl className={styles.factList}>
             <div>

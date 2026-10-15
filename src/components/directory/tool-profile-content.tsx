@@ -44,9 +44,11 @@ export function ToolProfileContent({ profile }: { profile: ToolProfile }) {
   );
 }
 
-export function ToolProfileNav({ mobile = false }: { mobile?: boolean }) {
+export function ToolProfileNav({ mobile = false, featured = false, similar = false }: { mobile?: boolean; featured?: boolean; similar?: boolean }) {
   return <nav className={`${styles.contentsNav} ${mobile ? styles.mobileNav : ""}`} aria-label="On this page">
     <h2>On this page</h2>
     <a href="#features">Features</a><a href="#pricing">Pricing & free limits</a><a href="#fit-and-limits">Best for & limitations</a>
+    {featured ? <a href="#featured-in">Featured in</a> : null}
+    {similar ? <a href="#similar-tools">Similar tools</a> : null}
   </nav>;
 }

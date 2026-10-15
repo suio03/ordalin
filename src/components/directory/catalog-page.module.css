@@ -324,6 +324,23 @@
 .detailSection h2,
 .factPanel h2 { margin: 0 0 var(--space-md); font-size: var(--font-size-panel-heading); font-weight: var(--font-weight-heading); }
 .detailSection p { margin: 0; color: var(--color-text-secondary); font-size: var(--font-size-body); line-height: 1.7; }
+.alsoConsider { margin: var(--space-lg) 0 var(--space-xl); }
+.alsoConsider header { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-md); margin-bottom: var(--space-sm); }
+.alsoConsider h2 { margin: 0; color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: var(--font-size-metadata); font-weight: var(--font-weight-regular); text-transform: uppercase; letter-spacing: .06em; }
+.alsoConsider header a { color: var(--color-text-secondary); font-size: var(--font-size-caption); text-underline-offset: 3px; white-space: nowrap; }
+.alsoConsider ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); margin: 0; padding: 0; list-style: none; }
+.alsoConsider li a { display: grid; grid-template: "icon text" / auto minmax(0, 1fr); gap: var(--space-sm); height: 100%; padding: var(--space-md); border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-panel); background: var(--color-surface-raised); box-shadow: var(--shadow-card); color: inherit; text-decoration: none; }
+.alsoConsider li a:hover { border-color: var(--color-border-strong); }
+.alsoConsider li a:hover strong { text-decoration: underline; text-underline-offset: 3px; }
+.alsoConsiderText { grid-area: text; display: grid; gap: var(--space-xs); min-width: 0; }
+.alsoConsiderText strong { color: var(--color-text-primary); font-size: var(--font-size-body-compact); font-weight: var(--font-weight-strong); }
+.alsoConsiderText span { display: -webkit-box; overflow: hidden; color: var(--color-text-secondary); font-size: var(--font-size-caption); line-height: var(--line-height-body); -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.alsoConsiderText small { color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: var(--font-size-metadata); }
+@media (max-width: 820px) {
+  .alsoConsider ul { grid-template-columns: 1fr; gap: var(--space-sm); }
+  .alsoConsider li a { padding: var(--space-sm) var(--space-md); }
+  .alsoConsiderText span { -webkit-line-clamp: 1; }
+}
 .factList { margin: 0; }
 .factList div { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: var(--space-sm); padding: var(--space-sm) 0; border-top: var(--border-width) solid var(--color-border-subtle); }
 .factList dt { color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: var(--font-size-metadata); }
