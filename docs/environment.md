@@ -219,22 +219,25 @@ manual page_view events. No Clarity, user IDs or form values are collected.
 Verify reception on the production site after deployment; local checks
 intentionally cannot populate these dashboards.
 
-### Custom events (Plausible and Recount)
+### Custom events (Plausible, Recount and GA4)
 
 Business events go to Plausible and Recount (same name and props) through
-`trackEvent()` in `src/lib/analytics.ts`; GA4 receives page views only. One delegated click listener covers links, so
+`trackEvent()` in `src/lib/analytics.ts`. GA4 receives the same events with
+snake_case names (`outbound_click`, `tool_open`, `search`, ...); their params
+are reportable in GA4 only after being registered as custom dimensions. One delegated click listener covers links, so
 server components only add `data-*` attributes.
 
 | Event | Props | Fired when |
 |---|---|---|
 | `Outbound Click` | `tool`, `placement` | a link tagged `utm_source=ordalin` is clicked |
-| `Tool Open` | `tool`, `from`, `search` | an internal link to `/tools/[slug]` is clicked |
+| `Tool Open` | `tool`, `from`, `search`, `placement` (when tagged) | an internal link to `/tools/[slug]` is clicked |
 | `Search` | `query`, `results` | a new non-empty query renders its first page (`/tools`, `/search`) |
 | `Submission Started` | — | the submit website check returns a draft |
 | `Submission Sent` | — | a submission is accepted for review |
 
 - `placement` comes from `data-placement` (`profile`, `row`, `task`, `compare`,
-  `editorial`), falling back to the page's first path segment; `tool` comes from
+  `editorial`), falling back to the page's first path segment for outbound
+  clicks; `Tool Open` carries it only for tagged links (`also-consider`); `tool` comes from
   `data-tool`, falling back to the official hostname. Tag new official-site links
   with both.
 - `query` is trimmed, lower-cased and cut to 100 characters; `results` is a
@@ -245,3 +248,10 @@ server components only add `data-*` attributes.
 - Goals and custom properties are managed with `bin/plausible-admin` in the
   self-hosted analytics repository (`docs/events/ordalin.json`). When adding an
   event or prop here, run `events sync` / `properties add` for `ordalin.com` too.
+
+### Core metric
+
+Dwell time is not the directory's goal. Judge pages by **decision rate**: the
+share of sessions landing on a page group (`/`, `/tools/*`, `/compare/*`,
+`/best/*`, `/agents/*`, `/tasks/*`) that end in an `Outbound Click`, alongside
+pages per session for the next-step journey (`Tool Open`).

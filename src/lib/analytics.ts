@@ -25,12 +25,17 @@ type AnalyticsWindow = Window & {
 
 export type TrackedEvent = { name: string; props: EventProps };
 
-// Custom events go to Plausible and Recount (Plausible owns the callback).
-// `window.plausible` / `window.recount` exist only on the production hosts
-// (installAnalytics creates their queues), so this is a no-op elsewhere.
+export function gaEventName(name: string) {
+  return name.trim().toLowerCase().replace(/\s+/g, "_");
+}
+
+// Custom events go to Plausible, Recount and GA4 (Plausible owns the callback).
+// The trackers exist only on the production hosts (installAnalytics creates
+// their queues), so this is a no-op elsewhere.
 export function trackEvent(name: string, props?: EventProps, callback?: () => void) {
   const browser = typeof window === "undefined" ? undefined : (window as AnalyticsWindow);
   browser?.recount?.(name, { props });
+  browser?.gtag?.("event", gaEventName(name), props ?? {});
   const plausible = browser?.plausible;
   if (!plausible) {
     callback?.();
@@ -86,6 +91,7 @@ export function eventForLink(
       tool,
       from: pageSection(current.pathname),
       search: current.searchParams.get("q")?.trim() ? "yes" : "no",
+      ...(dataset.placement ? { placement: dataset.placement } : {}),
     },
   };
 }

@@ -75,6 +75,15 @@ describe("Plausible custom events", () => {
     expect(callback).not.toHaveBeenCalled();
   });
 
+  it("mirrors events to GA4 with snake_case names", () => {
+    const { browser, raw, events } = browserFor("ordalin.com");
+    installAnalytics(browser, "G-TEST123");
+    vi.stubGlobal("window", raw);
+    trackEvent("Outbound Click", { tool: "granola", placement: "task" });
+    vi.unstubAllGlobals();
+    expect(Array.from(events.at(-1) as ArrayLike<unknown>)).toEqual(["event", "outbound_click", { tool: "granola", placement: "task" }]);
+  });
+
   it("tags official-site links as outbound clicks", () => {
     expect(eventForLink("https://www.granola.ai/?utm_source=ordalin", { tool: "granola", placement: "task" }, page))
       .toEqual({ name: "Outbound Click", props: { tool: "granola", placement: "task" } });
@@ -91,6 +100,11 @@ describe("Plausible custom events", () => {
       .toEqual({ name: "Tool Open", props: { tool: "granola", from: "tools", search: "yes" } });
     expect(eventForLink("/tools/granola", {}, new URL("https://ordalin.com/")))
       .toEqual({ name: "Tool Open", props: { tool: "granola", from: "home", search: "no" } });
+  });
+
+  it("adds the placement of a tagged internal link", () => {
+    expect(eventForLink("/tools/granola", { placement: "also-consider" }, new URL("https://ordalin.com/tools/otter")))
+      .toEqual({ name: "Tool Open", props: { tool: "granola", from: "tools", search: "no", placement: "also-consider" } });
   });
 
   it("ignores other internal links and self-links", () => {
