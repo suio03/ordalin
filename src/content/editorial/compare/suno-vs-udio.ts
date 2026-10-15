@@ -3,21 +3,24 @@ import type { ComparePage } from "@/lib/editorial/types";
 export const sunoVsUdio: ComparePage = {
   kind: "compare",
   slug: "suno-vs-udio",
-  title: "Suno vs Udio: which AI song generator fits your workflow?",
-  description: "Suno and Udio both write full songs from a prompt. We compare their free limits, style controls, editing tools and paths to production.",
+  title: "Suno vs Udio: downloads, limits and which AI song generator to use",
+  description: "Suno caps downloads and Udio has switched them off. We compare download rules, free limits, style controls and editing tools.",
   author: "Ordalin",
   publishedAt: "2026-10-01",
+  updatedAt: "2026-10-15",
   status: "published",
   groupSlug: "music",
   intro: [
     "Suno and Udio are the two best-known AI song generators. Both turn a description or your own lyrics into a finished track with vocals, and both let you extend and rework what they produce. The differences show up after the first generation: how you steer the sound, what you can edit, and what you can take into other music software.",
+    "The biggest difference is now what you can take away. Since September 3, 2026, Suno limits downloads to 20 songs a month on Pro and 60 on Premier, and free accounts get up to seven lifetime trial downloads. Udio has disabled downloads of audio, video and stems since October 29, 2025, so songs stay on udio.com and are shared by link.",
     "This comparison is based on each company's official pricing pages and help documentation, checked on the dates shown. We did not run the same prompts through both tools.",
   ],
-  verdict: "Choose Suno if you want to take songs further: stem separation, a browser-based studio on Premier, singing in your own voice and Android as well as iPhone apps. Choose Udio if you want to steer a song with reference tracks, blend two styles and inpaint sections, and you are happy working mainly on the web.",
+  verdict: "Choose Suno if you need song files: it is the only one of the two that lets you download audio, stems and video, within monthly limits on paid plans. Choose Udio only if you make and share songs inside Udio and want reference-track styling, blending and inpainting, since downloads are switched off.",
   sides: [
     {
       toolSlug: "suno",
       chooseIf: [
+        "You need audio files for streaming, video or another app; paid plans include 20 or 60 song downloads a month, and more can be bought.",
         "You want to split songs into stems and finish them in the audio workstation you already use.",
         "You want a browser studio with MIDI, effects and automation; it is included on Premier.",
         "You want generated songs sung in your own recorded voice on an eligible paid plan.",
@@ -27,6 +30,7 @@ export const sunoVsUdio: ComparePage = {
     {
       toolSlug: "udio",
       chooseIf: [
+        "You create and share songs inside Udio and do not need to download them.",
         "You want to guide a song with one or two reference tracks and set how strongly they influence it.",
         "You want to blend two genres or references with a slider.",
         "You want to inpaint or edit parts of a song, with trimming that costs no credits.",
@@ -37,8 +41,13 @@ export const sunoVsUdio: ComparePage = {
   differences: [
     {
       topic: "Free plan",
-      left: "50 credits a day with a shared queue. No commercial rights, monthly song downloads or stem separation.",
+      left: "50 credits a day with a shared queue. Up to seven lifetime trial downloads for personal use; no commercial rights or stem separation.",
       right: "10 credits a day and 100 a month, capped at three full-length (2:10) songs a day.",
+    },
+    {
+      topic: "Downloads",
+      left: "Pro 20 and Premier 60 songs a month, with extra downloads for sale. Stems come with the song's download. The limits also cover songs made before September 3, 2026.",
+      right: "Audio, video and stem downloads are disabled. Songs are shared through udio.com links.",
     },
     {
       topic: "Steering the sound",
@@ -53,7 +62,7 @@ export const sunoVsUdio: ComparePage = {
     {
       topic: "Taking songs elsewhere",
       left: "Time-aligned stems for another audio workstation. Pro has two stem types and Premier three.",
-      right: "The profile does not establish stem export. Songs built from uploaded audio cannot be published on udio.com.",
+      right: "Nothing leaves Udio while downloads are off. Songs built from uploaded audio cannot be published on udio.com.",
     },
     {
       topic: "Where it runs",
@@ -68,12 +77,20 @@ export const sunoVsUdio: ComparePage = {
   ],
   faq: [
     {
+      question: "Can I still download songs from Udio?",
+      answer: "No. Udio disabled downloading of audio, video and stems on October 29, 2025, when it partnered with Universal Music Group. You can still share songs through udio.com links while Udio works on a licensed new platform.",
+    },
+    {
+      question: "How many songs can I download from Suno?",
+      answer: "Pro includes 20 song downloads a month and Premier 60; unused downloads do not roll over and extra downloads can be bought. A song counts once, whatever formats or stems you take. Free accounts get up to seven lifetime trial downloads for personal, non-commercial use.",
+    },
+    {
       question: "Which is cheaper to start with?",
-      answer: "With annual billing, Suno Pro and Udio Standard both list $8 a month. Suno Pro includes 2,500 credits a month and Udio Standard 2,400. Check each plan's credit costs and limits before comparing value.",
+      answer: "With annual billing, Suno Pro and Udio Standard both list $8 a month. Suno Pro includes 2,500 credits a month and Udio Standard 2,400. Only Suno Pro lets you download songs, up to 20 a month.",
     },
     {
       question: "Can I use the songs commercially?",
-      answer: "Suno's free plan has no commercial rights; Pro and Premier include them, subject to Suno's terms of service. For Udio, read its current terms before commercial use; our profile does not summarise its licence.",
+      answer: "Suno grants commercial use for songs downloaded while you are on Pro or Premier, subject to its terms; free trial downloads are personal use only. Udio songs cannot be downloaded at the moment, so they can only be shared through udio.com links; read Udio's current terms before any other use.",
     },
     {
       question: "Can I use my own voice or recordings?",
