@@ -690,6 +690,71 @@
         "https://space.kakao.com/"
       ],
       "needs_update": "Announced 2026-10-13 with pre-registration only; re-check prices, safety, privacy and regions when the closed beta opens (December 2026)"
+    },
+    {
+      "slug": "eney",
+      "name": "Eney",
+      "vendor": "MacPaw",
+      "channel": "personal",
+      "category": "personal agent (Mac and iPhone)",
+      "launch_date": "2026-10-15",
+      "official_url": "https://eney.ai/",
+      "checked_on": "2026-10-16",
+      "access": {
+        "free_tier": "14-day trial with 10,000 AI credits (ends early if the credits run out); one trial per user and Setapp account",
+        "required_plan_for_agent": "Any AI credits plan (Starter or higher) after the trial",
+        "paid_plans": [
+          {
+            "name": "Starter",
+            "price_usd_month": "14.99",
+            "credits": "10,000 credits / month"
+          },
+          {
+            "name": "Boost",
+            "price_usd_month": "29.99",
+            "credits": "20,000 credits / month"
+          },
+          {
+            "name": "Power",
+            "price_usd_month": "49.99",
+            "credits": "30,000 credits / month"
+          }
+        ],
+        "billing_note": "AI credits subscription through Setapp by MacPaw; renews monthly until cancelled, cancel any time. Unused credits do not roll over. One-off 12-month credit top-ups are also offered",
+        "usage_note": "Simple tasks use few credits, bigger ones more; a Setapp membership also works",
+        "subscription_note": "18+, or 13–17 with a parent's or guardian's approval"
+      },
+      "platforms": {
+        "macos": "M-series Macs, macOS 15+",
+        "ios": "iOS 26+, companion app for Setapp users"
+      },
+      "regions": "unknown",
+      "actions": "turns one request into multi-step work across your Mac and connected apps: drafts and sends email, adds calendar events, finds, edits and converts files and PDFs, tidies Desktop and Downloads, records and transcribes meetings into notes, generates and edits images, trims video, searches the web; proactive suggestions, ready-made and scheduled workflows such as a morning brief or weekly review; Eney Wand works on content where it appears on screen",
+      "connectors_notable": [
+        "Google services (Calendar, Drive, Gmail)",
+        "Slack",
+        "Notion",
+        "Linear",
+        "Jira and Confluence",
+        "Figma",
+        "Dropbox",
+        "Canva"
+      ],
+      "execution": "Native Mac app: device actions such as reading files, running commands and searching your data run locally through Eney's built-in tools. Answers come from cloud AI providers (OpenAI, Anthropic, Google), with the results of those tools sent along when needed; MacPaw says Eney does not currently use a local model to answer requests",
+      "safety": "Accesses your apps and files only with your permission; permissions can be changed in Settings. Proactive suggestions are on by default and can be turned off. MacPaw does not say whether Eney confirms before sending, posting or deleting content in connected services",
+      "privacy": {
+        "training": "Training on Eney data is switched off in MacPaw's accounts with its AI providers; providers may keep requests and outputs for a limited time (OpenAI and Google up to 30 days). Usage data is not used to train third-party models",
+        "delete_data": "Deleting a chat removes it from your devices and hides it; it is permanently deleted from MacPaw's servers when you request data deletion. Memories are stored on your device. Disconnecting a service or deleting your account removes its access token"
+      },
+      "model": "Mac: OpenAI GPT in Fast mode, Anthropic Claude in More thorough mode; iOS: Anthropic Claude; Google for image generation",
+      "sources": [
+        "https://eney.ai/",
+        "https://eney.ai/about",
+        "https://eney.ai/use-cases",
+        "https://macpaw.com/legal/eney-privacy-policy",
+        "https://macpaw.com/legal/eney-terms-of-service",
+        "https://apps.apple.com/us/app/eney-ai-assistant/id6757791741"
+      ]
     }
   ]
 }
