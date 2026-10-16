@@ -34,6 +34,9 @@ const PRICING_OPTIONS: Array<[PricingModel, string]> = [
   ["free_trial", "Free trial"], ["contact_sales", "Contact sales"], ["unknown", "Unknown"],
 ];
 
+type ReviewField = "name" | "tagline" | "description";
+const FIELD_RULES: Array<[ReviewField, string, number]> = [["name", "Enter the tool name.", 2], ["tagline", "Add a short description.", 20], ["description", "Describe what the tool does.", 60]];
+
 function statusLabel(value: string) {
   return value.replaceAll("_", " ");
 }
@@ -49,6 +52,15 @@ function ReviewCard({ item, categories, tags }: { item: ImportItem; categories: 
   const [primaryCategorySlug, setPrimaryCategorySlug] = useState(item.primaryCategorySlug);
   const [categorySlugs, setCategorySlugs] = useState(item.categorySlugs);
   const [tagSlugs, setTagSlugs] = useState(item.tagSlugs);
+  const [checked, setChecked] = useState(false);
+  const values: Record<ReviewField, string> = { name, tagline, description };
+  const problems = Object.fromEntries(FIELD_RULES.map(([field, empty, min]) => {
+    const length = values[field].trim().length;
+    return [field, !length ? empty : length < min ? `Use at least ${min} characters · ${length} so far.` : ""];
+  })) as Record<ReviewField, string>;
+  const problem = (field: ReviewField) => checked ? problems[field] : "";
+  const fieldError = (field: ReviewField) => problem(field) ? <small className={styles.fieldError} id={`${item.id}-${field}-problem`}>{problem(field)}</small> : null;
+  const invalid = (field: ReviewField) => problem(field) ? { "aria-invalid": true, "aria-describedby": `${item.id}-${field}-problem` } : {};
 
   const toggle = (value: string, current: string[], setValue: (next: string[]) => void, max: number) => {
     if (current.includes(value)) setValue(current.filter((itemValue) => itemValue !== value));
@@ -57,6 +69,14 @@ function ReviewCard({ item, categories, tags }: { item: ImportItem; categories: 
 
   async function request(action: "publish" | "reject", event?: FormEvent) {
     event?.preventDefault();
+    if (action === "publish") {
+      setChecked(true);
+      const field = FIELD_RULES.find(([key]) => problems[key])?.[0];
+      if (field) {
+        (event?.currentTarget as HTMLFormElement | undefined)?.querySelector<HTMLElement>(`[name="${field}"]`)?.focus();
+        return;
+      }
+    }
     setBusy(true);
     setError("");
     try {
@@ -109,12 +129,12 @@ function ReviewCard({ item, categories, tags }: { item: ImportItem; categories: 
       {item.errorSummary ? <p className={styles.error}>{item.errorSummary}</p> : null}
 
       {pending ? (
-        <form className={styles.form} onSubmit={(event) => request("publish", event)}>
+        <form className={styles.form} onSubmit={(event) => request("publish", event)} noValidate>
           <div className={styles.fieldGrid}>
-            <label><span>Name</span><input value={name} onChange={(event) => setName(event.target.value)} minLength={2} maxLength={80} required /></label>
+            <label><span>Name</span><input name="name" value={name} onChange={(event) => setName(event.target.value)} maxLength={80} aria-required="true" {...invalid("name")} />{fieldError("name")}</label>
             <label><span>Pricing</span><select value={pricingModel} onChange={(event) => setPricingModel(event.target.value as PricingModel)}>{PRICING_OPTIONS.map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select></label>
-            <label className={styles.wide}><span>Short description</span><input value={tagline} onChange={(event) => setTagline(event.target.value)} minLength={20} maxLength={180} required /></label>
-            <label className={styles.wide}><span>Description</span><textarea value={description} onChange={(event) => setDescription(event.target.value)} minLength={60} maxLength={1_200} rows={4} required /></label>
+            <label className={styles.wide}><span>Short description</span><input name="tagline" value={tagline} onChange={(event) => setTagline(event.target.value)} maxLength={180} aria-required="true" {...invalid("tagline")} />{fieldError("tagline")}</label>
+            <label className={styles.wide}><span>Description</span><textarea name="description" value={description} onChange={(event) => setDescription(event.target.value)} maxLength={1_200} rows={4} aria-required="true" {...invalid("description")} />{fieldError("description")}</label>
             <label><span>Primary group</span><select value={primaryCategorySlug} onChange={(event) => {
               const next = event.target.value;
               setPrimaryCategorySlug(next);

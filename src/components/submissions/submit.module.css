@@ -5,7 +5,7 @@
 .intro h1 { max-width: 720px; margin: 0; font-size: clamp(2.5rem, 6vw, 4.6rem); font-weight: var(--font-weight-display); letter-spacing: -.058em; line-height: .98; }
 .intro > p:last-child { max-width: 650px; margin: var(--space-lg) 0 0; color: var(--color-text-secondary); font-size: var(--font-size-body); line-height: 1.65; }
 .flow { border-top: var(--border-width) solid var(--color-border-strong); }
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; padding: 0; border-bottom: var(--border-width) solid var(--color-border-strong); list-style: none; }
+.steps { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); margin: 0; padding: 0; border-bottom: var(--border-width) solid var(--color-border-strong); list-style: none; }
 .steps li { display: flex; gap: var(--space-sm); padding: var(--space-md); border-right: var(--border-width) solid var(--color-border-subtle); color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: var(--font-size-metadata); text-transform: uppercase; letter-spacing: .06em; }
 .steps li:last-child { border-right: 0; }
 .steps li[aria-current="step"] { color: var(--color-text-primary); background: var(--color-surface-muted); }
@@ -40,7 +40,7 @@
 .fieldGrid label,
 .emailField { position: relative; display: grid; gap: var(--space-xs); }
 .fieldGrid label > span,
-.emailField > span,
+.emailField > span:first-child,
 .choiceField legend { color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: var(--font-size-metadata); text-transform: uppercase; letter-spacing: .06em; }
 .fieldGrid input,
 .fieldGrid textarea,
@@ -51,7 +51,7 @@
 .fieldGrid textarea:focus,
 .fieldGrid select:focus,
 .emailField input:focus { box-shadow: 0 0 0 3px var(--color-focus-ring); }
-.fieldGrid small { position: absolute; right: var(--space-sm); bottom: var(--space-xs); color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: 9px; }
+.fieldGrid small { flex: none; color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: 9px; }
 .wideField { grid-column: 1 / -1; }
 .logoChoices { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-sm); }
 .logoChoices > label { min-height: 160px; display: flex; align-items: center; flex-direction: column; gap: var(--space-sm); padding: var(--space-md); border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-medium); background: var(--color-surface-raised); cursor: pointer; }
@@ -108,7 +108,11 @@
 }
 
 @media (max-width: 560px) {
-  .steps li { align-items: flex-start; flex-direction: column; padding: var(--space-sm); }
+  .steps { display: flex; }
+  .steps li { flex: none; padding: var(--space-sm); }
+  .steps li[aria-current="step"] { flex: 1; }
+  .steps li:not([aria-current="step"]) b { display: none; }
+  .stepActions .publishButton { flex: 1; }
   .urlControl { grid-template-columns: 1fr; }
   .urlControl button { width: 100%; }
   .success { padding: var(--space-2xl) var(--space-lg); }
@@ -144,3 +148,30 @@
 
 span.previewLogo { display: grid; place-items: center; width: 72px; height: 72px; border-radius: var(--radius-tool-mark); background: var(--color-surface-muted); font-family: var(--font-family-metadata); font-weight: var(--font-weight-strong); }
 .profilePreview h2, .profilePreview h3 { font-weight: var(--font-weight-heading); }
+
+.steps b { font-weight: inherit; }
+.steps li[data-done] { color: var(--color-text-secondary); }
+.steps li > button { display: flex; gap: var(--space-sm); padding: 0; border: 0; color: inherit; background: transparent; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.steps li > button:hover b { text-decoration: underline; text-underline-offset: 3px; }
+.steps li > button:focus-visible { border-radius: var(--radius-control); box-shadow: 0 0 0 3px var(--color-focus-ring); }
+.fieldGrid label > .fieldMeta { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2xs) var(--space-md); color: var(--color-text-tertiary); font-family: inherit; font-size: var(--font-size-metadata); letter-spacing: 0; text-transform: none; }
+.fieldSource { display: inline-flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-sm); }
+.fieldSource[data-origin="submitter"] { color: var(--color-text-secondary); }
+.fieldSource a { color: var(--color-text-secondary); text-underline-offset: 3px; }
+.stepBody { min-width: 0; display: grid; align-content: start; gap: var(--space-lg); }
+.stepBody .classificationGroups,
+.stepBody .choiceField { grid-column: auto; margin-top: 0; }
+.subheading { margin: 0; color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: var(--font-size-metadata); font-weight: inherit; letter-spacing: .06em; text-transform: uppercase; }
+.mediaNote { color: var(--color-text-tertiary); font-size: var(--font-size-metadata); }
+.stepActions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--space-sm); margin-top: var(--space-md); padding-top: var(--space-lg); border-top: var(--border-width) solid var(--color-border-subtle); }
+.stepActions .error { flex-basis: 100%; margin: 0; }
+.profilePreview { gap: 0; padding-block: 0 var(--space-2xl); }
+.previewBlock { padding-block: var(--space-xl); border-top: var(--border-width) solid var(--color-border-subtle); }
+.previewBlock:first-child { border-top: 0; padding-top: 0; }
+.profilePreview .previewBlock > header { align-items: center; }
+.previewIdentity { display: flex; align-items: center; gap: var(--space-lg); }
+.previewIdentity h2 { margin: 0 0 var(--space-2xs); }
+.fieldGrid [aria-invalid="true"],
+.emailField [aria-invalid="true"] { border-color: var(--color-danger); }
+.fieldError { display: inline-flex; align-items: center; gap: var(--space-xs); color: var(--color-danger); font-size: var(--font-size-metadata); line-height: var(--line-height-body); }
+.fieldError::before { content: ""; width: 6px; height: 6px; flex: none; border-radius: 50%; background: currentColor; }
