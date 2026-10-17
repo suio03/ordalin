@@ -1,8 +1,8 @@
 import { LOCAL_READ_ONLY_MESSAGE } from "@/lib/local-read-only";
 import { type NextRequest, NextResponse } from "next/server";
 
-// POST routes that only read: the AI visibility checker records nothing locally.
-const localReadOnlyPosts = new Set(["/api/free-tools/ai-visibility"]);
+// POST routes that only read: the free tools record nothing locally.
+const localReadOnlyPosts = new Set(["/api/free-tools/ai-visibility", "/api/free-tools/llms-txt"]);
 
 export function middleware(request: NextRequest) {
   const { hostname, pathname, protocol } = request.nextUrl;

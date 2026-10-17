@@ -30,6 +30,8 @@ export type VisibilityCheck = {
   evidence: string[];
   fix?: string;
   snippet?: string;
+  /** A related Ordalin tool that helps with this check. */
+  link?: { href: string; label: string };
 };
 
 export type CrawlerAccess = {
@@ -283,7 +285,7 @@ function structuredDataCheck(input: VisibilityInput, html: string | null): Visib
 }
 
 function llmsCheck(llms: FetchedResource): VisibilityCheck {
-  const base = { id: "llms-txt", title: "llms.txt (optional)" };
+  const base = { id: "llms-txt", title: "llms.txt (optional)", link: { href: "/free-tools/llms-txt-generator", label: "Generate an llms.txt file" } };
   const body = llms.body?.trim() ?? "";
   const isText = ok(llms.status) && !/^<(?:!doctype|html)/i.test(body) && !(llms.contentType ?? "").includes("html");
   if (!isText) {

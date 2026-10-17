@@ -44,6 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     })),
     { url: `${baseUrl}/free-tools/ai-visibility-checker`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/free-tools/llms-txt-generator`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/about/how-we-review`, changeFrequency: "monthly", priority: 0.4 },
   ];
 

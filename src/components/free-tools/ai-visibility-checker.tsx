@@ -55,6 +55,7 @@ function CheckItem({ check }: { check: VisibilityCheck }) {
             <CopyButton text={check.snippet} />
           </div>
         ) : null}
+        {check.link ? <p><Link href={check.link.href}>{check.link.label}</Link></p> : null}
         {check.evidence.length ? (
           <details className={styles.evidence}>
             <summary>What we found</summary>
