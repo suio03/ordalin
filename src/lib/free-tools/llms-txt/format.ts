@@ -1,3 +1,5 @@
+import { validateLlmsTxt } from "./validate";
+
 /**
  * The llms.txt format from llmstxt.org: an H1 with the site name, an optional
  * blockquote summary, then H2 sections that each hold a list of
@@ -54,22 +56,9 @@ export function renderLlmsTxt(draft: Pick<LlmsDraft, "name" | "summary" | "pages
 
 export type FormatHint = { ok: boolean; text: string };
 
-/** Quick format hints for the edited file; not a full validator. */
+/** Quick hints for the edited file, from the same rules as the llms.txt checker. */
 export function formatHints(text: string): FormatHint[] {
-  const lines = text.split(/\r?\n/);
-  const first = lines.find((line) => line.trim()) ?? "";
-  const links = [...text.matchAll(/^\s*-\s*\[[^\]]*\]\(([^)\s]+)\)/gm)].map((match) => match[1]);
-  const relative = links.filter((url) => !/^https?:\/\//i.test(url));
-  return [
-    { ok: /^# \S/.test(first), text: /^# \S/.test(first) ? "Starts with an H1 site name" : "The first line must be an H1, such as “# Your product”" },
-    { ok: lines.some((line) => /^> \S/.test(line)), text: lines.some((line) => /^> \S/.test(line)) ? "Has a one-line summary" : "Add a “> ” summary line under the H1" },
-    {
-      ok: links.length > 0 && relative.length === 0,
-      text: !links.length
-        ? "No links yet. Add “- [Page name](https://…)” lines under an H2"
-        : relative.length
-          ? `${relative.length} link${relative.length === 1 ? " is" : "s are"} not a full URL`
-          : `${links.length} link${links.length === 1 ? "" : "s"}, all full URLs`,
-    },
-  ];
+  return validateLlmsTxt(text)
+    .filter((check) => ["h1", "summary", "links"].includes(check.id))
+    .map((check) => ({ ok: check.status === "pass", text: check.summary }));
 }

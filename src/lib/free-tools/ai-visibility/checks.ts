@@ -292,10 +292,11 @@ function llmsCheck(llms: FetchedResource): VisibilityCheck {
     return { ...base, status: "info", summary: "No llms.txt. It is an optional proposal, and no AI company has said it uses the file to choose citations.", evidence: [`${llms.url}: ${ok(llms.status) ? "returns an HTML page" : httpLabel(llms)}`] };
   }
   const firstLine = body.split(/\r?\n/).find((line) => line.trim()) ?? "";
+  const check = { href: "/free-tools/llms-txt-checker", label: "Check the full llms.txt format" };
   if (!firstLine.startsWith("# ")) {
-    return { ...base, status: "info", summary: "llms.txt exists but does not start with an H1 (“# Name”), which the proposal requires.", evidence: [`First line: “${firstLine.slice(0, 120)}”`] };
+    return { ...base, link: check, status: "info", summary: "llms.txt exists but does not start with an H1 (“# Name”), which the proposal requires.", evidence: [`First line: “${firstLine.slice(0, 120)}”`] };
   }
-  return { ...base, status: "info", summary: "llms.txt exists and starts with an H1 as the proposal requires.", evidence: [`First line: “${firstLine.slice(0, 120)}”`] };
+  return { ...base, link: check, status: "info", summary: "llms.txt exists and starts with an H1 as the proposal requires.", evidence: [`First line: “${firstLine.slice(0, 120)}”`] };
 }
 
 function sitemapCheck(robots: FetchedResource, sitemap: FetchedResource | null): VisibilityCheck {

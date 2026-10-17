@@ -8,7 +8,7 @@
 const defaultPaths = [
   "/", "/tools", "/tools?page=2", "/tools/granola", "/tools/adant",
   "/tasks", "/collections", "/categories/video", "/submit",
-  "/about/how-we-review", "/free-tools/ai-visibility-checker", "/free-tools/llms-txt-generator", "/search", "/best", "/alternatives", "/compare",
+  "/about/how-we-review", "/free-tools/ai-visibility-checker", "/free-tools/llms-txt-generator", "/free-tools/llms-txt-checker", "/search", "/best", "/alternatives", "/compare",
   "/guides", "/agents", "/agents/meta-muse", "/agents/methodology",
 ];
 const [base = "http://localhost:3000", ...args] = process.argv.slice(2);

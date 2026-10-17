@@ -38,6 +38,7 @@ export async function GET() {
     ...section("Free tools", [
       link("/free-tools/ai-visibility-checker", "AI visibility checker", "Test whether AI search crawlers can reach and read a website"),
       link("/free-tools/llms-txt-generator", "llms.txt generator", "Generate an llms.txt file from a site's sitemap"),
+      link("/free-tools/llms-txt-checker", "llms.txt checker", "Validate an llms.txt file's format, delivery and links"),
     ]),
     ...section("About", [
       link("/about/how-we-review", "How we review", "How tool profiles are researched, checked and kept current"),

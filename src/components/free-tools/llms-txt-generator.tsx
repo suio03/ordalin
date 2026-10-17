@@ -213,7 +213,7 @@ export function LlmsTxtGenerator({ turnstileSiteKey }: { turnstileSiteKey?: stri
                 {hints.map((hint) => <li key={hint.text} data-ok={hint.ok}>{hint.ok ? "✓" : "!"} {hint.text}</li>)}
               </ul>
               <p className={shared.meta}>
-                Upload it so it loads at <code>{draft.website}llms.txt</code>. <a href="#upload">Where to upload llms.txt</a>
+                Upload it so it loads at <code>{draft.website}llms.txt</code>. <a href="#upload">Where to upload llms.txt</a>. Already have a file? <Link href="/free-tools/llms-txt-checker">Check it</Link>.
               </p>
             </div>
           </div>

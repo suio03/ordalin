@@ -31,7 +31,7 @@ export function submissionHashSalt(secret: string | undefined) {
 export async function consumeSubmissionLimit(
   database: D1Database,
   hash: string,
-  action: "enrich" | "publish" | "visibility" | "llms",
+  action: "enrich" | "publish" | "visibility" | "llms" | "llms-check",
   limit: number,
 ) {
   const now = Math.floor(Date.now() / 1000);

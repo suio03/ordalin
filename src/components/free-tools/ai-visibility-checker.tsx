@@ -15,7 +15,7 @@ type Result = {
 };
 
 const statusLabel: Record<CheckStatus, string> = { fail: "Fix", warn: "Improve", pass: "Pass", info: "Note" };
-const statusOrder: Record<CheckStatus, number> = { fail: 0, warn: 1, pass: 2, info: 3 };
+export const statusOrder: Record<CheckStatus, number> = { fail: 0, warn: 1, pass: 2, info: 3 };
 const purposeLabel: Record<CrawlerAccess["purpose"], string> = {
   answers: "AI search and answer crawlers",
   user: "User-triggered fetchers",
@@ -41,7 +41,7 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-function CheckItem({ check }: { check: VisibilityCheck }) {
+export function CheckItem({ check }: { check: VisibilityCheck }) {
   return (
     <li className={styles.check} data-status={check.status}>
       <span className={styles.status}>{statusLabel[check.status]}</span>

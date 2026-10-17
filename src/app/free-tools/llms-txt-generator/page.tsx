@@ -95,6 +95,7 @@ export default function LlmsTxtGeneratorPage() {
             <li><strong>Sections.</strong> Pages are grouped by URL path into Docs, Product, Use cases, Blog and Company, with legal pages under Optional. Up to 30 pages are listed: top-level pages first, a few pages from each folder, and the six newest blog posts.</li>
             <li><strong>Descriptions.</strong> Each link&apos;s note is that page&apos;s own meta description. Pages without one get a plain link for you to describe.</li>
           </ul>
+          <p>Already have an llms.txt file? The <Link href="/free-tools/llms-txt-checker">llms.txt checker</Link> validates its format and tests its links.</p>
           <p>Treat the result as a first draft. The best llms.txt files are short and point to the pages that answer real questions about your product.</p>
         </section>
 

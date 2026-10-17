@@ -53,7 +53,7 @@ function description(html: string) {
   return value ? value.replace(/\s+/g, " ").trim() || null : null;
 }
 
-async function pool<T, R>(items: T[], size: number, run: (item: T) => Promise<R>) {
+export async function pool<T, R>(items: T[], size: number, run: (item: T) => Promise<R>) {
   const results: R[] = new Array(items.length);
   let next = 0;
   await Promise.all(

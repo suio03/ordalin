@@ -82,6 +82,7 @@ export function SiteFooter() {
         { href: "/submit", label: "Submit a tool" },
         { href: "/free-tools/ai-visibility-checker", label: "AI visibility checker" },
         { href: "/free-tools/llms-txt-generator", label: "llms.txt generator" },
+        { href: "/free-tools/llms-txt-checker", label: "llms.txt checker" },
         { href: "https://github.com/suio03/ordalin", label: "GitHub" },
       ],
     },
