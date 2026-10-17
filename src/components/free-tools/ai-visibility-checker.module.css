@@ -80,6 +80,6 @@
   .report { padding: var(--space-lg); }
   .reportHeader,
   .listing { align-items: flex-start; flex-direction: column; }
-  .check { grid-template-columns: 1fr; gap: var(--space-xs); }
+  .check { grid-template-columns: minmax(0, 1fr); gap: var(--space-xs); }
   .status { justify-self: start; }
 }
