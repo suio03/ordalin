@@ -80,6 +80,7 @@ export function SiteFooter() {
       links: [
         { href: "/about/how-we-review", label: "How we review" },
         { href: "/submit", label: "Submit a tool" },
+        { href: "/free-tools/ai-visibility-checker", label: "AI visibility checker" },
         { href: "https://github.com/suio03/ordalin", label: "GitHub" },
       ],
     },

@@ -12,14 +12,22 @@ declare global {
   }
 }
 
-export function TurnstileBox({ siteKey, onToken }: { siteKey?: string; onToken: (token: string) => void }) {
+export function TurnstileBox({
+  siteKey,
+  onToken,
+  action = "submit-tool",
+}: {
+  siteKey?: string;
+  onToken: (token: string) => void;
+  action?: string;
+}) {
   const container = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
   const renderWidget = useCallback(() => {
     if (!siteKey || !container.current || !window.turnstile || widgetId.current) return;
     widgetId.current = window.turnstile.render(container.current, {
       sitekey: siteKey,
-      action: "submit-tool",
+      action,
       appearance: "interaction-only",
       size: "flexible",
       theme: "auto",
@@ -27,7 +35,7 @@ export function TurnstileBox({ siteKey, onToken }: { siteKey?: string; onToken: 
       "expired-callback": () => onToken(""),
       "error-callback": () => onToken(""),
     });
-  }, [onToken, siteKey]);
+  }, [action, onToken, siteKey]);
 
   useEffect(() => {
     if (!siteKey) onToken("development-bypass");

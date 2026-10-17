@@ -3,10 +3,11 @@ import { withSocial } from "@/lib/seo";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { ToolMark } from "@/components/directory/tool-mark";
-import { EditorialCard } from "@/components/editorial/editorial-parts";
+import { EditorialCard, JsonLd } from "@/components/editorial/editorial-parts";
 import { formatPricingModel, modelTagSlug } from "@/lib/catalog";
 import { editorialHref, type EditorialPage } from "@/lib/editorial";
 import { listLiveEditorial } from "@/lib/editorial/load";
+import { appBaseUrl } from "@/lib/editorial/metadata";
 import { pinnedHomepageGuides } from "@/content/editorial";
 import {
   listCategories,
@@ -88,8 +89,37 @@ export default async function Home({ searchParams }: HomeProps) {
   };
   const guides = [...editorial.pages].sort((left, right) => pinRank(left) - pinRank(right)).slice(0, 3);
 
+  const baseUrl = appBaseUrl();
+
   return (
     <main className={styles.main}>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": `${baseUrl}/#organization`,
+              name: "Ordalin",
+              url: `${baseUrl}/`,
+              logo: `${baseUrl}/apple-touch-icon.png`,
+              sameAs: ["https://github.com/suio03/ordalin"],
+            },
+            {
+              "@type": "WebSite",
+              "@id": `${baseUrl}/#website`,
+              name: "Ordalin",
+              url: `${baseUrl}/`,
+              publisher: { "@id": `${baseUrl}/#organization` },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: { "@type": "EntryPoint", urlTemplate: `${baseUrl}/tools?q={search_term_string}` },
+                "query-input": "required name=search_term_string",
+              },
+            },
+          ],
+        }}
+      />
       <section className={styles.hero} aria-labelledby="home-title">
         <div>
           <p className={styles.eyebrow}>AI tool directory</p>

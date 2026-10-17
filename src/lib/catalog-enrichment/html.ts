@@ -19,12 +19,12 @@ function decodeEntities(value: string) {
     .replaceAll("&gt;", ">");
 }
 
-function plainText(value: string) {
+export function plainText(value: string) {
   const content = value.replace(/<(script|style|noscript|svg|template)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, " ").replace(/<!--[\s\S]*?-->/g, " ");
   return decodeEntities(content.replace(/<[^>]+>/g, " ")).replace(SPACE, " ").trim();
 }
 
-function attr(tag: string, name: string) {
+export function attr(tag: string, name: string) {
   const match = new RegExp(`${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "i").exec(tag);
   return decodeEntities(match?.[1] ?? match?.[2] ?? match?.[3] ?? "").trim();
 }
@@ -39,7 +39,7 @@ function absoluteUrl(value: string, pageUrl: string) {
   }
 }
 
-function meta(html: string, key: string) {
+export function meta(html: string, key: string) {
   for (const match of html.matchAll(/<meta\b[^>]*>/gi)) {
     const tag = match[0];
     const identity = attr(tag, "property") || attr(tag, "name");

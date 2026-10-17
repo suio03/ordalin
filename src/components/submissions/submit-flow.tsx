@@ -140,7 +140,7 @@ function FieldSource({ value, original, urls, pages, optional = false }: { value
   );
 }
 
-export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft }: { categories: Category[]; tags: Tag[]; turnstileSiteKey?: string; initialDraft?: Draft }) {
+export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, initialWebsite = "" }: { categories: Category[]; tags: Tag[]; turnstileSiteKey?: string; initialDraft?: Draft; initialWebsite?: string }) {
   const [details, setDetails] = useState<Record<DetailField, string>>({ features: "", pricingDetails: "", useCases: "" });
   const [preparedLogo, setPreparedLogo] = useState<File | null>(null);
   const preparedLogoPreview = useMemo(() => preparedLogo ? URL.createObjectURL(preparedLogo) : null, [preparedLogo]);
@@ -161,7 +161,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft }:
   const imageOperation = useRef(0);
   const screenshotPreview = useMemo(() => screenshot ? URL.createObjectURL(screenshot) : null, [screenshot]);
   useEffect(() => () => { if (screenshotPreview) URL.revokeObjectURL(screenshotPreview); }, [screenshotPreview]);
-  const [websiteUrl, setWebsiteUrl] = useState("");
+  const [websiteUrl, setWebsiteUrl] = useState(initialWebsite);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [existingTool, setExistingTool] = useState<ExistingTool | null>(null);
   const [busy, setBusy] = useState(false);

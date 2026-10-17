@@ -16,7 +16,8 @@ export const metadata: Metadata = withSocial({
   description: "Check, confirm, and submit a new AI tool to Ordalin.",
 });
 
-export default async function SubmitPage() {
+export default async function SubmitPage({ searchParams }: { searchParams: Promise<{ website?: string | string[] }> }) {
+  const { website } = await searchParams;
   const [categories, tags] = await Promise.all([
     listSubmissionCategoryGroups(),
     listSubmissionTags(),
@@ -35,6 +36,7 @@ export default async function SubmitPage() {
         categories={categories.map(({ slug, name, description }) => ({ slug, name, description }))}
         tags={tags}
         turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+        initialWebsite={typeof website === "string" ? website.slice(0, 2_048) : ""}
         initialDraft={process.env.NODE_ENV === "development" ? previewDraft(categories, tags) : undefined}
       />
     </main>

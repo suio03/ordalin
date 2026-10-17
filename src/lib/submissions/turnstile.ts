@@ -11,10 +11,11 @@ export async function verifyTurnstile(
   token: string,
   remoteAddress: string,
   secret: string | undefined,
+  action = "submit-tool",
 ) {
   if (!secret) {
     if (process.env.NODE_ENV !== "production" && token === "development-bypass") {
-      return { success: true, action: "submit-tool", hostname: "localhost" };
+      return { success: true, action, hostname: "localhost" };
     }
     throw new SubmissionError("Submission protection is not configured.", 503, "turnstile_unavailable");
   }
@@ -31,7 +32,7 @@ export async function verifyTurnstile(
   });
   if (!response.ok) throw new SubmissionError("Verification service is unavailable.", 503, "turnstile_unavailable");
   const result = (await response.json()) as TurnstileResult;
-  if (!result.success || (result.action && result.action !== "submit-tool")) {
+  if (!result.success || (result.action && result.action !== action)) {
     throw new SubmissionError("Verification expired or failed. Please try again.", 400, "turnstile_failed");
   }
   return result;
