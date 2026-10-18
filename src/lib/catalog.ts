@@ -60,6 +60,7 @@ type TitleTag = { kind: string; name: string; groupSlug: string | null };
 const titleUseOverrides: Record<string, string> = {
   "artcraft": "Image generation",
   "flux-3": "Video generation",
+  "inbox-zero": "Email assistant",
   "yue2-studio": "Music generation",
 };
 
