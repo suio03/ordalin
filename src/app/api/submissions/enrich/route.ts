@@ -7,6 +7,7 @@ import { loadCatalogTaxonomy } from "@/lib/catalog-analysis/taxonomy";
 import { enrichCatalogSite } from "@/lib/catalog-enrichment/enrich";
 import { knownToolError, SubmissionError, submissionErrorResponse, type KnownTool } from "@/lib/submissions/http";
 import { actorHash, clientAddress, consumeSubmissionLimit, submissionHashSalt } from "@/lib/submissions/request";
+import { verifyTurnstile } from "@/lib/submissions/turnstile";
 import { canonicalWebsite } from "@/lib/submissions/validation";
 
 export const dynamic = "force-dynamic";
@@ -15,27 +16,31 @@ export async function POST(request: Request) {
   try {
     const length = Number(request.headers.get("content-length") ?? 0);
     if (length > 8_192) throw new SubmissionError("Request is too large.", 413, "request_too_large");
-    let body: { websiteUrl?: unknown };
+    let body: { websiteUrl?: unknown; turnstileToken?: unknown };
     try {
-      body = (await request.json()) as { websiteUrl?: unknown };
+      body = (await request.json()) as typeof body;
     } catch {
       throw new SubmissionError("Enter a valid HTTPS website.", 400, "invalid_website");
     }
     if (typeof body.websiteUrl !== "string" || body.websiteUrl.length > 2_048) {
       throw new SubmissionError("Enter a valid HTTPS website.", 400, "invalid_website");
     }
+    if (typeof body.turnstileToken !== "string" || body.turnstileToken.length > 4_096) {
+      throw new SubmissionError("Verification expired or failed. Please try again.", 400, "turnstile_failed");
+    }
     const requested = canonicalWebsite(body.websiteUrl);
     const env = await getCloudflareEnv();
     const runtimeEnv = env as CloudflareEnv & {
       SUBMISSION_HASH_SALT?: string;
+      TURNSTILE_SECRET_KEY?: string;
       OPENAI_API_KEY?: string;
       OPENAI_ANALYSIS_MODEL?: string;
     };
-    const hash = await actorHash(
-      clientAddress(request),
-      submissionHashSalt(runtimeEnv.SUBMISSION_HASH_SALT),
-    );
+    const address = clientAddress(request);
+    const hash = await actorHash(address, submissionHashSalt(runtimeEnv.SUBMISSION_HASH_SALT));
     await consumeSubmissionLimit(env.DB, hash, "enrich", 10);
+    // Each check crawls the site and calls OpenAI, so it needs its own verification.
+    await verifyTurnstile(body.turnstileToken, address, runtimeEnv.TURNSTILE_SECRET_KEY, "submit-enrich");
 
     const duplicate = await env.DB
       .prepare("SELECT slug, name, status FROM tools WHERE canonical_domain = ? LIMIT 1")

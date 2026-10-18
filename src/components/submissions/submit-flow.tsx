@@ -211,6 +211,9 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
   ], [tags]);
   useEffect(() => () => { if (uploadPreview) URL.revokeObjectURL(uploadPreview); }, [uploadPreview]);
   const handleToken = useCallback((token: string) => setTurnstileToken(token), []);
+  const [checkToken, setCheckToken] = useState("");
+  const [checkVersion, setCheckVersion] = useState(0);
+  const handleCheckToken = useCallback((token: string) => setCheckToken(token), []);
 
   async function captureScreenshot(draftId: string) {
     const operation = ++imageOperation.current;
@@ -271,10 +274,11 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
   async function checkWebsite(event: FormEvent) {
     event.preventDefault(); setError(""); setExistingTool(null);
     if (!websiteUrl.trim()) { setError("Enter your product's website, like your-product.com."); return; }
+    if (!checkToken) { setError("Verification is still loading. Try again in a moment."); return; }
     setBusy(true);
     try {
       const value = await responseJson(await fetch("/api/submissions/enrich", {
-        method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ websiteUrl }),
+        method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ websiteUrl, turnstileToken: checkToken }),
       }));
       trackEvent("Submission Started");
       applyDraft(value as unknown as Draft, true);
@@ -282,7 +286,10 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
       const value = caught as { code?: string; existingTool?: ExistingTool };
       if (value.code === "duplicate_domain" && value.existingTool) setExistingTool(value.existingTool);
       setError(messageFrom(caught));
-    } finally { setBusy(false); }
+    } finally {
+      // Turnstile tokens are single-use; mount a fresh widget for the next check.
+      setCheckToken(""); setCheckVersion((version) => version + 1); setBusy(false);
+    }
   }
 
   function toggleTag(slug: string) {
@@ -421,6 +428,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
               <input id="website" type="text" inputMode="url" autoComplete="url" autoCapitalize="none" spellCheck={false} placeholder="your-product.com" value={websiteUrl} onChange={(event) => setWebsiteUrl(event.target.value)} aria-invalid={error ? true : undefined} aria-describedby={error ? "website-error" : undefined} />
               <button type="submit" disabled={busy}>{busy ? "Checking…" : "Check website →"}</button>
             </div>
+            <TurnstileBox key={checkVersion} siteKey={turnstileSiteKey} onToken={handleCheckToken} action="submit-enrich" />
             {error ? <div id="website-error" className={styles.error} role="alert">{error}{existingTool ? <Link href={`/tools/${existingTool.slug}`}>View {existingTool.name} →</Link> : null}</div> : null}
           </form>
           <div className={styles.stageNotes}>
