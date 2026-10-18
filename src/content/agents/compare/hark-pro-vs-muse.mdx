@@ -1,0 +1,89 @@
+export const meta = {
+  title: "Hark Pro vs Meta Muse (2026): Price, Features, Privacy",
+  description:
+    "Both are free with $20 and $100 plans. Muse adds a Mac app and WhatsApp but uses chats for training by default; Hark Pro doesn't. Official facts, dated.",
+  subtitle:
+    "Two cloud agents that cost the same: free, then $20 or $100 a month. They differ in where you can use them, what they connect to and what happens to your data. Facts from Hark's and Meta's own pages, checked October 18, 2026.",
+  verdict:
+    "Price won't decide it: both are free with a usage cap, then $20 or $100 a month. Pick Muse if you're in the US and want it on your Mac or in WhatsApp; pick Hark Pro if you'd rather your data never trains AI models, with no setting to change.",
+  picks: [
+    [
+      "You don't want your chats used to train AI models. Hark's privacy policy rules it out, and there's nothing to switch off.",
+      "Your email and calendar are in Google Workspace or Microsoft 365, which Hark connects to directly.",
+      "You want suggested one-tap actions (pay a bill, cancel a subscription) and small custom Panels on a home screen.",
+    ],
+    [
+      "You're in the US, where Meta is rolling Muse out.",
+      "You want an agent on your Mac that can sort your files and read iMessage, Notes and Calendar, or one you can message in WhatsApp.",
+      "You want a published allowance: 500M Muse tokens a week on Power and 3B on Max. Hark only says 2× and 10× its free cap.",
+    ],
+  ],
+  faq: [
+    {
+      q: "Which is cheaper, Hark Pro or Meta Muse?",
+      a: "Neither. Both are free with a usage cap, and both have paid plans at $20 and $100 a month. Muse publishes its weekly allowance (500M Muse tokens on Power, 3B on Max); Hark says Pro² gives 2× and Pro³ 10× the free usage but doesn't publish the free cap. Hark also offers optional auto top-up with an amount and ceiling you set.",
+    },
+    {
+      q: "Does Hark Pro or Muse train AI models on my data?",
+      a: "Hark: no. Its privacy policy (updated October 1, 2026) says your inputs, outputs, memory, connected account data and sandbox data are not used for training, with no opt-out needed. Muse: yes, by default. Meta's help page says the Help improve our AI models setting is on when you first use Muse; turning it off in Settings → Data controls also covers past interactions.",
+    },
+    {
+      q: "Can I use Hark Pro or Muse outside the US?",
+      a: "Meta says Muse is rolling out in the US and its subscriptions aren't available in all locations yet. Hark's launch post says Hark Pro is available to everyone, but Hark doesn't publish a country list. Its terms charge in the currency shown at checkout.",
+    },
+    {
+      q: "Do they work on a computer, or only on the phone?",
+      a: "Both run on iOS, Android and the web, and both do browser tasks on a cloud computer of their own. Muse also has a Mac app that, with macOS permissions you grant, can find and organize your files and read apps such as iMessage, Notes, Reminders, Email and Calendar. Hark lists only iOS, Android and the web.",
+    },
+    {
+      q: "Will they buy things or send messages without asking?",
+      a: "Not by default. Muse checks with you before sensitive actions such as sending an email or making a purchase, and a separate Sentinel agent must approve anything that reaches the internet. Hark asks before it spends your money or sends a message, unless you've given it standing permission for that kind of task.",
+    },
+    {
+      q: "How do they handle my passwords and cards?",
+      a: "Muse keeps credentials in secure storage it can use but not see, and pays through Link by Stripe, which issues a one-time card; Meta says Shop Pay and 1Password support are coming soon. Hark stores passwords and cards in an encrypted vault called Secured by Hark and fills them in only on the page that needs them.",
+    },
+  ],
+};
+
+## Price
+
+The plans line up almost exactly. Both are **free with a usage cap**, and both charge **$20 a month** and **$100 a month** for more.
+
+Meta publishes what each Muse plan buys: **Power ($20/mo) gives 500M Muse tokens a week** and **Max ($100/mo) gives 3B**. The free limit isn't published, and Meta says Muse subscriptions are still in limited testing.
+
+Hark describes its plans relative to the free tier: **Hark Pro² ($20/mo) gives 2× the usage** and **Hark Pro³ ($100/mo) gives 10×**. Every feature is in every plan, including the free one. The free cap itself isn't published. Optional **auto top-up** buys more usage when you run low, up to a ceiling you set.
+
+**Bottom line:** same prices. Muse tells you more precisely what you're paying for.
+
+## What each can do
+
+Both work through a single ongoing chat, remember what you tell them and do web tasks on a cloud computer of their own.
+
+Hark's computer is called **Handoff**; Hark says it can run up to six browsers at once. Around the chat, Hark adds **Action Buttons** (suggested tasks you approve with one tap, such as paying a bill), **Panels** (small apps it builds on your Home screen, for example from Strava or Venmo data), **Projects** for long-running topics and **Specialties** for workflows it repeats. It connects directly to **Google Workspace and Microsoft 365**.
+
+Muse runs in a **Muse Secure VM**. Meta pitches it at errands and bigger goals: booking travel, filling in forms, negotiating, and a **Goals** tab where it tracks your progress and checks in. At checkout it uses **Link by Stripe**, which generates a one-time card and adds Link's purchase protections.
+
+**Bottom line:** Hark builds more of its own interface around the chat; Muse leans on goals and protected checkout.
+
+## Where you use it
+
+Both run on **iOS, Android and the web**.
+
+Muse also works in **WhatsApp**, and its **Mac app** can, with macOS permissions you grant, find and organize your files and read apps such as iMessage, Notes, Reminders and Calendar. Before an important action, such as sending an email or making a purchase, it asks you to confirm. AI glasses support is "coming soon."
+
+Hark lists only iOS, Android and the web. It says it will release its first hardware in 2027.
+
+## Safety and privacy
+
+**Approvals.** Muse checks with you before sensitive actions like sending an email or making a purchase, and keeps an audit trail of what it did. A separate **Sentinel** agent on the same VM must approve anything that reaches the internet. Hark asks before it spends money or sends a message on your behalf, unless you've given it standing permission for that kind of task, and you can watch its browser and cancel.
+
+**Training.** This is the clearest difference. Hark's privacy policy says your data is **not used to train AI models**, and no opt-out is needed. Muse's **Help improve our AI models** setting is **on by default**; turn it off under Settings → Data controls, and the change also covers your past interactions. Meta says Muse doesn't share your conversations or VM data with its ad systems. For more on Muse, see [is Meta Muse safe](/agents/safety/meta-muse).
+
+**Deleting data.** Ask either one to forget something. **Reset Muse** in Data controls permanently deletes everything, and you can download your Muse data first. Hark's account deletion is under Settings → Profile.
+
+Meta has announced a **Muse Confidential VM**, encrypted with a key only you hold, for later in 2026. It isn't live yet.
+
+## Availability
+
+Muse: **rolling out in the US**, with subscriptions not yet available in every location. Hark Pro: Hark says it is available to everyone, but it doesn't publish a country list. Hark requires you to be 18 to use it; Muse requires 18 to subscribe.

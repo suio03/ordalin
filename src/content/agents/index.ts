@@ -12,6 +12,7 @@ export const REGISTRY: AgentsRegistry = {
     "muse-vs-dots": { sides: ["meta-muse","chatgpt-dots"], load: () => import("./compare/muse-vs-dots.mdx") },
     "muse-vs-dots-vs-grok-bot": { sides: ["meta-muse","chatgpt-dots","grok-bot"], load: () => import("./compare/muse-vs-dots-vs-grok-bot.mdx") },
     "muse-vs-dots-vs-gemini-spark": { sides: ["meta-muse","chatgpt-dots","gemini-spark"], load: () => import("./compare/muse-vs-dots-vs-gemini-spark.mdx") },
+    "hark-pro-vs-muse": { sides: ["hark-pro","meta-muse"], load: () => import("./compare/hark-pro-vs-muse.mdx") },
   },
   agentPages: {
     "airtap": () => import("./agents/airtap.mdx"),

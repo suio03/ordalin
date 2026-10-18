@@ -36,6 +36,8 @@ export default async function ComparePage({ params }: Props) {
   const names = agents.map(displayName);
   const sources = [...new Set(agents.flatMap((a) => a.sources))];
   const three = agents.length > 2;
+  // The page is only as fresh as its least recently checked side.
+  const checkedOn = agents.map((a) => a.checked_on ?? CHECKED_ON).sort()[0];
 
   // Next reads: each side's own page, related comparisons, then pricing and alternatives pages.
   const cards: Card[] = [
@@ -71,7 +73,7 @@ export default async function ComparePage({ params }: Props) {
               </h1>
               <p className="max-w-[760px] text-[17px] leading-normal text-ink-2 md:text-[19px]">{meta.subtitle}</p>
             </div>
-            <Checked on={CHECKED_ON}>
+            <Checked on={checkedOn}>
               <div>{sources.length} official sources</div>
             </Checked>
           </div>
@@ -141,7 +143,7 @@ export default async function ComparePage({ params }: Props) {
           "@type": "WebPage",
           name: meta.title,
           url: absoluteUrl(`/agents/compare/${pair}`),
-          dateModified: CHECKED_ON,
+          dateModified: checkedOn,
           about: agents.map((a) => ({
             "@type": "SoftwareApplication",
             name: displayName(a),

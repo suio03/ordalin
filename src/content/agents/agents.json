@@ -10,6 +10,7 @@
       "category": "personal agent",
       "launch_date": "2026-09-08",
       "official_url": "https://muse.ai",
+      "checked_on": "2026-10-18",
       "access": {
         "free_tier": "yes — free with a usage limit that refreshes (limit not stated officially)",
         "paid_plans": [
@@ -34,17 +35,20 @@
         "macos": true,
         "glasses": "coming soon"
       },
+      "messaging": [
+        "WhatsApp"
+      ],
       "regions": "US (rolling out)",
       "actions": "browse web, fill forms, send email, book travel, purchases, negotiate on user's behalf",
       "connectors_notable": [
         "Link (Stripe)",
-        "Shop Pay",
-        "1Password"
+        "Shop Pay (coming soon)",
+        "1Password (coming soon)"
       ],
       "execution": "Muse Secure VM — dedicated cloud VM holding agent + user data; Sentinel agent must approve anything that reaches the internet",
       "safety": "Checks with the person before sensitive actions like sending an email or making a purchase; approval modes: Ask for some actions (every write and important read) or Always ask",
       "privacy": {
-        "training": "Users can opt out of interactions being used to train Meta's models",
+        "training": "On by default: interactions can be used to train Meta's models until you turn off Help improve our AI models (Settings → Data controls); turning it off also covers past interactions",
         "confidential_compute": "Muse Confidential VM, user-held key — announced for later in 2026 (not live)",
         "delete_data": "Delete single messages, side chats and files; Reset Muse permanently deletes everything, including chat history; deleting the Meta account deletes Muse data"
       },
@@ -485,7 +489,7 @@
       "category": "personal agent",
       "launch_date": "2026-10-06",
       "official_url": "https://hark.com/",
-      "checked_on": "2026-10-07",
+      "checked_on": "2026-10-18",
       "catalogue_slug": "hark",
       "access": {
         "free_tier": "yes — all features included, with a usage cap; exact allowance and reset schedule not publicly stated",
@@ -521,7 +525,7 @@
       "execution": "Handoff runs on a cloud computer; Hark's launch article says up to six browsers at once",
       "safety": "By default asks before spending money or sending communications, unless you grant standing permission; watch and cancel browser actions; scheduled tasks can be paused or cancelled",
       "privacy": {
-        "training": "Terms permit content use for improvement and development; safety/compliance training and quality assurance may continue after opt-out. Third-party model providers may not train on your content",
+        "training": "Privacy policy (updated 2026-10-01): inputs, outputs, memory, connected account data and sandbox data are not used to train AI models; no opt-out needed. AI providers are contractually barred from training on your data",
         "delete_data": "Ask Hark to review, edit or delete memories. Delete Account in Settings → Profile; legal and security retention exceptions apply"
       },
       "model": "Handoff for computer use; full model lineup not stated",
