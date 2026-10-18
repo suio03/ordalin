@@ -103,6 +103,8 @@ Architecture:
 | /new | Permanent redirect to /tools | Redirect |
 | /guides | Evidence-led guide index | Noindex while empty; index when guides exist |
 | /guides/[slug] | One static MDX decision guide | Index when published |
+| /skills | Agent skill hub (see "Agent skills" below) | Noindex until three skill pages are published |
+| /skills/[slug] | One agent skill, with Ordalin's own test run | Index when published |
 | /collections | Curated collection index | Index |
 | /collections/[slug] | Editorial tool collection | Index |
 | /search?q= | Search and filters | Noindex, follow |
@@ -115,6 +117,28 @@ Filter parameters must not create indexable URL combinations. Categories, tasks,
 collections and editorial pages are the controlled SEO landing pages. Old homepage
 catalogue URLs (`/?q=`, `category`, `pricing`, `sort`, `page`) permanently redirect
 to the same query on `/tools`.
+
+### Agent skills
+
+Approved 2026-10-18 to reach creators who already use AI chatbots or agents,
+beyond tool founders. A skill is a reusable instruction package for an agent
+such as Claude Code or Codex (for example writing without an AI tone, or making
+a short film in code).
+
+- Source: `src/content/skills/`, mirroring `/agents`: a `skills.json` fact file
+  plus one MDX page per skill, registered in an index and covered by tests.
+- Facts come only from the skill's own repository or site: author, repository,
+  licence, supported agents, install steps, the language it writes in, and what
+  it produces. Unknown fields render as "Not stated".
+- Every page carries Ordalin's own test: the input, the agent and model used,
+  the date and the real output. A README alone is not enough to publish.
+- Pages are English only, including test samples (no Chinese text). Link the
+  skill's repository once, at the bottom of the page.
+- Third-party prompts, videos and demo output are linked and credited, never
+  copied. Do not rank skills by GitHub stars or show other engagement counts.
+- Neutral coverage: list skills from any author, including competitors' own.
+- New pages start as `status: "draft"`; only the maintainer publishes them.
+  The hub gets a navigation entry once three pages are published.
 
 ## 4. Homepage and catalogue contract
 

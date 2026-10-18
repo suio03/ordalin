@@ -1,0 +1,110 @@
+export const meta = {
+  title: "Human Writing Skill Tested on English: Does It Remove the AI Tone?",
+  description:
+    "Human Writing is a free MIT agent skill for plainer, human-sounding prose. Its rules target Chinese, so we tested it on an English draft. See both outputs.",
+  summary:
+    "Human Writing is a free, MIT-licensed agent skill by KKKKhazix for writing and revising prose so it sounds like a person talking. It asks the agent to check it has real material first, then cuts report-speak, colons, dashes, “not X but Y” turns and stock phrases, and varies sentence length. Its rules and checker are written for Chinese, so we tested whether they carry over to English: one AI-sounding English draft, rewritten by the same model with and without the skill.",
+  bestFor: [
+    "Blog posts and answers that read like a template",
+    "People who already have the facts and want them told plainly",
+    "Anyone tired of colons, dashes and “not just X, it’s Y” lines",
+  ],
+  notFor: [
+    "English users who want the checker script; it only reads Chinese",
+    "Drafts with no real material; the skill asks for more or writes shorter",
+    "Strict fact-keeping without a final read; our test run still added small claims",
+  ],
+  test: {
+    date: "2026-10-18",
+    agent: "Claude Code, headless (claude -p)",
+    model: "claude-opus-5-5",
+    commit: "4fda173",
+    task: "Rewrite draft.md as a short post for my personal blog, so it reads like me telling the story of these three weeks. Use only the facts already in the draft; do not invent new numbers or experiences. Output only the rewritten post, with no explanation.",
+    samples: [
+      {
+        label: "Input draft",
+        note: "Written by us in a deliberately AI-like style. 193 words.",
+        text: `In today's fast-paced world, time management has become a topic none of us can ignore. I tried the Pomodoro Technique for three full weeks, and it was a truly transformative journey.
+
+Firstly, the Pomodoro Technique isn't just a timer — it's a whole new mindset. Twenty-five minutes of focus followed by a five-minute break may seem simple, but it holds profound wisdom. In week one, I averaged only 4 pomodoros a day, constantly interrupted by WeChat messages.
+
+Secondly, I discovered that the importance of environment cannot be overstated. In week two, I moved my phone to another room, and my daily count rose to 7. This change was nothing short of a game-changer — it made me truly appreciate the value of focus.
+
+Finally, it's worth noting that the Pomodoro Technique is not a one-size-fits-all solution. In week three, while writing my weekly report, I found that 25 minutes was too short for tasks that require deep thinking, so I extended my sessions to 50 minutes.
+
+In conclusion, the Pomodoro Technique is a key that unlocks the door to productivity. With persistence, anyone can find their own rhythm and unlock their full potential.`,
+      },
+      {
+        label: "With the skill",
+        note: "150 words. No colons, dashes or headings.",
+        text: `For three weeks I worked in pomodoros. You focus for twenty-five minutes, take a five-minute break, and start the next one.
+
+The first week went badly. I averaged four pomodoros a day, and WeChat messages kept interrupting me.
+
+In week two I put my phone in another room. That was the only change I made, and my daily count went up to seven. I didn't expect one small move to make that much difference. It showed me how much of my focus problem was really the phone sitting next to me.
+
+Week three brought a different problem. I was writing my weekly report, and twenty-five minutes was too short for work that needs deep thinking. So for that kind of task I started doing 50-minute sessions.
+
+After three weeks I still use the timer. For most work I use the standard length, and for harder thinking I use longer sessions.`,
+      },
+      {
+        label: "Same model, no skill",
+        note: "161 words. Four colons and bold section headings.",
+        text: `Three weeks of Pomodoro
+
+For three weeks I worked in pomodoros: 25 minutes of focus, then a 5-minute break. Here's how it went.
+
+**Week one: 4 a day**
+
+I averaged 4 pomodoros a day, and WeChat was the reason it wasn't more. A message would come in and I'd check it. The timer kept running, but my focus didn't.
+
+**Week two: 7 a day**
+
+So I put my phone in another room. My daily count went up to 7. I didn't get any better at concentrating. The thing that kept interrupting me just wasn't within reach anymore.
+
+**Week three: 25 minutes wasn't enough**
+
+That week I was writing my weekly report. That kind of work takes real thinking, and 25 minutes kept ending just as I got going. I switched to 50-minute sessions.
+
+**What I'm keeping**
+
+The timer helps. What made the biggest difference was keeping the phone out of the room and changing the session length to fit the work.`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What does the Human Writing skill do?",
+      a: "It tells an agent how to write and revise prose so it reads like a specific person talking. Before writing, the agent checks that it has enough real material, and it researches, asks or writes shorter when it does not. After the first draft it cuts repeated explanations, varies sentence length and removes colons, dashes, “not X but Y” turns and common AI jargon.",
+    },
+    {
+      q: "Does it work in English?",
+      a: "Partly. Its rules and examples are written in Chinese, but in our English test the model still followed the main ones: no colons, no dashes, no headings and plain sentences. The included checker script does not help in English; it stops with a message that it found no Chinese characters.",
+    },
+    {
+      q: "How do I install it?",
+      a: "The README suggests sending your agent one line asking it to install the skill from https://github.com/KKKKhazix/human-writing. If your agent cannot do that, copy the human-writing folder from the repository or its latest release into ~/.agents/skills/ and keep the folder name. In Claude Code, a project-level copy in .claude/skills/human-writing also works; that is how we tested it.",
+    },
+    {
+      q: "Can I use it in ChatGPT without installing anything?",
+      a: "Yes. The repository includes dist/human-writing-lite.md, a short version with the five rules its author considers most effective. You paste it after your writing request in ChatGPT or a similar chat app. It is written in Chinese, so English users may want to translate it first; we have not tested the lite version.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes. It is open source under the MIT licence. You still pay for whatever AI agent or chat app you run it in.",
+    },
+  ],
+};
+
+## What we tested
+
+We wrote a short English post about three weeks with the Pomodoro Technique in the style people call “AI-sounding”: a sweeping opening line, a Firstly/Secondly/Finally skeleton, an “isn't just X, it's Y” turn, two dashes, “game-changer” and an uplifting last line. We asked Claude Code to rewrite it as a personal blog post, keeping only the facts already in the draft. One run loaded the skill; the other used the same model and the same request without it. We also ran the skill's own `check_prose.py` on all three texts.
+
+## What we found
+
+- **Both versions kept every number.** Four sessions a day in week one, seven after the phone left the room, 50-minute sessions for the weekly report.
+- **The Chinese rules carried over to English.** The skill version had no colons, no dashes and no headings, and its sentences ran from short to long. The version without the skill turned the post into four bold sections and used four colons.
+- **Both added things the draft does not say, the version without the skill more so.** With the skill, the model claimed the phone was “the only change I made” and that the writer still uses the timer. Without it, the model invented small scenes, such as the timer running while focus did not, and the 25 minutes ending “just as I got going”.
+- **The checker does not work in English.** On all three texts it stopped with a message that it found no Chinese characters, so in English you check the result by reading it.
+
+On a strong model the gain was real but moderate: the draft's clichés were gone in both versions, and the skill mainly added a plainer shape and slightly better restraint. One short rewrite is a small test. We have not yet tried long articles or weaker models, where the skill's material check and revision passes would have more to do.

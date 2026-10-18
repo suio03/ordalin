@@ -9,6 +9,7 @@ import {
 } from "@/lib/editorial";
 import { allAgentsPaths } from "@/lib/agents/content";
 import { allAgents, CHECKED_ON } from "@/lib/agents/data";
+import { allSkills, allSkillsPaths } from "@/lib/skills/data";
 import { indexableModelsMinimum, modelTagSlug } from "@/lib/catalog";
 import { listPublishedToolSlugs, listPublishedTools, listSitemapEntries } from "@/lib/repositories/catalog";
 
@@ -59,9 +60,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // Agent skill pages: published only; the hub joins once enough are published.
+  const skillDates = new Map(allSkills().map((skill) => [`/skills/${skill.slug}`, skill.checked_on]));
+  const skills: MetadataRoute.Sitemap = allSkillsPaths().map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: skillDates.get(path),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
   return [
     ...fixed,
     ...agents,
+    ...skills,
     ...entries.tools.map((entry) => ({
       url: `${baseUrl}/tools/${entry.slug}`,
       lastModified: new Date(entry.updated_at * 1000),
