@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Homepage footer slot for partner and directory links, filled by the footer links Worker.
+
 ## [0.5.0] - 2026-08-27
 
 ### Added

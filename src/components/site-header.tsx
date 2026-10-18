@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { editorialHref, listEditorialPages } from "@/lib/editorial";
+import HomePartners from "./home-partners";
 import { MobileMenu } from "./mobile-menu";
 import { ThemeSelector } from "./theme-selector";
 import styles from "./site-shell.module.css";
@@ -106,6 +107,7 @@ export function SiteFooter() {
           </nav>
         ))}
       </div>
+      <HomePartners />
       <span>Ordalin · Ordered discovery for AI tools · No paid placement</span>
     </footer>
   );
