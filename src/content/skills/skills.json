@@ -25,6 +25,19 @@
       "language": "Style names in English or Chinese; on-screen text in the language you ask for",
       "produces": "Short films rendered in code (1920×1080 at 24 fps by default) in one of 51 styles, with an original score, sound effects, subtitles and optional text-to-speech narration",
       "checked_on": "2026-10-19"
+    },
+    {
+      "slug": "humanizer",
+      "name": "Humanizer",
+      "author": "blader",
+      "repo": "https://github.com/blader/humanizer",
+      "license": "MIT",
+      "version": "3.1.0",
+      "agents": "Claude Code (as a plugin), Codex, Claude.ai and Claude Desktop (upload the repository ZIP as a skill), and the other agents the Skills CLI supports, such as Gemini CLI, GitHub Copilot and Windsurf",
+      "install": "In Claude Code run /plugin marketplace add blader/humanizer, then /plugin install humanizer@humanizer; for other agents run npx skills add blader/humanizer --global with the agent name; in Claude.ai, upload the repository ZIP as a skill",
+      "language": "English; its patterns and examples are all English",
+      "produces": "A rewrite of your text with AI writing patterns removed and the facts kept; for pasted text it also shows a first draft and the patterns still left in it, and for a file it edits only the prose",
+      "checked_on": "2026-10-19"
     }
   ]
 }

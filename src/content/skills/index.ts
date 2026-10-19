@@ -9,5 +9,6 @@ export const REGISTRY: SkillsRegistry = {
   skills: {
     "human-writing": { status: "published", load: () => import("./skills/human-writing.mdx") },
     "lemo-opuscar": { status: "published", load: () => import("./skills/lemo-opuscar.mdx") },
+    humanizer: { status: "published", load: () => import("./skills/humanizer.mdx") },
   },
 };

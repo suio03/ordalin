@@ -1,0 +1,152 @@
+export const meta = {
+  title: "Humanizer Skill Tested: Does It Remove the AI Tone Without Making Things Up?",
+  description:
+    "Humanizer is a free MIT agent skill that rewrites AI-sounding English using Wikipedia's Signs of AI writing. We ran it on one draft, with and without the skill.",
+  summary:
+    "Humanizer is a free, MIT-licensed agent skill by blader that rewrites AI-sounding text so it reads like a person wrote it, without changing what it says. It checks for 26 patterns taken from Wikipedia’s “Signs of AI writing” guide, such as “not X but Y” lines, one-line closers, forced lists of three and bold labels, and it must not add facts the text does not contain. We gave the same AI-sounding English post to the same model twice, once with the skill and once without.",
+  bestFor: [
+    "Posts, emails and announcements that came out of a chatbot sounding like one",
+    "People who want the facts kept exactly and nothing new made up",
+    "Claude.ai and Claude Desktop users; the skill uploads as a ZIP with no terminal",
+  ],
+  notFor: [
+    "Getting past AI detectors; the author says that is not a goal and detectors still flag most of its output",
+    "A quick one-line answer; for pasted text it replies with a draft, a self-check and a final version",
+    "Writing in languages other than English; its patterns and examples are all English, and we tested only English",
+  ],
+  howItWorks: [
+    {
+      title: "One file of rules",
+      text: "The whole skill is a single SKILL.md file. It lists 26 patterns, strongest first, each with what to watch for, why it sounds artificial and a before-and-after example. The list follows Wikipedia’s “Signs of AI writing” guide.",
+    },
+    {
+      title: "Four passes",
+      text: "The agent marks every pattern it finds, drafts a rewrite, checks the draft for leftover patterns and for any fact it added or dropped, then writes the final version.",
+    },
+    {
+      title: "No made-up details",
+      text: "A name, number, date, quote or other fact must come from your text or from you. If a sentence needs a detail that is missing, the skill tells the agent to ask or write a simpler sentence.",
+    },
+    {
+      title: "Pasted text or a file",
+      text: "Paste text and you get the draft, the patterns still left in it and the final rewrite. Name a file and the agent edits only the prose in it, leaving code, data and links alone.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Install in Claude Code",
+      code: "/plugin marketplace add blader/humanizer\n/plugin install humanizer@humanizer",
+      note: "Needs Claude Code 2.1.142 or newer. In Claude.ai or Claude Desktop, download the repository as a ZIP and upload it as a skill in Settings instead.",
+    },
+    {
+      label: "Or install for Codex and other agents",
+      code: "npx skills add blader/humanizer --global --agent '*'",
+      note: "Installs it for every agent the Skills CLI supports. Replace '*' with codex to install it for Codex only.",
+    },
+    {
+      label: "Ask",
+      code: "Please humanize this text:\n\n[paste your text here]",
+      note: "To match your own voice, paste two or three paragraphs of your writing first and say it is a sample.",
+    },
+  ],
+  test: {
+    date: "2026-10-19",
+    agent: "Claude Code 2.1.303, headless (claude -p), project settings only",
+    model: "claude-opus-5-5",
+    commit: "8c307f3",
+    task: "Please humanize this text:\n\n[the input draft below, pasted in full]",
+    samples: [
+      {
+        label: "Input draft",
+        note: "Written by us in a deliberately AI-like style. 203 words, two dashes, three bold labels, two emoji.",
+        text: `Our First Year at the Saturday Market: A Journey of Growth 🌱
+
+Let's be honest — when my partner and I set up a folding table of houseplants at our local Saturday market last March, we had no idea what we were getting into. Here's the thing: running a plant stall isn't just about selling plants. It's about building a community.
+
+On our very first Saturday, we brought 40 cuttings and sold just 12. It was a humbling moment, but it taught us a valuable lesson in patience.
+
+**Pricing:** We quickly learned that pricing is everything. When we dropped our small pots from $8 to $5, sales nearly doubled.
+
+**Variety:** Customers kept asking for pet-safe plants, so we started labelling every pot that's safe for cats and dogs.
+
+**Consistency:** Showing up every single week, rain or shine, built trust, loyalty, and lasting relationships.
+
+By December, we were selling around 60 plants each Saturday. Even more importantly, we donated $1,800 to the local primary school's garden program — a true testament to what a small idea can become.
+
+At its core, this journey has been about so much more than plants. It's been about the people. And honestly? We can't wait to see what year two brings. ✨`,
+      },
+      {
+        label: "With the skill (final version)",
+        note: "159 words. No dashes, colons, bold or emoji. No new facts; one added reaction.",
+        text: `Our first year at the Saturday market
+
+Last March my partner and I set up a folding table of houseplants at our local Saturday market, with no idea what we were getting into. The best part of the year ended up being the people we met.
+
+We brought 40 cuttings that first Saturday and sold 12, which was humbling and meant we had to be patient.
+
+Pricing mattered more than we expected. When we dropped our small pots from $8 to $5, sales nearly doubled. Customers kept asking for pet-safe plants, so we started labelling every pot that's safe for cats and dogs. We also showed up every week, rain or shine, and people started to trust us and come back.
+
+By December we were selling around 60 plants each Saturday, and we'd donated $1,800 to the local primary school's garden program. That donation is the part we're proudest of.
+
+We can't wait to see what year two brings.`,
+      },
+      {
+        label: "Same model, no skill",
+        note: "209 words. No dashes or emoji; a bold title. Adds scenes and claims the draft does not contain.",
+        text: `Our first year at the Saturday market
+
+Last March my partner and I set up a folding table of houseplants at our local Saturday market. We didn't really know what we were doing.
+
+The first Saturday, we brought 40 cuttings and sold 12. We drove home a bit deflated and spent most of the evening wondering whether we'd priced things wrong, picked the wrong plants, or just needed more time.
+
+Pricing turned out to be a big part of it. We'd started our small pots at $8, and when we dropped them to $5, sales nearly doubled. We also kept getting asked which plants were safe for pets, so now every pot that's fine around cats and dogs gets a label. And we kept turning up every week, including the wet, miserable ones. That's how people started to recognise us. Some of them now come by most weekends to show us how last month's cutting is doing.
+
+By December we were selling around 60 plants a Saturday. We also gave $1,800 to the garden program at the local primary school, which we'd never have guessed back on that 12-plant morning.
+
+The plants pay for themselves, but the regulars are why we keep coming back. We're already planning year two.`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What does the Humanizer skill do?",
+      a: "It tells an agent how to rewrite text that sounds AI-generated so it reads like a person wrote it, while keeping every fact. It checks 26 patterns from Wikipedia’s “Signs of AI writing”, strongest first, including “not X but Y” lines, one-line closers, lists of three, dashes everywhere, inflated claims, sales language, bold labels and chatbot leftovers such as “I hope this helps!”.",
+    },
+    {
+      q: "Will it get my text past AI detectors?",
+      a: "No, and it does not try to. The README says that getting past AI detectors is not a goal and that detectors still flag most of its output. It edits for human readers.",
+    },
+    {
+      q: "Does it make things up?",
+      a: "Its rules forbid adding a name, number, date, quote or other fact that is not in your text, and in our test it added none. It may add an opinion or reaction in personal writing, which its rules allow; ours gained one line saying the donation was the part the writers were proudest of. The same model without the skill invented several scenes and a claim that the plants pay for themselves.",
+    },
+    {
+      q: "Can I use it in Claude.ai without the terminal?",
+      a: "Yes. The README says to download the repository as a ZIP and upload it as a skill in Claude.ai or Claude Desktop settings. We tested it in Claude Code, not in Claude.ai.",
+    },
+    {
+      q: "Can it match my own writing voice?",
+      a: "The README says it can if you paste two or three paragraphs of your own writing before the text to rewrite. It then follows the sample’s sentence length, word choice and punctuation, including dashes if you use them. We did not test voice matching.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes. It is open source under the MIT licence. You still pay for whatever AI agent or chat app you run it in.",
+    },
+  ],
+};
+
+## What we tested
+
+We wrote a short English post about a first year running a plant stall at a Saturday market, in the style people call “AI-sounding”: a “Let's be honest” opening, a “Here's the thing” run-up, an “isn't just X, it's about Y” turn, three bold labels, a list of three, two dashes, “a true testament”, “At its core” and two emoji. It holds a dozen small facts we could check, from 40 cuttings and 12 sales on the first day to the $1,800 donation.
+
+We pasted it into Claude Code with the same one-line request twice. One run had the skill installed in the project; the other used the same model with nothing installed. Both runs loaded project settings only, so no personal instructions or installed skills were involved beyond Claude Code's built-in ones and, in one run, Humanizer.
+
+## What we found
+
+- **Both versions kept every fact.** 40 cuttings and 12 sold, $8 down to $5, nearly double the sales, the pet-safe labels, every week in all weather, about 60 plants by December and the $1,800 donation.
+- **Only the version without the skill made things up.** It added a deflated drive home, an evening spent wondering about prices, regulars who come back to show how their cuttings are doing and the claim that “the plants pay for themselves”. It warned about the regulars line but not the others. The skill version added no facts. It did add one reaction, that the donation is the part the writers are proudest of, and its own check flagged that line before the final version.
+- **The skill showed its work.** Its reply had a first draft, a list of four patterns still in that draft (a vague “trust and loyalty” pair, a short closer, a softened “not X but Y” contrast and the added reaction) and the final version. The run without the skill returned one rewrite and a list of changes.
+- **Both removed the obvious tells.** Neither kept the dashes, emoji, “Here's the thing” or “a true testament”. Neither kept a colon. The version without the skill kept a bold title, and the skill version came out shorter, 159 words against 209.
+- **Some stock lines survived.** The skill version kept “We can't wait to see what year two brings” as its last line and turned “a valuable lesson in patience” into “meant we had to be patient”.
+
+The skill run took three turns instead of one and cost about three times as much at API prices ($0.20 against $0.07, as reported by Claude Code), mostly because it writes a draft and a check before the final version. One short post on a strong model is a small test. We have not tried long articles, files, voice matching or weaker models. For Chinese text, see our test of [Human Writing](/skills/human-writing).
