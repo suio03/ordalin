@@ -8,5 +8,6 @@ export const REGISTRY: SkillsRegistry = {
   overview: () => import("./overview.mdx"),
   skills: {
     "human-writing": { status: "published", load: () => import("./skills/human-writing.mdx") },
+    "lemo-opuscar": { status: "published", load: () => import("./skills/lemo-opuscar.mdx") },
   },
 };

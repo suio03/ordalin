@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { editorialHref, listEditorialPages } from "@/lib/editorial";
+import { skillsPath, visibleSkillSlugs } from "@/lib/skills/data";
 import HomePartners from "./home-partners";
 import { MobileMenu } from "./mobile-menu";
 import { ThemeSelector } from "./theme-selector";
@@ -60,6 +61,7 @@ export function SiteFooter() {
         { href: "/models", label: "AI models" },
         { href: "/tasks", label: "Find by goal" },
         { href: "/collections", label: "Collections" },
+        ...(visibleSkillSlugs().length ? [{ href: skillsPath.overview, label: "Agent skills" }] : []),
         { href: "/search", label: "Advanced search" },
       ],
     },

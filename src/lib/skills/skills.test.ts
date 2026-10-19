@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import source from "@/content/skills/skills.json";
 import { REGISTRY } from "@/content/skills";
@@ -72,6 +72,16 @@ describe("skill page registry (index.ts)", () => {
     const cjk = /[　-鿿＀-￯]/;
     const files = readdirSync(CONTENT, { recursive: true, encoding: "utf8" }).filter((f) => /\.(mdx|json)$/.test(f));
     expect(files.filter((file) => cjk.test(readFileSync(join(CONTENT, file), "utf8")))).toEqual([]);
+  });
+
+  it("serves every gallery image from public/", () => {
+    const mdx = readdirSync(CONTENT, { recursive: true, encoding: "utf8" }).filter((f) => f.endsWith(".mdx"));
+    const missing = mdx.flatMap((file) =>
+      [...readFileSync(join(CONTENT, file), "utf8").matchAll(/\bsrc: "([^"]+)"/g)]
+        .map((m) => m[1])
+        .filter((src) => !existsSync(join(process.cwd(), "public", src))),
+    );
+    expect(missing).toEqual([]);
   });
 
   it("links only to /skills pages that exist", () => {

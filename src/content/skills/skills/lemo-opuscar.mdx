@@ -1,0 +1,151 @@
+export const meta = {
+  title: "Lemo-Opuscar Tested: A Claude Code Skill That Makes Films in Code",
+  description:
+    "Lemo-Opuscar is a free skill that has Claude Code direct, draw, score and render a short film in one of 51 styles. See the styles and what our test run found.",
+  summary:
+    "Lemo-Opuscar is a free agent skill by Lemomo (LemoLab) that turns Claude Code into a small film studio. You pick one of 51 styles, from whiteboard explainers to pixel-art RPGs, describe your story, and the agent writes the code that draws every frame, composes the music, mixes the sound and renders an MP4. There is no video generation and no stock footage. Below you can watch all 51 of the author's demo films, see how it works, and read what happened when we asked it for a one-minute whiteboard explainer.",
+  bestFor: [
+    "Explainers, data stories and short narrative films with a distinct look",
+    "People who want a film they can edit and re-render as code",
+    "Claude Code users who are comfortable in a terminal",
+  ],
+  notFor: [
+    "Quick clips; the README says a film takes an agent 30 to 60 minutes and a fair amount of tokens",
+    "Models other than Claude Opus 5.5; the author warns the styles may not carry over",
+    "Photoreal footage; everything is drawn by code, not generated or filmed",
+  ],
+  gallery: {
+    heading: "All 51 styles",
+    intro:
+      "Every style comes with one demo film made by the author. Pick the look you want, then ask for it by name.",
+    items: [
+      { group: "Evidence Films", src: "/skills/lemo-opuscar/satellite-briefing.jpg", label: "Satellite Briefing", title: "The Map Still Says Sea", caption: "A satellite follows the map to the Aral Sea and finds a desert; the only part that came back is the part someone dammed.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/satellite-briefing.mp4", duration: "0:38", uses: ["Climate & environment", "Investigations & news explainers", "Geography & history"] },
+      { group: "Evidence Films", src: "/skills/lemo-opuscar/briefing-board.jpg", label: "Engineering Briefing Board", title: "The Ship Decides", caption: "A river needs a bridge; four bridge types are tested on one briefing wall, and the ship that must pass underneath picks the winner.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/briefing-board.mp4", duration: "0:40", uses: ["Engineering decisions", "Option comparisons", "Briefings & explainers"] },
+      { group: "Evidence Films", src: "/skills/lemo-opuscar/lidar-survey.jpg", label: "LiDAR Survey", title: "The Fields Under the Forest", caption: "A laser survey strips the canopy off a Connecticut forest, layer by layer, and finds the stone walls of the farms that were there: 3.4 km of them, measured.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/lidar-survey.mp4", duration: "0:40", uses: ["Archaeology & heritage", "Forestry & environment", "Infrastructure & site surveys"] },
+      { group: "Evidence Films", src: "/skills/lemo-opuscar/white-model.jpg", label: "Projection on White Model", title: "How a Flattened City Grew Back", caption: "A projector lights Rotterdam's white model layer by layer: what stood before 1940, the decades that filled the hole, the towers, and the winter shadow the tallest one casts on the pre-war roofs.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/white-model.mp4", duration: "0:40", uses: ["Urban planning & real estate", "Exhibitions & showrooms", "City data & history"] },
+      { group: "Evidence Films", src: "/skills/lemo-opuscar/data-physical.jpg", label: "Data Physicalization", title: "Two Spirals", caption: "Twelve years of wind and solar capacity stacked as real plates on a walnut dial: wind led in 2014, solar passed it in 2021, and by 2025 the ratio has turned the other way round.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/data-physical.mp4", duration: "0:39", uses: ["Annual reports & ESG", "Investor communications", "Energy & climate statistics"] },
+      { group: "Evidence Films", src: "/skills/lemo-opuscar/teardown.jpg", label: "Exploded Teardown", title: "21 Keys, Opened", caption: "One half of an open-source keyboard comes apart in a single orbit, dives under its circuit board to the chip, the lights and the sockets, then closes with its real dimensions drawn on it.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/teardown.mp4", duration: "0:39", uses: ["Hardware launches", "E-commerce product pages", "Technical marketing & spec explainers"] },
+      { group: "Evidence Films", src: "/skills/lemo-opuscar/microscope.jpg", label: "Microscope Story", title: "Measured Blue", caption: "One continuous camera takes a liver slide from the eye down to a single nucleus; two circles 1.4 mm apart are counted pixel by pixel, and one holds 2.4 times the blue.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/microscope.mp4", duration: "0:40", uses: ["Biomedicine & pathology", "Materials & surface science", "Skincare & cosmetic science"] },
+      { group: "Evidence Films", src: "/skills/lemo-opuscar/archive-lighttable.jpg", label: "Archive Light Table", title: "Two Seconds Short", caption: "The telegram said the longest flight lasted 57 seconds and the newspaper printed it; under a loupe, the Wright brothers' glass negatives and the Library of Congress record say 59.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/archive-lighttable.mp4", duration: "0:40", uses: ["Brand history & anniversaries", "Documentary & archive explainers", "Museum & collection stories"] },
+      { group: "Hand-drawn & Painting", src: "/skills/lemo-opuscar/crayon-book.jpg", label: "Crayon Picture Book", title: "The Moon Can't Sleep", caption: "The moon can't sleep, so a little girl climbs onto the roof to sing it a lullaby.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/crayon-book.mp4", duration: "0:52", uses: ["Picture books", "Bedtime stories", "Kids' learning"] },
+      { group: "Hand-drawn & Painting", src: "/skills/lemo-opuscar/watercolor.jpg", label: "Watercolor Brush", title: "Follow the Rain", caption: "Follow the rain from Australia's red desert heart to its green coast in one unbroken painted walk.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/watercolor.mp4", duration: "1:54", uses: ["Nature documentary", "Travel", "Science explainers"] },
+      { group: "Hand-drawn & Painting", src: "/skills/lemo-opuscar/ink-wash.jpg", label: "Chinese Ink Wash", title: "The Swordsman and the River", caption: "A swordsman crosses the river on the water and splits the current with a single stroke.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/ink-wash.mp4", duration: "0:48", uses: ["Wuxia", "Cultural brands", "Poetry"] },
+      { group: "Hand-drawn & Painting", src: "/skills/lemo-opuscar/impasto.jpg", label: "Impasto Oil Painting", title: "The Colour of Rain", caption: "In a grey, rainy square one red umbrella opens, and a waltz paints the whole plaza in colour.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/impasto.mp4", duration: "0:40", uses: ["Music videos", "Art & culture", "Emotional ads"] },
+      { group: "Hand-drawn & Painting", src: "/skills/lemo-opuscar/one-line.jpg", label: "One-line Drawing", title: "The Line That Never Lifted", caption: "One unbroken line draws a whole life, then the pen passes to a child.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/one-line.mp4", duration: "0:48", uses: ["Brand stories", "Life milestones", "Minimal ads"] },
+      { group: "Hand-drawn & Painting", src: "/skills/lemo-opuscar/whiteboard.jpg", label: "Whiteboard Explainer", title: "Einstein in Your Pocket", caption: "How your phone knows where you are: GPS, atomic clocks, and the 38 microseconds relativity adds every day.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/whiteboard.mp4", duration: "1:51", uses: ["Explainers", "Online courses", "Science"] },
+      { group: "Hand-drawn & Painting", src: "/skills/lemo-opuscar/urban-sketch.jpg", label: "Urban Sketch · Pen & Wash", title: "Where the Wind Went", caption: "A park that is only a pen sketch; wherever the wind carries her straw hat, colour follows.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/urban-sketch.mp4", duration: "0:32", uses: ["City & travel", "Architecture", "Lifestyle brands"] },
+      { group: "East Asian Traditions", src: "/skills/lemo-opuscar/shadow-puppet.jpg", label: "Shadow Puppetry", title: "Hou Yi Shoots the Suns", caption: "Ten suns scorch the earth until the archer Hou Yi draws his bow, told with leather puppets on a lit screen.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/shadow-puppet.mp4", duration: "0:54", uses: ["Myths & folklore", "Heritage", "Festivals"] },
+      { group: "East Asian Traditions", src: "/skills/lemo-opuscar/ukiyoe.jpg", label: "Ukiyo-e", title: "A Journey Toward the Mountain", caption: "A traveller walks toward a distant mountain; every shot is a woodblock print, ending in a great wave.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/ukiyoe.mp4", duration: "0:44", uses: ["Travel", "Japanese culture", "Poetry"] },
+      { group: "East Asian Traditions", src: "/skills/lemo-opuscar/papercut-red.jpg", label: "Red Paper-cut", title: "Nian Comes to Town", caption: "On New Year's Eve the beast Nian comes to town, and one girl's giant paper-cut lights up the village to scare it off.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/papercut-red.mp4", duration: "0:49", uses: ["Lunar New Year", "Festive greetings", "Folk tales"] },
+      { group: "East Asian Traditions", src: "/skills/lemo-opuscar/paper-lantern.jpg", label: "Paper-cut Lightbox", title: "A Mooncake's Longing", caption: "A single mooncake tells the Mid-Autumn story of reunion and longing inside a glowing paper-cut lightbox.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/paper-lantern.mp4", duration: "2:02", uses: ["Festivals", "Gift brands", "Cultural stories"] },
+      { group: "Print & Printmaking", src: "/skills/lemo-opuscar/risograph.jpg", label: "Risograph Print", title: "Sunday Ride", caption: "A Sunday-morning bike ride through the city — bakery, park, riverside — in two misregistered inks.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/risograph.mp4", duration: "0:40", uses: ["Indie brands", "Zines", "Lifestyle"] },
+      { group: "Print & Printmaking", src: "/skills/lemo-opuscar/halftone-dossier.jpg", label: "Halftone Dossier", title: "Case File: Chubby", caption: "A chubby orange cat stands trial for testing gravity and 4 a.m. parkour, and walks free.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/halftone-dossier.mp4", duration: "0:30", uses: ["Humour", "Pet content", "Social shorts"] },
+      { group: "Print & Printmaking", src: "/skills/lemo-opuscar/woodcut.jpg", label: "Woodcut Print", title: "The Bell Founder", caption: "A village spends a whole winter casting one bell; the first time it rings, the snow stops.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/woodcut.mp4", duration: "0:58", uses: ["Folk tales", "Craft brands", "Book trailers"] },
+      { group: "Print & Printmaking", src: "/skills/lemo-opuscar/engraving.jpg", label: "Copperplate Engraving", title: "The Honeybee, Plate VII", caption: "A natural-history plate engraves itself: the burin cuts the copper, the bee builds up line by line, and a watercolour wash brings it to life.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/engraving.mp4", duration: "0:40", uses: ["Museum labels", "Science explainers", "Brand heritage"] },
+      { group: "Print & Printmaking", src: "/skills/lemo-opuscar/silkscreen-poster.jpg", label: "Silkscreen Travel Poster", title: "Three Trails", caption: "Three trail posters are screen-printed one ink at a time, then climbed in one long take from noon to dusk.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/silkscreen-poster.mp4", duration: "0:38", uses: ["Trail & destination guides", "Tourism promos", "Event posters"] },
+      { group: "Graphic & Type", src: "/skills/lemo-opuscar/swiss-motion.jpg", label: "Swiss Motion Graphics", title: "Five Rules for a Poster", caption: "A concert poster lays itself out by five Swiss design rules; the fifth is to break just one.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/swiss-motion.mp4", duration: "0:44", uses: ["Brand identity", "Events", "Design education"] },
+      { group: "Graphic & Type", src: "/skills/lemo-opuscar/spy-titles.jpg", label: "60s Spy Title Sequence", title: "The Velvet Cipher", caption: "Opening titles for an imaginary 1964 spy film: a chase for a stolen key until the shapes lock into the title.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/spy-titles.mp4", duration: "0:44", uses: ["Title sequences", "Event openers", "Trailers"] },
+      { group: "Graphic & Type", src: "/skills/lemo-opuscar/art-deco.jpg", label: "Art Deco", title: "Midnight at the Starlight Hotel", caption: "A grand hotel, 1930: a bellboy races lifts and revolving doors to deliver one letter before midnight.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/art-deco.mp4", duration: "0:58", uses: ["Luxury & hospitality", "Galas", "Invitations"] },
+      { group: "Graphic & Type", src: "/skills/lemo-opuscar/blueprint.jpg", label: "Blueprint", title: "Patent Pending: The Cloud Catcher", caption: "An inventor's blueprint draws, explodes and assembles a cloud-catching machine, and its revision cloud starts to rain.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/blueprint.mp4", duration: "0:47", uses: ["Engineering", "Hardware launches", "Tech explainers"] },
+      { group: "Graphic & Type", src: "/skills/lemo-opuscar/stained-glass.jpg", label: "Stained Glass", title: "The Dragon of the East Window", caption: "Sunlight crosses a cathedral window from dawn to dusk, waking each pane of a knight-and-dragon tale.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/stained-glass.mp4", duration: "0:56", uses: ["Legends", "Heritage", "Holiday stories"] },
+      { group: "Graphic & Type", src: "/skills/lemo-opuscar/pictogram-motion.jpg", label: "Pictogram Motion", title: "Aichi-Nagoya 2026 — All 43 Sports", caption: "All 43 sports of the 2026 Asian Games as beat-locked geometric pictograms.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/pictogram-motion.mp4", duration: "2:44", uses: ["Sports events", "Visual identity", "Event openers"] },
+      { group: "Graphic & Type", src: "/skills/lemo-opuscar/ascii-crt.jpg", label: "ASCII / CRT Terminal", title: "Tranquility.log", caption: "A moon-base AI wakes after forty years to a signal from Earth, and replies by drawing “home” in characters.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/ascii-crt.mp4", duration: "1:00", uses: ["Developer tools", "Sci-fi", "Tech brands"] },
+      { group: "Information & Keynote", src: "/skills/lemo-opuscar/dataviz.jpg", label: "Data Storytelling", title: "A Hundred Summers", caption: "A hundred years of summer temperatures, where the chart itself tells the story.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/dataviz.mp4", duration: "0:50", uses: ["Data journalism", "Reports", "Climate & science"] },
+      { group: "Information & Keynote", src: "/skills/lemo-opuscar/iso-infographic.jpg", label: "Isometric Infographic", title: "From Bean to Cup", caption: "A coffee's journey from the plantation to your hands, across one isometric world.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/iso-infographic.mp4", duration: "0:59", uses: ["Process explainers", "Supply chains", "Annual reports"] },
+      { group: "Information & Keynote", src: "/skills/lemo-opuscar/dark-keynote.jpg", label: "Dark Tech Keynote", title: "Room to Think", caption: "Launch film for Tidy, a fictional app: one buried cursor snaps hundreds of windows back into place.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/dark-keynote.mp4", duration: "0:42", uses: ["Product launches", "SaaS", "Keynotes"] },
+      { group: "Information & Keynote", src: "/skills/lemo-opuscar/living-screencast.jpg", label: "Living Screencast", title: "Clawd Moves In", caption: "Clawd, the Claude Code pixel mascot, hops out of the terminal into the Claude app and acts out plan mode, diff comments and self-checks in a one-take screencast.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/living-screencast.mp4", duration: "0:59", uses: ["Product tutorials", "Feature launches", "Onboarding"] },
+      { group: "Information & Keynote", src: "/skills/lemo-opuscar/hologram-hud.jpg", label: "Sci-fi Hologram HUD", title: "Volt · Spec Scan", caption: "An e-bike is scanned into a hologram; target boxes lock onto the battery, motor and brakes, and each spec rolls into place.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/hologram-hud.mp4", duration: "0:39", uses: ["Product spec walkthroughs", "Launch & crowdfunding videos", "Trade-show screens"] },
+      { group: "Cartoon & Anime", src: "/skills/lemo-opuscar/rubber-hose.jpg", label: "1930s Rubber Hose Cartoon", title: "Coffee Cup Chase", caption: "A coffee cup chases a runaway sugar cube around the kitchen, 1930s-cartoon style.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/rubber-hose.mp4", duration: "0:50", uses: ["Food & drink", "Retro ads", "Kids"] },
+      { group: "Cartoon & Anime", src: "/skills/lemo-opuscar/cel-anime-80s.jpg", label: "80s Cel Anime", title: "City Lights, 1987", caption: "A courier girl rides through a rain-soaked neon city to deliver a tape before the dawn launch.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/cel-anime-80s.mp4", duration: "0:59", uses: ["Music videos", "Game trailers", "Nostalgia"] },
+      { group: "Cartoon & Anime", src: "/skills/lemo-opuscar/scifi-toon.jpg", label: "Sci-Fi Sitcom Toon", title: "Coffee Run", caption: "A jaded genius opens a portal just to buy coffee and tumbles through ever-stranger universes.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/scifi-toon.mp4", duration: "0:58", uses: ["Comedy", "Tech brands", "Social shorts"] },
+      { group: "Cartoon & Anime", src: "/skills/lemo-opuscar/midcentury-toon.jpg", label: "Mid-century Cartoon", title: "Meet Pip", caption: "A robot vacuum set up in three steps, told like a 1950s classroom film: place the dock, connect the app, press start.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/midcentury-toon.mp4", duration: "0:40", uses: ["Product set-up guides", "Help-centre explainers", "How-to steps"] },
+      { group: "Games", src: "/skills/lemo-opuscar/pixel-rpg.jpg", label: "16-bit Pixel RPG", title: "The Last Save Point", caption: "At the final boss door a hero saves the game, and the save screen replays the whole journey.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/pixel-rpg.mp4", duration: "0:54", uses: ["Game trailers", "Recaps", "Nostalgia"] },
+      { group: "Games", src: "/skills/lemo-opuscar/hd-2d.jpg", label: "HD-2D", title: "The Lampbearer", caption: "The lighthouse goes dark; a girl carries the last flame through a night forest and up the storm cliffs.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/hd-2d.mp4", duration: "1:16", uses: ["Game trailers", "Fantasy", "Story films"] },
+      { group: "Games", src: "/skills/lemo-opuscar/microgame.jpg", label: "Microgame Frenzy", title: "Five-Second Astronaut", caption: "A clumsy cadet survives a five-second boot camp, faster and faster, until the boss: landing home.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/microgame.mp4", duration: "1:00", uses: ["Game trailers", "Onboarding", "Social shorts"] },
+      { group: "Games", src: "/skills/lemo-opuscar/game-show.jpg", label: "Game Show Flat", title: "Rhythm of AI, 1997 → 2026", caption: "The history of AI as a rhythm game: models take the stage on the beat, and a report card closes the show.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/game-show.mp4", duration: "2:29", uses: ["Tech timelines", "Year in review", "Variety shows"] },
+      { group: "Cinema & Eras", src: "/skills/lemo-opuscar/silent-film.jpg", label: "1920s Silent Film", title: "The Runaway Loaf", caption: "A baker's boy chases a runaway loaf downhill, then breaks it in half for a hungry girl.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/silent-film.mp4", duration: "0:54", uses: ["Comedy", "Retro brands", "Silent storytelling"] },
+      { group: "Cinema & Eras", src: "/skills/lemo-opuscar/backrooms.jpg", label: "Liminal Found Footage", title: "Night Shift Orientation", caption: "A new night-shift hire films their first night in an endless yellow office, following the rules on the wall.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/backrooms.mp4", duration: "1:00", uses: ["Horror", "Mystery & ARG", "Game teasers"] },
+      { group: "Materials & 3D", src: "/skills/lemo-opuscar/brick-toy.jpg", label: "Brick Toy", title: "Rocket from Spare Parts", caption: "A brick astronaut builds a rocket from spare parts and flies to a brick moon.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/brick-toy.mp4", duration: "0:54", uses: ["Toys & kids", "Product builds", "Space"] },
+      { group: "Materials & 3D", src: "/skills/lemo-opuscar/paper-popup.jpg", label: "Paper Pop-up Book", title: "Pip's Paper Adventure", caption: "A pop-up book opens on a desk; a sprite named Pip adventures through paper worlds and jumps out into ours.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/paper-popup.mp4", duration: "2:13", uses: ["Children's books", "Game trailers", "Story films"] },
+      { group: "Materials & 3D", src: "/skills/lemo-opuscar/tilt-shift.jpg", label: "Tilt-Shift Miniature", title: "Toy Town Rush Hour", caption: "Morning rush hour in a town that looks like a model: traffic, trains and tiny people.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/tilt-shift.mp4", duration: "0:38", uses: ["City promos", "Real estate", "Transport"] },
+      { group: "Materials & 3D", src: "/skills/lemo-opuscar/lowpoly-island.jpg", label: "Low-poly Isometric Island", title: "The Island That Grew", caption: "An island and its village grow tile by tile from an empty sea, each tile a note, into a starry night.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/lowpoly-island.mp4", duration: "0:53", uses: ["Game trailers", "World building", "Calm content"] },
+      { group: "Materials & 3D", src: "/skills/lemo-opuscar/glass-product.jpg", label: "Glass Product Render", title: "Aura — Hear the Light", caption: "Unboxing and close-ups of Aura, fictional glass earbuds, in strip-light sweeps and caustics.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/glass-product.mp4", duration: "0:32", uses: ["Product launches", "Consumer tech", "Beauty"] },
+    ],
+    credit:
+      "Demo films and stills by LemoLab, licensed CC BY 4.0, shown unchanged. Some include Chinese on-screen text. The films play from the author's own gallery site. They are the author's showcase films, made with Claude Opus 5.5, not output from our test.",
+  },
+  howItWorks: [
+    {
+      title: "One small skill",
+      text: "The skill itself is a few lines. It clones the library to ~/lemo-opuscar, installs the tools and tells Claude to follow the library's instructions. There is no MCP server and no separate skill per style.",
+    },
+    {
+      title: "Guides the agent reads",
+      text: "One guide sets the workflow, one covers story, rhythm and camera, and one covers rendering and sound. Each of the 51 styles is a single style sheet of about 100 to 140 lines on its materials, colours, type, motion, camera and sound. Claude reads the one you name.",
+    },
+    {
+      title: "Pictures drawn by code",
+      text: "Claude writes a web page for your film that can draw any moment of it on a canvas or in three.js. A headless browser then renders it frame by frame at 1920×1080 and 24 fps.",
+    },
+    {
+      title: "Sound and the final cut",
+      text: "A sampler plays a score Claude writes on free instrument libraries, and sound effects are synthesised in code. Narration is optional: Kokoro for English or edge-tts for Chinese, checked with Whisper. ffmpeg mixes it all into the MP4.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Install the skill",
+      code: "claude plugin marketplace add lemomo-ai/lemo-opuscar\nclaude plugin install lemo-opuscar@lemolab",
+      note: "Run in a terminal. You need Node 20 or newer, ffmpeg and Python 3.11 or newer (or uv).",
+    },
+    {
+      label: "Ask Claude Code for a film",
+      code: "Make a 45-second film in the Watercolor style about the coffee farm my family runs. Warm female narrator.",
+      note: "The README's own example. Swap in any style name from above and your own topic. It asks you a few questions once, then works on its own for 30 to 60 minutes.",
+    },
+  ],
+  test: {
+    date: "2026-10-18",
+    agent: "Claude Code subagent, working from a clone of the repository",
+    model: "claude-opus-5-5",
+    commit: "a7fc269",
+    task: "Make a whiteboard explainer of about 60 seconds on how the Pomodoro Technique works. Use only these facts: one round is 25 minutes of focus plus a 5-minute break; a phone interrupts focus, and moving it to another room helps; for tasks that need long thinking you can lengthen the focus block, for example to 50 minutes. English on-screen text and subtitles. No narration, music and sound effects only. No storyboard review.",
+    samples: [],
+  },
+  faq: [
+    {
+      q: "What does Lemo-Opuscar do?",
+      a: "It gives a coding agent a library of 51 film styles plus guides on directing, rendering, scoring and mixing. You describe a story and name a style; the agent writes web pages that draw each frame, renders them to video, writes an original score from free sample libraries, adds sound effects and subtitles, and muxes the final MP4.",
+    },
+    {
+      q: "Does it use AI video generation?",
+      a: "No. Every frame is drawn by code (canvas and WebGL) and rendered frame by frame. The README says there is no video generation and no stock footage. Narration, when you want it, comes from text-to-speech.",
+    },
+    {
+      q: "How do I install it?",
+      a: "In a terminal, run claude plugin marketplace add lemomo-ai/lemo-opuscar and then claude plugin install lemo-opuscar@lemolab. On first use it downloads the guides and tools to ~/lemo-opuscar. You can also clone the repository and start Claude Code inside it, which is how we tested it. For other agents, the README says to copy the plugin/skills/lemo-opuscar folder into their skills folder.",
+    },
+    {
+      q: "What do I need on my computer?",
+      a: "Node 20 or newer, ffmpeg and Python 3.11 or newer (or uv). The agent installs the rest. Output defaults to 1920×1080 at 24 frames per second.",
+    },
+    {
+      q: "Is it free, and can I use the films commercially?",
+      a: "The skill is free: the code is MIT-licensed, and the README says films you make with it are yours, with no credit needed. The author's own demo films and stills are CC BY 4.0, so reusing those needs credit to LemoLab. You still pay for the Claude usage, and a film uses a fair amount of tokens.",
+    },
+  ],
+};
+
+## What we tested
+
+We cloned the repository and gave a Claude Code subagent on Claude Opus 5.5 the brief above, with the Whiteboard Explainer style and no narration, so the film had to work with music, sound effects and on-screen text alone. The agent followed the repository's own workflow: it read the director and technique guides and the style sheet, wrote a treatment, built the film, checked stills and a contact sheet, then rendered, scored, mixed and subtitled it.
+
+## What we found
+
+- **It delivered a finished film.** The result was a 62-second MP4 at 1920×1080 and 24 fps, with an original score, sound effects synced to each pen stroke, nine subtitles and loudness normalised to −14 LUFS. It stuck to the three facts in the brief.
+- **The tooling is the strong part.** Rendering, audio sampling, sound design, the readability check and the final mix all came from the repository and worked first time. Rendering all 1,498 frames took 18 seconds.
+- **The film itself is still written by the agent.** About 500 lines of new code (the shots, the score and the mix) were the agent's own, drawing heavily on the style's demo. Its own estimate was roughly 15 minutes of work after reading the guides, which it called a lower bound.
+- **We hit a few rough edges.** The whiteboard demo references a handwriting font the repository does not include, so the agent downloaded it. The readability check needs a hook the demo page does not provide. There is no general subtitle exporter, and the guides assume a narrated film. Most comments in the core tools are in Chinese.
+- **Competent, not stunning.** The style was there: a glossy board, a floating marker, magnets as the only moving objects. But the opening is slow without a voice, the full-board pull-back near the end looks sparse, and the final hold runs a little long.
+
+The films above show what the author gets from the same library. Our single run landed below that bar, which fits the README's own note that a film takes 30 to 60 minutes of agent work: a quick pass gets you a usable explainer, and the showcase look takes more iteration.

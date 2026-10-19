@@ -38,7 +38,7 @@ export default async function SkillsOverviewPage() {
       </section>
 
       <p className="text-[14px] text-muted">
-        Independent. Not affiliated with, endorsed by, or paid by any skill author. We link to each repository and do not copy its files.
+        Independent. Not affiliated with, endorsed by, or paid by any skill author. We link to each repository; any images we show from one are used under its licence and credited.
       </p>
     </main>
   );

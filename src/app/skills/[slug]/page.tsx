@@ -6,6 +6,8 @@ import { Checked } from "@/components/agents/checked";
 import { Faq } from "@/components/agents/faq";
 import { Sources } from "@/components/agents/sources";
 import { JsonLd } from "@/components/agents/json-ld";
+import { CopyCode } from "@/components/skills/copy-code";
+import { FilmGallery } from "@/components/skills/film-gallery";
 import { absoluteUrl } from "@/lib/agents/site";
 import { displayName, getSkill, loadSkillPage, NOT_STATED, skillsPath, stated, visibleSkillSlugs } from "@/lib/skills/data";
 import type { Skill } from "@/lib/skills/types";
@@ -60,6 +62,46 @@ export default async function SkillPage({ params }: Props) {
       </section>
 
       <div className="mx-auto flex max-w-[1080px] flex-col gap-14 px-4 pt-10 md:px-10">
+        {meta.gallery && (
+          <section className="flex flex-col gap-5">
+            <h2 className="font-serif text-[30px] font-medium md:text-[36px]">{meta.gallery.heading}</h2>
+            {meta.gallery.intro && <p className="max-w-[760px] text-[17px] text-muted">{meta.gallery.intro}</p>}
+            <FilmGallery items={meta.gallery.items} />
+            <p className="text-[13px] text-muted">{meta.gallery.credit}</p>
+          </section>
+        )}
+
+        {meta.howItWorks && (
+          <section className="flex flex-col gap-5">
+            <h2 className="font-serif text-[30px] font-medium md:text-[36px]">How it works</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              {meta.howItWorks.map((part) => (
+                <div key={part.title} className="rounded-2xl border border-line bg-surface p-6 shadow-card">
+                  <h3 className="mb-2 font-bold">{part.title}</h3>
+                  <p className="text-[15px] leading-relaxed text-ink-2">{part.text}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {meta.quickstart && (
+          <section className="flex flex-col gap-5">
+            <h2 className="font-serif text-[30px] font-medium md:text-[36px]">Try it</h2>
+            <ol className="flex flex-col gap-6">
+              {meta.quickstart.map((step, i) => (
+                <li key={step.label} className="flex flex-col gap-2">
+                  <span className="font-bold">
+                    {i + 1}. {step.label}
+                  </span>
+                  <CopyCode code={step.code} />
+                  {step.note && <p className="text-[14px] text-muted">{step.note}</p>}
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
         <section className="grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-line bg-surface p-6">
             <h2 className="mb-3 text-[13px] font-bold tracking-[0.06em] text-ok uppercase">Best for</h2>
@@ -93,17 +135,19 @@ export default async function SkillPage({ params }: Props) {
             <div className="mb-1 text-[13px] font-bold tracking-[0.06em] text-muted uppercase">Request</div>
             <p className="whitespace-pre-line">{test.task}</p>
           </div>
-          <div className="grid gap-4 lg:grid-cols-3">
-            {test.samples.map((sample) => (
-              <figure key={sample.label} className="flex flex-col gap-3 rounded-2xl border border-line bg-surface p-5 shadow-card">
-                <figcaption className="flex flex-col gap-1">
-                  <span className="font-bold">{sample.label}</span>
-                  {sample.note && <span className="text-[13px] text-muted">{sample.note}</span>}
-                </figcaption>
-                <p className="text-[15px] leading-relaxed whitespace-pre-line">{sample.text}</p>
-              </figure>
-            ))}
-          </div>
+          {test.samples.length > 0 && (
+            <div className="grid gap-4 lg:grid-cols-3">
+              {test.samples.map((sample) => (
+                <figure key={sample.label} className="flex flex-col gap-3 rounded-2xl border border-line bg-surface p-5 shadow-card">
+                  <figcaption className="flex flex-col gap-1">
+                    <span className="font-bold">{sample.label}</span>
+                    {sample.note && <span className="text-[13px] text-muted">{sample.note}</span>}
+                  </figcaption>
+                  <p className="text-[15px] leading-relaxed whitespace-pre-line">{sample.text}</p>
+                </figure>
+              ))}
+            </div>
+          )}
           <article className="prose-av">
             <Body />
           </article>
