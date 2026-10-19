@@ -1,5 +1,6 @@
 import { readResearchedProfile, type CheckedProfile } from "@/lib/catalog-profile/contract";
 import { readConfirmedProfile, type ConfirmedProfile } from "@/lib/submissions/profile";
+import { getToolProfile } from "@/content/tool-profiles/granola";
 import { cache } from "react";
 import { getCloudflareEnv } from "@/lib/cloudflare";
 import { cataloguePageSize, toFtsQuery, type CatalogueSort } from "@/lib/catalog";
@@ -783,12 +784,14 @@ export async function listEditorialTools(slugs: string[]): Promise<Map<string, E
     .all<ToolRow & { import_json: string | null }>();
   return new Map(result.results.map((row) => {
     const profile = readResearchedProfile(row.import_json);
+    // Hand-curated profiles (Granola) have no researched import record.
+    const curated = profile ? undefined : getToolProfile(row.slug);
     return [row.slug, {
       ...mapTool(row),
-      pricingSummary: profile?.pricingSummary.text ?? null,
-      platforms: profile?.platforms.map((item) => item.text) ?? [],
-      freeLimits: profile?.freeLimits.map((item) => item.text) ?? [],
-      checkedAt: profile?.checkedAt ?? null,
+      pricingSummary: profile?.pricingSummary.text ?? curated?.pricingSummary ?? null,
+      platforms: profile?.platforms.map((item) => item.text) ?? (curated ? curated.platforms.split(" · ") : []),
+      freeLimits: profile?.freeLimits.map((item) => item.text) ?? (curated ? [curated.freeLimit] : []),
+      checkedAt: profile?.checkedAt ?? curated?.checkedAt ?? null,
     }];
   }));
 }

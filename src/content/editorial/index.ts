@@ -7,6 +7,7 @@ import { udioAlternatives } from "./alternatives/udio";
 import { longVideoToShortClips } from "./best/ai-tools-long-video-to-short-clips";
 import { argonVsOpus } from "./compare/gemini-4-argon-vs-claude-opus-5-5";
 import { haikuVsLuna } from "./compare/claude-haiku-5-5-vs-gpt-6-luna";
+import { granolaVsOtter } from "./compare/granola-vs-otter-ai";
 import { heygenVsSynthesia } from "./compare/heygen-vs-synthesia";
 import { otterVsFireflies } from "./compare/otter-ai-vs-fireflies-ai";
 import { sunoVsUdio } from "./compare/suno-vs-udio";
@@ -18,7 +19,7 @@ import { demoEditorialPages } from "./demo";
 // without runtime filesystem reads. Keep each list alphabetical.
 export const bestPages: EditorialPage[] = [aiMusicGenerators, longVideoToShortClips];
 export const alternativesPages: EditorialPage[] = [cursorAlternatives, fathomAlternatives, sunoAlternatives, udioAlternatives];
-export const comparePages: EditorialPage[] = [haikuVsLuna, argonVsOpus, heygenVsSynthesia, otterVsFireflies, sunoVsUdio, viduQ4VsMinimaxH3, kling4VsViduQ4];
+export const comparePages: EditorialPage[] = [haikuVsLuna, argonVsOpus, granolaVsOtter, heygenVsSynthesia, otterVsFireflies, sunoVsUdio, viduQ4VsMinimaxH3, kling4VsViduQ4];
 
 export const editorialPages: EditorialPage[] = [
   ...bestPages,
