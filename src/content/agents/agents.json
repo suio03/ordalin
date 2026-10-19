@@ -759,6 +759,58 @@
         "https://macpaw.com/legal/eney-terms-of-service",
         "https://apps.apple.com/us/app/eney-ai-assistant/id6757791741"
       ]
+    },
+    {
+      "slug": "readywhen",
+      "name": "readywhen",
+      "vendor": "Oliva Health Ltd",
+      "channel": "personal",
+      "category": "personal assistant (WhatsApp, for owner-led businesses)",
+      "launch_date": "2026-10-19 (WhatsApp beta)",
+      "official_url": "https://readywhen.ai/",
+      "checked_on": "2026-10-20",
+      "access": {
+        "free_tier": "yes — free and unlimited during the beta, no credit card required",
+        "paid_plans": [],
+        "billing_note": "No prices published. The terms describe paid subscriptions billed in GBP that renew automatically, with 30 days' notice of price changes; an Enterprise plan with custom setups is mentioned on the security page",
+        "subscription_note": "16+ under the terms"
+      },
+      "platforms": {
+        "web": true
+      },
+      "messaging": [
+        "WhatsApp",
+        "Phone calls"
+      ],
+      "regions": "unknown",
+      "actions": "catches the promises you make in email, calls, chats and comments, keeps a running list of who is waiting on you, and sends a daily brief of what can't slip with its reasons; drafts replies, follow-ups and invoice chasers, preps you before calls and finds what was agreed or quoted. On WhatsApp you message it, voice-note it or call it; launch examples include finding offsite options and pencilling one into your calendar, turning notes into a proposal and reviewing your inbox",
+      "connectors_notable": [
+        "Gmail",
+        "Outlook",
+        "Google Calendar",
+        "Slack",
+        "Notion",
+        "QuickBooks",
+        "Google Meet, Granola and Fathom notes"
+      ],
+      "connectors_count": "100+",
+      "execution": "Hosted in the cloud and keeps working while your laptop is shut; connects to your tools through OAuth and builds a working memory of your customers, suppliers and commitments in your workspace. readywhen describes it as having its own phone number and its own computer. It never joins calls as a bot; it reads notes and transcripts from your meeting tools",
+      "safety": "Nothing goes out without your OK: every reply, chase and change waits for approval, and you can edit or discard it. The terms also describe act-and-notify, ask-before-sending and draft-only modes. It only sees what your connected tools already show you, and you can disconnect any tool at any time",
+      "privacy": {
+        "training": "Your data and your customers' data are never used to train AI models. Data is encrypted in transit and at rest and hosted in the EU (Ireland); ISO 27001 certified and GDPR compliant, SOC 2 Type II underway. The privacy notice names Anthropic's Claude API for processing meeting transcripts, with inputs kept up to 30 days for trust and safety",
+        "delete_data": "Deleting your account removes your commitments, drafts, chats and connections straight away; OAuth tokens are deleted when you disconnect a tool. Deletion requests can also go to data.protection@readywhen.ai"
+      },
+      "model": "Anthropic's Claude API is named in the privacy notice for processing meeting transcripts; models for other tasks not stated",
+      "sources": [
+        "https://readywhen.ai/",
+        "https://readywhen.ai/how-it-works",
+        "https://readywhen.ai/connectors",
+        "https://readywhen.ai/security",
+        "https://readywhen.ai/terms",
+        "https://readywhen.ai/privacy",
+        "https://app.readywhen.ai/start",
+        "https://www.producthunt.com/products/readywhen"
+      ]
     }
   ]
 }

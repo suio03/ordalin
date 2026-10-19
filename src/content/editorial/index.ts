@@ -4,6 +4,7 @@ import { cursorAlternatives } from "./alternatives/cursor";
 import { fathomAlternatives } from "./alternatives/fathom";
 import { sunoAlternatives } from "./alternatives/suno";
 import { udioAlternatives } from "./alternatives/udio";
+import { wisprFlowAlternatives } from "./alternatives/wispr-flow";
 import { longVideoToShortClips } from "./best/ai-tools-long-video-to-short-clips";
 import { argonVsOpus } from "./compare/gemini-4-argon-vs-claude-opus-5-5";
 import { haikuVsLuna } from "./compare/claude-haiku-5-5-vs-gpt-6-luna";
@@ -18,7 +19,7 @@ import { demoEditorialPages } from "./demo";
 // Add one static import per article so the bundle works on Cloudflare Workers
 // without runtime filesystem reads. Keep each list alphabetical.
 export const bestPages: EditorialPage[] = [aiMusicGenerators, longVideoToShortClips];
-export const alternativesPages: EditorialPage[] = [cursorAlternatives, fathomAlternatives, sunoAlternatives, udioAlternatives];
+export const alternativesPages: EditorialPage[] = [cursorAlternatives, fathomAlternatives, sunoAlternatives, udioAlternatives, wisprFlowAlternatives];
 export const comparePages: EditorialPage[] = [haikuVsLuna, argonVsOpus, granolaVsOtter, heygenVsSynthesia, otterVsFireflies, sunoVsUdio, viduQ4VsMinimaxH3, kling4VsViduQ4];
 
 export const editorialPages: EditorialPage[] = [

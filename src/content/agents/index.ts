@@ -30,6 +30,7 @@ export const REGISTRY: AgentsRegistry = {
     "tab": () => import("./agents/tab.mdx"),
     "kanana-space": () => import("./agents/kanana-space.mdx"),
     "eney": () => import("./agents/eney.mdx"),
+    "readywhen": () => import("./agents/readywhen.mdx"),
   },
   pricingPages: {
     "meta-muse": { planPrefix: "Muse", compareWith: ["chatgpt-dots","gemini-spark","grok-bot","poke","lindy"], load: () => import("./pricing/meta-muse.mdx") },
