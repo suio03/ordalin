@@ -98,6 +98,8 @@ export type ToolListOptions = {
   editorPicksOnly?: boolean;
   /** Editor picks first, then newest. Used by homepage shelves. */
   featuredFirst?: boolean;
+  /** Skip the COUNT query when the caller never shows the total. */
+  withTotal?: boolean;
 };
 
 export type PaginatedTools = {
@@ -349,14 +351,15 @@ export async function listPublishedTools(
     bindings.push(ftsQuery);
   }
   if (options.categorySlug) {
+    // IN drives the lookup from the tag side instead of probing every published tool.
     conditions.push(
-      "EXISTS (SELECT 1 FROM tool_tags gtt JOIN tags gtag ON gtag.id = gtt.tag_id JOIN categories gc ON gc.id = gtag.category_group_id WHERE gtt.tool_id = t.id AND gtag.kind = 'category' AND gc.slug = ?)",
+      "t.id IN (SELECT gtt.tool_id FROM categories gc JOIN tags gtag ON gtag.category_group_id = gc.id AND gtag.kind = 'category' JOIN tool_tags gtt ON gtt.tag_id = gtag.id WHERE gc.slug = ?)",
     );
     bindings.push(options.categorySlug);
   }
   if (options.browseCategorySlug) {
     conditions.push(
-      "EXISTS (SELECT 1 FROM tool_tags btt JOIN tags btag ON btag.id = btt.tag_id WHERE btt.tool_id = t.id AND btag.kind = 'category' AND btag.slug = ?)",
+      "t.id IN (SELECT btt.tool_id FROM tags btag JOIN tool_tags btt ON btt.tag_id = btag.id WHERE btag.kind = 'category' AND btag.slug = ?)",
     );
     bindings.push(options.browseCategorySlug);
   }
@@ -366,7 +369,7 @@ export async function listPublishedTools(
   }
   if (options.tagSlug) {
     conditions.push(
-      "EXISTS (SELECT 1 FROM tool_tags ftt JOIN tags ftag ON ftag.id = ftt.tag_id WHERE ftt.tool_id = t.id AND ftag.slug = ?)",
+      "t.id IN (SELECT ftt.tool_id FROM tags ftag JOIN tool_tags ftt ON ftt.tag_id = ftag.id WHERE ftag.slug = ?)",
     );
     bindings.push(options.tagSlug);
   }
@@ -383,6 +386,7 @@ export async function listPublishedTools(
      FROM tools t ${joinSql}
      WHERE ${where}`,
   );
+  // Pick the page first so tag joins and per-tool subqueries run only for its rows.
   const dataStatement = database.prepare(
     `SELECT t.id, t.slug, t.name, t.tagline, t.website_url, t.canonical_domain,
       t.pricing_model, t.logo_asset_key, t.published_at, t.last_checked_at,
@@ -401,22 +405,26 @@ export async function listPublishedTools(
        JOIN categories category_group ON category_group.id = category_tag.category_group_id
        WHERE category_tt.tool_id = t.id AND category_tag.kind = 'category'
          AND category_tag.is_active = 1 AND category_group.is_active = 1) AS category_group_slugs
-     FROM tools t
+     FROM (
+       SELECT t.id FROM tools t ${joinSql}
+       WHERE ${where}
+       ORDER BY ${orderSql}
+       LIMIT ? OFFSET ?
+     ) page_tools
+     JOIN tools t ON t.id = page_tools.id
      JOIN categories c ON c.id = t.primary_category_id
-     ${joinSql}
      LEFT JOIN tool_tags tt ON tt.tool_id = t.id
      LEFT JOIN tags tag ON tag.id = tt.tag_id AND tag.is_active = 1
-     WHERE ${where}
      GROUP BY t.id
-     ORDER BY ${orderSql}
-     LIMIT ? OFFSET ?`,
+     ORDER BY ${orderSql}`,
   );
 
+  const withTotal = options.withTotal ?? true;
   const [countResult, dataResult] = await Promise.all([
-    countStatement.bind(...bindings).first<{ total: number }>(),
+    withTotal ? countStatement.bind(...bindings).first<{ total: number }>() : null,
     dataStatement.bind(...bindings, pageSize, offset).all<ToolRow>(),
   ]);
-  const total = Number(countResult?.total ?? 0);
+  const total = withTotal ? Number(countResult?.total ?? 0) : dataResult.results.length;
 
   return {
     items: dataResult.results.map(mapTool),

@@ -413,6 +413,7 @@ async function applyBundle(filename: string, batchContext: BatchContext | null):
   const publishedAt = Math.floor(Date.now() / 1000);
   await d1File(projectRoot, mode, [
     `UPDATE tools SET status = 'published', published_at = ${publishedAt}, last_checked_at = ${publishedAt}, updated_at = ${publishedAt} WHERE id = ${sqlText(toolId)} AND status = 'pending_review'`,
+    `DELETE FROM tools_fts WHERE tool_id = ${sqlText(toolId)}`,
     `INSERT INTO tools_fts (tool_id, name, tagline, description, category_names, tag_names) VALUES (${sqlText(toolId)}, ${sqlText(name)}, ${sqlText(tagline)}, ${sqlText(description)}, ${sqlText(categoryNames)}, ${sqlText(tagNames)})`,
     `UPDATE import_candidates SET status = 'published', updated_at = ${publishedAt} WHERE id = ${sqlText(importId)}`,
     `INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (${sqlText(`event_${crypto.randomUUID()}`)}, 'import_candidate', ${sqlText(importId)}, 'auto_publish', 'codex-schedule', ${sqlText(JSON.stringify({ toolId, screenshotAssetKey, reasons: [] }))}, ${publishedAt})`,

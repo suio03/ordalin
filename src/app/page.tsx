@@ -32,6 +32,41 @@ type HomeProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
+async function loadHomeData() {
+  const [groups, latest, models, collections, tasks, editorial] = await Promise.all([
+    listCategories(),
+    listPublishedTools({ pageSize: 4 }),
+    listPublishedTools({ tagSlug: modelTagSlug, pageSize: 1 }),
+    listCollections(),
+    listTasks(),
+    listLiveEditorial(),
+  ]);
+  const shelves = await Promise.all(
+    groups.map(async (group) => ({
+      group,
+      tools: (await listPublishedTools({ categorySlug: group.slug, pageSize: 4, featuredFirst: true, withTotal: false })).items,
+      best: editorial.pages.find((page): page is Extract<EditorialPage, { kind: "best" }> =>
+        page.kind === "best" && page.groupSlug === group.slug),
+    })),
+  );
+  return { groups, latest, models, collections, tasks, editorial, shelves };
+}
+
+// The homepage reads about 15 catalogue queries but its data changes only on
+// imports, so each Worker isolate reuses one load for a few minutes. Only
+// resolved data is cached: a shared in-flight promise would tie other requests
+// to the I/O of the request that started it.
+const homeDataTtlMs = 5 * 60 * 1000;
+let homeDataCache: { expiresAt: number; data: Awaited<ReturnType<typeof loadHomeData>> } | null = null;
+
+async function homeData() {
+  if (process.env.NODE_ENV !== "production") return loadHomeData();
+  if (homeDataCache && homeDataCache.expiresAt > Date.now()) return homeDataCache.data;
+  const data = await loadHomeData();
+  homeDataCache = { expiresAt: Date.now() + homeDataTtlMs, data };
+  return data;
+}
+
 function ShelfTool({ tool }: { tool: ToolCard }) {
   return (
     <Link className={styles.toolCard} href={`/tools/${tool.slug}`}>
@@ -67,22 +102,7 @@ export default async function Home({ searchParams }: HomeProps) {
     permanentRedirect(`/tools?${query}`);
   }
 
-  const [groups, latest, models, collections, tasks, editorial] = await Promise.all([
-    listCategories(),
-    listPublishedTools({ pageSize: 4 }),
-    listPublishedTools({ tagSlug: modelTagSlug, pageSize: 1 }),
-    listCollections(),
-    listTasks(),
-    listLiveEditorial(),
-  ]);
-  const shelves = await Promise.all(
-    groups.map(async (group) => ({
-      group,
-      tools: (await listPublishedTools({ categorySlug: group.slug, pageSize: 4, featuredFirst: true })).items,
-      best: editorial.pages.find((page): page is Extract<EditorialPage, { kind: "best" }> =>
-        page.kind === "best" && page.groupSlug === group.slug),
-    })),
-  );
+  const { groups, latest, models, collections, tasks, editorial, shelves } = await homeData();
   const pinRank = (page: EditorialPage) => {
     const rank = pinnedHomepageGuides.indexOf(editorialHref(page));
     return rank === -1 ? pinnedHomepageGuides.length : rank;
