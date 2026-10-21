@@ -6,7 +6,8 @@
 // lab and tech-news feeds. New agents come from Google News searches, lab feeds, tech news and Hacker
 // News. A local `claude -p` call (your Claude subscription, no API key) sorts the launch headlines.
 // Nothing is published: the report lands in .ordalin-imports/radar/<date>.md for the maintainer.
-// Other new products come from the Product Hunt imports (`pnpm imports:discover`), not from here.
+// Other launches (inference engines, SDKs, apps) are listed only when widely covered; everyday new
+// products come from the Product Hunt imports (`pnpm imports:discover`).
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -21,6 +22,8 @@ const arg = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`
 const showAll = process.argv.includes("--all");
 const model = arg("model") ?? "sonnet";
 const BATCH = 60;
+// An "other" launch is listed only when this many headlines cover it; single mentions are noise.
+const OTHER_MIN_HEADLINES = 3;
 const DAY = 86_400_000;
 
 type State = { lastRun?: string; openRouterIds: string[]; reported: Record<string, string> };
@@ -122,10 +125,11 @@ const headlines = [...feedResults.flat(), ...hnAgents, ...hnModels]
   })
   .map((item, i) => ({ ...item, id: `n${i + 1}` }));
 
-const SYSTEM = `You sort AI news headlines for Ordalin, a directory of AI tools. Find two kinds of launches:
+const SYSTEM = `You sort AI news headlines for Ordalin, a directory of AI tools. Find three kinds of launches:
 
 1. "agent": a newly launched or announced general-purpose AI agent that does tasks for a person: a personal assistant agent that acts across apps, email, calendar, browsing, computer use or purchases (examples: Meta Muse, ChatGPT Dots, Grok Bot, Gemini Spark, OpenClaw, Hark Pro). Include agents an individual can sign up for or install themselves, from any company, including open-source ones and invite-only betas. Exclude enterprise-only agents and business editions of existing agents (those that need an organization admin, a company program or a business plan, e.g. Google Cloud's Gemini agent, Microsoft Scout, Hermes for Businesses), general chatbots and chat apps (ChatGPT, Grok, Gemini, Claude) and their chat-only updates, coding-only agents, agents for a single industry or job (finance research, legal, sales, customer support, SRE), agent frameworks and SDKs, benchmarks, agent infrastructure, and features that merely add "agentic" steps to an existing app.
 2. "model": a newly released or announced general-purpose AI model with its own name or version (language, reasoning, image, video, audio, speech, music, embedding or multimodal), including open-weight releases. Exclude models for one narrow domain (genomics, weather, agriculture, geospatial, a single industry), price changes, papers without a released model, and benchmark or opinion pieces.
+3. "other": any other newly released or open-sourced AI product, tool, app, SDK, framework, inference engine or developer release that is neither an "agent" nor a "model" as defined above, including things excluded there (coding agents, agent frameworks, enterprise agents). Exclude funding, acquisitions, partnerships, policy, lawsuits, papers, price changes and opinion pieces.
 
 Rules:
 - Only report what the headlines say. Never add facts from memory; if the vendor is not clear from the headline, use "unknown".
@@ -135,12 +139,12 @@ Rules:
 - "status" is "launched" (available now), "preview" (limited, beta, waitlist or research preview) or "announced" (not yet available).
 - "summary" is one plain English sentence on what it is, from the headlines.
 
-Respond with one JSON object and nothing else: {"items":[{"kind":"agent"|"model","name":"...","vendor":"...","status":"...","summary":"...","known":"slug"|null,"ids":["n1"]}]}
+Respond with one JSON object and nothing else: {"items":[{"kind":"agent"|"model"|"other","name":"...","vendor":"...","status":"...","summary":"...","known":"slug"|null,"ids":["n1"]}]}
 
 Agents already covered:
 ${agentsJson.agents.map((a) => `${a.slug}: ${[a.name, a.display_name].filter(Boolean).join(", ")}`).join("\n")}`;
 
-type Finding = { kind: "agent" | "model"; name: string; vendor: string; status: string; summary: string; known?: string | null; ids: string[] };
+type Finding = { kind: "agent" | "model" | "other"; name: string; vendor: string; status: string; summary: string; known?: string | null; ids: string[] };
 
 function runClaude(system: string, user: string): Promise<string> {
   const cwd = mkdtempSync(path.join(tmpdir(), "ordalin-radar-")); // empty dir: no project instructions or files
@@ -175,7 +179,7 @@ for (let i = 0; i < headlines.length; i += BATCH) {
   const valid = new Set(batch.map((h) => h.id));
   for (const f of parsed.items ?? []) {
     const ids = (f.ids ?? []).filter((id) => valid.has(id));
-    if ((f.kind === "agent" || f.kind === "model") && f.name && ids.length) findings.push({ ...f, ids });
+    if ((f.kind === "agent" || f.kind === "model" || f.kind === "other") && f.name && ids.length) findings.push({ ...f, ids });
   }
 }
 
@@ -199,6 +203,9 @@ const routerNames = [...newRouterModels.values()].flatMap((m) => [m.name, m.name
 const newsModels = allFindings.filter((f) => f.kind === "model" && !reportedBefore(f));
 const newsOnlyModels = newsModels.filter((f) => !matchesKnown(f.name, routerNames));
 const alsoInNews = newsModels.filter((f) => matchesKnown(f.name, routerNames));
+const otherLaunches = allFindings
+  .filter((f) => f.kind === "other" && f.ids.length >= OTHER_MIN_HEADLINES && !reportedBefore(f))
+  .sort((a, b) => b.ids.length - a.ids.length);
 
 // ---- report ----
 
@@ -237,6 +244,12 @@ const md = [
   "App-only models, announcements, and open-weight releases OpenRouter has not listed yet.",
   "",
   ...(newsOnlyModels.length ? findingLines(newsOnlyModels) : ["None found."]),
+  "",
+  `## Other widely covered launches (${otherLaunches.length})`,
+  "",
+  `Neither agents nor models, with at least ${OTHER_MIN_HEADLINES} headlines each: developer tools, frameworks, apps.`,
+  "",
+  ...(otherLaunches.length ? findingLines(otherLaunches.map((f) => ({ ...f, summary: `${f.summary} (${f.ids.length} headlines)` }))) : ["None found."]),
   ...(knownAgentNews.length ? ["", "## News about agents already on /agents", "", ...findingLines(knownAgentNews)] : []),
   ...(failures.length ? ["", "## Sources that failed", "", ...failures.map((f) => `- ${f}`)] : []),
   "",
@@ -247,7 +260,7 @@ const reportPath = path.join(outDir, `${date}.md`);
 writeFileSync(reportPath, md);
 writeFileSync(path.join(outDir, `${date}.json`), `${JSON.stringify({ since, headlines, findings: allFindings, openRouter: [...newRouterModels.values()], failures }, null, 2)}\n`);
 
-for (const f of [...newAgents, ...newsModels]) state.reported[`${f.kind}:${nameKey(f.name)}`] ??= date;
+for (const f of [...newAgents, ...newsModels, ...otherLaunches]) state.reported[`${f.kind}:${nameKey(f.name)}`] ??= date;
 state.openRouterIds = [...new Set([...state.openRouterIds, ...routerModels.map((m) => m.id)])];
 state.lastRun = now.toISOString();
 writeFileSync(statePath, `${JSON.stringify(state, null, 2)}\n`);
