@@ -6,6 +6,10 @@
 
 - Homepage footer slot for partner and directory links, filled by the footer links Worker.
 
+### Removed
+
+- The Recount tracker (`recount.tools`) and its event mirroring; Plausible and GA4 remain.
+
 ## [0.5.0] - 2026-08-27
 
 ### Added
