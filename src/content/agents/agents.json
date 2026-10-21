@@ -811,6 +811,67 @@
         "https://app.readywhen.ai/start",
         "https://www.producthunt.com/products/readywhen"
       ]
+    },
+    {
+      "slug": "claude-duet",
+      "name": "Claude Duet",
+      "vendor": "Anthropic",
+      "channel": "personal",
+      "category": "personal agent (standalone app)",
+      "launch_date": "2026-10-21 (research preview; waitlist)",
+      "official_url": "https://claude.com/product/claude-duet",
+      "checked_on": "2026-10-22",
+      "access": {
+        "free_tier": "no",
+        "required_plan_for_agent": "Claude Pro or Max, US only, via waitlist during the research preview; Team and Enterprise plans are not included yet",
+        "paid_plans": [
+          {
+            "name": "Pro",
+            "price_usd_month": "20",
+            "note": "$17/mo billed annually ($200 up front)"
+          },
+          {
+            "name": "Max 5x",
+            "price_usd_month": "100"
+          },
+          {
+            "name": "Max 20x",
+            "price_usd_month": "200"
+          }
+        ],
+        "included": "Included in Pro and Max during the research preview, no separate price",
+        "usage_note": "Shares your plan's usage limits with the rest of Claude. Background checks count toward them, and large tasks such as a financial model or a deck use more"
+      },
+      "platforms": {
+        "ios": true,
+        "android": true,
+        "web": "claude.ai"
+      },
+      "regions": "United States (research preview)",
+      "actions": "morning brief across connected apps; checks them every few hours and messages you when something needs you; takes tasks by text or voice in one thread, such as scheduling meetings, drafting replies, finding unpaid invoices, preparing payroll, preparing contracts, building dashboards, forecasts, decks and web apps; can buy things through Stripe's Link (virtual card) and Shop Pay",
+      "connectors_notable": [
+        "Gmail",
+        "Slack",
+        "QuickBooks",
+        "Stripe",
+        "Gusto",
+        "LinkedIn",
+        "Docusign",
+        "HubSpot",
+        "Canva",
+        "Shopify"
+      ],
+      "connectors_count": "6,000+ connectors and plugins in the Claude Marketplace",
+      "execution": "Its own cloud virtual machine with a browser, so your laptop or phone can stay off; carries over memory, skills and connected apps from your Claude account. It can't yet show you its browser",
+      "safety": "Shows exactly what it will do and waits for approval before sending a message, paying, signing a document or deleting anything; some actions, such as trading securities or moving money between accounts, are off-limits even with approval. Never directly sees passwords or sign-in tokens; actions checked by Anthropic's auto mode classifier; a dedicated classifier refuses to share card numbers and government IDs, and health or finance details go out only on your explicit instruction. You can disconnect any app",
+      "privacy": "unknown",
+      "model": "Claude Opus 5.5",
+      "sources": [
+        "https://claude.com/product/claude-duet",
+        "https://claude.com/resources/articles/claude-duet",
+        "https://claude.com/pricing"
+      ],
+      "needs_update": "Research preview by waitlist from 2026-10-21; Anthropic says more safety details are coming. Re-check access, privacy and regions when the waitlist opens wider"
     }
   ]
 }
