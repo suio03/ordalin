@@ -38,6 +38,19 @@
       "language": "English; its patterns and examples are all English",
       "produces": "A rewrite of your text with AI writing patterns removed and the facts kept; for pasted text it also shows a first draft and the patterns still left in it, and for a file it edits only the prose",
       "checked_on": "2026-10-19"
+    },
+    {
+      "slug": "replica-skill",
+      "name": "Replica",
+      "author": "Jake Schincariol",
+      "repo": "https://github.com/Jakeschincariol/replica-skill",
+      "license": "MIT",
+      "version": "1.0.0",
+      "agents": "Claude Code (as a plugin or copied skill folders); any single SKILL.md can be pasted into a chat app, without the Python tools",
+      "install": "In Claude Code run /plugin marketplace add Jakeschincariol/replica-skill, then /plugin install replica-skill@replica-skill; or copy the replica-* folders to ~/.claude/skills/ or the project's .claude/skills/",
+      "language": "English",
+      "produces": "Eleven steps of files in a replica folder: a recon map and feature spreadsheet of the original app, architecture and design plans, your rebuilt app and backend, tests, a feature comparison, business, brand and launch notes, and a deploy step gated by a brand sweep",
+      "checked_on": "2026-10-22"
     }
   ]
 }

@@ -1,0 +1,162 @@
+export const meta = {
+  title: "Replica Skill Tested: Can Claude Map an App Before You Rebuild It?",
+  description:
+    "Replica is a free MIT set of eleven Claude skills for rebuilding an app's features under your own brand. We tested its first step, recon, with and without the skill.",
+  summary:
+    "Replica is a free, MIT-licensed set of eleven Claude skills by Jake Schincariol for rebuilding the features and flows of an existing app under your own name. The skills run in order, from a recon map of the original app to architecture, design, build, backend, testing, a feature-by-feature comparison, branding, launch and deploy, and each one writes its results into a replica folder in your project. The README says it rebuilds features only, never code, logos, copy or private APIs, and that deploy is blocked until a brand check is clean. We tested only the first skill, recon, on one open-source app, and ran the same request without the skill to compare.",
+  bestFor: [
+    "Founders and builders who want a structured study of an app before rebuilding its features for their own product",
+    "Projects where you want screens, flows, a data model and a prioritised feature list written down as files you can keep editing",
+    "Claude Code users; the skills install as a plugin or as copied skill folders and come with small Python helper tools",
+  ],
+  notFor: [
+    "Copying another product's code, logo, text or private API; the README rules all of these out",
+    "A quick answer; even the first step writes a long map and a feature spreadsheet before any code",
+    "Apps you can only study by scraping or logging in to someone else's account; the README limits sources to public pages and your own account",
+  ],
+  howItWorks: [
+    {
+      title: "Eleven steps in order",
+      text: "Recon maps the original app. Architect, design, build and backend plan and write your version. Test and diff check it against the original's feature list. Entrepreneur, brand, launch and deploy cover the business side, naming and release. Each step reads the files the earlier ones wrote.",
+    },
+    {
+      title: "Recon first",
+      text: "The recon skill lists its sources, numbers every screen and flow, counts the clicks on each flow, lists components, infers a data model with evidence and a confidence level, and writes a feature spreadsheet with must, should, could and skip rows. It ends with a size estimate from S to XL.",
+    },
+    {
+      title: "Local helper tools",
+      text: "Six small Python scripts that need no network handle image comparison, feature parity, review analysis, colour contrast, a brand sweep and store listings. They need Python 3.8 or newer. We did not run them.",
+    },
+    {
+      title: "Rules against copying",
+      text: "The README says the skills rebuild features and flows only, use public sources and your own account, never fabricate reviews, and block deploy until the brand sweep finds no leftover names or assets from the original.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Install in Claude Code",
+      code: "/plugin marketplace add Jakeschincariol/replica-skill\n/plugin install replica-skill@replica-skill",
+      note: "Installed as a plugin, the skills are namespaced, so recon is called /replica-skill:replica-recon.",
+    },
+    {
+      label: "Or copy the skill folders",
+      code: "git clone https://github.com/Jakeschincariol/replica-skill\ncp -r replica-skill/replica-* ~/.claude/skills/",
+      note: "Copy them into your project's .claude/skills folder instead to keep them in one project. A single SKILL.md can also be pasted into a chat app, but then the Python tools are not available.",
+    },
+    {
+      label: "Ask",
+      code: "/replica-recon Reverse engineer [app name and website] so I can build my own version of it. Scope: [the part you want]. Use only its public website and documentation.",
+      note: "Recon writes replica/recon.md and replica/features.csv. Each step ends by naming the next one to run.",
+    },
+  ],
+  test: {
+    date: "2026-10-22",
+    agent: "Claude Code 2.1.307, headless (claude -p), project settings only",
+    model: "claude-opus-5-5",
+    commit: "77c9436",
+    task: "Reverse engineer Memos (https://usememos.com), the open-source note-taking web app, so I can build my own version of it.\n\nScope: the core loop only, on the web: writing a memo, tagging it, and finding it again. It is for my own personal use. Use only its public website and documentation. Write what you find into this project.",
+    samples: [
+      {
+        label: "With the skill: flows from replica/recon.md (excerpt)",
+        note: "Three of seven numbered flows. The full map also has 15 numbered sources, 12 screens, a component table, a data model with confidence levels and a size estimate.",
+        text: `F01 Write a quick memo
+    S02 -> S03 (type, already focused or one click) -> save
+    happy path clicks: 2 (focus + save) or 1 with a save shortcut (not documented; assume Cmd/Ctrl+Enter)
+    edge: page reload mid-draft (draft must come back), empty content (save disabled, guess),
+          paste or drop an image (upload, retry on failure), long memo (focus mode)
+
+F02 Tag while writing
+    S03 type "#" -> autocomplete list of existing tags -> pick or keep typing -> save
+    happy path clicks: 0 extra (keyboard only)
+    edge: case differs (#Work is not #work), punctuation ends the tag (#release.notes -> release),
+          tag inside code, link or URL (not a tag), escaped \\#literal, nested #project/backend
+          also counts as "project", slash at the start or end or a double slash (not a tag)
+
+F03 Find by tag
+    S02 -> S12 click tag -> S02 filtered (tag in ["x"], includes children)
+    happy path clicks: 1
+    edge: parent tag shows children's memos too, filter combined with other filters, no results
+
+Numbers to beat: capture in 2 clicks, filter by tag in 1, reuse a View in 1.
+
+Size: M. A usable MVP (F01-F04, F07) fits a weekend. Views/CEL, calendar, and polish take it to a few weeks.`,
+      },
+      {
+        label: "With the skill: replica/features.csv (excerpt)",
+        note: "8 of 47 rows: 17 must, 13 should, 8 could and 9 skip.",
+        text: `feature,area,priority,original,clone,notes
+Composer at top of Home timeline,write,must,yes,no,S03; no title field
+Inline #tags extracted from content,tags,must,yes,no,follow grammar in recon.md; parse from Markdown AST
+Tag list in sidebar with counts and click to filter,find,must,yes,no,UI not documented; inferred (S12)
+Saved Views (title icon CEL filter) in sidebar,find,should,yes,no,/views; replaced Shortcuts in 0.31
+CEL filter subset with Validate,find,should,yes,no,hardest part; fields listed in recon.md
+Per-user tag color and blur rules (exact or regex),tags,could,yes,no,
+Spaces and SPACE visibility,collab,skip,yes,skip,multi-user; not needed for personal use
+Memos name logo and brand,brand,skip,yes,skip,owned by Memos; pick your own`,
+      },
+      {
+        label: "Same model, no skill: MEMOS_SPEC.md (excerpt)",
+        note: "One 15.6 KB spec with each point marked [doc] or [inferred]. It covers the same ground but has no screen or flow IDs, click counts, priorities or size estimate.",
+        text: `## 8. Suggested build order
+
+1. Memo CRUD, the SQLite schema, a feed that sorts pinned first then by created time desc, and an inline composer with a localStorage draft.
+2. Markdown rendering, with task-checkbox toggling.
+3. Tag extraction on save (AST-based, with ancestors), a sidebar tag tree with counts, click-to-filter, and # autocomplete in the composer.
+4. Archive/restore and the Archived page, plus pinning.
+5. Text search (substring, case-insensitive, highlighted).
+6. The CEL-subset parser -> SQL, with Validate, Expression mode in search, and Views (CRUD, sidebar, URL sync).
+7. Calendar with day counts, and the day filter.
+8. Nice-to-haves: memo-to-memo references, per-tag colors and blur, focus mode, column layouts.
+
+## 9. Open questions (not answered by the public docs)
+
+- The content length limit (it's an instance setting with an unknown default).
+- The exact rule for property.title.
+- Whether # must be preceded by whitespace.
+- Whether delete is hard or soft.`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What does Replica do?",
+      a: "It is a set of eleven Claude skills that walk an agent through rebuilding an existing app's features under your own brand: a recon map of the original, then architecture, design, build, backend, tests, a feature comparison, business notes, branding, launch and deploy. Each step writes files into a replica folder that the next step reads.",
+    },
+    {
+      q: "Is it legal to clone an app with it?",
+      a: "The README calls it a clean-room rebuild of features and flows, never code, logos, copy or private APIs, and says to use public sources and your own account only. It also says it is not legal advice. Whether a particular rebuild is allowed depends on the app's terms and your jurisdiction. We tested it on Memos, which is open source under the MIT licence.",
+    },
+    {
+      q: "Does it scrape the app or log in to it?",
+      a: "Not in our test. The recon run read only the public website and documentation, as we asked, and listed every page it used. It did not open the live demo or the source code and took no screenshots. The README says to use public sources and your own account, with no scraping.",
+    },
+    {
+      q: "Does it write the code too?",
+      a: "Later skills in the set plan and write the app, its backend and its tests, and a deploy skill handles release. We tested only the recon step, so we cannot say how well those work.",
+    },
+    {
+      q: "Can I use it outside Claude Code?",
+      a: "The README says you can paste any single SKILL.md into a chat app, but the Python helper tools then do not run, and the steps lose the shared replica folder that links them. We tested it only in Claude Code.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes. It is open source under the MIT licence. You still pay for the AI agent you run it in.",
+    },
+  ],
+};
+
+## What we tested
+
+We installed the eleven skills into an empty test project and gave Claude Code one request: study Memos, the open-source note-taking web app, so we could build our own version of its core loop, which is writing a memo, tagging it and finding it again. We limited the sources to its public website and documentation. Memos is MIT-licensed, so rebuilding it raises no terms-of-service question.
+
+We sent the same request twice: once with the skills installed in the project, and once with the same model and nothing installed. Both runs loaded project settings only and could read web pages and write files.
+
+## What we found
+
+- **The skill picked the recon step itself and followed it.** It wrote replica/recon.md, a 14 KB map with 15 numbered sources, 12 screens, 7 flows with click counts and edge cases, a component table, a data model with evidence and a confidence level for each entity, the exact tag rules and a size estimate of M. It also wrote replica/features.csv with 47 rows: 17 must, 13 should, 8 could and 9 skip. It ended by naming the next skill to run.
+- **It marked its guesses.** Screens and actions the docs do not describe, such as the sidebar tag list, the memo action menu and the save shortcut, are labelled as guesses rather than stated as facts. It left the screenshots folder empty and said so.
+- **It kept the brand out.** The Memos name and logo are a skip row, and the out-of-scope list sends you to pick your own name.
+- **The run without the skill was also good.** It wrote one 15.6 KB spec covering the same tag rules, data model, filter language and calendar, marked each point as documented or inferred, added a suggested SQLite schema and a build order, and listed open questions. What it lacked was the structure the later Replica steps depend on: numbered screens and flows, click counts, a prioritised feature list with skip rows and a size estimate.
+- **Neither run read the source code or opened the demo,** because we asked them not to. A real rebuild would likely check both.
+
+The run with the skill took 22 turns and about three minutes and cost $0.63 at API prices, as reported by Claude Code. The run without it took 17 turns and cost $0.50. This is one small test of the first of eleven skills, on one well-documented open-source app. We did not test the architect, design, build, backend, test, diff, entrepreneur, brand, launch or deploy skills, the Python tools, the plugin install, or an app with thin public documentation.
