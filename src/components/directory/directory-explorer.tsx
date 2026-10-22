@@ -252,6 +252,9 @@ export function DirectoryExplorer({
               />
             </div>
           ) : null}
+          <p className={styles.indexLink}>
+            <Link href="/tools/a-z">Browse all tools A–Z →</Link>
+          </p>
         </section>
 
         <aside className={styles.editorialRail}>

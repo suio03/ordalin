@@ -14,6 +14,7 @@ import { ToolMark } from "@/components/directory/tool-mark";
 import { EditorialCard } from "@/components/editorial/editorial-parts";
 import { ToolRow } from "@/components/directory/tool-row";
 import { listLiveEditorialForTool } from "@/lib/editorial/load";
+import { listPublishedGuidesForTool } from "@/lib/guides";
 import {
   getToolBySlug,
   listRelatedTools,
@@ -40,11 +41,12 @@ export async function generateMetadata({ params }: ToolParams): Promise<Metadata
 
 export default async function ToolPage({ params }: ToolParams) {
   const slug = (await params).slug;
-  const [tool, relatedTasks, relatedTools, featuredIn] = await Promise.all([
+  const [tool, relatedTasks, relatedTools, featuredIn, guides] = await Promise.all([
     getToolBySlug(slug),
     listTasksForTool(slug),
     listRelatedTools(slug),
     listLiveEditorialForTool(slug),
+    listPublishedGuidesForTool(slug),
   ]);
   if (!tool) notFound();
 
@@ -115,6 +117,20 @@ export default async function ToolPage({ params }: ToolParams) {
         <div><dt>Available as</dt><dd>{profile?.platforms ?? (research ? research.platforms.map(item => item.text).join(" · ") || "Not yet verified" : (interfaces.length ? interfaces.map((tag) => tag.name).join(" · ") : "Not yet verified"))}{research ? research.platforms.map(item => <ResearchCitations key={item.text} evidence={item.evidence} />) : null}</dd></div>
         <div><dt>Primary group</dt><dd>{tool.primaryCategory.name}</dd></div>
       </dl>
+
+      {guides.length ? (
+        <ul className={styles.guideList} aria-label={`${tool.name} guides`}>
+          {guides.map((guide) => (
+            <li key={guide.slug}>
+              <Link href={`/guides/${guide.slug}`} data-placement="tool-guide">
+                <span className={styles.eyebrow}>Guide</span>
+                <strong>{guide.title}</strong>
+                <span>{guide.description}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       {relatedTools.length ? (
         <section className={styles.alsoConsider} aria-labelledby="also-consider-title">

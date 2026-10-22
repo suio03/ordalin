@@ -11,6 +11,8 @@ export type GuideMetadata = {
   updatedAt?: string;
   status: GuideStatus;
   topics?: string[];
+  /** Catalogue tool slugs the guide is about; their tool pages link back to it. */
+  tools?: string[];
   relatedLinks?: Array<{ href: string; label: string }>;
 };
 
@@ -100,6 +102,7 @@ export function parseGuideMetadata(slug: string, input: unknown): GuideSummary {
     updatedAt,
     status,
     topics: optionalStrings(value.topics, "topics"),
+    tools: optionalStrings(value.tools, "tools"),
     relatedLinks,
   };
 }
@@ -118,6 +121,10 @@ const loadGuideSummaries = cache(async () => {
 
 export async function listPublishedGuides() {
   return loadGuideSummaries();
+}
+
+export async function listPublishedGuidesForTool(toolSlug: string) {
+  return (await loadGuideSummaries()).filter((guide) => guide.tools?.includes(toolSlug));
 }
 
 export async function getPublishedGuide(slug: string): Promise<PublishedGuide | null> {

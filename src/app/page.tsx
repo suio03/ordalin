@@ -9,6 +9,7 @@ import { editorialHref, type EditorialPage } from "@/lib/editorial";
 import { listLiveEditorial } from "@/lib/editorial/load";
 import { appBaseUrl } from "@/lib/editorial/metadata";
 import { pinnedHomepageGuides } from "@/content/editorial";
+import { displayName as skillName, getSkill, HUB_INDEX_MINIMUM, publishedSkillSlugs, skillsPath } from "@/lib/skills/data";
 import {
   listCategories,
   listCollections,
@@ -109,6 +110,9 @@ export default async function Home({ searchParams }: HomeProps) {
   };
   const guides = [...editorial.pages].sort((left, right) => pinRank(left) - pinRank(right)).slice(0, 3);
 
+  const skills = publishedSkillSlugs().map(getSkill);
+  const skillsHub = skills.length >= HUB_INDEX_MINIMUM;
+
   const baseUrl = appBaseUrl();
 
   return (
@@ -176,6 +180,8 @@ export default async function Home({ searchParams }: HomeProps) {
           <nav className={styles.sidebarMore} aria-label="More ways to browse">
             <p className={styles.label}>Browse</p>
             <ul>
+              <li><Link href="/agents">AI agents</Link></li>
+              {skillsHub ? <li><Link href={skillsPath.overview}>Agent skills</Link></li> : null}
               {models.total ? <li><Link href="/models">AI models</Link></li> : null}
               {tasks.length ? <li><Link href="/tasks">Find by goal</Link></li> : null}
               {collections.length ? <li><Link href="/collections">Collections</Link></li> : null}
@@ -209,6 +215,26 @@ export default async function Home({ searchParams }: HomeProps) {
                 <div className={styles.shelfLinks}><Link href="/tools">All tools →</Link></div>
               </div>
               <ToolGrid tools={latest.items} />
+            </section>
+          ) : null}
+
+          {skills.length ? (
+            <section className={styles.shelf} aria-labelledby="skills-title">
+              <div className={styles.shelfHeader}>
+                <h2 id="skills-title">Agent skills</h2>
+                {skillsHub ? <div className={styles.shelfLinks}><Link href={skillsPath.overview}>All skills →</Link></div> : null}
+              </div>
+              <ul className={styles.toolGrid}>
+                {skills.map((skill) => (
+                  <li key={skill.slug}>
+                    <Link className={`${styles.toolCard} ${styles.skillCard}`} href={skillsPath.skill(skill.slug)}>
+                      <strong>{skillName(skill)}</strong>
+                      <span className={styles.toolTagline}>{skill.produces}</span>
+                      <span className={styles.toolMeta}>By {skill.author}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </section>
           ) : null}
 

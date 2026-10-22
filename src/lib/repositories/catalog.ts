@@ -773,6 +773,23 @@ export const listPublishedToolSlugs = cache(async (): Promise<Set<string>> => {
   return new Set(result.results.map((row) => row.slug));
 });
 
+export type ToolIndexEntry = { slug: string; name: string; categoryName: string };
+
+/** Every published tool by name, for the A–Z index. */
+export const listToolIndex = cache(async (): Promise<ToolIndexEntry[]> => {
+  const database = await getDatabase();
+  const result = await database
+    .prepare(
+      `SELECT t.slug, t.name, c.name AS category_name
+       FROM tools t
+       JOIN categories c ON c.id = t.primary_category_id
+       WHERE t.status = 'published'
+       ORDER BY t.name COLLATE NOCASE ASC`,
+    )
+    .all<{ slug: string; name: string; category_name: string }>();
+  return result.results.map((row) => ({ slug: row.slug, name: row.name, categoryName: row.category_name }));
+});
+
 /** Published tools named by an editorial page, with facts from their researched profile. */
 export async function listEditorialTools(slugs: string[]): Promise<Map<string, EditorialTool>> {
   const unique = [...new Set(slugs)];

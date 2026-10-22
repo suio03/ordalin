@@ -31,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const fixed: MetadataRoute.Sitemap = [
     { url: baseUrl, changeFrequency: "daily", priority: 1 },
     { url: `${baseUrl}/tools`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${baseUrl}/tools/a-z`, changeFrequency: "daily", priority: 0.8 },
     { url: `${baseUrl}/tasks`, changeFrequency: "weekly", priority: 0.85 },
     { url: `${baseUrl}/collections`, changeFrequency: "weekly", priority: 0.8 },
     ...(models.total >= indexableModelsMinimum

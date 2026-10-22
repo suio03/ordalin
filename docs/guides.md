@@ -35,6 +35,7 @@ export const metadata = {
   updatedAt: "2026-09-01",
   status: "draft",
   topics: ["Voice & Speech"],
+  tools: ["otter-ai"],
   relatedLinks: [
     { href: "/categories/voice-speech", label: "Voice & Speech tools" },
   ],
@@ -52,6 +53,10 @@ Then add one statically analyzable loader to `guideLoaders` in
 "choose-an-ai-transcription-tool": () =>
   import("@/content/guides/choose-an-ai-transcription-tool.mdx"),
 ```
+
+`tools` lists the catalogue slugs the guide is about. Each of those tool pages
+links back to the published guide, so a guide is never reachable only through
+the sitemap while Guides navigation stays hidden.
 
 Keep `status: "draft"` until the copy, links, dates, and factual claims have
 been checked. Publishing requires only changing the status and rebuilding; it

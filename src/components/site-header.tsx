@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { indexableCategoryMinimum } from "@/lib/catalog";
 import { editorialHref, listEditorialPages } from "@/lib/editorial";
-import { skillsPath, visibleSkillSlugs } from "@/lib/skills/data";
+import { listPublishedGuides } from "@/lib/guides";
+import { listBrowseCategories, listCategories, listCollections, listTasks } from "@/lib/repositories/catalog";
+import { displayName as skillName, getSkill, publishedSkillSlugs, skillsPath, visibleSkillSlugs } from "@/lib/skills/data";
 import HomePartners from "./home-partners";
 import { MobileMenu } from "./mobile-menu";
 import { ThemeSelector } from "./theme-selector";
@@ -49,15 +52,85 @@ export function SiteHeader() {
   );
 }
 
-export function SiteFooter() {
-  const bestPages = listEditorialPages("best").slice(0, 5);
-  const comparePages = listEditorialPages("compare").slice(0, 5);
-  const alternativesPages = listEditorialPages("alternatives").slice(0, 5);
-  const columns = [
+type FooterColumn = { title: string; links: Array<{ href: string; label: string }> };
+
+// Footer directory: links every indexable listing page so crawlers reach each one
+// within two clicks of any page. Categories below indexableCategoryMinimum are noindex.
+async function directoryColumns(): Promise<FooterColumn[]> {
+  const [groups, categories, tasks, collections] = await Promise.all([
+    listCategories(),
+    listBrowseCategories(),
+    listTasks(),
+    listCollections(),
+  ]).catch(() => [[], [], [], []] as const);
+  const skills = publishedSkillSlugs();
+  const guides = await listPublishedGuides().catch(() => []);
+  return [
+    {
+      title: "Categories",
+      links: groups
+        .filter((group) => group.publishedToolCount >= indexableCategoryMinimum)
+        .map((group) => ({ href: `/categories/${group.slug}`, label: group.name })),
+    },
+    {
+      title: "Popular categories",
+      links: categories
+        .filter((category) => category.publishedToolCount >= indexableCategoryMinimum)
+        .map((category) => ({ href: `/categories/${category.groupSlug}/${category.slug}`, label: category.name })),
+    },
+    {
+      title: "Find by goal",
+      links: tasks.map((task) => ({ href: `/tasks/${task.slug}`, label: task.name })),
+    },
+    {
+      title: "Collections",
+      links: collections.map((collection) => ({ href: `/collections/${collection.slug}`, label: collection.name })),
+    },
+    {
+      title: "Agent skills",
+      links: skills.map((slug) => ({ href: skillsPath.skill(slug), label: skillName(getSkill(slug)) })),
+    },
+    {
+      // Individual guides only: the /guides hub stays out of navigation until it is approved.
+      title: "Guides",
+      links: guides.map((guide) => ({ href: `/guides/${guide.slug}`, label: guide.title })),
+    },
+  ].filter((column) => column.links.length);
+}
+
+function FooterColumns({ columns, className }: { columns: FooterColumn[]; className?: string }) {
+  return (
+    <div className={className ? `${styles.footerColumns} ${className}` : styles.footerColumns}>
+      {columns.map((column) => (
+        <nav key={column.title} aria-label={column.title}>
+          <p>{column.title}</p>
+          <ul>
+            {column.links.map((link) => (
+              <li key={link.href}>
+                {link.href.startsWith("/")
+                  ? <Link href={link.href}>{link.label}</Link>
+                  : <a href={link.href}>{link.label}</a>}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))}
+    </div>
+  );
+}
+
+export async function SiteFooter() {
+  const directory = await directoryColumns();
+  const bestPages = listEditorialPages("best");
+  const comparePages = listEditorialPages("compare");
+  const alternativesPages = listEditorialPages("alternatives");
+  const columns: FooterColumn[] = [
     {
       title: "Browse",
       links: [
         { href: "/tools", label: "All tools" },
+        { href: "/tools/a-z", label: "All tools A–Z" },
+        { href: "/agents", label: "AI agents" },
         { href: "/models", label: "AI models" },
         { href: "/tasks", label: "Find by goal" },
         { href: "/collections", label: "Collections" },
@@ -69,14 +142,13 @@ export function SiteFooter() {
       title: "Best of",
       links: [...bestPages.map((page) => ({ href: editorialHref(page), label: page.title })), { href: "/best", label: "All best-of lists" }],
     }] : []),
-    ...(comparePages.length || alternativesPages.length ? [{
+    ...(comparePages.length ? [{
       title: "Compare",
-      links: [
-        ...comparePages.map((page) => ({ href: editorialHref(page), label: page.title })),
-        ...alternativesPages.map((page) => ({ href: editorialHref(page), label: page.title })),
-        ...(comparePages.length ? [{ href: "/compare", label: "All comparisons" }] : []),
-        ...(alternativesPages.length ? [{ href: "/alternatives", label: "All alternatives" }] : []),
-      ],
+      links: [...comparePages.map((page) => ({ href: editorialHref(page), label: page.title })), { href: "/compare", label: "All comparisons" }],
+    }] : []),
+    ...(alternativesPages.length ? [{
+      title: "Alternatives",
+      links: [...alternativesPages.map((page) => ({ href: editorialHref(page), label: page.title })), { href: "/alternatives", label: "All alternatives" }],
     }] : []),
     {
       title: "Ordalin",
@@ -93,22 +165,8 @@ export function SiteFooter() {
   ];
   return (
     <footer className={styles.footer}>
-      <div className={styles.footerColumns}>
-        {columns.map((column) => (
-          <nav key={column.title} aria-label={column.title}>
-            <p>{column.title}</p>
-            <ul>
-              {column.links.map((link) => (
-                <li key={link.href}>
-                  {link.href.startsWith("/")
-                    ? <Link href={link.href}>{link.label}</Link>
-                    : <a href={link.href}>{link.label}</a>}
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ))}
-      </div>
+      <FooterColumns columns={columns} />
+      {directory.length ? <FooterColumns columns={directory} className={styles.footerDirectory} /> : null}
       <HomePartners />
       <span>Ordalin · Ordered discovery for AI tools · No paid placement</span>
     </footer>

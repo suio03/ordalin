@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { withSocial } from "@/lib/seo";
 import Link from "next/link";
-import { allAgents, displayName, getAgent } from "@/lib/agents/data";
-import { agentsPath, ALTERNATIVES_PAGES, BEST_PAGES, COMPARISONS, comparisonTitle, OVERVIEW, PRICING_PAGES } from "@/lib/agents/content";
+import { allAgents, displayName, getAgent, vendorShort } from "@/lib/agents/data";
+import { AGENT_PAGES, agentsPath, ALTERNATIVES_PAGES, BEST_PAGES, COMPARISONS, comparisonTitle, OVERVIEW, PRICING_PAGES, SAFETY_PAGES } from "@/lib/agents/content";
 import { CHECKED_ON } from "@/lib/agents/site";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -54,7 +54,15 @@ export default async function AgentsOverviewPage() {
       title: `${displayName(getAgent(slug))} pricing`,
       note: "Plans and what you need →",
     })),
+    ...Object.keys(SAFETY_PAGES).map((slug) => ({
+      href: agentsPath.safety(slug),
+      title: `Is ${displayName(getAgent(slug))} safe?`,
+      note: "Privacy and data use →",
+    })),
   ];
+  const profileCards: LinkCard[] = agents
+    .filter((agent) => agent.slug in AGENT_PAGES)
+    .map((agent) => ({ href: agentsPath.agent(agent.slug), title: displayName(agent), note: `${vendorShort(agent)} →` }));
 
   return (
     <main className="mx-auto flex max-w-[1280px] flex-col gap-16 px-4 pt-12 md:px-10 md:pt-16">
@@ -93,6 +101,11 @@ export default async function AgentsOverviewPage() {
       <section className="flex flex-col gap-4">
         <h2 className="font-serif text-[30px] font-medium md:text-[36px]">Guides</h2>
         <CardGrid cards={guideCards} />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="font-serif text-[30px] font-medium md:text-[36px]">Every agent we track</h2>
+        <CardGrid cards={profileCards} />
       </section>
 
 

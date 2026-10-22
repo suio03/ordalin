@@ -10,11 +10,13 @@ describe("guide metadata", () => {
         publishedAt: "2026-08-26",
         status: "published",
         topics: ["Audio", "Audio"],
+        tools: ["otter-ai", "otter-ai"],
         relatedLinks: [{ href: "/categories/voice-speech", label: "Voice & Speech" }],
       }),
     ).toMatchObject({
       slug: "choose-a-transcription-tool",
       topics: ["Audio"],
+      tools: ["otter-ai"],
     });
   });
 

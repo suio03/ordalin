@@ -257,6 +257,11 @@
 
 .footerColumns a:hover { color: var(--color-text-primary); text-decoration: underline; }
 
+.footerDirectory {
+  padding-top: var(--space-2xl);
+  border-top: var(--border-width) solid var(--color-border-subtle);
+}
+
 .footer a {
   color: inherit;
   text-underline-offset: 3px;

@@ -237,6 +237,13 @@
   font-size: var(--font-size-metadata);
 }
 
+.skillCard {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "name" "tagline" "meta";
+}
+
+.skillCard .toolTagline { -webkit-line-clamp: 2; }
+
 .pickBadge { color: var(--color-accent-text); }
 
 .srOnly {

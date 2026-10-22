@@ -373,6 +373,13 @@
 .fitIdentity span { color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: var(--font-size-metadata); }
 .fitItem dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xl); margin: 0; padding: var(--space-xl) 0; }
 .fitItem dd { margin: 0; color: var(--color-text-secondary); font-size: var(--font-size-caption); line-height: 1.65; }
+.guideList { display: grid; gap: var(--space-sm); margin: 0 0 var(--space-md); padding: 0; list-style: none; }
+.guideList a { display: grid; gap: var(--space-2xs); padding: var(--space-md) var(--space-lg); border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-panel); background: var(--color-surface-raised); box-shadow: var(--shadow-card); color: var(--color-text-primary); text-decoration: none; }
+.guideList a:hover strong { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.guideList .eyebrow { margin: 0; }
+.guideList strong { font-size: var(--font-size-body-compact); font-weight: var(--font-weight-strong); }
+.guideList strong::after { content: " →"; }
+.guideList a > span:last-child { color: var(--color-text-secondary); font-size: var(--font-size-caption); line-height: 1.65; }
 
 .relatedSection {
   display: grid;

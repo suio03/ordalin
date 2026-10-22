@@ -228,6 +228,16 @@
   border-top: var(--border-width) solid var(--color-border-subtle);
 }
 
+.indexLink {
+  margin: 0;
+  padding: var(--space-md) var(--space-lg);
+  border-top: var(--border-width) solid var(--color-border-subtle);
+  font-size: var(--font-size-body-compact);
+}
+
+.indexLink a { color: var(--color-text-secondary); text-underline-offset: 3px; }
+.indexLink a:hover { color: var(--color-text-primary); }
+
 .editorialRail { display: grid; gap: var(--layout-column-gap); }
 
 .railPanel {

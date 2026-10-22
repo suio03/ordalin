@@ -130,6 +130,10 @@ export const meta = {
       a: "Node 20 or newer, ffmpeg and Python 3.11 or newer (or uv). The agent installs the rest. Output defaults to 1920×1080 at 24 frames per second.",
     },
     {
+      q: "Can I change a style and keep my own version?",
+      a: "Yes, since the 2026-10-19 update. Name a style and say you want your own version; the agent lists what is safe to change, what changes the style's character and what cannot change, then saves your version under a new name in ~/lemo-my-styles/, outside the library, so updates and uninstalls leave it alone. It shows a style frame next to the original and, once you approve, makes a 15 to 30 second test film. Our test run predates this feature.",
+    },
+    {
       q: "Is it free, and can I use the films commercially?",
       a: "The skill is free: the code is MIT-licensed, and the README says films you make with it are yours, with no credit needed. The author's own demo films and stills are CC BY 4.0, so reusing those needs credit to LemoLab. You still pay for the Claude usage, and a film uses a fair amount of tokens.",
     },
@@ -149,3 +153,13 @@ We cloned the repository and gave a Claude Code subagent on Claude Opus 5.5 the 
 - **Competent, not stunning.** The style was there: a glossy board, a floating marker, magnets as the only moving objects. But the opening is slow without a voice, the full-board pull-back near the end looks sparse, and the final hold runs a little long.
 
 The films above show what the author gets from the same library. Our single run landed below that bar, which fits the README's own note that a film takes 30 to 60 minutes of agent work: a quick pass gets you a usable explainer, and the showcase look takes more iteration.
+
+## Make a style your own
+
+An update on 2026-10-19 added a way to change one of the 51 styles and keep the result as your own. Our test run came before it, so this section follows the author's MY-STYLES.md guide in the repository rather than our own run.
+
+- **Start from one style.** You ask for your own version of a style, for example turning Ukiyo-e into a "Night Ukiyo-e", the README's own example.
+- **The agent says what can change.** Colour within the style's logic, type, motion and sound are safe; materials, colour logic and camera change its character; its essence and render engine cannot change without it becoming a different style. Story, pacing, cast and voice need no custom style, since every film can set them.
+- **Up to five changes a round.** The new style is saved in `~/lemo-my-styles/` with a full style sheet and a list of changes. The library itself is never edited, and updates or uninstalling leave your styles in place.
+- **A frame, then a short test film.** The agent renders one frame next to the original style, waits for your approval, then makes a 15 to 30 second test film that shows every change. After that you name your style like any other when you ask for a film.
+- **Still code only.** Changes must be things code can draw. If one needs pictures, the guide says to use your own images or openly licensed ones, credited.
