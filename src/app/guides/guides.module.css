@@ -132,8 +132,11 @@
 .prose ul,
 .prose ol,
 .prose blockquote { margin: 0 0 var(--space-lg); }
+.prose ul { padding-left: 1.25em; list-style: disc; }
+.prose ol { padding-left: 1.25em; list-style: decimal; }
 .prose li + li { margin-top: var(--space-xs); }
-.prose a { color: var(--color-text-primary); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.prose a { color: var(--color-text-primary); text-decoration: underline; text-decoration-color: var(--color-text-tertiary); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.prose a:hover { text-decoration-color: currentColor; text-decoration-thickness: 2px; }
 .prose blockquote { padding: var(--space-md) var(--space-lg); border-left: 3px solid var(--color-border-strong); color: var(--color-text-secondary); background: var(--color-surface-muted); }
 .prose code { padding: 2px 5px; border-radius: var(--radius-control); background: var(--color-surface-muted); font-family: var(--font-family-metadata); font-size: .86em; }
 .prose pre { overflow-x: auto; margin: 0 0 var(--space-xl); padding: var(--space-lg); border-radius: var(--radius-medium); color: var(--color-text-primary); background: var(--color-surface-raised); }

@@ -1,5 +1,5 @@
 import { cache } from "react";
-import type { MDXContent } from "mdx/types";
+import type { ComponentType } from "react";
 
 export type GuideStatus = "draft" | "published";
 
@@ -15,10 +15,10 @@ export type GuideMetadata = {
 };
 
 export type GuideSummary = GuideMetadata & { slug: string };
-export type PublishedGuide = GuideSummary & { Content: MDXContent };
+export type PublishedGuide = GuideSummary & { Content: ComponentType };
 
 type GuideModule = {
-  default: MDXContent;
+  default: ComponentType;
   metadata: unknown;
 };
 
@@ -26,7 +26,9 @@ type GuideLoader = () => Promise<GuideModule>;
 
 // Add one statically analyzable import here for each MDX file. Avoid runtime
 // filesystem reads so the same bundle works on Cloudflare Workers.
-const guideLoaders: Record<string, GuideLoader> = {};
+const guideLoaders: Record<string, GuideLoader> = {
+  "artcraft-download": () => import("@/content/guides/artcraft-download.mdx"),
+};
 
 function requiredString(value: unknown, field: string) {
   if (typeof value !== "string" || !value.trim()) {

@@ -5,4 +5,6 @@ declare module "*.mdx" {
   // Named `meta` export of synced agent pages; its shape is checked in src/content/agents/index.ts.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export const meta: any;
+  // Named `metadata` export of guides; parsed by parseGuideMetadata in src/lib/guides.ts.
+  export const metadata: unknown;
 }

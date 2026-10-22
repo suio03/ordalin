@@ -1,0 +1,84 @@
+export const metadata = {
+  title: "ArtCraft download: official Launcher and AI studio links",
+  description: "ArtCraft has two different downloads: the Launcher for its free Craft apps and the ArtCraft AI studio. Official links for Windows, macOS and Linux, plus what we found when we checked the installers.",
+  author: "Ordalin",
+  publishedAt: "2026-10-22",
+  updatedAt: "2026-10-22",
+  status: "published",
+  topics: ["Image & Design"],
+  relatedLinks: [
+    { href: "/tools/artcraft", label: "ArtCraft AI studio profile" },
+    { href: "/categories/image", label: "Image & Design tools" },
+  ],
+};
+
+"ArtCraft" now refers to two downloads from the same team. In October 2026 ArtCraft released the **Craft apps**, thirteen free open-source desktop programs meant as alternatives to Adobe and Office apps, together with the **ArtCraft Launcher** that installs them. The older **ArtCraft AI studio** is a separate app for generating images and video with AI models. Since then, most ArtCraft downloads on GitHub have been for the Launcher, so check which one you need first.
+
+This page links only to the official website and the official GitHub releases. We downloaded each installer listed below on 22 October 2026 and checked its code signature. We did not run them.
+
+## Which ArtCraft do you want?
+
+### The Craft apps: free alternatives to Adobe and Office
+
+PhotoCraft (image editing), VectorCraft (vector illustration), FilmCraft (video editing), LightCraft (photo library and raw developer), PdfCraft (PDF tools), EffectCraft (motion graphics), DesignCraft (page layout), FigCraft (interface design), WordCraft (word processing), SoundCraft (audio), DeckCraft (presentations), CADCraft (CAD drafting) and GridCraft (spreadsheets).
+
+- They run locally on your own files and are written in Rust. They do not need an AI subscription.
+- They are early software: the official app list marks each one "Early alpha" or "In development". Treat them as previews, not drop-in replacements for the programs they imitate.
+- Install them with the **ArtCraft Launcher**, or download one app from its own page on getartcraft.com.
+
+### The ArtCraft AI studio: controllable AI images and video
+
+A desktop app where you lay out a scene on a 2D canvas or in 3D, pose characters and place the camera, then let an AI model such as Nano Banana or Seedance render it. The app is free and open source, but generating with ArtCraft's hosted models uses paid credits. There is also a web version. Read our [ArtCraft profile](/tools/artcraft) for what it does in detail.
+
+## Download the ArtCraft Launcher (Craft apps)
+
+Get it from the [Launcher's GitHub releases page](https://github.com/storytold/craft-launcher/releases/latest). Version 0.6.1 was released on 21 October 2026. Pick the file for your system:
+
+- **macOS:** [artcraft-launcher-0.6.1-macos-universal.dmg](https://github.com/storytold/craft-launcher/releases/download/v0.6.1/artcraft-launcher-0.6.1-macos-universal.dmg) (about 20 MB, Apple silicon and Intel). The app declares macOS 11 or later.
+- **Windows:** [windows-x64.msi](https://github.com/storytold/craft-launcher/releases/download/v0.6.1/artcraft-launcher-0.6.1-windows-x64.msi) for most PCs, [windows-arm64.msi](https://github.com/storytold/craft-launcher/releases/download/v0.6.1/artcraft-launcher-0.6.1-windows-arm64.msi) for Arm laptops, or the portable [x64 .zip](https://github.com/storytold/craft-launcher/releases/download/v0.6.1/artcraft-launcher-0.6.1-windows-x64-portable.zip) if you cannot run installers. The MSI installs for your user account only and does not ask for administrator rights.
+- **Linux (x86-64):** [AppImage](https://github.com/storytold/craft-launcher/releases/download/v0.6.1/artcraft-launcher-0.6.1-linux-x86_64.AppImage), [.deb](https://github.com/storytold/craft-launcher/releases/download/v0.6.1/artcraft-launcher-0.6.1-linux-x86_64.deb), [.rpm](https://github.com/storytold/craft-launcher/releases/download/v0.6.1/artcraft-launcher-0.6.1-linux-x86_64.rpm) or [Flatpak](https://github.com/storytold/craft-launcher/releases/download/v0.6.1/artcraft-launcher-0.6.1-linux-x86_64.flatpak). Arm64, RISC-V and FreeBSD builds, an Arch package and `.tar.gz` archives are on the release page.
+
+Open the Launcher, choose the apps you want and press Install. According to its README, it picks the right build for your system, checks it against the release's [SHA-256 checksums](https://github.com/storytold/craft-launcher/releases/download/v0.6.1/SHA256SUMS.txt) and tells you when updates are out. The Launcher itself is MIT or Apache-2.0 licensed and labelled early alpha.
+
+If you only want one app, open its page from [getartcraft.com/apps](https://getartcraft.com/apps); each app lists its own installers for macOS, Windows, Linux and, for most of them, the web.
+
+## Download the ArtCraft AI studio
+
+The [official download page](https://getartcraft.com/download) offers version 0.41.0, published on GitHub on 26 September 2026:
+
+- **macOS:** [ArtCraft_0.41.0_universal.dmg](https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_universal.dmg) (about 95 MB, Apple silicon and Intel). Official requirement: macOS 12 or later.
+- **Windows:** [ArtCraft_0.41.0_x64-setup.exe](https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_x64-setup.exe) (about 42 MB), or the [.msi installer](https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_x64_en-US.msi). Newer versions appear on the [GitHub releases page](https://github.com/storytold/artcraft/releases). Official requirement: 64-bit Windows 10 or later.
+- **Both:** 8 GB of RAM recommended and 2 GB of free storage.
+- **No Linux build.** On Linux, use the [web version](https://app.getartcraft.com/) in a browser.
+
+After installing, the official quick start asks you to create a free account or sign in before you generate anything.
+
+## Is the ArtCraft download safe?
+
+What we found when we checked the official installers:
+
+- **Launcher for macOS:** signed by Learning Machines LLC (Apple Team ID DJ6XS33FX8) and notarized by Apple, so it should open without a Gatekeeper block.
+- **Launcher for Windows:** the MSI carries a DigiCert code-signing certificate issued to Learning Machines Inc.
+- **AI studio for macOS:** signed by the same Learning Machines LLC developer ID and notarized by Apple.
+- **AI studio for Windows:** the `setup.exe` has **no digital signature**. Windows SmartScreen may show "Windows protected your PC" and list the publisher as unknown. That warning alone does not mean the file is harmful, but only continue with **More info → Run anyway** if the file came from getartcraft.com or github.com/storytold.
+
+The source code for all of these is public on GitHub, which lets anyone inspect it, but that is not a security audit.
+
+## Official sites and look-alikes
+
+Official sources:
+
+- [getartcraft.com](https://getartcraft.com/) (website, download page and Craft app pages)
+- [app.getartcraft.com](https://app.getartcraft.com/) (the AI studio's web version)
+- [github.com/storytold](https://github.com/storytold) (source code and releases)
+
+Since the Craft apps launched, many similarly named sites have appeared in search results, including getartcraft.app, artcraftapp.com, craftsuite.net, artcraftsuite.org, craftingapps.org and photocraftartcraft.com. None of them is linked from getartcraft.com or from the Launcher's README. Some only explain the project, but you don't need any of them to download it. Use the official links above.
+
+On the App Store, "AI Art Generator: ArtCraft" is published by a different developer and has nothing to do with this project. The official site offers desktop and web versions only and does not link to any mobile app.
+
+## Is ArtCraft free?
+
+- **Craft apps and Launcher:** free and open source. ArtCraft does not list a price for them.
+- **AI studio:** the app is free and open source (Apache-2.0), and ArtCraft says you can use it with your own compute or your own third-party subscriptions. Generating with ArtCraft's hosted models uses credits: Basic is listed at $10 a month (1,000 credits), Pro at $35 (3,750) and Max at $60 (6,600), and when we checked, the pricing page showed a limited-time 20% discount. One-time credit packs are also sold.
+
+Prices and versions were checked on 22 October 2026. Both projects publish new releases often, so the version numbers above will go out of date. The official release pages always list the newest files.
