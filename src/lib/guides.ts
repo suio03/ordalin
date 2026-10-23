@@ -13,6 +13,8 @@ export type GuideMetadata = {
   topics?: string[];
   /** Catalogue tool slugs the guide is about; their tool pages link back to it. */
   tools?: string[];
+  /** Agent slugs from /agents the guide covers; their agent pages link back to it. */
+  agents?: string[];
   relatedLinks?: Array<{ href: string; label: string }>;
 };
 
@@ -29,6 +31,7 @@ type GuideLoader = () => Promise<GuideModule>;
 // Add one statically analyzable import here for each MDX file. Avoid runtime
 // filesystem reads so the same bundle works on Cloudflare Workers.
 const guideLoaders: Record<string, GuideLoader> = {
+  "1password-for-agents": () => import("@/content/guides/1password-for-agents.mdx"),
   "artcraft-download": () => import("@/content/guides/artcraft-download.mdx"),
 };
 
@@ -103,6 +106,7 @@ export function parseGuideMetadata(slug: string, input: unknown): GuideSummary {
     status,
     topics: optionalStrings(value.topics, "topics"),
     tools: optionalStrings(value.tools, "tools"),
+    agents: optionalStrings(value.agents, "agents"),
     relatedLinks,
   };
 }
@@ -125,6 +129,10 @@ export async function listPublishedGuides() {
 
 export async function listPublishedGuidesForTool(toolSlug: string) {
   return (await loadGuideSummaries()).filter((guide) => guide.tools?.includes(toolSlug));
+}
+
+export async function listPublishedGuidesForAgent(agentSlug: string) {
+  return (await loadGuideSummaries()).filter((guide) => guide.agents?.includes(agentSlug));
 }
 
 export async function getPublishedGuide(slug: string): Promise<PublishedGuide | null> {

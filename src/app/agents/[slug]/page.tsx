@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/agents/json-ld";
 import { Sources } from "@/components/agents/sources";
 import { SpecTable } from "@/components/agents/spec-table";
 import { displayName, getAgent } from "@/lib/agents/data";
+import { listPublishedGuidesForAgent } from "@/lib/guides";
 import { AGENT_PAGES, ALTERNATIVES_PAGES, comparisonsWith, PRICING_PAGES, SAFETY_PAGES } from "@/lib/agents/content";
 import { absoluteUrl, CHECKED_ON, outbound } from "@/lib/agents/site";
 import { NOT_STATED_NOTE, specRows } from "@/lib/agents/specs";
@@ -32,6 +33,7 @@ export default async function AgentPage({ params }: Props) {
   const agent = getAgent(slug);
   const name = displayName(agent);
   const comparisons = comparisonsWith(slug);
+  const guides = await listPublishedGuidesForAgent(slug);
 
   return (
     <main>
@@ -100,6 +102,19 @@ export default async function AgentPage({ params }: Props) {
                   Is {name} safe? →
                 </Link>
               )}
+            </div>
+          </section>
+        )}
+
+        {guides.length > 0 && (
+          <section className="flex flex-col gap-4">
+            <h2 className="font-serif text-[30px] font-medium md:text-[36px]">Guides</h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              {guides.map((guide) => (
+                <Link key={guide.slug} href={`/guides/${guide.slug}`} className="rounded-2xl border border-line bg-surface p-5 font-bold text-ink hover:no-underline">
+                  {guide.title} →
+                </Link>
+              ))}
             </div>
           </section>
         )}

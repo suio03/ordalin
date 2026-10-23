@@ -43,7 +43,7 @@
       "connectors_notable": [
         "Link (Stripe)",
         "Shop Pay (coming soon)",
-        "1Password (coming soon)"
+        "1Password (rolling out)"
       ],
       "execution": "Muse Secure VM — dedicated cloud VM holding agent + user data; Sentinel agent must approve anything that reaches the internet",
       "safety": "Checks with the person before sensitive actions like sending an email or making a purchase; approval modes: Ask for some actions (every write and important read) or Always ask",
@@ -55,6 +55,7 @@
       "model": "Muse Spark",
       "sources": [
         "https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/",
+        "https://1password.com/partners/meta-muse",
         "https://www.meta.com/help/subscriptions/1021145227643680/",
         "https://www.meta.com/help/artificial-intelligence/1126304576638594/",
         "https://www.meta.com/help/artificial-intelligence/1385290430137537/",
