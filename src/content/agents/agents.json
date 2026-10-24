@@ -10,7 +10,7 @@
       "category": "personal agent",
       "launch_date": "2026-09-08",
       "official_url": "https://muse.ai",
-      "checked_on": "2026-10-18",
+      "checked_on": "2026-10-24",
       "access": {
         "free_tier": "yes — free with a usage limit that refreshes (limit not stated officially)",
         "paid_plans": [
@@ -38,7 +38,7 @@
       "messaging": [
         "WhatsApp"
       ],
-      "regions": "US (rolling out)",
+      "regions": "US (rolling out); Japan since 2026-10-23 on iOS, Android and muse.ai, the first region outside North America",
       "actions": "browse web, fill forms, send email, book travel, purchases, negotiate on user's behalf",
       "connectors_notable": [
         "Link (Stripe)",
@@ -55,6 +55,7 @@
       "model": "Muse Spark",
       "sources": [
         "https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/",
+        "https://about.fb.com/ja/news/2026/10/muse-personal-ai-agent-launches-in-japan/",
         "https://1password.com/partners/meta-muse",
         "https://www.meta.com/help/subscriptions/1021145227643680/",
         "https://www.meta.com/help/artificial-intelligence/1126304576638594/",
