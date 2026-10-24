@@ -1,0 +1,114 @@
+export const metadata = {
+  title: "Dessa AI voice model from Block: what it is, access and download",
+  description: "Dessa is Block's full-duplex voice AI, trained only on recorded human conversation. What it does, whether you can try or download it yet, and how it relates to the old Dessa.",
+  author: "Ordalin",
+  publishedAt: "2026-10-25",
+  updatedAt: "2026-10-25",
+  status: "published",
+  topics: ["Voice & Speech"],
+  tools: ["grok-voice-3-0", "voxtral-3", "eleven-v4", "voxcpm"],
+  relatedLinks: [
+    { href: "/models", label: "AI models" },
+    { href: "/categories/audio", label: "Voice & Speech tools" },
+  ],
+};
+
+**Dessa** is a speech-to-speech AI model from Block, the company behind Square and Cash App, that was trained only on recorded human conversation: no text and no pretrained models. It is full-duplex, so it listens and talks at the same time, and Block says it runs locally on a MacBook Pro M4 Max or better. Block announced it on 23 October 2026 as a research preview. As of 25 October 2026 you cannot use it yet: the waitlist and the download are both marked "coming soon", and early access goes only to a small group of AI safety researchers.
+
+Everything below comes from Block's official page at [block.xyz/dessa](https://block.xyz/dessa) (dessa.com redirects there) unless we say otherwise. Block has published demo recordings but no paper, benchmarks or model card, and nobody outside Block has tested it independently yet.
+
+## Dessa at a glance
+
+- **Made by:** a small AI research lab at Block, led by Ragavan Thurairatnam, that reports directly to Jack Dorsey.
+- **Type:** speech-to-speech conversation model. Audio goes in and audio comes out, with no text step in between.
+- **Training data:** human conversation audio only, trained from scratch on one NVIDIA GB200 NVL72.
+- **Full-duplex:** it can speak while you are still talking, cut in, and add short backchannels such as "yeah!" or "got it!".
+- **Speed:** Block says inference runs faster than real time.
+- **Hardware:** runs locally on a MacBook Pro M4 Max or better, according to Block.
+- **Status:** research preview. Waitlist and download not open yet; a request form for AI safety researchers.
+- **Not published:** price, API, open weights, parameter count, benchmarks and supported languages.
+
+## Can you try Dessa?
+
+Not yet, unless you are an AI safety researcher.
+
+- **Waitlist:** the page has a "Join the waitlist" button, but when we checked on 25 October 2026 it only showed the message "The waitlist opens soon."
+- **Download:** the "Download" button shows "Download coming soon." Block hasn't said what the download will contain, which platforms it will support or when it will arrive.
+- **Safety researcher early access:** Block is "giving a small group of AI safety researchers early access to find the risks we haven't anticipated". The request form asks for your name, an institutional email (university, company or lab) and, optionally, a Google Scholar or blog link.
+- **Demos:** the official page has about twenty recorded conversations you can play, and Block says more will be posted on X.
+
+There is no Dessa app, API or Hugging Face model yet. Any site that offers a Dessa download, a Dessa API or a "Dessa voice generator" today is not from Block. The "DESSA" voices on voice-cloning sites such as Fish Audio are community uploads that share the name and have nothing to do with this model.
+
+## What makes Dessa different from other voice AI?
+
+Most voice assistants convert your speech to text, have a language model answer in text, and then read that answer aloud. Block argues that this throws away how something was said. Dessa skips the text step. According to Block:
+
+- **It hears and produces emotion.** Block says it "natively hears and speaks emotion, sarcasm, laughter, a frustrated sigh, a voice cracking with sadness".
+- **It manages conversational timing.** Because it learned from real conversation, it decides when to cut in and when to backchannel instead of waiting for you to finish.
+- **It learned language from sound alone.** Block says it needed "hundreds of times fewer words" than text-trained language models, while also learning accents, pauses, breathing and inflection.
+- **It chooses its own voice.** In the demos nobody steers it; Block says Dessa picks what to say, when and how, "down to its own voice and personality".
+
+One demo has Dessa talking to OpenAI's GPT-Live-1. Block notes that OpenAI has not reviewed or endorsed Dessa.
+
+These are Block's own claims, illustrated with recordings Block chose. Until outside researchers or the public can use it, there is no independent measure of how often it gets things wrong.
+
+## Dessa (Block) and Dessa, the 2019 Toronto startup
+
+If you search for "Dessa AI voice", most older results are about a different Dessa project from 2019, though the two are connected.
+
+- **Dessa the startup** was a Toronto machine-learning company. In May 2019 it published RealTalk, a fake but convincing imitation of podcaster Joe Rogan's voice, and also worked on deepfake detection.
+- **Square acquired Dessa** in February 2020 ([Square's announcement](https://squareup.com/press/dessa-joins-square)). Square renamed itself Block in December 2021.
+- **The new Dessa model** comes from a lab "founded by former members of Dessa, the Toronto deep learning startup", which says it has built generative speech models for more than eight years. Ragavan Thurairatnam, a Dessa co-founder, leads it.
+
+The model shares its name and part of its team with the startup, but it is not RealTalk. RealTalk turned text into a cloned voice; Dessa holds a live, two-way spoken conversation.
+
+## Voice AI models you can use today
+
+Dessa isn't available, so if you need a voice model now, these are in the Ordalin catalogue:
+
+- **Speech-to-speech for real-time voice agents:** [Grok Voice 3.0](/tools/grok-voice-3-0) from SpaceXSI, priced per minute. It is the closest in kind to Dessa, but it is a commercial hosted service, not a local model.
+- **Speech recognition plus voice output with an agent SDK:** [Voxtral 3](/tools/voxtral-3) from Mistral AI.
+- **Expressive text-to-speech:** [Eleven v4](/tools/eleven-v4) from ElevenLabs, which also has a low-latency variant for voice agents.
+- **Open-source text-to-speech you can run yourself:** [VoxCPM](/tools/voxcpm) from OpenBMB, with voice design and voice cloning.
+
+All four are available now. None of them makes the full-duplex, trained-only-on-speech claim that Block makes for Dessa. See more on the [AI models](/models) page.
+
+## FAQ
+
+### What is Dessa AI?
+
+Dessa is a full-duplex speech-to-speech AI model from Block's research lab. It was trained only on recorded human conversation, without text, and can listen and talk at the same time.
+
+### Is Dessa free?
+
+Block hasn't announced any price. Right now it isn't offered to the public at all, so there is nothing to buy or use for free yet.
+
+### Can I download Dessa?
+
+Not yet. The download button on the official page says "Download coming soon." Block says the model runs locally on a MacBook Pro M4 Max or better but hasn't said when a download will be available or for which systems.
+
+### Is Dessa open source?
+
+Block has not released weights, code or a model card, and hasn't said whether it will.
+
+### Does Dessa have an API?
+
+No API has been announced.
+
+### How do I join the Dessa waitlist?
+
+The waitlist button is on [block.xyz/dessa](https://block.xyz/dessa), but on 25 October 2026 it said the waitlist "opens soon". Check the official page or Ragavan Thurairatnam's X account for updates.
+
+### What languages does Dessa speak?
+
+Block hasn't listed supported languages. One of the official demo clips is titled "Singing nonsense Spanish".
+
+### Is Dessa related to Jack Dorsey?
+
+Yes. Dessa comes from a lab at Block, the company Jack Dorsey co-founded, and the lab reports directly to him. Dorsey announced the model on X.
+
+### Is Dessa the same as the 2019 Joe Rogan voice clone?
+
+No. That was RealTalk, a text-to-speech system from the Toronto startup Dessa. The new model comes from former members of that startup, now at Block, and it holds live spoken conversations instead of reading text aloud.
+
+Checked against Block's official page on 25 October 2026. We will update this page when the waitlist, download or any public access opens.
