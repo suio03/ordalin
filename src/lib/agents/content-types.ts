@@ -21,6 +21,8 @@ export type AgentMeta = {
   summary: string;
   bestFor: string[];
   notFor: string[];
+  /** Ordalin pages for tools that plug into this agent, such as skill marketplaces. */
+  worksWith?: { href: string; title: string; note: string }[];
   faq: FaqItem[];
 };
 

@@ -119,6 +119,20 @@ export default async function AgentPage({ params }: Props) {
           </section>
         )}
 
+        {meta.worksWith && (
+          <section className="flex flex-col gap-4">
+            <h2 className="font-serif text-[30px] font-medium md:text-[36px]">Works with {name}</h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              {meta.worksWith.map((item) => (
+                <Link key={item.href} href={item.href} className="flex flex-col gap-1 rounded-2xl border border-line bg-surface p-5 text-ink hover:no-underline">
+                  <span className="font-bold">{item.title} →</span>
+                  <span className="text-[14px] text-muted">{item.note}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         <Faq items={meta.faq} />
         <Sources urls={agent.sources} />
       </div>

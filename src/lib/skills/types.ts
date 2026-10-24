@@ -81,7 +81,14 @@ export type SkillMeta = {
   faq: FaqItem[];
 };
 
-export type SkillsMeta = { title: string; description: string; heading: string; intro: string };
+export type SkillsMeta = {
+  title: string;
+  description: string;
+  heading: string;
+  intro: string;
+  /** Catalogue pages for places to get more skills; Ordalin has not tested what they sell. */
+  moreSkills?: { href: string; title: string; note: string }[];
+};
 
 export type Mod<M> = { default: ComponentType; meta: M };
 
