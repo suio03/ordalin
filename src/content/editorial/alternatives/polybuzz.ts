@@ -7,6 +7,7 @@ export const polybuzzAlternatives: AlternativesPage = {
   description: "PolyBuzz's iPhone app is gone from the App Store. Three AI character chat apps compared on platforms, age limits, content rules and price.",
   author: "Ordalin",
   publishedAt: "2026-10-22",
+  updatedAt: "2026-10-25",
   status: "published",
   groupSlug: "writing",
   anchorSlug: "polybuzz",
@@ -24,10 +25,10 @@ export const polybuzzAlternatives: AlternativesPage = {
     {
       toolSlug: "character-ai",
       label: "Largest library on web, iPhone and Android",
-      bestFor: "People who want the closest everyday replacement: millions of community characters, free unlimited messaging and apps on every platform.",
-      notIdealIf: "You want no ads or long-term memory without paying, or you mainly want to import characters you built elsewhere.",
+      bestFor: "People who want millions of community characters, free unlimited messaging and apps on every platform, and accept that the service's future depends on a sale.",
+      notIdealIf: "You want an app you can rely on long term: Character.AI filed for Chapter 11 in October 2026 and may be wound down if no buyer keeps it running.",
       summary: [
-        "Character.AI has more than 10 million user-made characters and lets you create your own, with guides on writing personas and scenes. Messaging is free and unlimited on the standard chat styles, with 15 memory pins; when the service is busy, free users can be placed in a waiting room.",
+        "Character.AI filed for Chapter 11 on 12 October 2026 to sell the company. It is still running and subscriptions still bill as normal, but it says the platform will be wound down if the sale, expected to finish by late November or early December 2026, does not produce a buyer that keeps it going. Character.AI has more than 10 million user-made characters and lets you create your own, with guides on writing personas and scenes. Messaging is free and unlimited on the standard chat styles, with 15 memory pins; when the service is busy, free users can be placed in a waiting room.",
         "(c.ai) lite starts at $4.99 a month (varying by region) for daily premium chat styles, fewer ads and 30 memory pins, and c.ai+ adds unlimited premium styles, no ads and Lorebooks. The terms set a minimum age of 13, or 16 in the EEA and UK, and teens can share a weekly Parental Insights report with a parent.",
       ],
     },
@@ -53,7 +54,7 @@ export const polybuzzAlternatives: AlternativesPage = {
     },
   ],
   decisionGuide: [
-    { situation: "I want a free replacement that works on iPhone, Android and the web", toolSlug: "character-ai" },
+    { situation: "I want a free app on iPhone, Android and the web now, even if it may not last", toolSlug: "character-ai" },
     { situation: "I am an adult on iPhone and mostly play interactive stories", toolSlug: "swerve" },
     { situation: "I am on Android and enjoy collecting or creating characters", toolSlug: "talkie" },
   ],
@@ -73,6 +74,10 @@ export const polybuzzAlternatives: AlternativesPage = {
     {
       question: "Can I move my PolyBuzz characters to another app?",
       answer: "None of these alternatives documents an import from PolyBuzz. Character.AI and Talkie let you recreate a character by hand. PolyBuzz itself accepts character cards from other platforms, so moving in the other direction is easier.",
+    },
+    {
+      question: "Is Character.AI still a safe choice?",
+      answer: "It works today, but Character.AI filed for Chapter 11 on 12 October 2026 and says the platform will be wound down if its sale does not produce a buyer that keeps it running. The sale is expected to finish by late November or early December 2026. If you move there, avoid long prepaid plans and export your data from time to time.",
     },
     {
       question: "Did you test these apps hands-on?",
