@@ -639,7 +639,7 @@
       "category": "personal agent (texting)",
       "launch_date": "2026-10-06 (private beta)",
       "official_url": "https://tab.bot/",
-      "checked_on": "2026-10-11",
+      "checked_on": "2026-10-25",
       "access": {
         "free_tier": "unknown",
         "paid_plans": "unknown",
@@ -666,6 +666,7 @@
         "https://tab.bot/privacy",
         "https://tab.bot/terms",
         "https://tab.bot/updates",
+        "https://tab.bot/wa",
         "https://techcrunch.com/2026/10/07/another-personal-ai-assistant-has-launched-meet-tab-which-emerged-from-stealth-with-a-300m-valuation/"
       ]
     },
