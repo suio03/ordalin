@@ -6,8 +6,8 @@ export const characterAiAlternatives: AlternativesPage = {
   title: "Character.AI alternatives after the Chapter 11 filing",
   description: "Character.AI filed for Chapter 11 and may shut down if no buyer keeps it running. What is confirmed, how to export your chats, and three apps to move to.",
   author: "Ordalin",
-  publishedAt: "2026-10-25",
-  status: "draft",
+  publishedAt: "2026-10-26",
+  status: "published",
   groupSlug: "writing",
   anchorSlug: "character-ai",
   intro: [
