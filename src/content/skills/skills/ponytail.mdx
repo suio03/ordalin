@@ -1,0 +1,176 @@
+export const meta = {
+  title: "Ponytail Skill Tested: Does It Make Claude Code Write Less Code?",
+  description:
+    "Ponytail is a free MIT plugin that makes coding agents reuse what exists before writing new code. Install steps for each agent, our Claude Code test and three benchmarks.",
+  summary:
+    "Ponytail is a free, MIT-licensed skill and plugin by Dietrich Gebert that tells a coding agent to act like a lazy senior developer: read the code first, then reuse what the project, the standard library or the platform already has, and write new code only for what is left. Its README says validation, error handling, security and accessibility are never cut. In Claude Code and Codex it installs as a plugin whose hooks load the rules into every session; other agents get a plugin, an extension or a rules file. We ran the same feature request in a small React project with and without the plugin. It wrote 16 lines where the plain agent wrote 39 and 42, mostly by leaving out a friendlier date format.",
+  bestFor: [
+    "Developers whose agent adds libraries, helper files and abstractions nobody asked for",
+    "Claude Code and Codex users, where the plugin's hooks load the rules into every session and every subagent",
+    "Teams that want a review or a whole-repo audit that also lists what to delete",
+  ],
+  notFor: [
+    "A big saving on a model that already writes lean code; in our test the plain agent also used the browser's date picker",
+    "Agents that only read a rules file, such as Windsurf, Cline or Copilot Chat; they get the rules but none of the commands",
+    "Copying SKILL.md into a skills folder on its own; JetBrains found Claude Code never picked it up that way",
+  ],
+  howItWorks: [
+    {
+      title: "Read first, then climb the ladder",
+      text: "Before writing anything the agent reads the code the change touches. Then it asks, in order: does this need to exist, is it already in the codebase, does the standard library or the platform do it, does an installed dependency do it, can it be one line. Only then does it write the smallest version that works.",
+    },
+    {
+      title: "Things it never cuts",
+      text: "The README lists validation at trust boundaries, data-loss handling, security and accessibility as off limits. Logic with a branch, a loop, a parser, money or security gets one small test. Every reply ends with what was skipped or not checked.",
+    },
+    {
+      title: "Always on through hooks",
+      text: "In Claude Code and Codex the plugin's start-of-session hook loads the rules, and another hook passes them to subagents. Levels are lite, full (the default), ultra and off. Claude Code 2.1.290 or later also shows a band above the prompt with the task's cost, tokens and test status.",
+    },
+    {
+      title: "Shortcuts are written down",
+      text: "When the agent takes a deliberate shortcut it leaves a shortcut: comment saying when to revisit it. /ponytail-debt collects those comments into a list, so they are not forgotten.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Claude Code: add the marketplace",
+      code: "/plugin marketplace add DietrichGebert/ponytail",
+      note: "Send this and the next command as two separate prompts. The same commands work in the Code tab of the Claude Code desktop app. The hooks need node on your PATH.",
+    },
+    {
+      label: "Claude Code: install the plugin",
+      code: "/plugin install ponytail@ponytail",
+      note: "Start a new session. It opens with \"PONYTAIL MODE ACTIVE — level: full\".",
+    },
+    {
+      label: "Codex",
+      code: "codex plugin marketplace add DietrichGebert/ponytail\ncodex plugin add ponytail@ponytail",
+      note: "Then run codex, open /hooks, trust its two hooks and start a new thread. In Codex the commands are called as $ponytail:ponytail-review and so on.",
+    },
+    {
+      label: "Copilot CLI, OpenCode, Gemini CLI, Antigravity CLI",
+      code: "copilot plugin marketplace add DietrichGebert/ponytail\ncopilot plugin install ponytail@ponytail\n\nopencode plugin add @dietrichgebert/ponytail\n\ngemini extensions install https://github.com/DietrichGebert/ponytail\n\nagy plugin install https://github.com/DietrichGebert/ponytail",
+      note: "Use the line for your agent. Copilot CLI names the commands /ponytail:ponytail-review and so on. Antigravity has no hooks, so levels do not carry over between sessions; copy AGENTS.md into the project for the always-on rules.",
+    },
+    {
+      label: "Cursor",
+      code: "git clone https://github.com/DietrichGebert/ponytail\nnode ponytail/scripts/cursor-hooks.js install",
+      note: "Adds two hooks to ~/.cursor/hooks.json. Switch levels by sending /ponytail lite, full, ultra or off as a plain message. Subagents and cloud agents run without the rules.",
+    },
+    {
+      label: "Any other agent",
+      code: "AGENTS.md",
+      note: "Copy the repository's AGENTS.md, or the rules file for your editor, into your project. Windsurf, Cline, Copilot Chat, Kiro, Aider and Zed read the rules this way but get no commands.",
+    },
+    {
+      label: "Use it",
+      code: "/ponytail ultra\n/ponytail-review\n/ponytail-audit\n/ponytail off",
+      note: "Change the level, review the current diff, check the whole repository, or turn it off. The README warns to install only from DietrichGebert/ponytail on GitHub or @dietrichgebert/ponytail on npm; the real project never ships .exe or .dll files.",
+    },
+  ],
+  test: {
+    date: "2026-10-26",
+    agent: "Claude Code 2.1.310, headless (claude -p), project settings only, plugin loaded with --plugin-dir",
+    model: "claude-opus-5-5",
+    commit: "09c434a",
+    task: "Add a due date to tasks. In the task form, users should pick the due date from a calendar, it can't be in the past, and it should be saved with the task and shown in the list.",
+    samples: [
+      {
+        label: "With Ponytail: the new field and check in src/TaskForm.tsx",
+        note: "16 lines added and 5 removed across three files. It reused the project's Input component and the browser's date picker, and showed the date in the list as plain YYYY-MM-DD.",
+        text: `const [due, setDue] = useState("");
+const [dueError, setDueError] = useState<string>();
+// Local-time YYYY-MM-DD (en-CA uses ISO order), so string comparison works.
+const today = new Date().toLocaleDateString("en-CA");
+
+const pastDue = !!due && due < today;
+setError(title.trim() ? undefined : "Give the task a title.");
+setDueError(pastDue ? "Due date can't be in the past." : undefined);
+if (!title.trim() || pastDue) return;
+onAdd({ id: crypto.randomUUID(), title: title.trim(), notes, due: due || undefined });
+
+<Input label="Due date" name="due" type="date" min={today} value={due}
+  onChange={(e) => setDue(e.target.value)} error={dueError} />`,
+      },
+      {
+        label: "With Ponytail: the end of its reply",
+        note: "As the README promises, the reply closed with what it skipped and the risks.",
+        text: `- Date format: the list shows the date as YYYY-MM-DD. I didn't add friendlier formatting, because turning that string into a date naively can show the day before in some time zones.
+- No tests: the project doesn't have a test setup, so I didn't add one.
+- Past-date message: in most browsers the date limit stops the form before my message can show, so users will usually see the browser's own warning instead.`,
+      },
+      {
+        label: "Same model, no plugin: the extra helpers",
+        note: "First of two runs: 42 lines added and 7 removed, including a new src/dates.ts. The second run wrote 39 and 6, with the same helpers inside the two components and noValidate on the form. Both also used the date picker and the Input component.",
+        text: `// Today's date in the user's local time zone, as "YYYY-MM-DD".
+// toISOString() would use UTC and can be off by a day.
+export function todayLocal(): string {
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return \`\${d.getFullYear()}-\${pad(d.getMonth() + 1)}-\${pad(d.getDate())}\`;
+}
+
+// Format a "YYYY-MM-DD" date for display without shifting it through UTC.
+export function formatDate(isoDate: string): string {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+}`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What does Ponytail do?",
+      a: "It is one prompt, skills/ponytail/SKILL.md, plus plugins that load it into different coding agents. The prompt tells the agent to read the code first and then reuse what the project, the standard library or the platform already has before writing anything new, without cutting validation, error handling, security or accessibility.",
+    },
+    {
+      q: "Does it really cut code by half?",
+      a: "It depends on how much the agent over-builds without it. The README's own benchmark reports 53% less code with Ponytail 5. JetBrains measured about 15% on 80 tasks with an older version and found the cut mostly on large builds. In our one small test with Opus 5.5 the plugin wrote 16 lines against 39 and 42, but the plain agent had already chosen the same simple approach.",
+    },
+    {
+      q: "Can I just copy SKILL.md into my skills folder?",
+      a: "You can, but JetBrains found Claude Code did not pick up the skill on its own in any of ten sessions. The plugin works because its start-of-session hook loads the rules every time. For Claude Code and Codex, install the plugin.",
+    },
+    {
+      q: "How do I turn it down or off?",
+      a: "Send /ponytail lite, /ponytail full, /ponytail ultra or /ponytail off. To set the default for new sessions, set PONYTAIL_DEFAULT_MODE or a defaultMode field in ~/.config/ponytail/config.json. The default is full.",
+    },
+    {
+      q: "Which repository is the real one?",
+      a: "The README says to install only from DietrichGebert/ponytail on GitHub or @dietrichgebert/ponytail on npm, and that the real project never ships .exe or .dll files. Copies of the repository exist under other accounts.",
+    },
+    {
+      q: "How do I uninstall it completely?",
+      a: "In Claude Code run node scripts/uninstall.js from the plugin first, then /plugin remove ponytail. The script removes what the plugin writes outside its own folder, such as the mode flag in ~/.claude, ~/.config/ponytail and the status line entry. In our test the plugin created ~/.claude/.ponytail-active and a task board in ~/.config/ponytail/band.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes. It is open source under the MIT licence. You still pay for the AI agent you run it in.",
+    },
+  ],
+};
+
+## What we tested
+
+We built a small React and TypeScript task list with its own `Input` component and gave Claude Code one feature request: add a due date that users pick from a calendar, that can't be in the past, and that is saved and shown in the list. This is close to the README's own date picker example, where the plain agent installs a library or hand-builds a calendar.
+
+We ran the request once with the plugin loaded from the repository at commit 09c434a (version 5.3.2) and twice with nothing installed, all with the same model and settings. The agents could read and edit files and run the TypeScript checker. The plugin's start-of-session hook fired and loaded the rules at the full level.
+
+## What we found
+
+- **All three runs chose the simple approach.** Each one used the browser's built-in date picker through the project's existing `Input` component, set the earliest date to today in local time, and checked again on submit. None added a library. On this model the README's "library or hand-built calendar" baseline did not happen.
+- **The plugin still wrote less.** It added 16 lines and removed 5 in three files. The plain runs added 42 and 39. Most of the difference is a helper that shows the date as "Oct 28, 2026" instead of "2026-10-28", which both plain runs wrote and the plugin skipped. One plain run also put the helpers in a new file.
+- **It said what it left out.** Its reply listed the plain date format, the missing tests and one real catch: the browser's own date limit usually stops the form before the custom error can show. One plain run solved that catch by turning off browser validation; the other did not mention it.
+- **All three passed the TypeScript check.** We did not open them in a browser.
+
+The plugin run took 14 turns, 54 seconds and $0.21 at API prices, as reported by Claude Code. The plain runs took 16 and 15 turns, 45 and 54 seconds, and $0.23 each. This is one small task in one project with one model, so read it as an example, not a benchmark.
+
+## Other benchmarks
+
+- **Ponytail README (version 5, Claude Code with Opus 5.5, 39 tasks, 5 runs each):** 53% less code, 26% lower cost, 41% less time.
+- **Chase AI, June 2026 (version not stated, Claude Code, about 19 tasks):** with Haiku 4.5, 56% less code, about 25% lower cost and about 31% less time; with Opus 4.8, 71% less code, about 53% lower cost and about 71% less time.
+- **JetBrains, July 2026 (version 4.8.4, Claude Code with Sonnet 5, 80 paired tasks):** 15% less code on a typical task, 10.3% lower cost, 11% less time.
+- **Ordalin, this page (version 5.3.2, Claude Code with Opus 5.5, one task against two plain runs):** 16 lines added against 39 and 42, about 8% lower cost, no time saved.
+
+The README says its figure reaches 94% where an agent over-builds and is near zero where the code is already small. JetBrains found the same pattern: its cut reached 31% on large builds and was about zero on small ones. It found no difference in quality, though 80 pairs can only rule out large differences. JetBrains tested by loading the plugin's rule text the way its hook does, not through a normal plugin install.

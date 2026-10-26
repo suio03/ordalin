@@ -11,5 +11,6 @@ export const REGISTRY: SkillsRegistry = {
     "lemo-opuscar": { status: "published", load: () => import("./skills/lemo-opuscar.mdx") },
     humanizer: { status: "published", load: () => import("./skills/humanizer.mdx") },
     "replica-skill": { status: "published", load: () => import("./skills/replica-skill.mdx") },
+    ponytail: { status: "published", load: () => import("./skills/ponytail.mdx") },
   },
 };

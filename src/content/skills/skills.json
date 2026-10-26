@@ -51,6 +51,19 @@
       "language": "English",
       "produces": "Eleven steps of files in a replica folder: a recon map and feature spreadsheet of the original app, architecture and design plans, your rebuilt app and backend, tests, a feature comparison, business, brand and launch notes, and a deploy step gated by a brand sweep",
       "checked_on": "2026-10-22"
+    },
+    {
+      "slug": "ponytail",
+      "name": "Ponytail",
+      "author": "Dietrich Gebert",
+      "repo": "https://github.com/DietrichGebert/ponytail",
+      "license": "MIT",
+      "version": "5.3.2",
+      "agents": "Claude Code and Codex as plugins with hooks; plugins or extensions for Copilot CLI, OpenCode, Gemini CLI, Antigravity CLI, Cursor (hooks) and others; a rules file (AGENTS.md or the matching rules folder) for Windsurf, Cline, Copilot Chat, Kiro, Aider, Zed and similar",
+      "install": "In Claude Code send /plugin marketplace add DietrichGebert/ponytail, then /plugin install ponytail@ponytail as a second prompt; in Codex run codex plugin marketplace add DietrichGebert/ponytail and codex plugin add ponytail@ponytail, then trust its two hooks in /hooks; other agents follow INSTALL.md or copy AGENTS.md into the project",
+      "language": "Any programming language; instructions in English",
+      "produces": "No files of its own: an always-on rule set that makes the agent reuse existing code and platform features before writing new code, plus review, audit and shortcut-ledger commands",
+      "checked_on": "2026-10-26"
     }
   ]
 }
