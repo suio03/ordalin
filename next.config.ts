@@ -12,7 +12,8 @@ const nextConfig: NextConfig = {
   redirects: async () => [{ source: "/agents/compare/grok-vs-chatgpt", destination: "/agents/personal", permanent: true }],
 };
 
-const withMDX = createMDX();
+// GitHub-flavoured Markdown for guide tables. Turbopack needs the plugin by name.
+const withMDX = createMDX({ options: { remarkPlugins: [["remark-gfm"]] } });
 
 // Maintainers keep their existing read-only production preview. Fresh clones
 // use isolated local fixtures; dev:demo explicitly selects them on any machine.
