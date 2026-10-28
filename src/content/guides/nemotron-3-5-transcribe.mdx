@@ -1,0 +1,162 @@
+export const metadata = {
+  title: "Nemotron 3.5 Transcribe: NVIDIA's open speech model, languages, GPUs and how to run it",
+  description: "Nemotron 3.5 Transcribe is NVIDIA's free open-weight transcription model for 40 languages. What it does, which GPU you need, how to run it, and how it differs from Nemotron 3.5 ASR.",
+  author: "Ordalin",
+  publishedAt: "2026-10-29",
+  updatedAt: "2026-10-29",
+  status: "draft",
+  topics: ["Voice & Speech"],
+  tools: ["nvidia-nemotron-3-5-transcribe", "voxtral-3"],
+  relatedLinks: [
+    { href: "/models", label: "AI models" },
+    { href: "/categories/audio/transcription", label: "AI transcription tools" },
+  ],
+};
+
+**Nemotron 3.5 Transcribe** is a free, open-weight speech model from NVIDIA that turns recordings into text in 40 languages. One model handles transcription, translation to and from English, speaker labels, word timestamps and questions about the audio. NVIDIA released it on 28 October 2026 on Hugging Face, GitHub and NGC under the OpenMDW-1.1 licence, which allows commercial use. It has 34 billion parameters in total, but only about 4.3 billion are active for each token, so it fits on one data-centre GPU. It works on recorded files up to an hour long; it is not a live, real-time transcriber.
+
+Everything below comes from NVIDIA's [model card on Hugging Face](https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B), checked on 29 October 2026, unless we say otherwise. We have not run the model ourselves, and the benchmark numbers are NVIDIA's own.
+
+## Nemotron 3.5 Transcribe at a glance
+
+- **Made by:** NVIDIA, as part of its Nemotron 3.5 model family.
+- **Full name on Hugging Face:** `nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B`.
+- **Price:** free to download. The OpenMDW-1.1 licence covers commercial and non-commercial use.
+- **Size:** 34B parameters in total, about 4.3B active. It is a mixture-of-experts model built on Nemotron 3.5 Lightning 30B-A3B, with an audio encoder and a speaker encoder in front.
+- **Input:** 16 kHz mono audio (WAV, FLAC, MP3, OGG and other formats that decode to PCM), up to 1 hour per recording, plus a text instruction.
+- **Output:** text, with optional word timestamps and speaker tags.
+- **Languages:** 40 for transcription; translation to and from English for 31 of them.
+- **Hardware:** NVIDIA's reference setup is one H100 80 GB. Smaller quantized versions (FP8 and NVFP4) run on cards such as the L40S and RTX 5090.
+- **Not:** a streaming or live-captioning model, or an app with a user interface. You run it from code or as a local server.
+
+## What can it do?
+
+You pick the task with a plain-language instruction in the prompt. The model card lists:
+
+- **Transcription**, either verbatim (with "um", repetitions and false starts) or cleaned-up written form.
+- **Contextual transcription:** you pass names and jargon in the prompt ("Context terms: …") so it spells them correctly, for earnings calls, support recordings or technical talks.
+- **Who said what, and when:** speaker tags such as `<spk:0>` and `<spk:1>` with word timestamps. NVIDIA trained it on conversations of up to eight speakers. Speaker labels separate voices within one recording; they don't identify who a person is.
+- **Speech translation** between English and 31 other languages, in both directions.
+- **Language identification.**
+- **Questions about a recording**, with reasoning turned on. NVIDIA only evaluated this in English.
+- **Nearest-speaker transcription** (experimental): transcribe only the person closest to the microphone and ignore background voices.
+
+NVIDIA recommends temperature 0 with reasoning off for transcription, translation and language ID, and leaving the system prompt empty for those tasks.
+
+## Which languages does it support?
+
+NVIDIA sorts the languages into three quality levels. Translation means to and from English.
+
+- **Leading** (state of the art or close to it): Czech, Dutch, English (US, India, UK), French (France, Canada), German, Hindi, Italian, Korean, Polish, Portuguese (Portugal, Brazil), Russian, Slovak, Spanish (US, Spain).
+- **Production-ready:** Bulgarian, Croatian, Danish, Estonian, Finnish, Hungarian, Japanese, Latvian, Lithuanian, Romanian, Slovenian, Swedish, Thai, Turkish, Ukrainian.
+- **Supported, may need fine-tuning:** Arabic, Bengali, Chinese (Mandarin), Greek, Hebrew, Indonesian, Maltese, Marathi, Tagalog, Tamil, Telugu, Vietnamese.
+
+A few gaps to know about:
+
+- **No translation** for Turkish, Bengali, Indonesian, Marathi, Tagalog, Tamil, Telugu or Vietnamese; they are transcription only.
+- **Multi-speaker transcription** is marked for 13 languages: English, French, German, Hindi, Italian, Korean, Portuguese, Russian, Spanish, Japanese, Thai, Arabic and Mandarin.
+- **Norwegian** is listed in the model's metadata, but the support table marks it as not specified for every task, so don't count on it.
+- Mixing languages within one recording (code-switching) is marked as supported for every language except Norwegian.
+
+## What GPU do you need?
+
+The model runs on NVIDIA GPUs only. NVIDIA's compatibility table pairs each card with the precisions it supports:
+
+| GPU | Precisions |
+| --- | --- |
+| H100, H200 | BF16, FP8 |
+| A100 80 GB | BF16 |
+| L40S 48 GB | FP8 |
+| RTX 5090 | NVFP4 |
+| RTX PRO 6000 Blackwell, B200, GB200, DGX Spark, Jetson Thor, GB300 DGX Station | BF16, FP8, NVFP4 |
+
+BF16 is the full-precision reference. The [FP8](https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B-FP8) and [NVFP4](https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B-NVFP4) versions are smaller quantized copies; pick the one your card supports. NVIDIA doesn't list a minimum amount of VRAM, older RTX cards or Apple Silicon. Linux is the main platform; on Windows it runs through WSL2, or natively with GGML on supported GPUs.
+
+Community conversions for Macs (MLX) and llama.cpp (GGUF) started appearing on Hugging Face a day after release. They are not from NVIDIA, and we haven't checked their quality.
+
+## How to run it
+
+NVIDIA documents five ways in. All of them need some Python or command-line work; there is no desktop app.
+
+1. **vLLM server (NVIDIA's main route).** Install vLLM 0.32.0 together with the NeMo Speech main branch, download the checkpoint with `hf download`, then start `vllm serve` with the NeMo speech plugin. You get an OpenAI-compatible endpoint on your own machine that you send audio to. The reference setup is one H100 80 GB.
+2. **Hugging Face Transformers.** Install Transformers from source and load the model in your own Python code. Good for experiments and small batches.
+3. **SGLang-Omni 0.2.0.** Serves a `/v1/audio/transcriptions` endpoint for whole-file transcription only; word timestamps, speaker labels, translation and speculative decoding aren't included in this integration.
+4. **GGML**, on supported GPUs, including native Windows.
+5. **NeMo Speech** for fine-tuning on your own domain or language.
+
+Two things NVIDIA flags for developers:
+
+- **Speed.** The fast numbers NVIDIA quotes (up to 2,238 seconds of audio transcribed per second on one RTX PRO 6000, with NVFP4 and the DFlash2 draft model) come from its NIM inference container. NVIDIA says the open-source vLLM integration available on release day is meant for model development and is about two times slower.
+- **Repetition loops.** In rare cases the model keeps repeating itself. The model card gives a short clean-up function to run on the output, and NVIDIA's own benchmark results use it.
+
+## Nemotron 3.5 Transcribe vs Nemotron 3.5 ASR
+
+NVIDIA has two similarly named speech models, and they do different jobs.
+
+| | Nemotron 3.5 Transcribe | Nemotron 3.5 ASR |
+| --- | --- | --- |
+| Released | 28 October 2026 | June 2026 |
+| Size | 34B total, about 4.3B active | 600M |
+| Mode | Recorded files, up to 1 hour | Live streaming, from 80 ms chunks |
+| Tasks | Transcription, translation, speaker labels, timestamps, audio questions | Transcription only |
+| Languages | 40 | 40 language-locales |
+| Best for | Highest accuracy on recordings | Voice agents and live captions |
+
+If you need captions while someone is still speaking, use [Nemotron 3.5 ASR](https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b). If you have a finished recording and want the most accurate transcript, translation or speaker labels, use Transcribe.
+
+## How accurate is it?
+
+These are NVIDIA's results, captured on 12 October 2026. WER is word error rate; lower is better.
+
+- **English, Open ASR Leaderboard (9 public test sets):** 4.71% mean WER, against 4.94% for Qwen3-ASR-1.7B, the next best open-weight model in NVIDIA's table.
+- **Long recordings, Open ASR long-form:** 10.98%, against 13.37% for NVIDIA's own Parakeet-TDT-0.6B-v3.
+- **Multilingual Open ASR (7 languages):** 4.62%, against 6.49% for Qwen3-ASR-1.7B.
+- **Meetings with several speakers** (AMI, CALLHOME, Mixer 6, NOTSOFAR-1): 15.80% mean cpWER, against 16.83% for the best published system NVIDIA lists.
+
+NVIDIA says it beats other open models on Hugging Face's [Open ASR Leaderboard](https://huggingface.co/spaces/hf-audio/open_asr_leaderboard). Check the leaderboard itself for the current ranking, and test on your own audio: accents, noise and domain words change results a lot.
+
+## Hosted transcription tools you can use today
+
+Nemotron 3.5 Transcribe is a model for developers. If you just want a transcript without setting up a GPU server, these are in the Ordalin catalogue:
+
+- **A speech model with a hosted API:** [Voxtral 3](/tools/voxtral-3) from Mistral AI, with speech recognition, voice output and an agent SDK.
+- **A transcription API for developers:** [Deepgram](/tools/deepgram).
+- **Meeting notes that join your calls:** [Otter.ai](/tools/otter-ai) and [Fireflies.ai](/tools/fireflies-ai).
+
+See all [AI transcription tools](/categories/audio/transcription) and other [AI models](/models).
+
+## FAQ
+
+### Is Nemotron 3.5 Transcribe free?
+
+Yes. The weights are free to download from Hugging Face under the OpenMDW-1.1 licence, which allows commercial use. You pay only for the GPU you run it on. NVIDIA's faster NIM container is a separate product.
+
+### Is it open source?
+
+It is open-weight: NVIDIA publishes the model weights, the inference code in NeMo Speech, a technical report and the Granary v2 training dataset. The licence is OpenMDW-1.1 rather than a classic software licence such as Apache 2.0.
+
+### Can it transcribe live audio?
+
+No. NVIDIA says it is an offline model and that its internal audio chunking does not make it a real-time streaming service. For live transcription, NVIDIA's Nemotron 3.5 ASR (600M) is the streaming model.
+
+### How long can a recording be?
+
+Up to one hour. NVIDIA says results beyond one hour, or beyond its 65,536-token context, aren't guaranteed. With vLLM you have to raise the default 600-second audio limit to 3,600 seconds, as the model card shows.
+
+### Does it run on a Mac or a laptop?
+
+Not officially. NVIDIA supports only NVIDIA GPUs. Community MLX conversions for Apple Silicon exist on Hugging Face but are unofficial and untested by us. Among consumer cards, NVIDIA lists the RTX 5090 with the NVFP4 version.
+
+### Does it support Chinese and Japanese?
+
+Yes. Japanese is rated production-ready and Mandarin Chinese is in the supported tier, which NVIDIA says may need fine-tuning. Both have translation to and from English and multi-speaker transcription.
+
+### Does it do speaker diarization?
+
+Yes. Ask for speaker tags in the prompt and turn on word timestamps, and it labels each speaker as `<spk:0>`, `<spk:1>` and so on. Speaker labels are marked as supported for 13 of the 40 languages.
+
+### Is Nemotron 3.5 Transcribe better than Whisper?
+
+NVIDIA's comparison tables focus on newer models such as Qwen3-ASR and its own Parakeet, and Nemotron leads the open-weight models in its English, long-form and multilingual tests. We haven't run our own comparison. It is also much larger than Whisper, so it needs a bigger GPU.
+
+Checked against NVIDIA's Hugging Face model card on 29 October 2026. We will update this page as NVIDIA adds runtimes, hosted access or new benchmark results.
