@@ -1,0 +1,147 @@
+export const metadata = {
+  title: "YuE2 prompting guide: style, lyrics, section tags and song length",
+  description: "How to write YuE2 prompts: what goes in the style field, how to tag lyrics, which planning mode to pick, and why long prompts cut songs short. Based on the official YuE2 docs.",
+  author: "Ordalin",
+  publishedAt: "2026-10-28",
+  updatedAt: "2026-10-28",
+  status: "published",
+  topics: ["Music & Audio"],
+  tools: ["yue2-studio", "suno", "udio"],
+  relatedLinks: [
+    { href: "/categories/music", label: "Music & Audio tools" },
+    { href: "/best/ai-music-generators", label: "Best AI music generators" },
+  ],
+};
+
+**YuE2** is the open song model from Multimodal Art Projection (m-a-p) that turns a style prompt and lyrics into a full song with vocals and accompaniment. A YuE2 prompt has two text fields: **style**, which describes how the song should sound, and **lyrics**, which holds only the words to sing, split into sections with tags such as `[Verse]` and `[Chorus]`. A third setting chooses whether YuE2 writes an editable melody-and-chord score first. This guide explains each part and the length limit that catches most people out.
+
+Everything below comes from the official [YuE2 repository](https://github.com/multimodal-art-projection/YuE), its [generation guide](https://github.com/multimodal-art-projection/YuE/blob/main/docs/generation.md), the [YuE2-3B model card](https://huggingface.co/m-a-p/YuE2-3B) and the [ComfyUI YuE2 tutorial](https://docs.comfy.org/tutorials/audio/yue2/yue2), checked on 28 October 2026. We haven't rendered the examples ourselves, so we don't make claims about how they sound.
+
+## The three parts of a YuE2 prompt
+
+| Part | What goes in it | Field name |
+|---|---|---|
+| Style | Language, genre, vocal character, instruments, mood and tempo | `style` (Python, JSON), **Style** (ComfyUI) |
+| Lyrics | Only the words to be sung, with section tags | `lyrics`, **Lyrics** |
+| Planning mode | Whether YuE2 writes a score before the audio | `cot`: `full`, `melody` or `off`; **Mode** in ComfyUI |
+
+You can also pass your own score in ABC notation (`abc`), a `seed`, and `cfg_scale` for text guidance. The official docs say the defaults are ready to use and that changing sampling or guidance settings may change quality, so leave them alone until the basics work.
+
+## How to write the style prompt
+
+Put every musical instruction in the style field. The official generation guide lists five things to include: **genre, instruments, vocal character, language and tempo**. The ComfyUI tutorial adds mood.
+
+A good order is language first, then vocal, genre, tempo and instruments, separated by commas. This is the official example request that ships with YuE2:
+
+> English, warm piano pop, expressive female voice, acoustic piano, rounded bass and light drums, lyrical memorable melody, unhurried phrasing, 88 BPM
+
+And this one is from the ComfyUI tutorial:
+
+> English, warm female vocal, contemporary pop, 96 BPM, piano, rounded electric bass, restrained drums, clear diction
+
+A template you can fill in:
+
+```text
+<language>, <vocal: e.g. warm female vocal>, <genre>, <tempo: e.g. 90 BPM>, <2–4 instruments>, <mood or delivery>
+```
+
+Tips from the docs:
+
+- **State the language.** Both official examples start with it. The model card tags English and Chinese; the ComfyUI tutorial says YuE2 sings English, Chinese, Japanese "and more".
+- **Give the tempo as BPM** (88 BPM) or as a word (slow, upbeat).
+- **Name instruments concretely.** "Rhodes piano, upright bass, brushed drums" tells the model more than "jazzy".
+- **Keep it short.** Every word of the style prompt uses the same budget as the song itself (see "Why YuE2 songs end early" below).
+
+## How to write YuE2 lyrics and section tags
+
+The lyrics field is only for words you want sung. Structure them with section tags in square brackets, one tag on its own line before each block:
+
+```text
+[Verse]
+Neon fades along the lane
+Footsteps keep the time of rain
+Fold the night and leave it here
+Morning has a sky to clear
+
+[Chorus]
+Let the day come into view
+Every road begins with you
+Hold a little room for light
+We will sing beyond the night
+```
+
+This is the opening of the official **City Lights** example. Each line in it has seven syllables, which keeps the melody regular.
+
+- **Section tags:** the docs use `[Verse]`, `[Chorus]`, `[Bridge]` and `[Outro]`, and the ComfyUI tutorial says YuE2 builds full structures with intro, verse, chorus, bridge and outro sections.
+- **No instructions in the lyrics.** Don't write "(guitar solo here)" or "sing softly" inside the lyrics. The ComfyUI tutorial says to keep musical instructions in the style field, and the official agent skill says to keep implementation notes out of the lyrics.
+- **Write the full structure.** Write the sections in the order you want them sung, and repeat the `[Chorus]` block if you want the chorus twice.
+
+## Which planning mode to choose: full, melody or off
+
+YuE2 can write a score in ABC notation (melody and chords) before it renders the audio. You can read that score, edit it, and render it again. The `cot` setting controls this:
+
+| Mode | What it does | Use it for |
+|---|---|---|
+| `full` | Plans melody and chords, then sings them | New songs. The default, and what the official benchmarks use |
+| `melody` | Plans only the melody; the accompaniment is freer | Covers, or a new arrangement of a melody you supply |
+| `off` | No score; generates straight from style and lyrics | Quick drafts when you don't need an editable score |
+
+To change a song's harmony, melody or form, copy the saved `score.abc`, edit the copy, and pass it back as `abc` with `full` or `melody`. Editing the score generates a new recording; it does not keep the original audio.
+
+In ComfyUI, leaving the **abc** input empty turns planning off.
+
+## Why YuE2 songs end early or cut off
+
+This is the most common YuE2 problem, and it comes from the prompt.
+
+- **The song stops when the structure ends.** YuE2 ends a song when it writes its end token. A short lyric sheet gives a short song, even with a high length limit.
+- **Max Duration is a ceiling, not a target.** In ComfyUI, **Max Duration** goes up to 900 seconds, at 25 semantic tokens per second. The Text to Music template sets it to 120 seconds.
+- **Long prompts shorten the song.** The style, lyrics and ABC score share the model's context with the music. If they take too much room, ComfyUI lowers the budget and logs `YuE2 music budget reduced to ... tokens (... seconds) to fit the prompt.` If nothing is left, the run stops with `YuE2 prompt leaves no room for music; shorten the style, lyrics, or ABC.`
+- **Abrupt endings mean the budget ran out.** The warning `YuE2 semantic reached its token budget before the end token.` means the audio may stop mid-song. Raise **Max Duration**. If the same run also reported a budget reduction, shorten the style, lyrics or score instead.
+
+In Python, check `song.truncated` after a run. The official command-line example exits with an error when a generation was truncated.
+
+## Get better results: takes, seeds and covers
+
+- **Make several takes.** One YuE2 call gives one candidate. The published benchmark scores pick the best of two (or eight) candidates, so a single run is not the best the model can do.
+- **Seeds help comparisons, not repeats.** A fixed seed lets you compare two prompts fairly, but the docs say the same seed can still differ across GPUs or software versions.
+- **Covers need matching lyrics.** For a cover, use `melody` mode and a score without chord symbols. The ComfyUI tutorial advises keeping new lyrics close in length to the original lines.
+
+## Where to write YuE2 prompts
+
+- **Online, free:** the official repository links a [NOIZ-hosted demo](https://yue.noizai.net/) that runs in the browser with no installation.
+- **ComfyUI:** native YuE2 nodes and an official Text to Music template with **Style**, **Lyrics**, **Mode** and **Max Duration** fields.
+- **[YuE2 Studio](/tools/yue2-studio):** a free, community-made Windows desktop app (by timoncool, not m-a-p). Its README says it runs on NVIDIA cards with 6 GB of VRAM or more, builds the style from separate musical fields, adds section tags to your lyrics with one button, and has an optional writing assistant.
+- **Python or CLI:** the official package (`yue2 generate --request song.json`). The official setup is Linux, Python 3.12 and an NVIDIA GPU with BF16 support and 24 GB of VRAM.
+
+If you'd rather not prompt a local model at all, hosted services such as [Suno](/tools/suno) and [Udio](/tools/udio) take a similar style-plus-lyrics input. Our [Suno vs Udio comparison](/compare/suno-vs-udio) covers their current terms.
+
+## Can you use YuE2 songs commercially?
+
+According to the official license table, personal users, content creators and musicians can use YuE2 and monetize what they generate with no fees or royalties. Academic and educational use is free for non-commercial purposes. Companies need a commercial license for the model weights. The weights are released under CC BY-NC 4.0 with an additional creator permission, and the code under Apache 2.0. Crediting YuE2 or using #YuE2 is encouraged but optional.
+
+## FAQ
+
+### What is a good YuE2 prompt?
+
+A short style line that states language, vocal, genre, tempo and instruments, plus lyrics that contain only the sung words, split with `[Verse]`, `[Chorus]`, `[Bridge]` and `[Outro]` tags.
+
+### What section tags does YuE2 support?
+
+The official docs use `[Verse]`, `[Chorus]`, `[Bridge]` and `[Outro]`, and describe songs with intro, verse, chorus, bridge and outro sections. Put each tag on its own line before its block of lyrics.
+
+### Why is my YuE2 song cut off at the end?
+
+The model ran out of token budget before it wrote the song's end. Raise Max Duration, or shorten the style, lyrics or ABC score if the log says the budget was reduced to fit the prompt.
+
+### What languages can YuE2 sing?
+
+The model card lists English and Chinese, and the ComfyUI tutorial names English, Chinese and Japanese among the supported singing languages. Write the language at the start of the style prompt.
+
+### Should I use full, melody or off mode?
+
+Use `full` for new songs, `melody` for covers or when you supply your own melody, and `off` for quick drafts without an editable score.
+
+### Can I try YuE2 without a GPU?
+
+Yes. The official repository links a free NOIZ-hosted demo that runs in the browser.

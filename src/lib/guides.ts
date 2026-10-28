@@ -34,6 +34,7 @@ const guideLoaders: Record<string, GuideLoader> = {
   "1password-for-agents": () => import("@/content/guides/1password-for-agents.mdx"),
   "artcraft-download": () => import("@/content/guides/artcraft-download.mdx"),
   "dessa": () => import("@/content/guides/dessa.mdx"),
+  "yue2-prompting-guide": () => import("@/content/guides/yue2-prompting-guide.mdx"),
 };
 
 function requiredString(value: unknown, field: string) {
