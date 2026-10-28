@@ -7,6 +7,7 @@ export const characterAiAlternatives: AlternativesPage = {
   description: "Character.AI filed for Chapter 11 and may shut down if no buyer keeps it running. What is confirmed, how to export your chats, and three apps to move to.",
   author: "Ordalin",
   publishedAt: "2026-10-26",
+  updatedAt: "2026-10-29",
   status: "published",
   groupSlug: "writing",
   anchorSlug: "character-ai",
@@ -18,7 +19,7 @@ export const characterAiAlternatives: AlternativesPage = {
     "The service may close. Character.AI says the platform will be wound down if the sale does not produce a buyer that keeps it running, and it will not know which way it goes until the sale ends in late November or early December 2026.",
     "You pay for a subscription. Billing is \"unchanged for now\", and Character.AI says it intends to tell subscribers in advance if paid features change, but it has not said what happens to a yearly plan if the platform winds down.",
     "Your characters and chats live only on Character.AI. There is no import into other apps, so recreating a favourite character elsewhere takes time you may not have later.",
-    "You are a teen. Most alternatives are adults-only; Character.AI's minimum age is 13, or 16 in the EEA and UK, so younger users have fewer places to go and should check each app's age rules first.",
+    "You are a teen. Most alternatives are adults-only; Character.AI's minimum age is 13, or 16 in the EEA and UK, so younger users have fewer places to go and should check each app's age rules first. In New York, a law signed on 28 October 2026 restricts what these apps may offer under-18s from 1 January 2027.",
   ],
   picks: [
     {
@@ -35,7 +36,7 @@ export const characterAiAlternatives: AlternativesPage = {
       toolSlug: "talkie",
       label: "Best for teens 14 and over",
       bestFor: "Users who want a character chat app with a lower minimum age than most, plus collectible cards and a creator revenue share.",
-      notIdealIf: "You want explicit content, or want to see the subscription price before installing.",
+      notIdealIf: "You want explicit content, want to see the subscription price before installing, or are a New York teen: a state law restricts character features for under-18s from 1 January 2027.",
       summary: [
         "Talkie, from SUBSUP and powered by MiniMax models, adds a game layer to character chat: conversations earn collectible cards, and creators can earn a share of revenue. The beta Talkie Claw feature lets characters send images, videos and songs and message you on Telegram or Discord.",
         "The minimum age is 14, or 15 to 16 in some countries, and pornographic and violent content are prohibited. Free use is available; Talkie+ is a monthly subscription bought in the mobile apps, and the website does not list its price. On iPhone, check that the developer is SUBSUP before installing.",
@@ -77,6 +78,10 @@ export const characterAiAlternatives: AlternativesPage = {
     {
       question: "Can I move my characters to another app?",
       answer: "Character.AI has no export into other apps. PolyBuzz accepts character cards from other platforms, so it is the easiest place to bring characters you have saved as cards; on Talkie and Swerve you would recreate them by hand.",
+    },
+    {
+      question: "Can teens in New York still use Character.AI and other character apps?",
+      answer: "For now, yes. New York's S9051-B, signed on 28 October 2026 and in force from 1 January 2027, does not ban minors from chatbots, but it bars operators from giving users they know are under 18 what it calls unsafe features. These include a chatbot that presents itself as a human or a real or fictional person, implies a personal relationship, makes emotional appeals or flatters excessively, remembers personal information from an earlier session, or produces sexually explicit content. Operators must also offer more than one way to check age, including one that does not rely only on a government ID. The law's definition of an AI companion is broad, so character chat apps are likely to change what New York teens see, but none of the apps here had announced changes when we checked on 29 October 2026.",
     },
     {
       question: "Did you test these apps hands-on?",

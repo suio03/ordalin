@@ -7,7 +7,7 @@ export const argonVsOpus: ComparePage = {
   description: "Gemini 4 Argon and Claude Opus 5.5 compared on API price before and after December 1, context, output length, thinking control, platforms and limits.",
   author: "Ordalin",
   publishedAt: "2026-10-15",
-  updatedAt: "2026-10-15",
+  updatedAt: "2026-10-29",
   status: "published",
   groupSlug: "coding",
   intro: [
@@ -93,6 +93,10 @@ export const argonVsOpus: ComparePage = {
     {
       question: "Which is better for coding agents?",
       answer: "Both vendors aim their model at long agentic coding. On the benchmarks they share, Google's Argon model card reports Argon ahead on DeepSWE (77.9% vs 74.2%) and behind on Terminal-Bench 4.0 (57.4% vs 66.4%) and FrontierSWE (55.0% vs 62.3%). These are vendor-reported scores, not our tests, so try both on your own repository.",
+    },
+    {
+      question: "Is Gemini 4 Carbon replacing Argon?",
+      answer: "Not for most people yet. Google announced Gemini 4 Carbon on October 28, 2026, two weeks after Argon, and calls it its strongest model, with a focus on cybersecurity. For now it goes only to a subset of cyber defenders and trusted partners in Google's Fairwind Program; Google says it will reach developers, businesses and consumers after more feedback and guardrail work, without giving a date. Its introductory API price matches Argon's, $2 input and $10 output per million tokens, rising to $4 and $20 afterwards. Google's post does not say Argon is being withdrawn, so Argon remains the Gemini 4 model you can use in the API and the Gemini app.",
     },
     {
       question: "Did you test the two models against each other?",

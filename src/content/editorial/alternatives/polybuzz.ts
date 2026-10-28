@@ -7,7 +7,7 @@ export const polybuzzAlternatives: AlternativesPage = {
   description: "PolyBuzz's iPhone app is gone from the App Store. Three AI character chat apps compared on platforms, age limits, content rules and price.",
   author: "Ordalin",
   publishedAt: "2026-10-22",
-  updatedAt: "2026-10-25",
+  updatedAt: "2026-10-29",
   status: "published",
   groupSlug: "writing",
   anchorSlug: "polybuzz",
@@ -78,6 +78,10 @@ export const polybuzzAlternatives: AlternativesPage = {
     {
       question: "Is Character.AI still a safe choice?",
       answer: "It works today, but Character.AI filed for Chapter 11 on 12 October 2026 and says the platform will be wound down if its sale does not produce a buyer that keeps it running. The sale is expected to finish by late November or early December 2026. If you move there, avoid long prepaid plans and export your data from time to time.",
+    },
+    {
+      question: "Does New York's new chatbot law affect these apps?",
+      answer: "Mainly for teens. New York's S9051-B, signed on 28 October 2026, takes effect on 1 January 2027 and bars AI companion operators from giving users they know are under 18 features such as human or character personas, simulated relationships, emotional appeals, memory of personal details across sessions and sexually explicit content. Operators must offer more than one age check, including one that does not rely only on a government ID, and the state attorney general can seek up to $25,000 per violation. PolyBuzz and Swerve are already adults-only; Character.AI (13 and over) and Talkie (14 and over) are the picks most likely to change for New York teens.",
     },
     {
       question: "Did you test these apps hands-on?",
