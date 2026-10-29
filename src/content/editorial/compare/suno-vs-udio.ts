@@ -7,7 +7,7 @@ export const sunoVsUdio: ComparePage = {
   description: "Suno caps downloads and Udio has switched them off. We compare download rules, free limits, style controls and editing tools.",
   author: "Ordalin",
   publishedAt: "2026-10-01",
-  updatedAt: "2026-10-15",
+  updatedAt: "2026-10-29",
   status: "published",
   groupSlug: "music",
   intro: [
@@ -95,6 +95,10 @@ export const sunoVsUdio: ComparePage = {
     {
       question: "Can I use my own voice or recordings?",
       answer: "Suno can rebuild a song around your recording and, on eligible paid plans, sing in a voice you record. Udio's paid plans can generate from uploaded audio, but songs made that way cannot be published on udio.com, and you must hold the rights to anything you upload.",
+    },
+    {
+      question: "Can I use Suno or Udio inside ChatGPT or Claude?",
+      answer: "Suno, yes, in beta. On October 28, 2026 Suno released Suno MCP, an official connector for ChatGPT, Claude, Claude Code, Gemini and Cursor: you add https://api.suno.com/mcp as a custom connector and sign in to Suno, with no API key. Your assistant writes the lyrics and style, Suno generates the song with your plan's credits, and the track appears in your Suno library. Suno's page asks you to request early access, and some assistants allow custom connectors only on paid plans. We found no official MCP server for Udio. Our Suno MCP guide has the setup steps for each app.",
     },
     {
       question: "Did you test both tools with the same prompts?",

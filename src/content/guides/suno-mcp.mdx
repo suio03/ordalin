@@ -1,0 +1,144 @@
+export const metadata = {
+  title: "Suno MCP: how to use Suno in Claude, ChatGPT, Gemini, Claude Code and Cursor",
+  description: "Suno MCP is Suno's official connector for AI assistants. How to add it to Claude, ChatGPT, Gemini, Claude Code and Cursor, what it can do, what it costs and how it differs from community Suno MCP servers.",
+  author: "Ordalin",
+  publishedAt: "2026-10-29",
+  updatedAt: "2026-10-29",
+  status: "published",
+  topics: ["Music & Audio"],
+  tools: ["suno"],
+  relatedLinks: [
+    { href: "/compare/suno-vs-udio", label: "Suno vs Udio" },
+    { href: "/alternatives/suno", label: "Suno alternatives" },
+    { href: "/best/ai-music-generators", label: "Best AI music generators" },
+  ],
+};
+
+**Suno MCP** is Suno's official connector for AI assistants. Once it is added, you can ask ChatGPT, Claude, Claude Code, Gemini or Cursor to make a song in the middle of a conversation: the assistant writes the lyrics and style, Suno generates the track, and it lands in your Suno library. Suno released it in beta on 28 October 2026. You connect by signing in to your Suno account; there is no API key, and songs use the credits on your current Suno plan.
+
+Everything below comes from Suno's [MCP page](https://suno.com/mcp) and its [Suno MCP (Beta) FAQ](https://help.suno.com/en/articles/14486145), checked on 29 October 2026. We have not used the connector ourselves yet.
+
+## Suno MCP at a glance
+
+- **Made by:** Suno. It is the first official Suno MCP server; earlier "Suno MCP" projects on GitHub are community-built.
+- **Server URL:** `https://api.suno.com/mcp`
+- **Works with:** ChatGPT, Claude, Claude Code, Gemini and Cursor, plus other AI tools that let you add a custom connector or MCP server.
+- **Sign-in:** your Suno account. No API key and no code.
+- **Plans:** Suno's FAQ says it works with all Suno plans, including Free. The MCP page also has a "Get early access" sign-up, so access may still be rolling out.
+- **Cost:** songs use your Suno credits, the same as songs made on suno.com.
+- **Not published yet:** usage limits, which Suno model the connector uses, and when the beta ends.
+
+## What can you do with it?
+
+Suno lists four things on its MCP page:
+
+- **Create conversationally.** Describe an idea in plain text; your assistant adds the lyrics and styles, and Suno makes the song. Because it is inside your chat, the assistant can use what you have already discussed, such as lyrics, a project or a video plan.
+- **Upload your own audio.** Turn voice memos or soundbites into full songs.
+- **Remix.** Make covers and mashups, or extend songs that are already in your Suno library.
+- **Use your Voice.** Apply a Voice you saved in Suno to tracks you create through your assistant.
+
+You then refine a track with ordinary follow-ups, such as "Make it slower", "Add a bridge" or "Give me three more". You can also ask the assistant how many credits you have left.
+
+Example prompts from Suno's page:
+
+- "Take my last song in Suno and make a slowed-down acoustic cover."
+- "Turn this voice memo into a full indie-folk track. Keep my melody."
+- "Make a lo-fi beat for studying, then give me three variations with different moods."
+
+## How to add Suno MCP
+
+Every app uses the same URL, `https://api.suno.com/mcp`, and finishes with a Suno sign-in where you approve access. Suno notes that some AI apps only let you add custom connectors on certain paid plans, so check your assistant's plan if the option is missing.
+
+### Claude
+
+1. Open **Customize → Connectors → + → Add custom connector**.
+2. Name it **Suno** and paste the URL.
+3. Click **Connect**, sign in to Suno and approve the connection.
+
+### ChatGPT
+
+1. Go to **Plugins → Add → Add custom MCP server**.
+2. Name it **Suno** and set **Connection (Server URL)** to the URL.
+3. Click **Create as a plugin**, then **Connect Suno** and authorize it.
+
+### Gemini
+
+1. Go to **Customize → Connectors** and click **+** to add a custom MCP server.
+2. Paste the URL and click **Create**.
+3. In a chat, mention **@Suno** to use the connector.
+
+### Claude Code
+
+Run this in your terminal, then run `/mcp` inside a Claude Code session to sign in to Suno:
+
+```sh
+claude mcp add --transport http suno https://api.suno.com/mcp
+```
+
+### Cursor
+
+Go to **Customize → MCPs → New MCP Server (User)**. Cursor opens a settings file called `mcp.json`; paste this and save:
+
+```json
+{
+  "mcpServers": {
+    "suno": {
+      "url": "https://api.suno.com/mcp"
+    }
+  }
+}
+```
+
+### Other tools, including Codex
+
+Suno doesn't give steps for other apps such as Codex. Its advice is to find the setting for a custom connector or custom MCP server and add the URL. The server is a remote HTTP server with a browser sign-in, so the tool needs to support that kind of MCP connection.
+
+If Suno doesn't show up after you add it, Suno's FAQ suggests checking the URL and making sure you finished the Suno sign-in and authorization.
+
+## Credits, downloads and rights
+
+- **Credits:** each song made through the connector uses credits from your plan, just like on suno.com. The Free plan currently gives 50 credits a day; see the [Suno profile](/tools/suno) for paid plans.
+- **Library:** every song is saved to your Suno library.
+- **Downloads and commercial use:** Suno's MCP pages don't say the connector changes either. Since September 2026 Suno limits downloads to 20 songs a month on Pro and 60 on Premier, with up to 7 lifetime trial downloads on Free, and Suno grants commercial use for songs downloaded while you are on Pro or Premier, subject to its terms. Our [Suno vs Udio](/compare/suno-vs-udio) comparison covers these rules.
+
+## Official Suno MCP vs community Suno MCP servers
+
+Searching for "Suno MCP" also turns up community servers on GitHub and MCP directories. Before 28 October 2026 they were the only option, and most work by reusing a logged-in suno.com browser session or by calling third-party Suno APIs that are not run by Suno.
+
+| | Official Suno MCP | Community servers |
+| --- | --- | --- |
+| Made by | Suno | Independent developers |
+| Setup | Paste one URL and sign in | Install and run locally, or sign up with a third-party API |
+| Account access | Suno sign-in and approval | Often a browser session, cookie or third-party API key |
+| Billing | Your Suno plan's credits | Your Suno credits, or the third-party service's own pricing |
+| Support | Suno's help centre | The project's maintainer |
+
+If you used a community server before, the official connector is now the simpler and safer route, since you no longer need to hand a session token or key to another tool.
+
+## FAQ
+
+### Is Suno MCP free?
+
+The connector itself costs nothing. Suno's FAQ says it works with all plans, including Free, and each song uses your plan's credits. Your AI assistant may need a paid plan to add custom connectors.
+
+### Is there an official Suno API?
+
+We found no public Suno developer API on suno.com; Suno MCP is the official way to use Suno from other software. Services that sell a "Suno API" are third parties, not Suno.
+
+### Does Suno MCP work with Claude?
+
+Yes. Add it as a custom connector in Claude (Customize → Connectors), or with `claude mcp add` in Claude Code, then sign in to Suno.
+
+### Does it work with ChatGPT?
+
+Yes. Add it in ChatGPT as a custom MCP server under Plugins, then connect your Suno account.
+
+### Where do songs made with Suno MCP go?
+
+To your Suno library, the same as songs made on suno.com, so you can open, edit or download them there under your plan's rules.
+
+### Can I use my own voice through Suno MCP?
+
+Yes, if you have saved a Voice in Suno. Suno says you can add your Voices to tracks you create with your AI assistant.
+
+Checked against Suno's MCP page and help centre on 29 October 2026. We will update this guide as Suno publishes limits, model details or the end of the beta.

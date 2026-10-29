@@ -7,6 +7,7 @@ export const sunoAlternatives: AlternativesPage = {
   description: "Suno now counts downloads: 20 a month on Pro, 60 on Premier. Five alternatives compared on downloads, vocals, your own voice and licences.",
   author: "Ordalin",
   publishedAt: "2026-10-18",
+  updatedAt: "2026-10-29",
   status: "published",
   groupSlug: "music",
   anchorSlug: "suno",
@@ -96,6 +97,10 @@ export const sunoAlternatives: AlternativesPage = {
     {
       question: "Which alternative lets me release songs on streaming services?",
       answer: "SOUNDRAW's Artist plans include song distribution and let you keep 100% of streaming royalties. Mubert does not allow tracks on streaming services. For other tools, read the plan's licence terms before distributing a track.",
+    },
+    {
+      question: "Can I make Suno songs from ChatGPT or Claude?",
+      answer: "Yes, through Suno MCP, an official beta connector released on October 28, 2026 for ChatGPT, Claude, Claude Code, Gemini and Cursor. It uses your Suno plan's credits and saves songs to your Suno library. Suno does not say the connector changes the download limits above. Our Suno MCP guide has the setup steps for each app.",
     },
     {
       question: "Did you test these tools hands-on?",

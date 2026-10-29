@@ -35,6 +35,7 @@ const guideLoaders: Record<string, GuideLoader> = {
   "artcraft-download": () => import("@/content/guides/artcraft-download.mdx"),
   "dessa": () => import("@/content/guides/dessa.mdx"),
   "nemotron-3-5-transcribe": () => import("@/content/guides/nemotron-3-5-transcribe.mdx"),
+  "suno-mcp": () => import("@/content/guides/suno-mcp.mdx"),
   "yue2-prompting-guide": () => import("@/content/guides/yue2-prompting-guide.mdx"),
 };
 
