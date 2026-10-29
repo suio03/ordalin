@@ -1,9 +1,9 @@
 export const meta = {
   title: "Lemo-Opuscar Tested: A Claude Code Skill That Makes Films in Code",
   description:
-    "Lemo-Opuscar is a free skill that has Claude Code direct, draw, score and render a short film in one of 51 styles. See the styles and what our test run found.",
+    "Lemo-Opuscar is a free skill that has Claude Code direct, draw, score and render a short film in one of 59 styles. See the styles and what our test run found.",
   summary:
-    "Lemo-Opuscar is a free agent skill by Lemomo (LemoLab) that turns Claude Code into a small film studio. You pick one of 51 styles, from whiteboard explainers to pixel-art RPGs, describe your story, and the agent writes the code that draws every frame, composes the music, mixes the sound and renders an MP4. There is no video generation and no stock footage. Below you can watch all 51 of the author's demo films, see how it works, and read what happened when we asked it for a one-minute whiteboard explainer.",
+    "Lemo-Opuscar is a free agent skill by Lemomo (LemoLab) that turns Claude Code into a small film studio. You pick one of 59 styles, from whiteboard explainers to pixel-art RPGs and archive-footage documentaries, describe your story, and the agent writes the code that draws or cuts every frame, composes the music, mixes the sound and renders an MP4. There is no video generation. Below you can watch all 59 of the author's demo films, see how it works, and read what happened when we asked it for a one-minute whiteboard explainer.",
   bestFor: [
     "Explainers, data stories and short narrative films with a distinct look",
     "People who want a film they can edit and re-render as code",
@@ -12,13 +12,21 @@ export const meta = {
   notFor: [
     "Quick clips; the README says a film takes an agent 30 to 60 minutes and a fair amount of tokens",
     "Models other than Claude Opus 5.5; the author warns the styles may not carry over",
-    "Photoreal footage; everything is drawn by code, not generated or filmed",
+    "New photoreal scenes; nothing is generated: most styles are drawn in code, and the documentary styles cut existing footage, photos and documents",
   ],
   gallery: {
-    heading: "All 51 styles",
+    heading: "All 59 styles",
     intro:
       "Every style comes with one demo film made by the author. Pick the look you want, then ask for it by name.",
     items: [
+      { group: "Edit & Documentary", src: "/skills/lemo-opuscar/caption-news.jpg", label: "Caption News", title: "The Bee Ledger", caption: "America lost 1.3 million bee colonies, yet the count rose 6 %: a news short that works with the sound off.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/caption-news.mp4", duration: "1:00", uses: ["Social news", "Report explainers", "Data shorts"] },
+      { group: "Edit & Documentary", src: "/skills/lemo-opuscar/newsreel.jpg", label: "1920s Newsreel", title: "Knock-Knee Alert", caption: "1926: the papers say the Charleston will ruin America's knees; at Ford's own picnic the kids dance it anyway.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/newsreel.mp4", duration: "0:55", uses: ["History stories", "Fads & eras", "Anniversaries"] },
+      { group: "Edit & Documentary", src: "/skills/lemo-opuscar/countdown.jpg", label: "Live Countdown Split-screen", title: "Counting Itself Down", caption: "The last minute of the Artemis II launch, uncut: one cell opens to nine, and they merge into one at ignition.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/countdown.mp4", duration: "1:00", uses: ["Launches", "Countdowns", "Live events"] },
+      { group: "Edit & Documentary", src: "/skills/lemo-opuscar/city-symphony.jpg", label: "Time-lapse Symphony", title: "One Day in New York", caption: "One day in New York in time-lapse: rivers of light, a grid on the sixteenths, 1899 beside today.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/city-symphony.mp4", duration: "0:52", uses: ["City films", "Music montages", "Openers"] },
+      { group: "Edit & Documentary", src: "/skills/lemo-opuscar/visual-investigation.jpg", label: "Visual Investigation", title: "The Hindenburg: Four Minutes, 32 Seconds", caption: "Newsreel, photos, testimony and the 1937 inquiry on one clock: five sources point to the same spot.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/visual-investigation.mp4", duration: "1:00", uses: ["Reconstructions", "Fact-checks", "Incident reports"] },
+      { group: "Edit & Documentary", src: "/skills/lemo-opuscar/kino-montage.jpg", label: "Constructivist Montage", title: "410 Days", caption: "The Empire State's 1931 brochure credits its builders; the site film and Hine's photos answer: 2,500 a day.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/kino-montage.mp4", duration: "1:00", uses: ["Industry histories", "Milestones", "Collective effort"] },
+      { group: "Edit & Documentary", src: "/skills/lemo-opuscar/telestrator.jpg", label: "Sports Telestrator", title: "Freeze Frame", caption: "Down 3–0 at half-time, Fenerbahçe scored three in 12 minutes: freeze, draw, split screen, shot map.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/telestrator.mp4", duration: "0:54", uses: ["Sports analysis", "Match recaps", "Coaching"] },
+      { group: "Edit & Documentary", src: "/skills/lemo-opuscar/news-package.jpg", label: "Broadcast News Package", title: "The Week in AI", caption: "Four AI stories from one week in a full on-air package: rundown, headline strap, price board, spec card.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/news-package.mp4", duration: "0:54", uses: ["News round-ups", "Bulletins", "Market updates"] },
       { group: "Evidence Films", src: "/skills/lemo-opuscar/satellite-briefing.jpg", label: "Satellite Briefing", title: "The Map Still Says Sea", caption: "A satellite follows the map to the Aral Sea and finds a desert; the only part that came back is the part someone dammed.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/satellite-briefing.mp4", duration: "0:38", uses: ["Climate & environment", "Investigations & news explainers", "Geography & history"] },
       { group: "Evidence Films", src: "/skills/lemo-opuscar/briefing-board.jpg", label: "Engineering Briefing Board", title: "The Ship Decides", caption: "A river needs a bridge; four bridge types are tested on one briefing wall, and the ship that must pass underneath picks the winner.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/briefing-board.mp4", duration: "0:40", uses: ["Engineering decisions", "Option comparisons", "Briefings & explainers"] },
       { group: "Evidence Films", src: "/skills/lemo-opuscar/lidar-survey.jpg", label: "LiDAR Survey", title: "The Fields Under the Forest", caption: "A laser survey strips the canopy off a Connecticut forest, layer by layer, and finds the stone walls of the farms that were there: 3.4 km of them, measured.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/lidar-survey.mp4", duration: "0:40", uses: ["Archaeology & heritage", "Forestry & environment", "Infrastructure & site surveys"] },
@@ -35,7 +43,7 @@ export const meta = {
       { group: "Hand-drawn & Painting", src: "/skills/lemo-opuscar/whiteboard.jpg", label: "Whiteboard Explainer", title: "Einstein in Your Pocket", caption: "How your phone knows where you are: GPS, atomic clocks, and the 38 microseconds relativity adds every day.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/whiteboard.mp4", duration: "1:51", uses: ["Explainers", "Online courses", "Science"] },
       { group: "Hand-drawn & Painting", src: "/skills/lemo-opuscar/urban-sketch.jpg", label: "Urban Sketch · Pen & Wash", title: "Where the Wind Went", caption: "A park that is only a pen sketch; wherever the wind carries her straw hat, colour follows.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/urban-sketch.mp4", duration: "0:32", uses: ["City & travel", "Architecture", "Lifestyle brands"] },
       { group: "East Asian Traditions", src: "/skills/lemo-opuscar/shadow-puppet.jpg", label: "Shadow Puppetry", title: "Hou Yi Shoots the Suns", caption: "Ten suns scorch the earth until the archer Hou Yi draws his bow, told with leather puppets on a lit screen.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/shadow-puppet.mp4", duration: "0:54", uses: ["Myths & folklore", "Heritage", "Festivals"] },
-      { group: "East Asian Traditions", src: "/skills/lemo-opuscar/ukiyoe.jpg", label: "Ukiyo-e", title: "A Journey Toward the Mountain", caption: "A traveller walks toward a distant mountain; every shot is a woodblock print, ending in a great wave.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/ukiyoe.mp4", duration: "0:44", uses: ["Travel", "Japanese culture", "Poetry"] },
+      { group: "East Asian Traditions", src: "/skills/lemo-opuscar/ukiyoe.jpg", label: "Ukiyo-e", title: "Toward the Mountain", caption: "A traveller walks toward a distant mountain; every shot is a woodblock print, ending in a great wave.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/ukiyoe.mp4", duration: "0:44", uses: ["Travel", "Japanese culture", "Poetry"] },
       { group: "East Asian Traditions", src: "/skills/lemo-opuscar/papercut-red.jpg", label: "Red Paper-cut", title: "Nian Comes to Town", caption: "On New Year's Eve the beast Nian comes to town, and one girl's giant paper-cut lights up the village to scare it off.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/papercut-red.mp4", duration: "0:49", uses: ["Lunar New Year", "Festive greetings", "Folk tales"] },
       { group: "East Asian Traditions", src: "/skills/lemo-opuscar/paper-lantern.jpg", label: "Paper-cut Lightbox", title: "A Mooncake's Longing", caption: "A single mooncake tells the Mid-Autumn story of reunion and longing inside a glowing paper-cut lightbox.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/paper-lantern.mp4", duration: "2:02", uses: ["Festivals", "Gift brands", "Cultural stories"] },
       { group: "Print & Printmaking", src: "/skills/lemo-opuscar/risograph.jpg", label: "Risograph Print", title: "Sunday Ride", caption: "A Sunday-morning bike ride through the city — bakery, park, riverside — in two misregistered inks.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/risograph.mp4", duration: "0:40", uses: ["Indie brands", "Zines", "Lifestyle"] },
@@ -72,7 +80,7 @@ export const meta = {
       { group: "Materials & 3D", src: "/skills/lemo-opuscar/glass-product.jpg", label: "Glass Product Render", title: "Aura — Hear the Light", caption: "Unboxing and close-ups of Aura, fictional glass earbuds, in strip-light sweeps and caustics.", video: "https://lemomo-ai.github.io/lemo-opuscar/films/glass-product.mp4", duration: "0:32", uses: ["Product launches", "Consumer tech", "Beauty"] },
     ],
     credit:
-      "Demo films and stills by LemoLab, licensed CC BY 4.0, shown unchanged. Some include Chinese on-screen text. The films play from the author's own gallery site. They are the author's showcase films, made with Claude Opus 5.5, not output from our test.",
+      "Demo films and stills by LemoLab, licensed CC BY 4.0, shown unchanged. The author excludes three voice tracks from that licence, including the narration in Broadcast News Package. Some include Chinese on-screen text, and the Edit & Documentary films use archive footage and photos credited on screen. The films play from the author's own gallery site. They are the author's showcase films, made with Claude Opus 5.5, not output from our test.",
   },
   howItWorks: [
     {
@@ -81,7 +89,7 @@ export const meta = {
     },
     {
       title: "Guides the agent reads",
-      text: "One guide sets the workflow, one covers story, rhythm and camera, and one covers rendering and sound. Each of the 51 styles is a single style sheet of about 100 to 140 lines on its materials, colours, type, motion, camera and sound. Claude reads the one you name.",
+      text: "One guide sets the workflow, one covers story, rhythm and camera, and one covers rendering and sound. Each of the 59 styles is a single style sheet of about 100 to 140 lines on its materials, colours, type, motion, camera and sound. Claude reads the one you name.",
     },
     {
       title: "Pictures drawn by code",
@@ -115,15 +123,15 @@ export const meta = {
   faq: [
     {
       q: "What does Lemo-Opuscar do?",
-      a: "It gives a coding agent a library of 51 film styles plus guides on directing, rendering, scoring and mixing. You describe a story and name a style; the agent writes web pages that draw each frame, renders them to video, writes an original score from free sample libraries, adds sound effects and subtitles, and muxes the final MP4.",
+      a: "It gives a coding agent a library of 59 film styles plus guides on directing, rendering, scoring and mixing. You describe a story and name a style; the agent writes web pages that draw each frame, renders them to video, writes an original score from free sample libraries, adds sound effects and subtitles, and muxes the final MP4.",
     },
     {
       q: "Does it use AI video generation?",
-      a: "No. Every frame is drawn by code (canvas and WebGL) and rendered frame by frame. The README says there is no video generation and no stock footage. Narration, when you want it, comes from text-to-speech.",
+      a: "No. Most styles draw every frame in code (canvas and WebGL) and render it frame by frame. The eight Edit & Documentary styles added on 2026-10-22 instead cut real archive footage, photographs, documents and data, graded and laid out by code, with each source credited on screen. Nothing is generated by a video model. Narration, when you want it, comes from text-to-speech.",
     },
     {
       q: "How do I install it?",
-      a: "In a terminal, run claude plugin marketplace add lemomo-ai/lemo-opuscar and then claude plugin install lemo-opuscar@lemolab. On first use it downloads the guides and tools to ~/lemo-opuscar. You can also clone the repository and start Claude Code inside it, which is how we tested it. For other agents, the README says to copy the plugin/skills/lemo-opuscar folder into their skills folder.",
+      a: "In a terminal, run claude plugin marketplace add lemomo-ai/lemo-opuscar and then claude plugin install lemo-opuscar@lemolab. To update later, run claude plugin marketplace update lemolab and claude plugin update lemo-opuscar@lemolab, then restart Claude Code. On first use it downloads the guides and tools to ~/lemo-opuscar. You can also clone the repository and start Claude Code inside it, which is how we tested it. For other agents, the README says to copy the plugin/skills/lemo-opuscar folder into their skills folder.",
     },
     {
       q: "What do I need on my computer?",
@@ -131,7 +139,7 @@ export const meta = {
     },
     {
       q: "Can I change a style and keep my own version?",
-      a: "Yes, since the 2026-10-19 update. Name a style and say you want your own version; the agent lists what is safe to change, what changes the style's character and what cannot change, then saves your version under a new name in ~/lemo-my-styles/, outside the library, so updates and uninstalls leave it alone. It shows a style frame next to the original and, once you approve, makes a 15 to 30 second test film. Our test run predates this feature.",
+      a: "Yes. Since the 2026-10-22 update you can change any of the 59 styles or start from a blank page with a description or a reference picture. The agent plans the changes with you one question at a time, shows one frame next to the original, makes a 15 to 30 second demo film, and keeps the result in ~/lemo-my-styles/, outside the library, so updates and uninstalls leave it alone. Our test run predates this feature.",
     },
     {
       q: "Is it free, and can I use the films commercially?",
@@ -156,10 +164,10 @@ The films above show what the author gets from the same library. Our single run 
 
 ## Make a style your own
 
-An update on 2026-10-19 added a way to change one of the 51 styles and keep the result as your own. Our test run came before it, so this section follows the author's MY-STYLES.md guide in the repository rather than our own run.
+A second version of this feature arrived on 2026-10-22. Our test run came before it, so this section follows the README and the author's MY-STYLES.md guide in the repository rather than our own run.
 
-- **Start from one style.** You ask for your own version of a style, for example turning Ukiyo-e into a "Night Ukiyo-e", the README's own example.
-- **The agent says what can change.** Colour within the style's logic, type, motion and sound are safe; materials, colour logic and camera change its character; its essence and render engine cannot change without it becoming a different style. Story, pacing, cast and voice need no custom style, since every film can set them.
-- **Up to five changes a round.** The new style is saved in `~/lemo-my-styles/` with a full style sheet and a list of changes. The library itself is never edited, and updates or uninstalling leave your styles in place.
-- **A frame, then a short test film.** The agent renders one frame next to the original style, waits for your approval, then makes a 15 to 30 second test film that shows every change. After that you name your style like any other when you ask for a film.
-- **Still code only.** Changes must be things code can draw. If one needs pictures, the guide says to use your own images or openly licensed ones, credited.
+- **Two ways in.** Change one of the 59 library styles, for example turning Ukiyo-e into a "Night Ukiyo-e", the README's own example. Or start from a blank page: describe the look, or share a picture or a film you like, and the agent picks the closest library style as the technique base and tells you why. Typing `/lemo-opuscar:lemo-opuscar` on its own opens a menu with both options.
+- **Planned one question at a time.** Each question has a few options with a recommendation first: what the films are for, which platform and aspect ratio, brand colours, logo, fonts or recurring characters, then what to change. For a library style, the agent first sorts it into what is safe to change (palette, type, pace, sound), what changes its character (materials, colour logic, camera) and what cannot change without it becoming a different style. Vague wishes such as "more premium" are turned into concrete choices, and at most five changes are allowed per round.
+- **Nothing is written until you agree.** You review a before-and-after summary, then see one style frame drawn with the real code, next to the original when you changed a library style. If it still isn't right after two rounds, the agent says so and suggests a closer base style.
+- **A short demo film, then you keep it.** The agent makes a 15 to 30 second demo with every change on screen, checks it once, and asks whether to keep it. Kept styles live in `~/lemo-my-styles/` with their style sheet, list of changes and demo, are listed first when you pick a style, and survive updates and uninstalls. When the base style is later updated, the agent asks once whether to bring the fixes into your copy.
+- **Still code only.** Every change has to be something code can draw; there is no image generation.

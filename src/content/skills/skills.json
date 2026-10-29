@@ -23,8 +23,8 @@
       "agents": "Built for Claude Code and tuned for Claude Opus 5.5; other agents can load the skill folder, but the README warns that other models may not reproduce the styles",
       "install": "Run claude plugin marketplace add lemomo-ai/lemo-opuscar, then claude plugin install lemo-opuscar@lemolab; or clone the repository and start Claude Code inside it",
       "language": "Style names in English or Chinese; on-screen text in the language you ask for",
-      "produces": "Short films rendered in code (1920×1080 at 24 fps by default) in one of 51 styles, with an original score, sound effects, subtitles and optional text-to-speech narration",
-      "checked_on": "2026-10-22"
+      "produces": "Short films rendered in code or cut from archive footage (1920×1080 at 24 fps by default) in one of 59 styles, with an original score, sound effects, subtitles and optional text-to-speech narration",
+      "checked_on": "2026-10-29"
     },
     {
       "slug": "humanizer",
