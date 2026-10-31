@@ -56,7 +56,7 @@ Then add one statically analyzable loader to `guideLoaders` in
 
 `tools` lists the catalogue slugs the guide is about. Each of those tool pages
 links back to the published guide, so a guide is never reachable only through
-the sitemap while Guides navigation stays hidden.
+the sitemap or the Guides hub.
 
 Keep `status: "draft"` until the copy, links, dates, and factual claims have
 been checked. Publishing requires only changing the status and rebuilding; it

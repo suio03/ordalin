@@ -48,6 +48,10 @@
   transition: color var(--motion-fast) var(--ease-standard), background var(--motion-standard) var(--ease-standard);
 }
 
+.navigation a {
+  white-space: nowrap;
+}
+
 .navigation a:hover,
 .submit:hover {
   color: var(--color-text-primary);
@@ -265,6 +269,19 @@
 .footer a {
   color: inherit;
   text-underline-offset: 3px;
+}
+
+/* Eight primary links need about 1010px of header; below that, use the menu. */
+@media (max-width: 1100px) {
+  .navigation {
+    display: none;
+  }
+
+  .mobileMenu { display: block; }
+
+  .themeSelector {
+    margin-left: auto;
+  }
 }
 
 @media (max-width: 820px) {

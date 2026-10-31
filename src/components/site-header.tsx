@@ -16,6 +16,7 @@ function primaryNavigation() {
     { href: "/tools", label: "All tools" },
     ...(listEditorialPages("best").length ? [{ href: "/best", label: "Best of" }] : []),
     ...(listEditorialPages("compare").length ? [{ href: "/compare", label: "Compare" }] : []),
+    { href: "/guides", label: "Guides" },
     { href: "/agents", label: "AI agents" },
     { href: "/models", label: "AI models" },
     { href: "/tasks", label: "Find by goal" },
@@ -91,9 +92,9 @@ async function directoryColumns(): Promise<FooterColumn[]> {
       links: skills.map((slug) => ({ href: skillsPath.skill(slug), label: skillName(getSkill(slug)) })),
     },
     {
-      // Individual guides only: the /guides hub stays out of navigation until it is approved.
+      // Newest first, from listPublishedGuides().
       title: "Guides",
-      links: guides.map((guide) => ({ href: `/guides/${guide.slug}`, label: guide.title })),
+      links: [...guides.map((guide) => ({ href: `/guides/${guide.slug}`, label: guide.title })), { href: "/guides", label: "All guides" }],
     },
   ].filter((column) => column.links.length);
 }
@@ -135,6 +136,7 @@ export async function SiteFooter() {
         { href: "/tasks", label: "Find by goal" },
         { href: "/collections", label: "Collections" },
         ...(visibleSkillSlugs().length ? [{ href: skillsPath.overview, label: "Agent skills" }] : []),
+        { href: "/guides", label: "Guides" },
         { href: "/search", label: "Advanced search" },
       ],
     },

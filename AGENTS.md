@@ -34,8 +34,8 @@
   out of Git. Remote commands must explicitly select the private configuration.
 - Do not test submissions, edits, deletions, seeds or migrations against production.
   Use isolated test fixtures for write paths; see `docs/environment.md`.
-- About ranking has no public navigation entry. Keep Guides navigation hidden
-  until useful content and its release are approved.
+- About ranking has no public navigation entry. Guides is in the primary
+  navigation and footer (approved 2026-10-31).
 
 ## Deployment
 

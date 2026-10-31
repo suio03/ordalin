@@ -185,8 +185,9 @@ mobile order search, categories, filters and results, collections, editor picks.
 - The footer lists Browse, Best of, Compare (when content exists) and Ordalin
   (How we review, Submit a tool, GitHub).
 - Do not expose About ranking in the header, footer, or homepage sidebar.
-- Hide Guides navigation until useful articles are available and its entry is
-  approved for release. Empty Guides remains noindex and outside the sitemap.
+- Guides is in the primary navigation, the footer Browse column and the footer
+  Guides column (approved 2026-10-31). Empty Guides remains noindex and outside
+  the sitemap.
 
 ## 5. Initial taxonomy and launch inventory
 
