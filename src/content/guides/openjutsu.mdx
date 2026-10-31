@@ -1,0 +1,94 @@
+export const metadata = {
+  title: "Openjutsu: the free, open-source Higgsfield Genjutsu alternative",
+  description: "Openjutsu swaps the person in a video for the character in one photo, on your own GPU with open-weights models. What it does, the hardware it needs, how to install it, and how it differs from Comfy's own Openjutsu.",
+  author: "Ordalin",
+  publishedAt: "2026-11-01",
+  updatedAt: "2026-11-01",
+  status: "published",
+  topics: ["Video & Animation"],
+  tools: ["comfyui"],
+  relatedLinks: [
+    { href: "/categories/video", label: "Video & Animation tools" },
+    { href: "/categories/video/video-editing", label: "AI video editing tools" },
+  ],
+};
+
+**Openjutsu** is a free, open-source app that does what Higgsfield's Genjutsu does: give it a video and a photo of a character, and the main person in the video becomes that character, while the camera, cuts, motion and soundtrack stay. It can also change someone's hair or clothes, remove an object or move the person somewhere else. It runs on your own NVIDIA GPU through ComfyUI, with open-weights models only, and it is MIT licensed.
+
+There are two projects called Openjutsu, so check which one you want first. This page is mainly about the community app on GitHub, [D3voz/openjutsu](https://github.com/D3voz/openjutsu), which you can install today. Comfy's own Openjutsu, a hosted beta on comfy.org, is covered further down. Everything below comes from the two repositories, Comfy's app and challenge pages and Higgsfield's Genjutsu page, checked on 31 October and 1 November 2026. We have not run Openjutsu ourselves.
+
+## Where Openjutsu comes from
+
+Higgsfield's [Genjutsu](https://higgsfield.ai/genjutsu) is a hosted video tool that, in Higgsfield's words, lets you "recast any motion with your characters, locations and products". It is part of Higgsfield's paid platform, which sells usage as credits.
+
+In October 2026 Comfy, the company behind ComfyUI, ran an [Open Source Higgsfield](https://comfy.org/open-source-higgsfield/) challenge: builders recreate Higgsfield's apps as open ComfyUI workflows. "Openjutsu: swap a character in a video" is one of the challenge's suggested apps. The build window runs from 15 October to 3 November 2026 and winners are announced on 10 November. D3voz/openjutsu is one of the entries.
+
+## Two Openjutsus: which one do you want?
+
+| | Openjutsu (D3voz) | Comfy's Openjutsu |
+| --- | --- | --- |
+| Where | [github.com/D3voz/openjutsu](https://github.com/D3voz/openjutsu) | [comfy.org/hub/apps/openjutsu](https://comfy.org/hub/apps/openjutsu/) and the template [Comfy-Org/comfy-openjutsu](https://github.com/Comfy-Org/comfy-openjutsu) |
+| Runs on | Your own NVIDIA GPU, through a local ComfyUI | Comfy's cloud, in the browser on comfy.org, or your own Comfy Developer Platform deployment |
+| Can you use it now? | Yes, if you install it | Yes, as a beta on comfy.org after you sign in (1 November 2026) |
+| Cost | Free software; you pay for your own hardware and power | Each run is charged, and the first-frame image it makes is charged separately |
+| What it does | Character swap for 1–4 people, object swap and removal, background change, relighting, face and colour fixes | Character swap of one 5–15 second part |
+
+If you have a strong NVIDIA card, D3voz's app is the one to try. If you don't, Comfy's hosted beta runs in the browser, but you pay for each run.
+
+## What Openjutsu can do
+
+- **Simple motion transfer:** one character replaces the person who fills most of the frame. Everyone else stays as they are.
+- **Advanced motion transfer:** one to four characters, each with an optional role such as "the drummer". Openjutsu tracks every person and matches them to a role shot by shot. A **Montage** tab handles edits where different people take turns in one shot, such as whip pans or selfie handovers.
+- **Object swap:** change what you name (hair, a jacket, a car) into something you describe or show in a picture, **Remove** it, or change the **Background** around a person. Only that area is regenerated. You can also **Add** an object by drawing a box where it goes.
+- **From picture:** prepares your character in the video's first pose with an image model first, so you can check the look before rendering the video. **Relight** changes the light in the same pass, with seventeen preset looks or your own description.
+- **Post-processing:** **Fix faces** redraws faces that came out poorly because the person was small in the frame, and **Fix colours** softens the harsh look of the video model.
+- **Check mask:** a quick preview of exactly which area will be regenerated, before you spend minutes on a full render.
+
+Under the hood it uses MiniMax H3 for the video, SAM 3.1 to track people and Qwen3-VL 8B to describe pictures and shots. The app itself is a small web front end over ComfyUI workflows.
+
+## What you need
+
+- **An NVIDIA GPU.** The author tested it on an RTX 4060 Ti with 16 GB of VRAM and **64 GB of system RAM**; the H3 models stream from RAM, so the RAM figure matters as much as the card.
+- **ComfyUI 0.41.2 or newer**, Node.js 22.6 or newer, and Python.
+- **Twelve ComfyUI custom node packs** and the H3, SAM and Qwen model files. The README lists every pack and the folder each model file goes in.
+- **Time.** A 6-second clip at 480p takes about 6–13 minutes on the 4060 Ti. The default is 736p, and 1080p is about 2.5 times slower than 736p and needs much more memory.
+
+The quickest launcher, `start_openjutsu.bat`, is for Windows. On other systems you run the same steps by hand.
+
+## How to install Openjutsu
+
+This is the short version of the [README](https://github.com/D3voz/openjutsu#run-it-locally); follow the README for the exact commands and versions.
+
+1. Install ComfyUI, the custom node packs and the model files listed in the README, then restart ComfyUI. On Windows, set `AIOHTTP_NOSENDFILE=1` before starting it.
+2. Install `comfy-api-proxy`, run the repository's `patch_proxy.py`, and start the proxy.
+3. Clone the repository, copy `.env.example` to `.env.local`, then run `npm ci`, `npm run build` and `npm start`.
+4. Open `http://127.0.0.1:3000`. On the first visit, pick the model that describes pictures and video frames. Qwen3-VL 8B is the default; smaller ones are offered for cards with less memory.
+
+On Windows, `start_openjutsu.bat` does steps 2 and 3 for you once ComfyUI is running. Before each job, Openjutsu checks ComfyUI for missing node packs and model files and links to what is missing. It does not check Python dependencies or available VRAM.
+
+## Limitations to know first
+
+- **No mirrors or reflections.** The reflection keeps the original person, and the video model copies their hair, outfit and build back onto your character. Use footage without mirrors or windows that reflect the person.
+- **Small faces come out poorly.** That is what Fix faces is for, and it adds time: a 17-second 768p video took about 28 minutes on the 4060 Ti.
+- **People who are tiny or on screen briefly are left alone,** because the model draws them as grey figures.
+- **Commercial use needs care.** Openjutsu itself is MIT licensed, but model licences are separate. The face model used by Fix faces (InsightFace `buffalo_l`) is licensed for non-commercial research only, and the YOLO weights it uses are AGPL-3.0.
+- **Cloud hosting is untested.** The README describes deploying it on the Comfy Developer Platform but says this has not been tested yet.
+
+## Comfy's own Openjutsu
+
+Comfy's version is a simpler app: upload a clip and a character image, and get the clip back with the character in it. It is built on Akatz Labs' H3 Character Swap workflow and MiniMax H3.
+
+On 1 November 2026 the [app page](https://comfy.org/hub/apps/openjutsu/) showed Openjutsu as a beta you can run in the browser after signing in. You upload an MP4 or MOV video (up to 15 seconds of it is used) and a character image, can add optional extra direction, and get a 768p result with the original sound kept. Each run is charged, and each run also makes a first-frame image that is charged separately. The page does not show prices before you sign in.
+
+Developers can also run the [template](https://github.com/Comfy-Org/comfy-openjutsu) on their own Comfy Developer Platform deployment, which needs an account, an API key and the right nodes and models. Comfy ran it on a 96 GB GPU and has not tested smaller setups, and generation uses deployment credits.
+
+## Openjutsu vs Higgsfield Genjutsu
+
+- **Price:** Openjutsu is free software running on your own hardware. Genjutsu is part of Higgsfield's credit-based paid platform; Higgsfield also offers a cheaper **Genjutsu Lite** for clips up to 30 seconds at 720p or 1080p.
+- **Setup:** Genjutsu runs in the browser, and so does Comfy's hosted Openjutsu beta. Openjutsu needs a capable NVIDIA PC, ComfyUI with twelve node packs, and several minutes of rendering per clip.
+- **Control:** Openjutsu exposes its steps, models and LoRAs, and you can edit the ComfyUI workflows themselves.
+- **Privacy:** with Openjutsu your videos and photos stay on your machine.
+
+We have not compared output quality side by side. The challenge winners are announced on 10 November 2026, and we will update this page if the Openjutsu entries or Comfy's hosted app change.
+
+Sources: [D3voz/openjutsu](https://github.com/D3voz/openjutsu) README, [Comfy-Org/comfy-openjutsu](https://github.com/Comfy-Org/comfy-openjutsu) README, [Comfy's Openjutsu app page](https://comfy.org/hub/apps/openjutsu/), the [Open Source Higgsfield challenge page](https://comfy.org/open-source-higgsfield/) and [Higgsfield Genjutsu](https://higgsfield.ai/genjutsu). Checked on 31 October and 1 November 2026.
