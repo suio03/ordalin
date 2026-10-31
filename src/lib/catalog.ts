@@ -66,6 +66,12 @@ const titleUseOverrides: Record<string, string> = {
   "yue2-studio": "Music generation",
 };
 
+/** Same-family tools that share no category tag, pinned first among related tools, keyed by tool slug. */
+export const toolCompanions: Record<string, string[]> = {
+  "audio8-asr": ["audio8-tts"],
+  "audio8-tts": ["audio8-asr"],
+};
+
 /** "AdAnt — AI Video Generation": the tool's main use, taken from a category tag in its primary group. */
 export function toolPageTitle(tool: { slug: string; name: string; primaryCategory: { slug: string; name: string }; tagDetails: TitleTag[] }) {
   const categories = tool.tagDetails

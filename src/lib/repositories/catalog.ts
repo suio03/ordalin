@@ -3,7 +3,7 @@ import { readConfirmedProfile, type ConfirmedProfile } from "@/lib/submissions/p
 import { getToolProfile } from "@/content/tool-profiles/granola";
 import { cache } from "react";
 import { getCloudflareEnv } from "@/lib/cloudflare";
-import { cataloguePageSize, toFtsQuery, type CatalogueSort } from "@/lib/catalog";
+import { cataloguePageSize, toFtsQuery, toolCompanions, type CatalogueSort } from "@/lib/catalog";
 import type { TagKind } from "@/domain/catalog";
 
 export type ToolCard = {
@@ -821,9 +821,21 @@ export async function listEditorialTools(slugs: string[]): Promise<Map<string, E
   }));
 }
 
-/** Tools sharing the most concrete categories with one tool, newest first on ties. */
+/** Same-family companions first, then tools sharing the most concrete categories, newest first on ties. */
 export async function listRelatedTools(slug: string, limit = 6): Promise<ToolCard[]> {
   const database = await getDatabase();
+  const companions = toolCompanions[slug] ?? [];
+  const pinned = companions.length
+    ? (await database
+      .prepare(
+        `${toolCardSelect}
+         FROM tools t
+         JOIN categories c ON c.id = t.primary_category_id
+         WHERE t.status = 'published' AND t.slug IN (${companions.map(() => "?").join(", ")})`,
+      )
+      .bind(...companions)
+      .all<ToolRow>()).results
+    : [];
   const result = await database
     .prepare(
       `${toolCardSelect}
@@ -842,5 +854,6 @@ export async function listRelatedTools(slug: string, limit = 6): Promise<ToolCar
     )
     .bind(slug, limit)
     .all<ToolRow>();
-  return result.results.map(mapTool);
+  const pinnedSlugs = new Set(pinned.map((row) => row.slug));
+  return [...pinned, ...result.results.filter((row) => !pinnedSlugs.has(row.slug))].slice(0, limit).map(mapTool);
 }
