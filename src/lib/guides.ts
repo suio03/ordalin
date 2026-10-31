@@ -33,6 +33,7 @@ type GuideLoader = () => Promise<GuideModule>;
 const guideLoaders: Record<string, GuideLoader> = {
   "1password-for-agents": () => import("@/content/guides/1password-for-agents.mdx"),
   "artcraft-download": () => import("@/content/guides/artcraft-download.mdx"),
+  "clean-your-tv": () => import("@/content/guides/clean-your-tv.mdx"),
   "dessa": () => import("@/content/guides/dessa.mdx"),
   "nemotron-3-5-transcribe": () => import("@/content/guides/nemotron-3-5-transcribe.mdx"),
   "suno-mcp": () => import("@/content/guides/suno-mcp.mdx"),

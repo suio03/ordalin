@@ -1,0 +1,104 @@
+export const metadata = {
+  title: "Clean Your TV (GitHub): debloat Android TV with Claude Code, what testers found and the risks",
+  description: "Clean Your TV is a free open-source GitHub project that removes ads and bloat from Android TV and Google TV with an AI coding agent. Which TVs work, how to run it, the phone app, how to undo it and what hands-on testers reported.",
+  author: "Ordalin",
+  publishedAt: "2026-10-31",
+  updatedAt: "2026-10-31",
+  status: "published",
+  topics: ["Automation & Agents"],
+  relatedLinks: [
+    { href: "/categories/coding", label: "AI coding tools" },
+    { href: "/skills", label: "Agent skills" },
+  ],
+};
+
+**Clean Your TV** (repository `Gathin23/cleanyourtv`, formerly tv-vibehack) is a free, open-source project that strips sponsored rows, ad services, telemetry and preloaded apps from **Android TV and Google TV** sets, then replaces the home screen with a small Apple TV-style launcher. You don't need to write code: you clone the repository, open it in an AI coding assistant such as Claude Code or Codex, paste the project's prompt with your TV model, and the assistant does the work over Wi-Fi in about fifteen minutes. There is no root, nothing is uninstalled, and a restore script puts the TV back.
+
+The facts below come from the project's [README](https://github.com/Gathin23/cleanyourtv) and its official site, [cleanyour.tv](https://cleanyour.tv), checked on 31 October 2026 (latest release v3.2.0, 29 October). We have not run it ourselves because we don't have an Android TV to test on, so the hands-on results further down are other people's, credited and linked.
+
+## Clean Your TV at a glance
+
+- **Made by:** developer Gathin, who posted a before-and-after of their parents' TV on 17 October 2026. Hundreds of contributors have since added lists for their own sets.
+- **Price:** free. The README states the MIT licence. The AI assistant you use may need its own paid plan.
+- **Works on:** Android TV and Google TV. Fire TV gets the debloat only, not the new home screen.
+- **Doesn't work on:** Samsung (Tizen), LG (webOS), Roku, Vizio and Hisense VIDAA. These have no ADB access.
+- **Tested lists:** 380 TV models from 101 brands as of 30 October, led by TCL, Sony, Xiaomi, Philips, Skyworth and Hisense, plus projectors.
+- **What it changes:** it disables packages with Android's own `pm disable-user` (the same switch as Settings › Apps › Disable) and installs a roughly 572 KB launcher. Nothing is flashed, rooted or deleted.
+- **Official links:** only [cleanyour.tv](https://cleanyour.tv) and the GitHub repository. The README warns that other domains using the name, such as cleanyourtv.com, are not run by the project.
+
+## Which way should you use it?
+
+The project offers three routes, depending on what you have.
+
+| You have | Route | Time, per the project |
+| --- | --- | --- |
+| A computer and an AI coding assistant | Paste `PROMPT.md` into the assistant | About 15 minutes |
+| A computer, no assistant | Run the same scripts yourself ("Doing it by hand" in the README) | Longer; you read the steps |
+| Only an Android phone | The community-built [Clean Your TV app](https://cleanyour.tv/app) | About 5 minutes |
+
+If your TV isn't Android-based, the project's [not-android page](https://cleanyour.tv/not-android) explains which tracking settings you can still turn off with the remote.
+
+## How to run it with Claude Code or Codex
+
+The README names Claude Code, Codex, Gemini CLI and Antigravity CLI as assistants that work.
+
+**Before you start**, the computer must be on the same Wi-Fi as the TV and have a shell, Python 3, a JDK from version 17 through 22, and Android SDK platform 34 with build-tools 34. The assistant builds the launcher on your computer, so these have to be there.
+
+1. **On the TV:** Settings › Device Preferences › About, press OK on **Build** seven times, go back to Developer options and turn on **USB debugging**. If the TV also shows a Network or ADB debugging switch, turn that on too. Keep the TV on.
+2. **On the computer:** run `git clone https://github.com/Gathin23/cleanyourtv`, open that folder in your assistant, paste [`PROMPT.md`](https://github.com/Gathin23/cleanyourtv/blob/main/PROMPT.md) and fill in your TV model.
+3. **Follow along:** accept "Allow USB debugging?" on the TV, then answer the assistant's checklist: which apps you use, the dock size and app order, and whether to keep the voice assistant, Chromecast and system updates.
+
+Cloning matters. The project says the assistant should reuse the repository's own `disable.sh` and launcher install script instead of writing its own, because that is where the backup, the guard that keeps a working home screen and the restore record live. If your model isn't in the list yet, the prompt has the assistant discover the bloat on your TV and ask before switching off anything you might use.
+
+## What you end up with
+
+- **No sponsored rows** or "Discover" suggestions on the home screen, and the manufacturer's ad and analytics services switched off.
+- **A black home screen** with a dock of your favourite apps, a grid of the rest, a clock and an Inputs button for your HDMI ports.
+- **Themes** you can push over Wi-Fi without rebuilding, a clock screensaver, and the launcher in 31 languages.
+- **Remote buttons** such as Input, YouTube and Settings keep working after the stock launcher is gone.
+
+What it does **not** do: block ads inside streaming apps. The FAQ suggests Android's Private DNS with an ad-blocking resolver for partial cover, and says even that doesn't remove YouTube ads.
+
+## How to undo it
+
+- **Before** changing anything, `disable.sh` writes a record of the TV's state to `~/.cleanyourtv/` on your computer. Keep it, and keep the list you applied.
+- **One command restores the TV:** `tools/restore.sh` with that list, plus the stock launcher name on Google TV. Disabled apps come back and Home returns to the original launcher. The new launcher stays installed until you remove it in Settings › Apps.
+- **Without a computer,** the TV's own Settings › Apps page can re-enable packages. If the TV no longer starts far enough for that, the FAQ says a factory reset from the recovery menu is usually the way back.
+- **After a firmware update,** the disabled apps and the stock home screen usually come back. Turn debugging on again and run `tools/check.py` with your list; `--fix` reapplies it.
+
+When you're done, the project asks you to turn **USB, Network and Wireless debugging off** again and revoke the authorisations, because network ADB is unencrypted and on some firmware any device on your network could get a shell.
+
+## What hands-on testers found
+
+The project's [press list](https://github.com/Gathin23/cleanyourtv/blob/main/docs/PRESS.md) counts 351 articles and 229 videos as of 30 October. Most articles retell the viral post; these are the ones with a first-hand test or a clear verdict.
+
+- **[Techy Druid](https://techydruid.com/remove-smart-tv-bloatware)** (26 October) ran it with **Codex** on a Google TV running Android 13. The assistant found 112 packages, disabled 16 and uninstalled none; the author kept their streaming apps, installed the new launcher, and reported that the remote and playback still worked. They didn't measure a speed gain and point out that ads inside streaming apps stay.
+- **[Android Authority](https://www.androidauthority.com/android-tv-vibe-hacking-remove-ads-bloatware-3725338/)** (20 October) didn't test it, but collected user reports: the original Xiaomi TV run removed 25 Xiaomi packages, one user said they bricked a TV, and another got stuck partway on a Fire TV Stick. It advises against modding newer TVs still under warranty.
+- **[PCWorld](https://www.pcworld.com/article/3266473/please-dont-use-ai-hacks-to-debloat-your-tv.html)** (22 October) argues against the AI route. It notes that boot loops have been reported, that lists depend on volunteers for each model, and that coding agents often need a paid plan. Its alternative: turn off ACR viewing tracking in the TV's settings and install a reviewed launcher from the Play Store, such as Projectivy Launcher, AT4K Launcher or Kyu Launcher.
+
+**Our read:** the reversible design (disable, don't delete, with a recorded restore) is careful, and the risk is concentrated in one place. If something the TV depends on gets switched off and the TV can't reach its settings, you're into a factory reset. If you only want a cleaner home screen, a Play Store launcher is the lower-risk first step; Clean Your TV adds the debloat and telemetry cleanup on top.
+
+## Community projects built on it
+
+The repository's showcase lists more than 160 projects built on top. A few that people search for, all community-built and not checked by us:
+
+- **[Clean Your TV app](https://github.com/udhaykumarbala/cleanyourtv-app)** (Android phone, MIT) by @udhaykumarbala, linked from the official README: connect, analyse, clean, without a laptop or coding agent.
+- **LG webOS ports:** [clean-your-tv-lg-webos](https://github.com/Razdva122/clean-your-tv-lg-webos) (a new home screen without root) and [cleanyourtv-WebOS](https://github.com/lasharor/cleanyourtv-WebOS) (for rooted sets). Neither is the official project.
+
+## Questions people ask
+
+**Is Clean Your TV free?** Yes. The project itself costs nothing. Claude Code and Codex may need a paid plan, which PCWorld flags; the hand-run scripts and the phone app don't need an assistant at all.
+
+**Can I just download an APK for the TV?** Not from the official project. It ships no prebuilt launcher; the build script compiles it on your computer so you control what goes on the TV.
+
+**Does it work on Samsung or LG TVs?** No. They don't offer ADB. For LG there are separate community ports listed above.
+
+**Will my streaming apps still update?** Yes, according to the FAQ: the Play Store is left alone.
+
+**Can I do this for my parents' TV in another house?** The README describes doing it over a private Tailscale link, and says never to open the TV's ADB port on their router.
+
+**Does it void my warranty?** The project says changing a TV's software may affect its warranty or support. Check your TV's terms first.
+
+## Source
+
+[Gathin23/cleanyourtv on GitHub](https://github.com/Gathin23/cleanyourtv)
