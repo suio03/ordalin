@@ -59,8 +59,10 @@ type TitleTag = { kind: string; name: string; groupSlug: string | null };
 /** Title use for tools whose first category tag alphabetically is not their main use, keyed by tool slug. */
 const titleUseOverrides: Record<string, string> = {
   "artcraft": "Image generation",
+  "basetab": "New tab dashboard",
   "flux-3": "Video generation",
   "fraud-blocker": "Click fraud protection",
+  "godwit": "Email client",
   "inbox-zero": "Email assistant",
   "tulu": "Marketing analytics",
   "yue2-studio": "Music generation",
