@@ -2,6 +2,8 @@ export const meta = {
   title: "Impeccable Skill Tested: Does It Fix AI-Looking Front-End Design?",
   description:
     "Impeccable is a free Apache-2.0 design skill with 24 commands and a slop detector. Install steps, what it can access, and our Claude Code test against the plain agent.",
+  verdict:
+    "With Impeccable, Claude Code checked its page with the skill's detector and fixed what it flagged. The plain agent's page was already close, so the visible difference was small, at twice the cost.",
   summary:
     "Impeccable is a free, Apache-2.0 design skill by Paul Bakaus for coding agents. It adds 24 commands such as polish, bolder, quieter, critique and audit, and a detector with 62 rules for the tells of AI-made pages: Inter everywhere, purple gradients, cards inside cards, grey text on colour. We gave Claude Code the same purple-gradient pricing page with and without the plugin. Both runs produced a calm, green, readable page. With Impeccable, the agent ran the detector on its own work, fixed what it flagged and avoided the fonts and cream background the detector calls defaults; it also took twice as long and cost twice as much.",
   bestFor: [
@@ -75,9 +77,18 @@ export const meta = {
     model: "claude-opus-5-5",
     commit: "f864521",
     task: "/impeccable polish this landing page. Context: Ledgerly is invoicing software for freelancers (designers, developers, writers). The page should feel calm and trustworthy, not hyped. Keep all the copy, the three plans and their prices. Work only on index.html and styles.css, and don't ask me questions: decide yourself.",
+    runs: [
+      { label: "With the skill", outcome: "A calm page, checked and fixed with the skill's detector", time: "149 s", cost: "$0.83", turns: 24 },
+      { label: "Same model, no skill", outcome: "A similar calm page, plus a made-up sample invoice", time: "86 s", cost: "$0.41", turns: 12 },
+    ],
+    shots: [
+      { src: "/skills/impeccable/with-desktop.jpg", alt: "Ledgerly landing page built with Impeccable: a large serif headline on cool grey with one deep green button", caption: "With the skill: the first screen at 1440 pixels, captured by us in Chrome.", width: 1440, height: 900 },
+      { src: "/skills/impeccable/without-desktop.jpg", alt: "Ledgerly landing page built without the skill: a serif headline on cream with a sample invoice card beside it", caption: "No skill: the first screen at 1440 pixels. The invoice, client and amounts are made up.", width: 1440, height: 900 },
+    ],
     samples: [
       {
         label: "The page we started from: part of styles.css",
+        mono: true,
         note: "A typical AI-made SaaS page: Inter, purple gradients, gradient headline text, light grey text, emoji icons and a scaled-up \"popular\" card. Impeccable's detector found 26 problems in it.",
         text: `body { font-family: 'Inter', sans-serif; text-align: center; color: #333; background: #f9f9fb; }
 .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
@@ -88,6 +99,7 @@ h1 { font-size: 52px; background: linear-gradient(90deg, #fff, #e0d4ff);
       },
       {
         label: "With Impeccable: the new colours and fonts",
+        mono: true,
         note: "291 lines added and 73 removed in two files. After its first version the agent ran the detector, which flagged a cream background and cramped padding in three sections. It switched to a cool grey and fixed the padding. The final check left one finding: the word \"Supercharge\" in the copy it was told to keep.",
         text: `/* Ledgerly — cool ledger-paper grey, ink, one ledger green. */
 :root {
@@ -102,6 +114,7 @@ h1 { font-size: 52px; background: linear-gradient(90deg, #fff, #e0d4ff);
       },
       {
         label: "Same model, no plugin: the new colours and fonts",
+        mono: true,
         note: "312 lines added and 74 removed. It reached a very similar page and added a sample invoice card beside the headline. The detector flagged its Inter font and cream background, and two lines of grey text at 4.4:1 contrast, just under the 4.5:1 that WCAG AA asks for.",
         text: `/* Ledgerly — calm, paper-and-ink palette */
 :root {

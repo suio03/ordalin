@@ -2,6 +2,8 @@ export const meta = {
   title: "Cloudflare security-audit Skill Tested: Proven Findings at 24 Times the Cost",
   description:
     "Cloudflare's free MIT security-audit skill runs a multi-agent code audit with independent verifiers. Install steps, what it writes, and our Claude Code test against the plain agent.",
+  verdict:
+    "Both runs found every hole we planted. Cloudflare's skill also proved each one by running a script, and it took 15 minutes and $8.41 against the plain agent's 100 seconds and $0.35.",
   summary:
     "security-audit is a free, MIT-licensed skill from Cloudflare that turns a coding agent into a security auditor. It maps the code, sends separate subagents to hunt each risky area, gives every lead to a fresh agent that tries to disprove it, and writes a report only from findings that survive. Cloudflare says it seeded the company's own vulnerability-finding system. We gave Claude Code a small notes API with three planted holes, with and without the skill. Both runs found all three, plus the same two extra problems. With the skill, each finding came with a script that reproduced it in a locked-down sandbox; the plain agent's proofs were reasoned, not run. The skill's audit took 15 minutes and $8.41 at API prices against 100 seconds and $0.35.",
   bestFor: [
@@ -60,9 +62,14 @@ export const meta = {
     model: "claude-opus-5-5",
     commit: "c1c8a8c",
     task: "Run a full security audit of this codebase. Write all audit output into ./security-audit/ inside this folder. Don't run the app and don't ask me questions.",
+    runs: [
+      { label: "With the skill", outcome: "Found all planted holes and proved each with a script", time: "15 min", cost: "$8.41", turns: 78, tone: "ok" },
+      { label: "Same model, no skill", outcome: "Found all planted holes; proofs read from the code, not run", time: "100 s", cost: "$0.35", turns: 7, tone: "ok" },
+    ],
     samples: [
       {
         label: "With the skill: the confirmed findings",
+        mono: true,
         note: "It chose the quick profile for an 81-line target and used 10 subagents: 3 hunters, 1 critic and 6 verifiers. Each row is a result its verifier observed, not a guess.",
         text: `| # | Severity | Title                                            | Observed result (local harness, dummy data)
 | 1 | High     | SQL injection in GET /notes search term          | UNION payload returned email, token and is_admin for all 3 users
@@ -73,6 +80,7 @@ export const meta = {
       },
       {
         label: "With the skill: how it ran the proofs",
+        mono: true,
         note: "We told it not to run the app, and the dependencies were not installed. It rebuilt each vulnerable line in a small Node script and ran it inside macOS's sandbox with no network, no environment and writes only to a scratch folder.",
         text: `PROFILE="(version 1)(allow default)(deny network*)(deny file-write*)
          (allow file-write* (subpath \\"$SCR\\") (literal \\"/dev/null\\"))"
@@ -83,6 +91,7 @@ exec perl -e "alarm shift; exec @ARGV" 30 /usr/bin/sandbox-exec -p "$PROFILE" /u
       },
       {
         label: "Same model, no skill: its summary table",
+        mono: true,
         note: "One agent read the four files and wrote the report in 100 seconds. It found the same five problems, said its proofs were derived from the code and not executed, and added six more items: missing upload limits, attachment ownership, known multer CVEs, plaintext tokens and hardening gaps.",
         text: `| # | Severity | Issue                                              | Location
 | 1 | Critical | SQL injection in GET /notes q                      | src/server.js:16

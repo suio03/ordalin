@@ -143,7 +143,8 @@ a short film in code).
 - Third-party prompts, videos and demo output are linked and credited, never
   copied. Do not rank skills by GitHub stars or show other engagement counts.
 - Neutral coverage: list skills from any author, including competitors' own.
-- New pages start as `status: "draft"`; only the maintainer publishes them.
+- Pages the maintainer asks for are published directly (approved 2026-11-05);
+  others start as `status: "draft"`.
   The hub gets a navigation entry once three pages are published.
 
 ### MCP servers
@@ -168,7 +169,8 @@ whose name people have started searching, not a mass directory.
 - The same rules as skills apply: English only, repository linked once at the
   bottom, third-party material credited not copied, no star or download counts,
   neutral coverage.
-- New pages start as `status: "draft"`; only the maintainer publishes them.
+- Pages the maintainer asks for are published directly (approved 2026-11-05);
+  others start as `status: "draft"`.
   The hub gets a navigation entry once three pages are published.
 
 ## 4. Homepage and catalogue contract

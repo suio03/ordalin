@@ -2,6 +2,8 @@ export const meta = {
   title: "Superpowers Skills Tested: Does It Make Claude Code Write Tests First?",
   description:
     "Superpowers is a free MIT skills library that gives coding agents a brainstorm, plan, test-first workflow. Install steps, the 15 skills, and our Claude Code test against the plain agent.",
+  verdict:
+    "Superpowers made Claude Code write failing tests first and finish with twice as many tests. Its brainstorming and planning steps never started in our run, and the result worked the same as the plain agent's.",
   summary:
     "Superpowers is a free, MIT-licensed set of 15 workflow skills for coding agents by Jesse Vincent and Prime Radiant. It tells the agent to talk a feature through before building, write a plan, write tests before code, debug in steps and check its work before saying it is done. We asked Claude Code to add due dates to a small to-do app, with and without the plugin, in a three-message conversation. With Superpowers, the agent loaded its test-driven development skill, wrote failing tests first and ended with 12 tests, including six that run the real command line; the plain agent wrote six tests after the code and tried the command by hand. The brainstorming step the README describes did not start, and the run cost about a third more.",
   bestFor: [
@@ -70,9 +72,14 @@ export const meta = {
     model: "claude-opus-5-5",
     commit: "22f0b46",
     task: "Add due dates to this to-do CLI: `add` takes an optional --due YYYY-MM-DD, `list` shows the due date, and `list --overdue` shows only open tasks whose due date is before today. Reject invalid dates with a clear message.",
+    runs: [
+      { label: "With Superpowers", outcome: "Tests first; 12 passing tests, 6 of them run the real command", time: "73 s", cost: "$0.39", turns: 16 },
+      { label: "Same model, no skill", outcome: "Code first; 6 passing tests, command checked by hand", time: "59 s", cost: "$0.29", turns: 12 },
+    ],
     samples: [
       {
         label: "With Superpowers: the first two moves",
+        mono: true,
         note: "Its first action was to load the test-driven development skill. It wrote the tests, ran them to confirm they failed because the feature was missing, then wrote the code. It repeated that for the command-line part.",
         text: `Skill({ skill: "superpowers:test-driven-development" })
 "Writing the failing tests first."
@@ -81,6 +88,7 @@ export const meta = {
       },
       {
         label: "With Superpowers: a test that runs the real command",
+        mono: true,
         note: "Six of its 12 tests start the CLI in a fresh folder and check what it prints. Each one creates a temp folder and never deletes it; our test runs left 20 behind.",
         text: `const fresh = () => mkdtempSync(join(tmpdir(), "todo-"));
 
@@ -96,6 +104,7 @@ test("list --overdue shows only open tasks due before today", () => {
       },
       {
         label: "Same model, no plugin: tests written after the code",
+        mono: true,
         note: "It wrote the store and CLI first, then added tests for the store functions only, and checked the CLI by hand in a temp folder. Its date check covers the same edge cases, such as 30 February and 29 February in a non-leap year.",
         text: `test("isValidDate accepts real YYYY-MM-DD dates only", () => {
   assert.equal(isValidDate("2026-12-31"), true);
