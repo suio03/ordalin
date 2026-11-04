@@ -23,7 +23,30 @@ export type Skill = {
 };
 
 /** One sample from Ordalin's test run, shown verbatim. */
-export type TestSample = { label: string; text: string; note?: string };
+export type TestSample = {
+  label: string;
+  text: string;
+  note?: string;
+  /** Terminal output, tool calls or code: shown in a monospace block that scrolls sideways instead of wrapping. */
+  mono?: boolean;
+};
+
+/** One run of Ordalin's test, shown as a result card near the top of the page. */
+export type TestRun = {
+  label: string;
+  /** What the run produced, in a few words. */
+  outcome: string;
+  /** Wall time as reported, e.g. "78 s" or "18 min". */
+  time: string;
+  /** Cost at API prices as reported by the agent, e.g. "$0.50". */
+  cost: string;
+  turns: number;
+  /** "ok" marks a result we verified as correct; it is the only use of green here. */
+  tone?: "ok";
+};
+
+/** A picture of what a test run produced, served from public/. */
+export type TestShot = { src: string; alt: string; caption: string; width: number; height: number };
 
 /** A still the skill's author published, served from public/ under the author's licence. */
 export type GalleryItem = {
@@ -65,11 +88,15 @@ export type SkillTest = {
   task: string;
   /** Text outputs shown side by side; empty when the output is a video or image we do not publish. */
   samples: TestSample[];
+  runs?: TestRun[];
+  shots?: TestShot[];
 };
 
 export type SkillMeta = {
   title: string;
   description: string;
+  /** One or two sentences for the top of the page; the full summary then opens the test section. */
+  verdict?: string;
   summary: string;
   bestFor: string[];
   notFor: string[];

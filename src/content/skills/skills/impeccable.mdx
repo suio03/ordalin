@@ -1,0 +1,164 @@
+export const meta = {
+  title: "Impeccable Skill Tested: Does It Fix AI-Looking Front-End Design?",
+  description:
+    "Impeccable is a free Apache-2.0 design skill with 24 commands and a slop detector. Install steps, what it can access, and our Claude Code test against the plain agent.",
+  summary:
+    "Impeccable is a free, Apache-2.0 design skill by Paul Bakaus for coding agents. It adds 24 commands such as polish, bolder, quieter, critique and audit, and a detector with 62 rules for the tells of AI-made pages: Inter everywhere, purple gradients, cards inside cards, grey text on colour. We gave Claude Code the same purple-gradient pricing page with and without the plugin. Both runs produced a calm, green, readable page. With Impeccable, the agent ran the detector on its own work, fixed what it flagged and avoided the fonts and cream background the detector calls defaults; it also took twice as long and cost twice as much.",
+  bestFor: [
+    "Developers who want named design moves (polish, quieter, typeset, layout) instead of \"make it look better\"",
+    "Teams that want a design check in CI or in the agent's loop, with no LLM and no API key",
+    "Reviewing an existing page or component; the README says it is strongest on interfaces that already exist",
+  ],
+  notFor: [
+    "A big jump over a strong model on a simple page; in our test the plain agent already removed the gradients, emoji and grey-on-colour text",
+    "Copy changes on their own; it flagged \"Supercharge\" as a buzzword but left the wording alone when asked to keep it",
+    "Unreviewed live mode in an unfamiliar repository; its Apply step can start Codex or Claude Code with approvals and sandboxing off",
+  ],
+  howItWorks: [
+    {
+      title: "One skill, 24 named commands",
+      text: "You name a move and a target: /impeccable polish settings, /impeccable quieter the landing page, /impeccable critique the pricing cards. Each command loads its own playbook. There are commands to steer (bolder, quieter, distill, colorize, typeset, layout, animate, delight, overdrive), to review (critique, audit), to finish (polish, harden, clarify, adapt, optimize, onboard) and to plan (shape, init, document, extract).",
+    },
+    {
+      title: "Project context files",
+      text: "/impeccable init reads the code, asks what it cannot infer, and writes PRODUCT.md. /impeccable document writes DESIGN.md from your current visual system. Later commands read both. Small refinements such as polish can run without them, as in our test.",
+    },
+    {
+      title: "A rule-based slop detector",
+      text: "A bundled engine checks pages against 62 rules, from overused fonts and gradient text to low contrast and cramped padding. It runs without an LLM. On CSS files it can only match patterns; rules such as contrast and tiny text need a rendered page, so point it at your dev server for the full check.",
+    },
+    {
+      title: "A hook that checks every edit",
+      text: "The installer offers a design hook for Claude Code, Cursor, Codex, GitHub Copilot, Grok Build and Hermes Agent. It scans each UI file the agent edits and hands the findings back before the agent says it is done.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Any supported agent",
+      code: "npx impeccable install",
+      note: "Run it in your project root. It detects your coding tools, asks for project or global install, and offers the design hook; the README says to accept it. Reload your tool afterwards.",
+    },
+    {
+      label: "Claude Code plugin",
+      code: "/plugin marketplace add pbakaus/impeccable",
+      note: "Then open /plugin and install Impeccable. This installs the skill without running the npx installer.",
+    },
+    {
+      label: "Codex: approve the hook",
+      code: "/hooks",
+      note: "In Codex, open /hooks and approve the project hook after installing, and again after an update that changes it. Commands start with $impeccable instead of /impeccable.",
+    },
+    {
+      label: "Set up the project once",
+      code: "/impeccable init",
+      note: "Writes PRODUCT.md. Run /impeccable document too if you want DESIGN.md written from your current styles.",
+    },
+    {
+      label: "Use it",
+      code: "/impeccable critique the pricing cards\n/impeccable polish the landing page\n/impeccable audit checkout",
+      note: "The README recommends narrow targets: one section reviewed closely beats a whole page at a glance.",
+    },
+    {
+      label: "Run the detector without an agent",
+      code: "npx impeccable detect src/\nnpx impeccable detect http://localhost:5173\nnpx impeccable detect --github src/",
+      note: "Exit code 2 means findings, 1 means a target could not be scanned. The URL form uses your installed Chrome or Edge.",
+    },
+    {
+      label: "Turn off telemetry",
+      code: "npx impeccable telemetry off",
+      note: "Or set DO_NOT_TRACK=1. When a new design starts, the skill still fetches visual directions from impeccable.style; telemetry off stops the anonymous record of which ones you picked.",
+    },
+  ],
+  test: {
+    date: "2026-11-04",
+    agent: "Claude Code 2.1.318, headless (claude -p), project settings only, plugin loaded with --plugin-dir",
+    model: "claude-opus-5-5",
+    commit: "f864521",
+    task: "/impeccable polish this landing page. Context: Ledgerly is invoicing software for freelancers (designers, developers, writers). The page should feel calm and trustworthy, not hyped. Keep all the copy, the three plans and their prices. Work only on index.html and styles.css, and don't ask me questions: decide yourself.",
+    samples: [
+      {
+        label: "The page we started from: part of styles.css",
+        note: "A typical AI-made SaaS page: Inter, purple gradients, gradient headline text, light grey text, emoji icons and a scaled-up \"popular\" card. Impeccable's detector found 26 problems in it.",
+        text: `body { font-family: 'Inter', sans-serif; text-align: center; color: #333; background: #f9f9fb; }
+.hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+h1 { font-size: 52px; background: linear-gradient(90deg, #fff, #e0d4ff);
+     -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.card p { color: #888; }
+.popular { transform: scale(1.05); border: 2px solid #764ba2; }`,
+      },
+      {
+        label: "With Impeccable: the new colours and fonts",
+        note: "291 lines added and 73 removed in two files. After its first version the agent ran the detector, which flagged a cream background and cramped padding in three sections. It switched to a cool grey and fixed the padding. The final check left one finding: the word \"Supercharge\" in the copy it was told to keep.",
+        text: `/* Ledgerly — cool ledger-paper grey, ink, one ledger green. */
+:root {
+  --paper: #f2f4f2;
+  --ink: #1c2220;
+  --ink-soft: #4d5552;      /* 7.0:1 on paper */
+  --ink-faint: #69716d;     /* 4.7:1 on paper */
+  --accent: #1f5a47;        /* ledger green, 7.6:1 on paper */
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}`,
+      },
+      {
+        label: "Same model, no plugin: the new colours and fonts",
+        note: "312 lines added and 74 removed. It reached a very similar page and added a sample invoice card beside the headline. The detector flagged its Inter font and cream background, and two lines of grey text at 4.4:1 contrast, just under the 4.5:1 that WCAG AA asks for.",
+        text: `/* Ledgerly — calm, paper-and-ink palette */
+:root {
+  --paper: #f7f5f0;
+  --ink: #1c2321;
+  --ink-soft: #4a5450;
+  --ink-muted: #6b7570;
+  --accent: #1f5a47;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What is Impeccable?",
+      a: "A design skill for coding agents by Paul Bakaus. It gives the agent 24 named design commands, project context files (PRODUCT.md and DESIGN.md) and a rule-based detector for common AI design tells. It is open source under the Apache 2.0 licence.",
+    },
+    {
+      q: "Does it make a real difference?",
+      a: "In our one test with Claude Opus 5.5 the plain agent already produced a calm, readable page from the same brief, so the visible gap was small. Impeccable's run checked its own work with the detector and fixed what it found, used fonts and colours outside the detector's list of defaults, and wrote down contrast ratios next to its colours. It took 149 seconds against 86. The README shows a bigger gap on a new page built from a brief.",
+    },
+    {
+      q: "Do I need an API key or account?",
+      a: "No. The skill and the detector run locally with no API key. The skill's engine downloads once into ~/.impeccable/bin if it is not shipped next to the skill. When a new design starts, it fetches visual directions from impeccable.style.",
+    },
+    {
+      q: "Which agents does it work with?",
+      a: "The README lists Claude Code, Cursor, Codex CLI, GitHub Copilot, Devin, Replit Agent, Gemini CLI, Grok Build, OpenCode, Google Antigravity, Kiro, Trae, Rovo Dev, Qoder, Mistral Vibe, Pi, Hermes Agent, DeepSeek Harness and Veto. The design hook is available on Claude Code, Cursor, Codex, GitHub Copilot, Grok Build and Hermes Agent.",
+    },
+    {
+      q: "What does it send or change outside my project?",
+      a: "It keeps its engine in ~/.impeccable (in our test it also wrote hook state and an update-check file there) and its project files under .impeccable/. With telemetry on, it records which suggested design directions you chose, anonymously; the README says project names, files, code and PRODUCT.md are never sent. Live mode can start the codex or claude command with approvals and sandboxing turned off to apply copy edits; set IMPECCABLE_LIVE_COPY_AGENT=chat or off to prevent that.",
+    },
+    {
+      q: "Can I use the detector in CI?",
+      a: "Yes. npx impeccable detect runs without an agent, and --github prints GitHub Actions annotations. Scan a running page by URL for the rules that need rendering, such as contrast and tiny text.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes. It is open source under the Apache 2.0 licence. You still pay for the AI agent you run it in.",
+    },
+  ],
+};
+
+## What we tested
+
+We wrote a small pricing page for a made-up invoicing app, Ledgerly, with the habits Impeccable targets: Inter, a purple gradient hero, gradient headline text, light grey text, emoji icons, pill buttons and a scaled-up "Most Popular" card. Impeccable's own detector found 26 problems in it.
+
+We asked Claude Code to polish it once with the Impeccable plugin loaded from the repository at commit f864521 (plugin version 4.8.0) and once with nothing installed. Both runs used the same model and settings, could read and edit files and run commands, and got the same brief: calm and trustworthy, keep the copy and prices, no questions. The plain run's request was the same sentence without the /impeccable command. We then ran Impeccable's detector on both results. The test sessions also had a few of our own general skills loaded, the same for both runs.
+
+## What we found
+
+- **Both pages came out calm and close to each other.** Each run removed the gradients and emoji, chose a serif for headings, a single deep green (#1f5a47 in both) as the only accent, outline icons, equal-height plan cards and visible keyboard focus. The plain run also added a sample invoice beside the headline, with a client and amounts it made up.
+- **Impeccable checked its own work.** It ran the skill's context step, read the polish and craft playbooks, wrote a first version, then ran the detector. The detector flagged a cream background and cramped padding in three sections; the agent switched to a cool grey and fixed the padding, then took its own screenshots at three widths.
+- **The detector scored the plain page lower.** On the finished files, the plain page had three findings (Inter, a cream background, the buzzword) plus two lines of grey text at 4.4:1 contrast, just below WCAG AA. Impeccable's page had one: "Supercharge" in the headline we told both runs to keep. This is the skill's own checker grading its own rules, so read it as "it followed its rules", not as an independent score.
+- **It respected the brief.** To silence the buzzword warning it briefly created an .impeccable/config.json, then deleted it because we had said to touch only two files, and told us how to keep it if we wanted.
+
+The Impeccable run took 24 turns, 149 seconds and $0.83 at API prices, as reported by Claude Code. The plain run took 12 turns, 86 seconds and $0.41. Both runs saved screenshots to the system temp folder. This is one small page with one model, so read it as an example, not a benchmark.

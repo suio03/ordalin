@@ -1,0 +1,140 @@
+export const meta = {
+  title: "Cloudflare security-audit Skill Tested: Proven Findings at 24 Times the Cost",
+  description:
+    "Cloudflare's free MIT security-audit skill runs a multi-agent code audit with independent verifiers. Install steps, what it writes, and our Claude Code test against the plain agent.",
+  summary:
+    "security-audit is a free, MIT-licensed skill from Cloudflare that turns a coding agent into a security auditor. It maps the code, sends separate subagents to hunt each risky area, gives every lead to a fresh agent that tries to disprove it, and writes a report only from findings that survive. Cloudflare says it seeded the company's own vulnerability-finding system. We gave Claude Code a small notes API with three planted holes, with and without the skill. Both runs found all three, plus the same two extra problems. With the skill, each finding came with a script that reproduced it in a locked-down sandbox; the plain agent's proofs were reasoned, not run. The skill's audit took 15 minutes and $8.41 at API prices against 100 seconds and $0.35.",
+  bestFor: [
+    "Security reviews where each finding must come with a source trace, a reproduction and a fix",
+    "Audits you will repeat; later runs read the earlier ledger and target the gaps",
+    "Teams that want unproven leads kept apart from confirmed bugs, so the report does not cry wolf",
+  ],
+  notFor: [
+    "A quick look at a small codebase; in our test the plain agent found the same holes in under two minutes",
+    "Hardening checklists; by design it leaves out missing headers, rate limits and other defence-in-depth gaps",
+    "Machines without a real sandbox; without one it will not run target code and keeps those leads unconfirmed",
+  ],
+  howItWorks: [
+    {
+      title: "Map the code first",
+      text: "The agent writes architecture.md with trust boundaries and input surfaces, then a coverage ledger: one unit per surface, boundary and attack class. Every unit must end as covered, a candidate, blocked, deferred or out of scope, so the report says what was not checked.",
+    },
+    {
+      title: "Hunters, critics and verifiers",
+      text: "Separate subagents hunt the ledger units. A coverage critic then looks for gaps. Every candidate goes to a fresh verifier that tries to disprove it; the agent that found a bug never confirms it. In the standard profile a second fresh agent checks each final record.",
+    },
+    {
+      title: "Three verdicts, checked against a schema",
+      text: "Findings land in findings.json as confirmed (complete source trace and an observed result), needs_validation (one exact open question, no severity) or rejected. Two bundled Node scripts validate the findings and the ledger. Severity is likelihood times impact.",
+    },
+    {
+      title: "Three profiles",
+      text: "quick runs one hunter wave and one critic for small targets, standard is the full workflow and the default, and deep splits the work finer and repeats critic waves until clean. You can also set a budget as a maximum number of agent calls.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Install with the Skills CLI",
+      code: "npx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit",
+      note: "Add --global to install it for every project. Run npx skills --help for agent selection.",
+    },
+    {
+      label: "Start an audit",
+      code: "security audit this codebase",
+      note: "Full audit mode starts for a direct audit or pen-test request. A plain security question gets guidance instead, without the report files.",
+    },
+    {
+      label: "Choose where the report goes",
+      code: "do a security review, output to ~/audits/my-project",
+      note: "By default it writes to ~/security-audit-skill/<repo-name>/run-<N>. It writes inside the repository only if you name a folder there; in our test it then excluded that folder from Git.",
+    },
+    {
+      label: "Narrow it or bound it",
+      code: "find security vulnerabilities in ./src",
+      note: "Name paths for a scoped run, or ask for the quick or deep profile, or a budget of agent calls. A scoped or quick run labels itself as partial coverage.",
+    },
+  ],
+  test: {
+    date: "2026-11-04",
+    agent: "Claude Code 2.1.318, headless (claude -p), project settings only, skill copied into .claude/skills",
+    model: "claude-opus-5-5",
+    commit: "c1c8a8c",
+    task: "Run a full security audit of this codebase. Write all audit output into ./security-audit/ inside this folder. Don't run the app and don't ask me questions.",
+    samples: [
+      {
+        label: "With the skill: the confirmed findings",
+        note: "It chose the quick profile for an 81-line target and used 10 subagents: 3 hunters, 1 critic and 6 verifiers. Each row is a result its verifier observed, not a guess.",
+        text: `| # | Severity | Title                                            | Observed result (local harness, dummy data)
+| 1 | High     | SQL injection in GET /notes search term          | UNION payload returned email, token and is_admin for all 3 users
+| 2 | High     | IDOR in GET /notes/:id                           | alice received bob's note body; the fixed query returned 404
+| 3 | High     | Path traversal in GET /attachments/:name         | ..%2Fnotes.db resolved outside UPLOADS
+| 4 | High     | Path traversal in GET /files?name=               | ../notes.db (both dummy tokens) and ../.env were read
+| 5 | Medium   | Unhandled stream error in GET /files crashes app | name=does-not-exist gave an uncaught ENOENT and exit code 1`,
+      },
+      {
+        label: "With the skill: how it ran the proofs",
+        note: "We told it not to run the app, and the dependencies were not installed. It rebuilt each vulnerable line in a small Node script and ran it inside macOS's sandbox with no network, no environment and writes only to a scratch folder.",
+        text: `PROFILE="(version 1)(allow default)(deny network*)(deny file-write*)
+         (allow file-write* (subpath \\"$SCR\\") (literal \\"/dev/null\\"))"
+ulimit -t 20 -f 10240 -u 64
+exec perl -e "alarm shift; exec @ARGV" 30 /usr/bin/sandbox-exec -p "$PROFILE" /usr/bin/env -i \\
+  HOME="$SCR/home" TMPDIR="$SCR/tmp" PATH=/usr/bin:/bin \\
+  "$NODE" --max-old-space-size=128 "$SCR/$SCRIPT" "$@"`,
+      },
+      {
+        label: "Same model, no skill: its summary table",
+        note: "One agent read the four files and wrote the report in 100 seconds. It found the same five problems, said its proofs were derived from the code and not executed, and added six more items: missing upload limits, attachment ownership, known multer CVEs, plaintext tokens and hardening gaps.",
+        text: `| # | Severity | Issue                                              | Location
+| 1 | Critical | SQL injection in GET /notes q                      | src/server.js:16
+| 2 | Critical | Path traversal in GET /files                       | src/server.js:49-52
+| 3 | High     | Path traversal in GET /attachments/:name via %2F   | src/server.js:43-47
+| 4 | High     | IDOR in GET /notes/:id                             | src/server.js:27-31
+| 5 | High     | One request to GET /files crashes the process      | src/server.js:50-51
+| 6–11       | Medium / Low: attachment ownership, upload limits, multer 1.x CVEs,
+              plaintext tokens, hardening, empty-token edge case`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What is Cloudflare's security-audit skill?",
+      a: "An open-source skill for coding agents that runs a structured security audit in six phases: reconnaissance, coverage-led hunting, adversarial validation, structured output, independent record verification and reporting. Cloudflare says it is the single-repository starting point for the vulnerability-finding system described on its blog.",
+    },
+    {
+      q: "Does it find more than a plain agent?",
+      a: "Not in our test. On a small API with three planted holes, the plain agent and the skill found the same five problems. The difference was proof: the skill reproduced each one in a sandbox and kept an unproven lead apart, while the plain agent reasoned its way to the same answers and listed more low-severity items. The README says a single run found about half of what repeated runs found in Cloudflare's own tests, so on real code more runs matter.",
+    },
+    {
+      q: "How much does an audit cost?",
+      a: "Ours took 78 turns, 15 minutes and $8.41 at API prices for 81 lines of code, as reported by Claude Code, on the cheapest profile. The plain agent took 100 seconds and $0.35. The standard and deep profiles use more agents, and you can set a maximum number of agent calls as a budget.",
+    },
+    {
+      q: "Does it run my code?",
+      a: "Only inside an OS-enforced sandbox with no network, a cleaned environment, resource limits and writes limited to scratch folders. Without one, it keeps the lead as needs_validation instead of running target code. In our test it ran small rebuilt scripts under macOS sandbox-exec and never started the app.",
+    },
+    {
+      q: "Where does it write files?",
+      a: "By default to ~/security-audit-skill/<repo-name>/run-<N>, outside your repository. If you name a folder inside the repository, it writes there only when version control ignores it; in our test it added the folder to .git/info/exclude itself.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes. It is open source under the MIT licence and needs Node.js for its validators. You pay for the agent and model it runs on, and a full audit uses many subagents.",
+    },
+  ],
+};
+
+## What we tested
+
+We wrote a small Express and SQLite API where users keep private notes and upload files: four source files, 81 lines. It contains three planted holes: SQL injection in the search, reading another user's note by id, and path traversal in a file download. Its README says it is a deliberately vulnerable test fixture.
+
+We ran Claude Code once with the skill copied in from the repository at commit c1c8a8c and once with nothing installed. Both runs used the same model and settings and could read and write files, run commands and start subagents. The skill run was asked for a full security audit; the plain run was asked for a security audit with a report. Both were told not to run the app and not to ask questions. The test sessions also had a few of our own general skills loaded, the same for both runs.
+
+## What we found
+
+- **Both found everything we planted.** Each run reported the SQL injection, the note IDOR and the `/files` traversal, and both also found a second traversal in `/attachments` through an encoded slash and a request that crashes the server. We found no false alarms in either report.
+- **The skill proved its findings.** For each candidate a fresh verifier wrote a small script that rebuilt the vulnerable line with dummy data and ran it in the macOS sandbox: the injection returned every user's token, and the fixed query returned nothing. The plain run said plainly that its proofs were derived, not executed.
+- **It was strict about what counts.** The open upload-size problem stayed in needs_validation, because confirming it would mean installing and running the upload library. Hardening items such as headers and rate limits, which the plain run listed, are left out by design. It also noted that the `/attachments` read is blocked when any folder in the server's path starts with a dot.
+- **It showed what it did not cover.** The report lists 13 coverage units, marks itself as a partial quick pass and names two areas a standard run should hunt next. It chose the quick profile on its own, even though we asked for a full audit, because the code was small.
+- **It cost far more.** The skill run took 78 turns, 911 seconds and $8.41 at API prices, as reported by Claude Code. The plain run took 7 turns, 100 seconds and $0.35. Its output folder held 988 KB of notes, ledgers and scripts against one 204-line report.
+
+This is one small API with one model, so read it as an example, not a benchmark.

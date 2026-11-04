@@ -1,0 +1,152 @@
+export const meta = {
+  title: "Superpowers Skills Tested: Does It Make Claude Code Write Tests First?",
+  description:
+    "Superpowers is a free MIT skills library that gives coding agents a brainstorm, plan, test-first workflow. Install steps, the 15 skills, and our Claude Code test against the plain agent.",
+  summary:
+    "Superpowers is a free, MIT-licensed set of 15 workflow skills for coding agents by Jesse Vincent and Prime Radiant. It tells the agent to talk a feature through before building, write a plan, write tests before code, debug in steps and check its work before saying it is done. We asked Claude Code to add due dates to a small to-do app, with and without the plugin, in a three-message conversation. With Superpowers, the agent loaded its test-driven development skill, wrote failing tests first and ended with 12 tests, including six that run the real command line; the plain agent wrote six tests after the code and tried the command by hand. The brainstorming step the README describes did not start, and the run cost about a third more.",
+  bestFor: [
+    "Developers who want the agent to write and run tests before it writes code, every time",
+    "Larger features where a written design and a step-by-step plan are worth the extra turns",
+    "Teams that use several coding agents and want the same working habits in each",
+  ],
+  notFor: [
+    "Small, fully specified changes; in our test the plain agent produced working code of similar quality, faster and cheaper",
+    "Expecting every stage to run on its own; in our test the agent skipped brainstorming and planning and went straight to test-first coding",
+    "Projects where tests must clean up after themselves without review; its tests in our run left a temp folder behind for each case",
+  ],
+  howItWorks: [
+    {
+      title: "A start-up hook that tells the agent to use skills",
+      text: "When a session starts, the plugin injects a short instruction: before any task, check whether a skill applies and use it. The agent then decides which skill to load, based on each skill's description.",
+    },
+    {
+      title: "Skills for each stage of a feature",
+      text: "The README's workflow is brainstorming (questions until the design is clear), using-git-worktrees (a separate branch), writing-plans (tasks of two to five minutes with exact files and code), subagent-driven-development or executing-plans, test-driven-development, requesting-code-review and finishing-a-development-branch.",
+    },
+    {
+      title: "Skills for debugging and checking",
+      text: "systematic-debugging works through four phases to the root cause, verification-before-completion makes the agent prove a fix before it claims one, and receiving-code-review covers how to act on review comments. dispatching-parallel-agents splits independent work across subagents.",
+    },
+    {
+      title: "A skill for when it misbehaves",
+      text: "Ask the agent to \"figure out what went wrong with superpowers in this session\" and diagnosing-superpowers reads the session transcript, reports what fired and what did not, and can package a cleaned-up bundle for a bug report.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Claude Code",
+      code: "/plugin install superpowers@claude-plugins-official",
+      note: "From Anthropic's official plugin marketplace. The project's own marketplace (/plugin marketplace add obra/superpowers-marketplace) carries it too, with some related plugins.",
+    },
+    {
+      label: "Cursor",
+      code: "/add-plugin superpowers",
+      note: "In Cursor Agent chat, or search for superpowers in the plugin marketplace.",
+    },
+    {
+      label: "Gemini CLI",
+      code: "gemini extensions install https://github.com/obra/superpowers",
+      note: "Update later with gemini extensions update superpowers.",
+    },
+    {
+      label: "GitHub Copilot CLI",
+      code: "copilot plugin marketplace add obra/superpowers-marketplace\ncopilot plugin install superpowers@superpowers-marketplace",
+      note: "Codex installs it from OpenAI's official plugin marketplace (Plugins in the app, or the plugin menu in the CLI).",
+    },
+    {
+      label: "Check that it works",
+      code: "Let's make a react todo list",
+      note: "Send this in a fresh session. The README says a working install starts brainstorming before any code is written.",
+    },
+    {
+      label: "Turn off the logo ping",
+      code: "export SUPERPOWERS_DISABLE_TELEMETRY=1",
+      note: "Brainstorming's optional visual companion loads a logo from Prime Radiant's site, with the plugin version in the request. It also honours Claude Code's DISABLE_TELEMETRY and CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC.",
+    },
+  ],
+  test: {
+    date: "2026-11-04",
+    agent: "Claude Code 2.1.318, headless (claude -p), project settings only, plugin loaded with --plugin-dir, three messages in one session",
+    model: "claude-opus-5-5",
+    commit: "22f0b46",
+    task: "Add due dates to this to-do CLI: `add` takes an optional --due YYYY-MM-DD, `list` shows the due date, and `list --overdue` shows only open tasks whose due date is before today. Reject invalid dates with a clear message.",
+    samples: [
+      {
+        label: "With Superpowers: the first two moves",
+        note: "Its first action was to load the test-driven development skill. It wrote the tests, ran them to confirm they failed because the feature was missing, then wrote the code. It repeated that for the command-line part.",
+        text: `Skill({ skill: "superpowers:test-driven-development" })
+"Writing the failing tests first."
+"RED as expected (features missing). Now the implementation:"
+"Store is green. Next, CLI argument parsing — test first:"`,
+      },
+      {
+        label: "With Superpowers: a test that runs the real command",
+        note: "Six of its 12 tests start the CLI in a fresh folder and check what it prints. Each one creates a temp folder and never deletes it; our test runs left 20 behind.",
+        text: `const fresh = () => mkdtempSync(join(tmpdir(), "todo-"));
+
+test("list --overdue shows only open tasks due before today", () => {
+  const dir = fresh();
+  run(dir, "add", "Old", "--due", "2000-01-01");
+  run(dir, "add", "Old done", "--due", "2000-01-02");
+  run(dir, "done", "2");
+  run(dir, "add", "Future", "--due", "2999-01-01");
+  run(dir, "add", "Undated");
+  assert.equal(run(dir, "list", "--overdue").stdout, "[ ] 1. Old (due 2000-01-01)\\n");
+});`,
+      },
+      {
+        label: "Same model, no plugin: tests written after the code",
+        note: "It wrote the store and CLI first, then added tests for the store functions only, and checked the CLI by hand in a temp folder. Its date check covers the same edge cases, such as 30 February and 29 February in a non-leap year.",
+        text: `test("isValidDate accepts real YYYY-MM-DD dates only", () => {
+  assert.equal(isValidDate("2026-12-31"), true);
+  assert.equal(isValidDate("2028-02-29"), true);
+  for (const bad of ["2026-02-30", "2027-02-29", "2026-13-01", "2026-00-10",
+                     "2026-1-5", "12/31/2026", "tomorrow", ""]) {
+    assert.equal(isValidDate(bad), false, bad);
+  }
+});`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What is Superpowers?",
+      a: "A library of 15 skills for coding agents, written by Jesse Vincent and Prime Radiant. The skills cover brainstorming a design, writing a plan, test-driven development, systematic debugging, code review, git worktrees and finishing a branch. A start-up hook tells the agent to check for a matching skill before every task.",
+    },
+    {
+      q: "Does it make a real difference?",
+      a: "In our test it changed how the agent worked more than what it produced. With Superpowers, Claude Code wrote failing tests first and tested the command line end to end, ending with 12 tests against 6. Both versions worked and handled the same invalid dates. The Superpowers run cost $0.39 against $0.29 at API prices over three messages.",
+    },
+    {
+      q: "Why didn't it brainstorm first?",
+      a: "Superpowers relies on the agent choosing the right skill from its description. Our request already named the options, the output and the error case, and the agent judged that test-first coding was the relevant skill. The README's check, \"Let's make a react todo list\", is an open request; that is where brainstorming is meant to start. A one-shot request that says \"don't ask me questions\" also skipped it in our first try.",
+    },
+    {
+      q: "Which agents does it work with?",
+      a: "The README has install steps for Claude Code, Codex app and CLI, Cursor, Gemini CLI, GitHub Copilot CLI, OpenCode, Google Antigravity, Devin, Factory Droid, Grok Build, Pi, Qwen Code, Hermes Agent and Muse. Install it separately in each agent you use.",
+    },
+    {
+      q: "Does it send anything anywhere?",
+      a: "The skills themselves are text files read by your agent. Brainstorming's optional visual companion loads a logo from Prime Radiant's website with the Superpowers version in the request; the README says no project, prompt or agent details are sent. Set SUPERPOWERS_DISABLE_TELEMETRY to turn it off.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes. It is open source under the MIT licence. You still pay for the AI agent you run it in, and the extra steps use more of it.",
+    },
+  ],
+};
+
+## What we tested
+
+We wrote a small to-do app for the command line, in TypeScript with four tests, and asked Claude Code to add due dates: an optional `--due` date on `add`, the date shown in `list`, a `list --overdue` filter and a clear error for invalid dates.
+
+We ran it once with the Superpowers plugin loaded from the repository at commit 22f0b46 (plugin version 7.0.2) and once with nothing installed. Both runs used the same model and settings and could read and edit files and run commands. Because Superpowers is built to ask questions and get a design approved before coding, each run was a three-message conversation: the request; then "pick sensible defaults, I approve the design, go ahead with the next step"; then "implement it now, finish the work and tell me when it's done". We checked the plugin's start-up hook ran and all 15 skills were listed. We then ran each project's tests. The test sessions also had a few of our own general skills loaded, the same for both runs.
+
+## What we found
+
+- **It wrote tests first.** The Superpowers run loaded the test-driven development skill as its first step, wrote failing tests, ran them to see them fail for the right reason, then wrote the code, once for the data layer and once for the command line. The plain run wrote all the code first and added tests afterwards.
+- **It tested more.** It finished with 12 passing tests, six of them running the real command in a fresh folder. The plain run finished with 6 passing tests for the data functions and checked the command by hand. Both handled the same edge cases, such as 30 February, and both added the option to the README.
+- **Brainstorming and planning did not start.** The agent never loaded the brainstorming, writing-plans or finishing-a-development-branch skills. It implemented the feature in the first message, so our second and third messages only led to a commit and a merge, which both runs did the same way. In an earlier one-message try that said "don't ask me questions", no Superpowers skill loaded at all.
+- **Its tests leave files behind.** Each command-line test creates a temp folder and does not delete it. After a few test runs we found 20 of them in the system temp folder.
+
+The Superpowers run took 16 turns, 73 seconds and $0.39 at API prices over the three messages, as reported by Claude Code. The plain run took 12 turns, 59 seconds and $0.29. This is one small feature with one model, so read it as an example, not a benchmark.

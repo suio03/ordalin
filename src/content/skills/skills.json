@@ -64,6 +64,58 @@
       "language": "Any programming language; instructions in English",
       "produces": "No files of its own: an always-on rule set that makes the agent reuse existing code and platform features before writing new code, plus review, audit and shortcut-ledger commands",
       "checked_on": "2026-10-26"
+    },
+    {
+      "slug": "impeccable",
+      "name": "Impeccable",
+      "author": "Paul Bakaus",
+      "repo": "https://github.com/pbakaus/impeccable",
+      "license": "Apache-2.0",
+      "version": "4.8.0",
+      "agents": "Claude Code, Cursor, Codex CLI, GitHub Copilot, Devin, Replit Agent, Gemini CLI, Grok Build, OpenCode, Google Antigravity, Kiro, Trae, Rovo Dev, Qoder, Mistral Vibe, Pi, Hermes Agent, DeepSeek Harness and Veto",
+      "install": "Run npx impeccable install in your project and accept the design hook, or in Claude Code run /plugin marketplace add pbakaus/impeccable and install it from /plugin",
+      "language": "English commands; works on any web front end (HTML, CSS, JSX, TSX and the common frameworks)",
+      "produces": "Edits to your front-end code from 24 design commands (polish, bolder, quieter, audit, critique and more), plus a detector with 62 rules for common AI design tells",
+      "checked_on": "2026-11-04"
+    },
+    {
+      "slug": "superpowers",
+      "name": "Superpowers",
+      "author": "Jesse Vincent (Prime Radiant)",
+      "repo": "https://github.com/obra/superpowers",
+      "license": "MIT",
+      "version": "7.0.2",
+      "agents": "Claude Code, Codex (app and CLI), Cursor, Gemini CLI, GitHub Copilot CLI, OpenCode, Google Antigravity, Devin, Factory Droid, Grok Build, Pi, Qwen Code, Hermes Agent and Muse",
+      "install": "In Claude Code run /plugin install superpowers@claude-plugins-official; other agents install it from their own plugin marketplace or from the repository",
+      "language": "English; works with any programming language",
+      "produces": "A set of 15 workflow skills (brainstorming, plans, test-driven development, debugging, code review, git worktrees) that the agent loads on its own when a task matches",
+      "checked_on": "2026-11-04"
+    },
+    {
+      "slug": "cloudflare-security-audit",
+      "name": "Cloudflare security-audit",
+      "author": "Cloudflare",
+      "repo": "https://github.com/cloudflare/security-audit-skill",
+      "license": "MIT",
+      "version": "unversioned (commit c1c8a8c, 14 September 2026)",
+      "agents": "Coding agents that support tool use and parallel subagents, such as Claude Code; installed with the Skills CLI, which supports many agents",
+      "install": "npx skills add https://github.com/cloudflare/security-audit-skill --skill security-audit (add --global for every project)",
+      "language": "English; audits code in any language, with extra guides for web, native, cloud, LLM, mobile and supply-chain targets",
+      "produces": "A security audit folder: REPORT.md, FINDINGS-DETAIL.md, NEEDS-VALIDATION.md, findings.json checked against a schema, a coverage ledger and the reproduction scripts",
+      "checked_on": "2026-11-04"
+    },
+    {
+      "slug": "taste-skill",
+      "name": "Taste Skill",
+      "author": "Leon Lin (Leonxlnx)",
+      "repo": "https://github.com/Leonxlnx/taste-skill",
+      "license": "MIT",
+      "version": "2.1.5",
+      "agents": "Claude Code and Codex (plugins), plus the other agents the npx skills CLI installs into",
+      "install": "Run npx skills add https://github.com/Leonxlnx/taste-skill --skill \"design-taste-frontend\", or in Claude Code run /plugin marketplace add Leonxlnx/taste-skill, then /plugin install taste-skill@taste-skill",
+      "language": "English; works on any web front end (plain HTML and CSS, React, Next.js, Vue, Svelte, Astro, Tailwind)",
+      "produces": "A landing page, one-pager or app screen built from a dealt art direction, with credited open-licence pictures and screenshots from its own browser check",
+      "checked_on": "2026-11-04"
     }
   ]
 }

@@ -12,5 +12,9 @@ export const REGISTRY: SkillsRegistry = {
     humanizer: { status: "published", load: () => import("./skills/humanizer.mdx") },
     "replica-skill": { status: "published", load: () => import("./skills/replica-skill.mdx") },
     ponytail: { status: "published", load: () => import("./skills/ponytail.mdx") },
+    impeccable: { status: "draft", load: () => import("./skills/impeccable.mdx") },
+    superpowers: { status: "draft", load: () => import("./skills/superpowers.mdx") },
+    "cloudflare-security-audit": { status: "draft", load: () => import("./skills/cloudflare-security-audit.mdx") },
+    "taste-skill": { status: "draft", load: () => import("./skills/taste-skill.mdx") },
   },
 };
