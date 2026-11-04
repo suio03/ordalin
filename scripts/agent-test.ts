@@ -12,6 +12,9 @@
 //   summary.json       date, agent and model versions, cost, tokens, duration, tools listed,
 //                      final answers, and files the run left in the home folder
 //
+// Each skill or server is tested once. After its page is published (images copied to public/),
+// delete the run folders: rm -rf .ordalin-tests
+//
 // Claude Code runs headless on the maintainer's subscription with project settings only, no
 // user plugins and no MCP servers except the one under test. Codex runs are started by the
 // maintainer, not by an AI session; the script prints the command instead when CODEX is unset.
