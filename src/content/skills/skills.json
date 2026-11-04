@@ -116,6 +116,19 @@
       "language": "English; works on any web front end (plain HTML and CSS, React, Next.js, Vue, Svelte, Astro, Tailwind)",
       "produces": "A landing page, one-pager or app screen built from a dealt art direction, with credited open-licence pictures and screenshots from its own browser check",
       "checked_on": "2026-11-04"
+    },
+    {
+      "slug": "rea-video",
+      "name": "rea-video",
+      "author": "June (JuneYaooo)",
+      "repo": "https://github.com/JuneYaooo/rea-video",
+      "license": "MIT, as stated in plugin.json and pyproject.toml; the repository has no LICENSE file",
+      "version": "0.1.0",
+      "agents": "Claude Code (as a plugin) and Codex; any agent that can run shell commands and, ideally, look at images",
+      "install": "Ask your agent to install it from the repository URL, or run pip install \"rea-video[ocr] @ git+https://github.com/JuneYaooo/rea-video\" for the command-line tool and add the skill with /plugin marketplace add JuneYaooo/rea-video, then /plugin install rea-video@rea-video; needs ffmpeg and Python 3.10 or later",
+      "language": "Works on videos in any language (on-screen text is read in Chinese and English, or Japanese); the agent replied in English when asked, but report.html, report.md and the generated prompts are in Chinese",
+      "produces": "A shot-by-shot breakdown of how a video was made (filmed, AI video, 3D, code-rendered, screen recording and more), its captions, edit and sound, a remake plan, and report.html, report.md, breakdown.json, frame sheets and separated voice and music tracks",
+      "checked_on": "2026-11-04"
     }
   ]
 }

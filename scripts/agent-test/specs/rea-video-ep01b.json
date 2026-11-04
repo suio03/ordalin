@@ -1,0 +1,12 @@
+{
+  "kind": "skill",
+  "name": "rea-video-ep01b",
+  "repo": "https://github.com/JuneYaooo/rea-video",
+  "commit": "faadcfd",
+  "install": {
+    "claude": { "plugin": "." }
+  },
+  "task": "Install the rea-video command-line tool from https://github.com/JuneYaooo/rea-video into a Python virtual environment in this folder (.venv), then use the rea-video skill to break down this video: ../../inputs/how-ai-sees-your-photo.mp4 . Write all output into ./out in this folder. No VLM is configured, so do the visual review yourself. Answer in English and don't ask me questions.",
+  "env": { "DO_NOT_TRACK": "1" },
+  "timeoutMinutes": 60
+}

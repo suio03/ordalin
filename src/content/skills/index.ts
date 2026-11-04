@@ -16,5 +16,6 @@ export const REGISTRY: SkillsRegistry = {
     superpowers: { status: "draft", load: () => import("./skills/superpowers.mdx") },
     "cloudflare-security-audit": { status: "draft", load: () => import("./skills/cloudflare-security-audit.mdx") },
     "taste-skill": { status: "draft", load: () => import("./skills/taste-skill.mdx") },
+    "rea-video": { status: "published", load: () => import("./skills/rea-video.mdx") },
   },
 };
