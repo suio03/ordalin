@@ -105,6 +105,8 @@ Architecture:
 | /guides/[slug] | One static MDX decision guide | Index when published |
 | /skills | Agent skill hub (see "Agent skills" below) | Noindex until three skill pages are published |
 | /skills/[slug] | One agent skill, with Ordalin's own test run | Index when published |
+| /mcp | MCP server hub (see "MCP servers" below) | Noindex until three MCP pages are published |
+| /mcp/[slug] | One MCP server, with Ordalin's own connection test | Index when published |
 | /collections | Curated collection index | Index |
 | /collections/[slug] | Editorial tool collection | Index |
 | /search?q= | Search and filters | Noindex, follow |
@@ -132,11 +134,40 @@ a short film in code).
   it produces. Unknown fields render as "Not stated".
 - Every page carries Ordalin's own test: the input, the agent and model used,
   the date and the real output. A README alone is not enough to publish.
+  Two tiers (approved 2026-11-04): the basic test is one real run on one task;
+  a with/without comparison is added only when the skill claims to do better
+  than the agent alone. Run tests with `pnpm agent-test` (Claude Code on the
+  maintainer's subscription); Codex runs are started by the maintainer.
 - Pages are English only, including test samples (no Chinese text). Link the
   skill's repository once, at the bottom of the page.
 - Third-party prompts, videos and demo output are linked and credited, never
   copied. Do not rank skills by GitHub stars or show other engagement counts.
 - Neutral coverage: list skills from any author, including competitors' own.
+- New pages start as `status: "draft"`; only the maintainer publishes them.
+  The hub gets a navigation entry once three pages are published.
+
+### MCP servers
+
+Approved 2026-11-04 as a traffic line next to skills: one page per MCP server
+whose name people have started searching, not a mass directory.
+
+- Source: `src/content/mcp/`, mirroring `/skills`: an `mcp.json` fact file plus
+  one MDX page per server, registered in an index and covered by tests.
+- Facts come only from the server's own repository or vendor docs: maintainer
+  (official or community), repository, licence, transport (stdio or remote),
+  install command, required accounts or API keys, the tools it exposes and the
+  supported clients. Unknown fields render as "Not stated". When several servers
+  share a name, the page says which one it covers and names the others.
+- Every page carries Ordalin's own test: the client and model, the date, the
+  tools the server listed and at least one real tool call with its output. A
+  README alone is not enough to publish. This connect, list and call test is
+  the whole requirement; no with/without comparison. It runs with
+  `pnpm agent-test` like the skill tests.
+- Each page states the permissions the server needs and what it can change
+  (files, accounts, devices, money) in plain words.
+- The same rules as skills apply: English only, repository linked once at the
+  bottom, third-party material credited not copied, no star or download counts,
+  neutral coverage.
 - New pages start as `status: "draft"`; only the maintainer publishes them.
   The hub gets a navigation entry once three pages are published.
 

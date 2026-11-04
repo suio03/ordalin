@@ -1,0 +1,165 @@
+export const meta = {
+  title: "Ghidra MCP Tested: pyghidra-mcp vs GhidraMCP on the Same Crackme",
+  description:
+    "pyghidra-mcp and LaurieWired's GhidraMCP let an AI agent drive Ghidra, the free NSA reverse engineering suite. Setup, tools, the macOS catch, and our Claude Code test of both on one stripped binary.",
+  verdict:
+    "Both servers let Claude Code reverse a stripped binary in Ghidra without the Ghidra window. Each found the password in about 30 seconds for under $0.20; setup on macOS was the hard part.",
+  summary:
+    "Ghidra is the free reverse engineering suite from the NSA. Two popular open-source MCP servers let an AI agent use it: pyghidra-mcp by clearbluejar, built to run without the Ghidra window, and GhidraMCP by LaurieWired, the best-known one, which started as a plugin for the open Ghidra window and now also runs headless. Both are Apache-2.0 and need Ghidra 12.1.4 and Java 21. We gave Claude Code the same stripped macOS binary that asks for a password and ran each server headless. Both found the password, tidepool-41, without running the program: pyghidra-mcp in 7 turns, 32 seconds and $0.16 at API prices, GhidraMCP in 8 turns, 25 seconds and $0.18. The work was in setup: on macOS, Ghidra's release has no decompiler for Apple's chips until you build it, and pyghidra-mcp downloads a 167 MB search model on first run.",
+  bestFor: [
+    "Reverse engineering, malware triage and crackmes where you want the agent to read decompiled code and explain it",
+    "Asking plain questions about a binary, such as where a string is used or what a function checks, without clicking through Ghidra",
+    "Naming and typing functions as the agent understands them, saved back into a Ghidra project you can open later",
+  ],
+  notFor: [
+    "Anyone without Ghidra set up; both need Ghidra 12.1.4, Java 21 and Python, and on macOS a one-time build of the decompiler",
+    "Dynamic analysis; neither server we tested runs or debugs the program",
+    "Large binaries on a tight budget; every decompiled function the agent reads costs tokens",
+  ],
+  permissions: [
+    "Files: each server imports the binaries you name into a Ghidra project folder you choose, and the agent can rename, retype and comment inside that project. Neither server ran the binary in our test.",
+    "Disk: Ghidra itself is about 1.4 GB unpacked. pyghidra-mcp adds a project-name-pyghidra-mcp folder beside the project with a ChromaDB index and saved analyses, and downloads a 167 MB embedding model into ~/.cache/chroma on first use.",
+    "Network: pyghidra-mcp fetches that model once; uvx downloads the Python packages once. The analysis itself is local.",
+    "Ports: in headless stdio mode neither opens a port. GUI GhidraMCP serves the Ghidra plugin on 127.0.0.1:8080, and pyghidra-mcp's recommended HTTP mode listens on 127.0.0.1:8000.",
+    "Accounts and money: none. Ghidra and both servers are free and need no login or API key.",
+  ],
+  howItWorks: [
+    {
+      title: "Ghidra does the analysis",
+      text: "Both servers start Ghidra's analysis engine through PyGhidra, import the binary, run the normal auto-analysis and then answer the agent's questions from the analysed program: functions, strings, imports, exports, cross-references, decompiled C, disassembly and raw bytes.",
+    },
+    {
+      title: "pyghidra-mcp: headless first, whole projects",
+      text: "It serves every binary in a Ghidra project at once, can start answering while analysis continues in the background, and indexes decompiled code and strings in ChromaDB so the agent can search by meaning. It runs over stdio or streamable HTTP, and --gui launches Ghidra with the same project open.",
+    },
+    {
+      title: "GhidraMCP: the GUI plugin, now also headless",
+      text: "The original mode is a Ghidra extension that serves the open CodeBrowser on port 8080 and a small Python bridge that the agent talks to, so you and the agent work on the same window. Version 2.0 adds --headless, which loads the extension's jar into PyGhidra and needs no window.",
+    },
+  ],
+  setup: [
+    {
+      label: "Ghidra and Java (both servers)",
+      code: "# Download ghidra_12.1.4_PUBLIC from github.com/NationalSecurityAgency/ghidra/releases\n# Install Java 21, for example: brew install openjdk@21\nexport GHIDRA_INSTALL_DIR=/path/to/ghidra_12.1.4_PUBLIC\n# macOS only, once:\ncd \"$GHIDRA_INSTALL_DIR/support/gradle\" && ./gradlew buildNatives",
+      note: "On macOS the release has no decompiler for your machine, so decompiling fails until buildNatives has run (we copied its output from build/os/mac_arm_64 into the os/mac_arm_64 folders). Keep the Ghidra project folder out of any path with a folder that starts with a dot: Ghidra refused one, and pyghidra-mcp would not start.",
+    },
+    {
+      label: "pyghidra-mcp in Claude Code",
+      code: "claude mcp add pyghidra-mcp \\\n  -e GHIDRA_INSTALL_DIR=/path/to/ghidra_12.1.4_PUBLIC \\\n  -- uvx pyghidra-mcp --project-path /path/to/ghidra-projects /path/to/binary",
+      note: "stdio is the default and is how we ran it. The README recommends a long-running HTTP server for larger work: uvx pyghidra-mcp --transport streamable-http ... and then add http://127.0.0.1:8000/mcp to your client.",
+    },
+    {
+      label: "GhidraMCP headless in Claude Code",
+      code: "claude mcp add ghidra \\\n  -e GHIDRA_INSTALL_DIR=/path/to/ghidra_12.1.4_PUBLIC \\\n  -- uvx --python 3.13 --from \"ghidra-mcp[headless] @ git+https://github.com/LaurieWired/GhidraMCP\" \\\n  ghidra-mcp --headless --binary /path/to/binary --project /path/to/ghidra-projects",
+      note: "Headless needs the GhidraMCP extension installed in Ghidra, or --extension-jar pointing at GhidraMCP.jar from the release, and Python 3.10 to 3.13. --project keeps the analysis and the agent's renames between runs.",
+    },
+    {
+      label: "GhidraMCP with the Ghidra window",
+      code: "claude mcp add ghidra -- uvx --from git+https://github.com/LaurieWired/GhidraMCP \\\n  ghidra-mcp --ghidra-server http://127.0.0.1:8080/",
+      note: "First install the release zip in Ghidra with File, Install Extensions, restart, and enable GhidraMCPPlugin under File, Configure, Developer. Open your binary in the CodeBrowser before you ask the agent. We did not test this mode.",
+    },
+  ],
+  tools: [
+    { name: "pyghidra-mcp: list_project_binaries, list_project_binary_metadata, import_binary, delete_project_binary", text: "See what is in the project, add a binary or remove one." },
+    { name: "pyghidra-mcp: decompile_function, disassemble, read_bytes", text: "Decompiled C for a function, optionally with its callees, disassembly, and raw bytes at an address." },
+    { name: "pyghidra-mcp: search_strings, search_symbols_by_name, search_code", text: "Search strings and symbols, and search decompiled code by meaning through its ChromaDB index." },
+    { name: "pyghidra-mcp: list_exports, list_imports, list_xrefs, gen_callgraph", text: "Entry points and library calls, cross-references, and a call graph." },
+    { name: "pyghidra-mcp: rename_function, rename_variable, set_variable_type, set_function_prototype, set_comment, save", text: "Write what the agent learns back into the project." },
+    { name: "GhidraMCP: get_program_info, list_functions, list_segments, list_strings, list_data_items", text: "Architecture, format and hashes, then functions, memory segments, strings and defined data." },
+    { name: "GhidraMCP: decompile_function, decompile_function_by_address, disassemble_function, read_memory", text: "Decompiled C by name or address, disassembly and raw memory." },
+    { name: "GhidraMCP: get_xrefs_to, get_xrefs_from, get_function_xrefs, get_function_calls", text: "Who calls what and which code uses an address." },
+    { name: "GhidraMCP: list_imports, list_exports, list_classes, list_methods, list_namespaces, search_functions_by_name, get_function_by_address", text: "Find your way around a large program." },
+    { name: "GhidraMCP: rename_function, rename_function_by_address, rename_data, rename_variable, set_function_prototype, set_local_variable_type, set_decompiler_comment, set_disassembly_comment", text: "Rename, retype and comment as the analysis goes." },
+  ],
+  test: {
+    date: "2026-11-04",
+    client: "Claude Code 2.1.318, headless (claude -p), project settings only, each server added with --mcp-config",
+    model: "claude-opus-5-5",
+    version: "pyghidra-mcp 0.3.0 (commit aeaf4d1) and GhidraMCP 2.0 (commit 1e98025), both headless over stdio, Ghidra 12.1.4, Java 21, macOS on Apple silicon",
+    listed: [
+      "pyghidra-mcp: decompile_function, delete_project_binary, disassemble, gen_callgraph, import_binary, list_exports, list_imports, list_project_binaries, list_project_binary_metadata, list_xrefs, read_bytes, rename_function, rename_variable, save, search_code, search_strings, search_symbols_by_name, set_comment, set_function_prototype, set_variable_type",
+      "GhidraMCP: decompile_function, decompile_function_by_address, disassemble_function, get_function_by_address, get_function_calls, get_function_xrefs, get_program_info, get_xrefs_from, get_xrefs_to, list_classes, list_data_items, list_exports, list_functions, list_imports, list_methods, list_namespaces, list_segments, list_strings, read_memory, rename_data, rename_function, rename_function_by_address, rename_variable, search_functions_by_name, set_decompiler_comment, set_disassembly_comment, set_function_prototype, set_local_variable_type",
+    ],
+    task: "This folder holds one stripped binary, crackme, that takes a password. Use the pyghidra-mcp tools (or the ghidramcp tools) to find the password it accepts and explain how the check works. Don't run the binary and don't use otool, strings or other disassemblers. Don't ask me questions. List the MCP tools you called.",
+    runs: [
+      { label: "pyghidra-mcp", outcome: "Found the password and explained the check", time: "32 s", cost: "$0.16", turns: 7, tone: "ok" },
+      { label: "GhidraMCP (headless)", outcome: "Found the password and explained the check", time: "25 s", cost: "$0.18", turns: 8, tone: "ok" },
+    ],
+    samples: [
+      {
+        label: "pyghidra-mcp: five calls to the answer",
+        note: "It found the strings, took the only exported function, decompiled it, and read the 11 key bytes the loop compares against.",
+        text: `list_project_binaries → /crackme-5f9f35, analysis_complete: true, code_indexed: true
+search_strings({ query: "" })      → usage: %s <password>, Access granted, Access denied, …
+list_exports                       → entry @ 1000004b0
+decompile_function({ name_or_address: "entry", include_callees: true })
+read_bytes({ address: "1000005c7", size: 11 }) → "2e323c3c2e3033317f6761"`,
+      },
+      {
+        label: "The decompiled check (same in both)",
+        note: "Ghidra's decompiler gave both servers the same C. The agent inverted it by hand: pw[i] = key[i] ^ i ^ 0x5a.",
+        text: `if (sVar3 == 0xb) {
+  lVar5 = 0;
+  do {
+    uVar1 = (uint)(byte)pcVar6[lVar5] ^ (uint)lVar5 & 0xff ^ (uint)(byte)(&DAT_1000005c7)[lVar5];
+    bVar2 = lVar5 != 10;
+    lVar5 = lVar5 + 1;
+  } while (uVar1 == 0x5a && bVar2);
+  if (uVar1 == 0x5a) { _puts("Access granted"); return 0; }
+}`,
+      },
+      {
+        label: "GhidraMCP: checking the decompiler against the assembly",
+        note: "With GhidraMCP the agent also disassembled the function to confirm the loop condition before reading the key.",
+        text: `get_program_info → Mac OS X Mach-O, AARCH64:LE:64:AppleSilicon, 4 functions (3 external)
+list_functions   → entry, _fprintf, _puts, _strlen
+decompile_function_by_address({ address: "0x1000004b0" })
+disassemble_function({ address: "0x1000004b0" })
+  1000004fc  cmp  w10,#0x5a
+             ccmp x8,#0xa,#0x4,eq
+read_memory({ address: "0x1000005c7", length: 16 }) → 2e 32 3c 3c 2e 30 33 31 7f 67 61 00 …
+Answer: tidepool-41`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "Which Ghidra MCP server should I use?",
+      a: "For a quick headless job both worked equally well in our test. Pick pyghidra-mcp if you want several binaries in one project, an HTTP server that stays up, or search over decompiled code. Pick GhidraMCP if you want the agent working in the Ghidra window you already have open; its plugin mode is what most tutorials show.",
+    },
+    {
+      q: "Can an AI really reverse engineer with it?",
+      a: "On a small stripped binary, yes. Claude Code found the password check, read the key and worked the password out in about half a minute with either server, and said clearly that it had not run the program to confirm. Real malware or obfuscated code takes many more calls and still needs a person to check the conclusions.",
+    },
+    {
+      q: "Does it run the binary?",
+      a: "No. Both servers only analyse the file statically through Ghidra. Our test also told the agent not to run it, and it did not.",
+    },
+    {
+      q: "Why does decompiling fail on my Mac?",
+      a: "The Ghidra 12.1.4 release has no decompiler built for macOS. Run support/gradle/gradlew buildNatives from the Ghidra folder with Java 21 once; GhidraMCP's README says the same. Our first runs also failed because the Ghidra project sat under a folder whose name starts with a dot, which Ghidra does not allow.",
+    },
+    {
+      q: "What about bethington's ghidra-mcp?",
+      a: "A third, larger server: version 7.0.0 lists 219 tools, including scripting, structure creation and a debugger link in GUI mode, and has a separate headless server. It installs as a Ghidra extension plus a bridge with uv tool install and also needs exactly Ghidra 12.1.4 and Java 21. We have not tested it.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes. Ghidra, pyghidra-mcp and GhidraMCP are free and open source; both servers are Apache-2.0. You pay only for the agent. Our runs cost $0.16 and $0.18 at API prices.",
+    },
+  ],
+};
+
+## What we tested
+
+We compiled a small C program that asks for a password, checks it with a per-byte XOR against a hidden key, and stripped its symbols, so only the entry point keeps a name. We installed Ghidra 12.1.4 and Java 21 on an Apple silicon Mac, built Ghidra's decompiler, and connected Claude Code to each server in turn, headless over stdio: pyghidra-mcp 0.3.0 and GhidraMCP 2.0 with its headless option. Both runs got the same request: find the password and explain the check, without running the binary or using other disassemblers. The test sessions also had a few of our own general skills loaded.
+
+## What we found
+
+- **Both solved it.** Each run found the password tidepool-41, explained the length check and the XOR loop correctly, and said it had not run the program to confirm. pyghidra-mcp took 7 turns, 32 seconds and $0.16 at API prices; GhidraMCP took 8 turns, 25 seconds and $0.18.
+- **The answers came from the same decompiler.** Both servers returned identical decompiled C, so the difference was in the tools around it. pyghidra-mcp's decompile_function returned the function with its callees in one call; with GhidraMCP the agent also read the assembly to check the loop condition.
+- **The tool sets differ in shape.** pyghidra-mcp listed 20 tools, built around a project of binaries and a search index. GhidraMCP listed 28, closer to Ghidra's own menus, with separate calls for segments, classes, namespaces and comments.
+- **Setup was the hard part on macOS.** The decompiler had to be built from the Ghidra folder first, and a project path under a dot folder stopped pyghidra-mcp from starting at all. Once running, neither server needed anything else.
+- **pyghidra-mcp leaves more behind.** It downloaded a 167 MB embedding model into ~/.cache/chroma and kept a ChromaDB index next to the project. GhidraMCP left only the Ghidra project.
+
+This is one small binary with one model, so read it as an example, not a benchmark.

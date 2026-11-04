@@ -1,0 +1,189 @@
+export const meta = {
+  title: "codebase-memory-mcp Tested: A Local Code Graph for Your Coding Agent",
+  description:
+    "codebase-memory-mcp is a free MIT MCP server that indexes a repository into a local code graph. Setup, its 17 tools, what it can access, and our Claude Code test against grep.",
+  verdict:
+    "It turns a repository into a local code graph your agent can query. In our test Claude Code found every caller of a function in four calls and 26 seconds, missing only one MDX page.",
+  summary:
+    "codebase-memory-mcp is a free, MIT-licensed MCP server by DeusData that turns a repository into a code graph stored on your machine. Your agent can then find a function, list everything that calls it, follow calls several hops away and run read-only graph queries, instead of opening files one by one. It needs no account or API key and the README says it sends nothing anywhere. We connected it to Claude Code and asked which files a change to one function would affect in a Next.js project. It indexed the project in one call and answered in 26 seconds; checked against a text search, it found 33 of the 34 files that call the function directly and missed only an MDX page.",
+  bestFor: [
+    "Large or unfamiliar codebases where the agent wastes turns opening files to find who calls what",
+    "Checking what a change could break before making it, including callers two or three hops away",
+    "Teams that want code search kept on their own machines, with no hosted service or API key",
+  ],
+  notFor: [
+    "Small projects, where a plain text search is fast and complete enough",
+    "Code in files it does not parse; in our test it missed a call inside an MDX page",
+    "Machines where you do not want a background process; a shared daemon starts with the first session",
+  ],
+  permissions: [
+    "Files: reads every source file in the repositories you ask it to index. Set CBM_ALLOWED_ROOT to limit which folders it may index.",
+    "Disk: stores each index as a SQLite database in ~/.cache/codebase-memory-mcp (29 MB for our 5,494-node project). Indexes stay until you delete them.",
+    "Processes: starts a shared background daemon that can watch indexed projects and re-index them when files change. Set auto_watch to false to stop the watching.",
+    "Network: the README says it makes no network requests of its own and collects no telemetry. Installing through npx downloads the release binary once.",
+    "Agent setup: the full installer writes MCP settings, instructions, skills, agent profiles and hooks into the coding agents it finds. The Claude Code plugin adds only the server.",
+    "Accounts and money: none. It needs no login, API key or payment.",
+  ],
+  howItWorks: [
+    {
+      title: "Index once, then query",
+      text: "index_repository parses the project with bundled grammars and stores functions, classes, files, routes and their relationships (calls, imports, definitions) as a graph. The README's own benchmark indexes Django in about 6 seconds and the Linux kernel in 3 minutes on an Apple M3 Pro.",
+    },
+    {
+      title: "Answers come from the graph",
+      text: "search_graph finds symbols by name or meaning, trace_path follows callers or callees up to 15 hops, query_graph runs read-only Cypher queries, and detect_changes maps a git diff to the code it affects. The agent reads source only where it needs to.",
+    },
+    {
+      title: "It stays current",
+      text: "While a session is connected, a shared daemon can watch indexed projects and re-index them when files change. check_index_coverage tells the agent which files are missing or stale, so a clean result is not mistaken for a complete one.",
+    },
+  ],
+  setup: [
+    {
+      label: "Install script (macOS and Linux)",
+      code: "curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash",
+      note: "Installs the binary and sets up the coding agents it detects. Pass --skip-config to install only the binary. Restart your agent, then say \"Index this project\".",
+    },
+    {
+      label: "Windows (PowerShell)",
+      code: "Invoke-WebRequest -Uri https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.ps1 -OutFile install.ps1\nUnblock-File .\\install.ps1\n.\\install.ps1",
+      note: "The README suggests reading install.ps1 before running it. It also notes that Microsoft Defender may flag the binary as a known false positive.",
+    },
+    {
+      label: "Claude Code plugin (server only)",
+      code: "claude plugin marketplace add DeusData/codebase-memory-mcp\nclaude plugin install codebase-memory@codebase-memory",
+      note: "Starts the server with npx, pinned to the current release, and verifies the binary against the release checksums. Use either this or the installer, not both, or the server runs twice.",
+    },
+    {
+      label: "Any MCP client, by hand",
+      code: "{\n  \"mcpServers\": {\n    \"codebase-memory-mcp\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"codebase-memory-mcp@0.12.1\"]\n    }\n  }\n}",
+      note: "This is how we ran it. With an installed binary, put its path in command and leave args empty. In Claude Code, /mcp should show 17 tools.",
+    },
+    {
+      label: "Remove it",
+      code: "codebase-memory-mcp uninstall\nrm -rf ~/.cache/codebase-memory-mcp",
+      note: "uninstall removes the agent settings, skills, hooks and binary it added and keeps your indexes unless you add --delete-indexes.",
+    },
+  ],
+  tools: [
+    { name: "index_repository", text: "Index a repository into the graph; can run in the background with async: true." },
+    { name: "list_projects", text: "List indexed projects, with node, edge and database sizes on request." },
+    { name: "delete_project", text: "Remove a project and all its graph data." },
+    { name: "index_status", text: "Check whether a project's index is ready and fresh." },
+    { name: "check_index_coverage", text: "Check whether given files or folders are indexed and up to date." },
+    { name: "search_graph", text: "Find symbols by name, keyword or meaning." },
+    { name: "trace_path", text: "Follow callers, callees, data flow or cross-service paths, 1 to 15 hops deep." },
+    { name: "detect_changes", text: "Map a git diff to the symbols it touches and what depends on them." },
+    { name: "query_graph", text: "Run a read-only Cypher query against the graph." },
+    { name: "get_graph_schema", text: "Show node and edge counts and the properties of each label." },
+    { name: "compare_graphs", text: "Compare two indexed snapshots of a project." },
+    { name: "get_code_snippet", text: "Read the source of one function by its qualified name." },
+    { name: "get_file_outline", text: "List the declarations in one file in source order." },
+    { name: "get_architecture", text: "Summarise languages, packages, routes, hotspots and clusters." },
+    { name: "search_code", text: "Text search across the indexed files, like grep." },
+    { name: "manage_adr", text: "Read and write architecture decision records stored with the project." },
+    { name: "ingest_traces", text: "Store call paths observed at runtime alongside the static graph." },
+  ],
+  test: {
+    date: "2026-11-04",
+    client: "Claude Code 2.1.318, headless (claude -p), project settings only, server added with --mcp-config",
+    model: "claude-opus-5-5",
+    version: "0.12.1 (npm), repository commit e0c7a1d",
+    listed: [
+      "check_index_coverage",
+      "compare_graphs",
+      "delete_project",
+      "detect_changes",
+      "get_architecture",
+      "get_code_snippet",
+      "get_file_outline",
+      "get_graph_schema",
+      "index_repository",
+      "index_status",
+      "ingest_traces",
+      "list_projects",
+      "manage_adr",
+      "query_graph",
+      "search_code",
+      "search_graph",
+      "trace_path",
+    ],
+    task: "Use the codebase-memory-mcp tools only, not grep or file reads. Index this repository, then tell me where withSocial is defined, which functions call it, and which files a change to it would affect. List the MCP tools you called.",
+    runs: [
+      { label: "One question, four tool calls", outcome: "Found 33 of the 34 files that call the function; missed one MDX page", time: "26 s", cost: "$0.21", turns: 6 },
+    ],
+    samples: [
+      {
+        label: "Call 1: index_repository",
+        note: "One call indexed the whole Next.js project: 5,494 nodes and 12,500 edges. Images and other non-source files (82 in all) were left out by design.",
+        text: `index_repository({ repo_path: "<project>" })
+→ not_indexed_files_count: 82  (public/*.png, *.svg, *.jpg … "Excluded by design")`,
+      },
+      {
+        label: "Call 2: search_graph",
+        note: "Found the function, its file and lines, and its edge counts.",
+        text: `search_graph({ name_pattern: "^withSocial$" })
+results: 1  (cols: qn label file lines in out)
+  ….src.lib.seo.withSocial Function src/lib/seo.ts 24-49 34 4`,
+      },
+      {
+        label: "Calls 3 and 4: trace_path and query_graph",
+        note: "trace_path counted 40 callers up to three hops away. A Cypher query then listed each caller with its file: 34 direct callers plus 6 pages that reach the function through two editorial helpers.",
+        text: `trace_path({ function_name: "withSocial", direction: "inbound", depth: 3, include_tests: true })
+callers_total: 40
+
+query_graph({ query: "MATCH (c)-[:CALLS*1..3]->(f:Function {name:'withSocial'})
+                      RETURN DISTINCT c.name, c.file_path ORDER BY c.file_path" })
+rows: 40  (cols: c.name c.file_path)
+  generateMetadata src/app/agents/[slug]/page.tsx
+  generateMetadata src/app/alternatives/[slug]/page.tsx
+  generateMetadata src/app/best/[slug]/page.tsx
+  …`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What does codebase-memory-mcp do?",
+      a: "It indexes a repository into a code graph on your machine and gives your coding agent 17 MCP tools to search it: find a symbol, list its callers and callees, follow calls several hops away, map a git diff to the code it affects, or run a read-only Cypher query.",
+    },
+    {
+      q: "Is it free, and does it need an API key?",
+      a: "It is free and open source under the MIT licence. It needs no account and no API key. You still pay for the AI agent you connect it to.",
+    },
+    {
+      q: "Does it send my code anywhere?",
+      a: "The README says indexing and queries run locally, it collects no telemetry and it makes no network requests of its own. Indexes are SQLite files in ~/.cache/codebase-memory-mcp. The optional CBM Lens viewer can download a model for in-browser chat if you turn that on.",
+    },
+    {
+      q: "Does it really save tokens?",
+      a: "The project's March 2026 preprint reports 10 times fewer tokens and 2.1 times fewer tool calls than exploring file by file, across 31 repositories. We did not measure tokens against a plain run. In our test the answer took four tool calls and six turns.",
+    },
+    {
+      q: "Is the answer complete?",
+      a: "Not always. In our test it found 33 of the 34 files that call the function directly; the one it missed was an MDX page, a format it did not parse. Its own docs say a clean coverage check means \"no recorded gap\", not proof of completeness.",
+    },
+    {
+      q: "Which install should I use?",
+      a: "The install script sets up the server plus skills, agent profiles and hooks for the agents it finds. The Claude Code plugin adds just the server. The README says to pick one, because using both registers the server twice.",
+    },
+    {
+      q: "How do I remove it?",
+      a: "Run codebase-memory-mcp uninstall. It removes the agent settings, skills, hooks and binary it added, and keeps your indexes unless you pass --delete-indexes. If you ran it through npx, also clear the npx cache; ours took 320 MB.",
+    },
+  ],
+};
+
+## What we tested
+
+We connected codebase-memory-mcp 0.12.1 to Claude Code through npx and pointed it at a copy of a real project: Ordalin's own Next.js site at commit e0c7a1d, about 460 files in Git. We asked one question that usually takes several searches: where a shared metadata function, `withSocial`, is defined, what calls it, and which files a change to it would affect. We told the agent to use only the server's tools, not grep or file reads. The index went into the test folder, not the home folder.
+
+## What we found
+
+- **It connected and listed all 17 tools** the README names.
+- **Four calls answered the question.** index_repository built the graph (5,494 nodes, 12,500 edges), search_graph found the function at `src/lib/seo.ts` lines 24 to 49, trace_path counted 40 callers within three hops, and query_graph listed each caller with its file. The run took 6 turns, 26 seconds and $0.21 at API prices, as reported by Claude Code.
+- **It caught indirect callers.** Six pages call two editorial helpers that call `withSocial`; a text search for the name would not show those pages.
+- **It missed one file.** A text search found 34 files that call the function directly. The graph found 33; the missing one was an MDX page, which it did not parse. The agent's own answer also pointed out that the graph's 34 inbound edges might include more than calls, and that 82 non-source files were not indexed.
+- **It left little behind.** The index took 29 MB, no process was left running after the session, and nothing new appeared in the home folder. The npx download, though, took 320 MB in the npm cache.
+
+This is one question on one project with one model, so read it as an example, not a benchmark.

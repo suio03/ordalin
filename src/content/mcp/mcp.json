@@ -1,0 +1,49 @@
+{
+  "servers": [
+    {
+      "slug": "codebase-memory-mcp",
+      "name": "codebase-memory-mcp",
+      "maintainer": "DeusData",
+      "kind": "official",
+      "repo": "https://github.com/DeusData/codebase-memory-mcp",
+      "license": "MIT",
+      "version": "0.12.1",
+      "transport": "stdio (local)",
+      "install": "Run the install script from the repository (curl … install.sh | bash on macOS and Linux, install.ps1 on Windows) and restart your agent; or in Claude Code run claude plugin marketplace add DeusData/codebase-memory-mcp, then claude plugin install codebase-memory@codebase-memory",
+      "requires": "No account or API key; a macOS, Linux or Windows machine. The Claude Code plugin needs Node for npx",
+      "clients": "Claude Code, Codex, OpenCode and the other clients its installer detects (45 integrations in the README)",
+      "does": "Indexes a repository into a local code graph so the agent can search symbols, trace callers and callees, and run read-only graph queries instead of reading files one by one",
+      "checked_on": "2026-11-04"
+    },
+    {
+      "slug": "artcraft-mcp",
+      "name": "ArtCraft MCP (VectorCraft and CADCraft)",
+      "maintainer": "ArtCraft (Storyteller)",
+      "kind": "official",
+      "repo": "https://github.com/storytold/vectorcraft",
+      "license": "MIT or Apache-2.0",
+      "version": "VectorCraft 0.21.0, CADCraft 0.17.0",
+      "transport": "stdio (local); headless, or bridged to the running desktop app",
+      "install": "Download the vectorcraft-cli or cadcraft-cli release for your system (on macOS a separate cli zip; on Linux it ships with the app), then add it to your agent, for example claude mcp add vectorcraft -- vectorcraft-cli mcp --headless, or claude mcp add cadcraft -- cadcraft-cli mcp",
+      "requires": "No account or API key; macOS, Windows, Linux or FreeBSD. The desktop app only for the live mode",
+      "clients": "Claude Code, Claude Desktop and other MCP clients that start stdio servers",
+      "does": "Lets an agent draw, inspect, render and export vector artwork in VectorCraft, or 2D CAD drawings in CADCraft, through the apps' own commands",
+      "checked_on": "2026-11-04"
+    },
+    {
+      "slug": "ghidra-mcp",
+      "name": "Ghidra MCP (pyghidra-mcp and GhidraMCP)",
+      "maintainer": "clearbluejar (pyghidra-mcp) and LaurieWired (GhidraMCP)",
+      "kind": "community",
+      "repo": "https://github.com/clearbluejar/pyghidra-mcp",
+      "license": "Apache-2.0",
+      "version": "pyghidra-mcp 0.3.0, GhidraMCP 2.0",
+      "transport": "stdio or streamable HTTP (local); headless, or with the Ghidra GUI",
+      "install": "Install Ghidra 12.1.4 and Java 21 and set GHIDRA_INSTALL_DIR, then run uvx pyghidra-mcp --project-path <dir> <binary>, or uvx --from \"ghidra-mcp[headless] @ git+https://github.com/LaurieWired/GhidraMCP\" ghidra-mcp --headless --binary <binary> (or the GhidraMCP extension in the Ghidra GUI)",
+      "requires": "Ghidra 12.1.4, Java 21, uv or Python 3.10 to 3.13. No account or API key. On macOS, Ghidra's decompiler must be built once with gradlew buildNatives",
+      "clients": "Claude Code, Claude Desktop, VS Code, Cursor and other MCP clients",
+      "does": "Lets an agent reverse engineer binaries with Ghidra: list functions and strings, decompile, disassemble, read bytes, follow cross-references, and rename or retype what it learns",
+      "checked_on": "2026-11-04"
+    }
+  ]
+}

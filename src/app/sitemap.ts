@@ -10,6 +10,7 @@ import {
 import { allAgentsPaths } from "@/lib/agents/content";
 import { allAgents, CHECKED_ON } from "@/lib/agents/data";
 import { allSkills, allSkillsPaths } from "@/lib/skills/data";
+import { allMcpPaths, allServers } from "@/lib/mcp/data";
 import { indexableModelsMinimum, modelTagSlug } from "@/lib/catalog";
 import { listPublishedToolSlugs, listPublishedTools, listSitemapEntries } from "@/lib/repositories/catalog";
 
@@ -70,10 +71,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // MCP server pages: same rule as skills.
+  const mcpDates = new Map(allServers().map((server) => [`/mcp/${server.slug}`, server.checked_on]));
+  const mcp: MetadataRoute.Sitemap = allMcpPaths().map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: mcpDates.get(path),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
   return [
     ...fixed,
     ...agents,
     ...skills,
+    ...mcp,
     ...entries.tools.map((entry) => ({
       url: `${baseUrl}/tools/${entry.slug}`,
       lastModified: new Date(entry.updated_at * 1000),
