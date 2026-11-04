@@ -9,6 +9,7 @@ import { editorialHref, type EditorialPage } from "@/lib/editorial";
 import { listLiveEditorial } from "@/lib/editorial/load";
 import { appBaseUrl } from "@/lib/editorial/metadata";
 import { pinnedHomepageGuides } from "@/content/editorial";
+import { HUB_INDEX_MINIMUM as MCP_HUB_MINIMUM, mcpPath, publishedServerSlugs } from "@/lib/mcp/data";
 import { displayName as skillName, getSkill, HUB_INDEX_MINIMUM, publishedSkillSlugs, skillsPath } from "@/lib/skills/data";
 import {
   listCategories,
@@ -112,6 +113,7 @@ export default async function Home({ searchParams }: HomeProps) {
 
   const skills = publishedSkillSlugs().map(getSkill);
   const skillsHub = skills.length >= HUB_INDEX_MINIMUM;
+  const mcpHub = publishedServerSlugs().length >= MCP_HUB_MINIMUM;
 
   const baseUrl = appBaseUrl();
 
@@ -182,6 +184,7 @@ export default async function Home({ searchParams }: HomeProps) {
             <ul>
               <li><Link href="/agents">AI agents</Link></li>
               {skillsHub ? <li><Link href={skillsPath.overview}>Agent skills</Link></li> : null}
+              {mcpHub ? <li><Link href={mcpPath.overview}>MCP servers</Link></li> : null}
               {models.total ? <li><Link href="/models">AI models</Link></li> : null}
               {tasks.length ? <li><Link href="/tasks">Find by goal</Link></li> : null}
               {collections.length ? <li><Link href="/collections">Collections</Link></li> : null}

@@ -4,28 +4,48 @@ import { indexableCategoryMinimum } from "@/lib/catalog";
 import { editorialHref, listEditorialPages } from "@/lib/editorial";
 import { listPublishedGuides } from "@/lib/guides";
 import { listBrowseCategories, listCategories, listCollections, listTasks } from "@/lib/repositories/catalog";
+import { getServer, mcpPath, publishedServerSlugs, visibleServerSlugs } from "@/lib/mcp/data";
 import { displayName as skillName, getSkill, publishedSkillSlugs, skillsPath, visibleSkillSlugs } from "@/lib/skills/data";
 import HomePartners from "./home-partners";
 import { MobileMenu } from "./mobile-menu";
+import { NavMenu } from "./nav-menu";
 import { ThemeSelector } from "./theme-selector";
 import styles from "./site-shell.module.css";
 
-// Editorial hubs appear only once they have something to show.
-function primaryNavigation() {
+// Agent-side hubs share one header slot. Skills and MCP appear once a page is visible.
+function agentNavigation() {
   return [
-    { href: "/tools", label: "All tools" },
-    ...(listEditorialPages("best").length ? [{ href: "/best", label: "Best of" }] : []),
-    ...(listEditorialPages("compare").length ? [{ href: "/compare", label: "Compare" }] : []),
-    { href: "/guides", label: "Guides" },
-    { href: "/agents", label: "AI agents" },
-    { href: "/models", label: "AI models" },
-    { href: "/tasks", label: "Find by goal" },
-    { href: "/collections", label: "Collections" },
+    { href: "/agents", label: "AI agents", note: "Agents compared on price, platforms and privacy" },
+    { href: "/models", label: "AI models", note: "Models with prices and limits" },
+    ...(visibleSkillSlugs().length ? [{ href: skillsPath.overview, label: "Agent skills", note: "Skills we installed and tested" }] : []),
+    ...(visibleServerSlugs().length ? [{ href: mcpPath.overview, label: "MCP servers", note: "Servers we connected and tested" }] : []),
   ];
 }
 
+// Editorial hubs appear only once they have something to show.
+function primaryNavigation() {
+  return {
+    before: [
+      { href: "/tools", label: "All tools" },
+      ...(listEditorialPages("best").length ? [{ href: "/best", label: "Best of" }] : []),
+      ...(listEditorialPages("compare").length ? [{ href: "/compare", label: "Compare" }] : []),
+      { href: "/guides", label: "Guides" },
+    ],
+    agents: agentNavigation(),
+    after: [
+      { href: "/tasks", label: "Find by goal" },
+      { href: "/collections", label: "Collections" },
+    ],
+  };
+}
+
 export function SiteHeader() {
-  const navigation = primaryNavigation();
+  const { before, agents, after } = primaryNavigation();
+  const link = (item: { href: string; label: string }) => (
+    <Link href={item.href} key={item.href}>
+      {item.label}
+    </Link>
+  );
   return (
     <header className={styles.header}>
       <Link className={styles.brand} href="/" aria-label="Ordalin home">
@@ -38,17 +58,15 @@ export function SiteHeader() {
         />
       </Link>
       <nav className={styles.navigation} aria-label="Primary navigation">
-        {navigation.map((item) => (
-          <Link href={item.href} key={item.href}>
-            {item.label}
-          </Link>
-        ))}
+        {before.map(link)}
+        <NavMenu label="Agents" items={agents} />
+        {after.map(link)}
       </nav>
       <ThemeSelector />
       <Link className={styles.submit} href="/submit">
         Submit a tool
       </Link>
-      <MobileMenu items={navigation} />
+      <MobileMenu items={[...before, ...agents.map(({ href, label }) => ({ href, label })), ...after]} />
     </header>
   );
 }
@@ -65,6 +83,7 @@ async function directoryColumns(): Promise<FooterColumn[]> {
     listCollections(),
   ]).catch(() => [[], [], [], []] as const);
   const skills = publishedSkillSlugs();
+  const servers = publishedServerSlugs();
   const guides = await listPublishedGuides().catch(() => []);
   return [
     {
@@ -90,6 +109,10 @@ async function directoryColumns(): Promise<FooterColumn[]> {
     {
       title: "Agent skills",
       links: skills.map((slug) => ({ href: skillsPath.skill(slug), label: skillName(getSkill(slug)) })),
+    },
+    {
+      title: "MCP servers",
+      links: servers.map((slug) => ({ href: mcpPath.server(slug), label: getServer(slug).name })),
     },
     {
       // Newest first, from listPublishedGuides().
@@ -136,6 +159,7 @@ export async function SiteFooter() {
         { href: "/tasks", label: "Find by goal" },
         { href: "/collections", label: "Collections" },
         ...(visibleSkillSlugs().length ? [{ href: skillsPath.overview, label: "Agent skills" }] : []),
+        ...(visibleServerSlugs().length ? [{ href: mcpPath.overview, label: "MCP servers" }] : []),
         { href: "/guides", label: "Guides" },
         { href: "/search", label: "Advanced search" },
       ],
