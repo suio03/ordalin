@@ -1,0 +1,19 @@
+{
+  "kind": "mcp",
+  "name": "codebase-memory-mcp",
+  "repo": "https://github.com/DeusData/codebase-memory-mcp",
+  "commit": "e0c7a1d",
+  "fixture": "git:.",
+  "mcp": {
+    "command": "npx",
+    "args": [
+      "-y",
+      "codebase-memory-mcp@0.12.1"
+    ],
+    "env": {
+      "CBM_CACHE_DIR": "{run}/cbm-cache"
+    }
+  },
+  "task": "Use the codebase-memory-mcp tools, not grep or file reads. Index this repository, then answer: which functions call withSocial, and which files would a change to it affect? List the MCP tools you called.",
+  "timeoutMinutes": 20
+}

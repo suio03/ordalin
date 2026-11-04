@@ -1,0 +1,28 @@
+{
+  "kind": "mcp",
+  "name": "pyghidra-mcp",
+  "repo": "https://github.com/clearbluejar/pyghidra-mcp",
+  "commit": "aeaf4d1",
+  "fixture": "crackme",
+  "mcp": {
+    "command": "uvx",
+    "args": [
+      "pyghidra-mcp==0.3.0",
+      "--transport",
+      "stdio",
+      "--project-path",
+      "{env:AGENT_TEST_DEPS}/ghidra-projects/pyghidra",
+      "--project-name",
+      "crackme",
+      "{run}/with/crackme"
+    ],
+    "env": {
+      "GHIDRA_INSTALL_DIR": "{env:AGENT_TEST_DEPS}/ghidra/x/ghidra_12.1.4_PUBLIC",
+      "JAVA_HOME": "{env:JAVA_HOME}",
+      "UV_CACHE_DIR": "{env:AGENT_TEST_DEPS}/uv-cache",
+      "UV_PYTHON_INSTALL_DIR": "{env:AGENT_TEST_DEPS}/uv-python"
+    }
+  },
+  "task": "This folder holds one stripped binary, crackme, that takes a password. Use the pyghidra-mcp tools to find the password it accepts and explain how the check works. Don't run the binary and don't use otool, strings or other disassemblers. Don't ask me questions. List the MCP tools you called.",
+  "timeoutMinutes": 25
+}

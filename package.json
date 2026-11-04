@@ -36,7 +36,8 @@
     "test:submissions:runtime": "node scripts/test-submission-runtime.mjs",
     "dev:demo": "ORDALIN_DEMO=1 next dev",
     "demo:setup": "pnpm db:migrate:local && pnpm seed:local",
-    "check:public": "node scripts/check-public-repo.mjs"
+    "check:public": "node scripts/check-public-repo.mjs",
+    "agent-test": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/agent-test.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

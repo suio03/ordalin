@@ -1,0 +1,18 @@
+{
+  "kind": "skill",
+  "name": "security-audit",
+  "repo": "https://github.com/cloudflare/security-audit-skill",
+  "commit": "c1c8a8c",
+  "fixture": "notes-api",
+  "install": {
+    "claude": {
+      "skill": "skills/security-audit"
+    },
+    "codex": {
+      "skill": "skills/security-audit"
+    }
+  },
+  "task": "Run a full security audit of this codebase. Write all audit output into ./security-audit/ inside this folder. Don't run the app and don't ask me questions.",
+  "baseline": "Do a security audit of this codebase: find the vulnerabilities and write a report to ./security-audit/REPORT.md. Don't run the app and don't ask me questions.",
+  "timeoutMinutes": 60
+}

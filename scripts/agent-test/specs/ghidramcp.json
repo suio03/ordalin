@@ -1,0 +1,32 @@
+{
+  "kind": "mcp",
+  "name": "ghidramcp",
+  "repo": "https://github.com/LaurieWired/GhidraMCP",
+  "commit": "1e98025",
+  "fixture": "crackme",
+  "mcp": {
+    "command": "uvx",
+    "args": [
+      "--python",
+      "3.13",
+      "--from",
+      "ghidra-mcp[headless] @ file://{env:AGENT_TEST_DEPS}/lw/x/GhidraMCP-release-2-0/ghidra_mcp-2.0.0-py3-none-any.whl",
+      "ghidra-mcp",
+      "--headless",
+      "--binary",
+      "{run}/with/crackme",
+      "--extension-jar",
+      "{env:AGENT_TEST_DEPS}/lw/x/GhidraMCP-release-2-0/ext/GhidraMCP/lib/GhidraMCP.jar",
+      "--project",
+      "{env:AGENT_TEST_DEPS}/ghidra-projects/ghidramcp"
+    ],
+    "env": {
+      "GHIDRA_INSTALL_DIR": "{env:AGENT_TEST_DEPS}/ghidra/x/ghidra_12.1.4_PUBLIC",
+      "JAVA_HOME": "{env:JAVA_HOME}",
+      "UV_CACHE_DIR": "{env:AGENT_TEST_DEPS}/uv-cache",
+      "UV_PYTHON_INSTALL_DIR": "{env:AGENT_TEST_DEPS}/uv-python"
+    }
+  },
+  "task": "This folder holds one stripped binary, crackme, that takes a password. Use the ghidramcp tools to find the password it accepts and explain how the check works. Don't run the binary and don't use otool, strings or other disassemblers. Don't ask me questions. List the MCP tools you called.",
+  "timeoutMinutes": 25
+}

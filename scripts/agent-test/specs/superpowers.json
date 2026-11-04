@@ -1,0 +1,22 @@
+{
+  "kind": "skill",
+  "name": "superpowers",
+  "repo": "https://github.com/obra/superpowers",
+  "commit": "22f0b46",
+  "fixture": "todo-cli",
+  "install": {
+    "claude": {
+      "plugin": "."
+    }
+  },
+  "task": "Add due dates to this to-do CLI: `add` takes an optional --due YYYY-MM-DD, `list` shows the due date, and `list --overdue` shows only open tasks whose due date is before today. Reject invalid dates with a clear message.",
+  "baseline": "Add due dates to this to-do CLI: `add` takes an optional --due YYYY-MM-DD, `list` shows the due date, and `list --overdue` shows only open tasks whose due date is before today. Reject invalid dates with a clear message.",
+  "followUps": [
+    "I won't answer detailed questions: pick sensible defaults for anything open. I approve the design. Go ahead with the next step.",
+    "Go: implement it now, finish the work and tell me when it's done."
+  ],
+  "after": [
+    "npm test 2>&1 | tail -15"
+  ],
+  "timeoutMinutes": 40
+}

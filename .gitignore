@@ -10,6 +10,7 @@ out/
 # Cloudflare local state
 .wrangler/
 .ordalin-imports/
+.ordalin-tests/
 
 # test output
 coverage/

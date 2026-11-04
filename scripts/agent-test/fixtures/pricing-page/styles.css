@@ -1,0 +1,28 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; text-align: center; color: #333; background: #f9f9fb; }
+.hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px 120px; }
+.nav { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto 80px; }
+.nav ul { display: flex; gap: 30px; list-style: none; }
+.nav a { color: white; text-decoration: none; }
+.logo { font-weight: bold; font-size: 22px; }
+h1 { font-size: 52px; max-width: 800px; margin: 0 auto 20px; background: linear-gradient(90deg, #fff, #e0d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { font-size: 20px; max-width: 600px; margin: 0 auto 40px; opacity: 0.9; }
+.btn { display: inline-block; padding: 12px 24px; border-radius: 30px; background: linear-gradient(90deg, #667eea, #764ba2); color: white; text-decoration: none; box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4); }
+.hero .btn { background: white; color: #764ba2; }
+.btn-big { padding: 18px 40px; font-size: 18px; }
+section { padding: 80px 20px; max-width: 1100px; margin: 0 auto; }
+h2 { font-size: 36px; margin-bottom: 40px; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.card { background: white; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+.icon { font-size: 40px; margin-bottom: 20px; }
+.card h3 { margin-bottom: 10px; }
+.card p { color: #888; }
+.price { font-size: 48px; font-weight: bold; margin: 20px 0; color: #764ba2; }
+.price span { font-size: 16px; color: #999; }
+.card ul { list-style: none; margin-bottom: 30px; line-height: 2; }
+.popular { transform: scale(1.05); border: 2px solid #764ba2; }
+.badge { background: linear-gradient(90deg, #667eea, #764ba2); color: white; display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+.sub { color: #888; margin: -30px 0 40px; }
+.faq .q { margin-bottom: 30px; }
+.faq p { color: #888; }
+footer { padding: 40px; color: #aaa; font-size: 14px; }

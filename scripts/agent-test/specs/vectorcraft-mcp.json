@@ -1,0 +1,12 @@
+{
+  "kind": "mcp",
+  "name": "vectorcraft",
+  "repo": "https://github.com/storytold/vectorcraft",
+  "commit": "42de898",
+  "mcp": {
+    "command": "{env:AGENT_TEST_DEPS}/vc/x/vectorcraft-cli-0.21.0-macos-universal/vectorcraft-cli",
+    "args": ["mcp", "--headless", "--automation-read-root", "{run}/with", "--automation-write-root", "{run}/with"]
+  },
+  "task": "Use the vectorcraft MCP tools to make a square 512 x 512 badge for a coffee shop called Ordal Roasters: a dark brown circle, a cream coffee cup drawn from simple shapes in the middle, and the name in a curve or a line under the cup. Look at your render and fix anything that looks wrong. Save it as badge.svg and badge.png in this folder. Don't ask me questions. List the MCP tools you called.",
+  "timeoutMinutes": 25
+}

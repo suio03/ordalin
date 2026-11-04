@@ -1,0 +1,12 @@
+{
+  "kind": "mcp",
+  "name": "cadcraft",
+  "repo": "https://github.com/storytold/cadcraft",
+  "commit": "2099288",
+  "mcp": {
+    "command": "{env:AGENT_TEST_DEPS}/cad/x/cadcraft-cli-0.17.0-macos-universal/cadcraft-cli",
+    "args": ["mcp", "--config-dir", "{run}/cadcraft-config"]
+  },
+  "task": "Use the cadcraft MCP tools to draw a metric floor plan of one room: 4000 x 3000 mm inside, 100 mm walls, a 900 mm door gap centred in the bottom wall with a door swing arc, and a 1200 mm window marked in the top wall. Put walls, door and window on separate layers and add the two overall dimensions. Check the drawing (closed shapes, areas) and fix anything wrong. Save plan.dxf and plan.png in this folder. Don't ask me questions. List the MCP tools you called.",
+  "timeoutMinutes": 25
+}

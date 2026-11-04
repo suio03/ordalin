@@ -1,0 +1,24 @@
+{
+  "kind": "skill",
+  "name": "impeccable",
+  "repo": "https://github.com/pbakaus/impeccable",
+  "commit": "f864521",
+  "fixture": "pricing-page",
+  "install": {
+    "claude": {
+      "plugin": "plugin"
+    },
+    "codex": {
+      "skill": "plugin/skills/impeccable"
+    }
+  },
+  "task": "/impeccable polish this landing page. Context: Ledgerly is invoicing software for freelancers (designers, developers, writers). The page should feel calm and trustworthy, not hyped. Keep all the copy, the three plans and their prices. Work only on index.html and styles.css, and don't ask me questions: decide yourself.",
+  "baseline": "Polish the design of this landing page. Context: Ledgerly is invoicing software for freelancers (designers, developers, writers). The page should feel calm and trustworthy, not hyped. Keep all the copy, the three plans and their prices. Work only on index.html and styles.css, and don't ask me questions: decide yourself.",
+  "after": [
+    "sh {repo}/plugin/skills/impeccable/scripts/impeccable detect --no-config ."
+  ],
+  "env": {
+    "DO_NOT_TRACK": "1"
+  },
+  "timeoutMinutes": 40
+}
