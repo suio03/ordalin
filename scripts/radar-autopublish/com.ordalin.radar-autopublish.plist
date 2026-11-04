@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Copy to ~/Library/LaunchAgents and `launchctl bootstrap gui/$(id -u) <file>`. Times are the Mac's local time (Melbourne).
+     A run missed while the Mac slept starts on wake. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.ordalin.radar-autopublish</string>
+  <key>ProgramArguments</key>
+  <array><string>/bin/zsh</string><string>-l</string><string>__ROOT__/scripts/radar-autopublish/run.sh</string></array>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Hour</key><integer>10</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Hour</key><integer>18</integer><key>Minute</key><integer>30</integer></dict>
+  </array>
+  <key>StandardOutPath</key><string>__ROOT__/.ordalin-imports/radar-auto/launchd.log</string>
+  <key>StandardErrorPath</key><string>__ROOT__/.ordalin-imports/radar-auto/launchd.log</string>
+</dict>
+</plist>

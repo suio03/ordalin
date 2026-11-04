@@ -1,6 +1,6 @@
 # Guides and time-archive contract
 
-Status: MDX guide system implemented; no guide is currently published
+Status: MDX guide system implemented; guides are published (some by the radar auto-publish run)
 
 Ordalin Guides provide evidence-led decision support around choosing and using
 AI tools. They are not a general AI-news feed and must not become bulk-generated
@@ -59,7 +59,8 @@ links back to the published guide, so a guide is never reachable only through
 the sitemap or the Guides hub.
 
 Keep `status: "draft"` until the copy, links, dates, and factual claims have
-been checked. Publishing requires only changing the status and rebuilding; it
+been checked. The radar auto-publish run (`docs/radar-autopublish.md`) is the one
+exception: it checks its own guides against official sources and publishes them directly. Publishing requires only changing the status and rebuilding; it
 does not require D1, an admin CMS, or a migration.
 
 ## Time archive reservation
