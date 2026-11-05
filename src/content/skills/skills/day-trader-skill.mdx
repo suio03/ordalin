@@ -1,0 +1,206 @@
+export const meta = {
+  title: "Day Trader Skill Tested: Claude Code Replays a Real Breakout Trade",
+  description:
+    "Day Trader is a free pack of 11 Claude skills: chart scanner, entry timer, exit planner, a 10,000-run Time Machine, position sizing and a paper-trading broker. Install steps and a Claude Code replay test.",
+  verdict:
+    "Claude Code ran the whole pipeline on a real session without help: it scanned 5,936 stocks, picked DUOL, planned the stop and target, ran the Time Machine and sized the trade. The trade lost: the stop was hit at 15:10. The tools did their job, and the entry tool had warned that a late entry is a different trade; the agent took it anyway.",
+  summary:
+    "Day Trader is a free set of 11 Claude skills by Jake Schincariol for intraday stock trading. Each skill is a plain Python script with no packages to install, reading free public data: Yahoo Finance charts, Nasdaq Trader's symbol lists, SEC EDGAR and the House Clerk. One scans thousands of charts for opening-range breakouts and other setups, one times the entry bar by bar, one sets the stop and target first, and the Time Machine replays the rest of the session 10,000 times from the stock's own recent bars before you commit. Others size the position to your max loss, check your limits, send orders to Alpaca (paper trading by default, never without your yes), ring price alerts, read earnings filings and read Congress's trade disclosures. We gave Claude Code a finished session, Wednesday 4 November 2026, and asked it to replay the morning as if it were 10:15 AM, plan and size one trade on a $5,000 paper account without placing anything, then check what really happened. It finished in 9 minutes and 28 turns, for $0.68 at API prices.",
+  bestFor: [
+    "Learning how an opening-range breakout trade is planned: the range, the trigger, the stop, the target and the size, with every number written to a file",
+    "Checking a trade idea against the stock's own recent sessions before you risk money, with odds you can repeat from the same seed",
+    "Sizing a position to a fixed dollar loss instead of a gut feeling, on a paper account first",
+    "Claude Code users who want the data tools to run without API keys, signups or pip installs",
+  ],
+  notFor: [
+    "Anyone looking for a strategy that makes money: the pack does arithmetic on public data and says itself that most day traders lose",
+    "Trading on news days with the Time Machine alone; it replays ordinary past sessions and missed our test day's move completely",
+    "Real-time execution: the data is Yahoo's free chart endpoint in 1- or 5-minute bars, which can lag or be rate-limited",
+    "Options, margin or short selling, which stay off unless you turn them on, and chat apps without a shell, where the Python tools cannot run",
+  ],
+  howItWorks: [
+    {
+      title: "Find the setup",
+      text: "trader-scanner builds a universe of about 5,900 US-listed stocks from Nasdaq Trader's lists, then reads their 5-minute charts and lists the ones that closed above their 15-minute opening range, with the time, price and how far over. trader-news pulls the morning's headlines and SEC filings for those symbols.",
+    },
+    {
+      title: "Time the entry, plan the exit",
+      text: "trader-entry checks a symbol bar by bar and says waiting, triggered or expired. trader-exit then writes the plan before any buy: a stop (by default the middle of the opening range), a target as a multiple of the risk, and a time to be out, 3:55 PM, win or lose.",
+    },
+    {
+      title: "Replay it 10,000 times",
+      text: "trader-timemachine builds 10,000 versions of the rest of the session, each 5-minute bar drawn from the stock's own bars at the same time of day over its last full sessions. It reports how often the target or the stop came first, the spread of closing prices, and how the same rule did on each of those real sessions. A fixed seed means anyone gets the same numbers.",
+    },
+    {
+      title: "Size, check, and only then trade",
+      text: "trader-budget sizes the position so a stop-out costs no more than your max loss and writes a bracket order. trader-risk passes or blocks it against your daily limits, entry window and cash. trader-broker shows the ticket and sends it to Alpaca's MCP server only after you type yes; paper trading is the default. trader-alerts rings on the stop, the target and the close.",
+    },
+    {
+      title: "Research on the side",
+      text: "trader-analyst reads a company's quarterly figures from SEC XBRL filings. trader-pelosi reads the periodic transaction reports members of Congress file with the House Clerk. Every skill writes into one trader/ folder, and each reads what the last one wrote.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Ask Claude",
+      code: "https://github.com/Jakeschincariol/day-trader-skill\n\ninstall skill",
+      note: "The README's own one-step install: paste the repository link and ask Claude to install it.",
+    },
+    {
+      label: "Or add the plugin to Claude Code",
+      code: "/plugin marketplace add Jakeschincariol/day-trader-skill\n/plugin install day-trader-skill@day-trader-skill",
+      note: "As a plugin the commands are namespaced, such as /day-trader-skill:trader-scanner. That is how we ran it.",
+    },
+    {
+      label: "Or copy the skills for plain /trader-* commands",
+      code: "git clone https://github.com/Jakeschincariol/day-trader-skill.git\ncp -r day-trader-skill/trader-* ~/.claude/skills/",
+      note: "Copy them into a project's .claude/skills/ instead to keep them local to that project. The tools need Python 3.8 or later and nothing else.",
+    },
+    {
+      label: "Set your limits",
+      code: "cp day-trader-skill/trader-budget/config.example.json trader/config.json",
+      note: "The example is a $5,000 account, $50 max loss a trade, $150 a day, three trades a day, paper trading on. The SEC tools (news filings, analyst) also need your name and email in sec_user_agent or the SEC_USER_AGENT environment variable.",
+    },
+    {
+      label: "Try it on today's market",
+      code: "Use the day trader skills. Scan for opening-range breakouts, pick the strongest, plan the stop and target, run the Time Machine and size it for my paper account. Don't place any orders.",
+      note: "To learn without risk, ask it to replay a past session with --now, as we did. Nothing is placed until you approve one exact order in /trader-broker.",
+    },
+  ],
+  test: {
+    date: "2026-11-05",
+    agent: "Claude Code 2.1.318, headless (claude -p), project settings only, plugin loaded with --plugin-dir",
+    model: "claude-opus-5-5",
+    commit: "3d0f4ef",
+    task: "Use the day trader skills. The US market closed today, Wednesday November 4, 2026. Replay today's session as if it were 10:15 AM New York time: scan for opening-range breakouts, pick the strongest one, plan the exit (stop and target), run the Time Machine on that plan, and size it for a $5,000 paper account with a $50 max loss per trade. Don't place any orders and don't connect a broker. Then check what that stock actually did for the rest of today and tell me whether the stop or the target was hit first. Keep all files in ./trader in this folder. Don't ask me questions: decide yourself.",
+    runs: [
+      { label: "Replay of 4 Nov 2026 at 10:15 AM", outcome: "DUOL picked, planned and sized; stop hit at 15:10", time: "9 min", cost: "$0.68", turns: 28 },
+    ],
+    shots: [
+      {
+        src: "/skills/day-trader-skill/duol-replay-chart.jpg",
+        alt: "Five-minute candlestick chart of DUOL on 4 November 2026: an opening range from 157 to 164.50, a breakout at 10:00, an entry line at 174.24 at 10:15, a target line far above at 201.22 and a stop line at 160.75 that the price reaches at 15:10",
+        caption: "What really happened, drawn by Ordalin from the 5-minute bars the agent saved. The breakout fired at 10:00 at 165.79; the agent entered at 10:15, 5.9% above the range. DUOL topped at 175.56 on that bar, drifted all day and hit the stop at 15:10. The target was never close.",
+        width: 1600,
+        height: 900,
+      },
+    ],
+    samples: [
+      {
+        label: "trader-scanner at 10:15 AM",
+        mono: true,
+        note: "The first lines of the scan. It checks the 200 most traded candidates and says so; --max-confirm 0 checks all of them.",
+        text: `Opening-range breakout scan, Wed 2026-11-04 10:15 AM ET: 15-minute range (9:30 to 9:45 AM), 5-minute bars, Yahoo.
+Fetched 5,936 of 5,936 charts; 2,583 usable (511 under the price / volume floor); 1,025 candidates, 200 confirmed with real highs and lows.
+PARTIAL: 825 more candidates were not checked (only the 200 most traded are; --max-confirm 0 checks all).
+120 of the 200 checked charts closed above their opening-range high by 10:15 AM:
+   9:50 AM  ABNB      $176.20  range 172.90 to 175.54  +0.37% over
+   9:50 AM  AMD       $510.15  range 476.50 to 508.08  +0.41% over
+   9:50 AM  ANET      $187.60  range 176.66 to 186.83  +0.41% over`,
+      },
+      {
+        label: "trader-entry: the warning the agent passed over",
+        mono: true,
+        note: "The agent picked DUOL because it was furthest above its range at 10:15, up 36% on the day, and planned from the 10:15 price.",
+        text: `DUOL  Wed 2026-11-04 10:15 ET  opening-range breakout (15-minute range) on 5-minute bars (Yahoo, free, can lag)
+Opening range 9:30-9:45: high $164.50, low $157.00 (3 of 3 bars).
+TRIGGERED 10:00 AM at $165.79: the 9:55 bar (bar 5) closed above the range high $164.50 (+0.79%).
+That was 15 minutes ago; the last close is $174.24 (10:10 bar). A late entry is a different trade: the price, the stop distance and the odds have moved.
+Nothing was placed.`,
+      },
+      {
+        label: "trader-exit: the plan",
+        mono: true,
+        text: `Exit plan: DUOL long, Wed 2026-11-04, opening-range breakout on 5-minute bars
+  Entry         $174.24
+  Stop          $160.75  opening-range midpoint: ($164.50 + $157.00) / 2 = $160.75
+  Target        $201.22  2R (two times the risk)
+  Risk a share  $13.49 (7.74% of the entry)
+  Reward:risk   2.0
+  Flat by       15:55 ET, win or lose: no overnight hold`,
+      },
+      {
+        label: "trader-timemachine: 10,000 replays",
+        mono: true,
+        note: "The replays came from 46 ordinary sessions, so almost none moved far enough to reach either line. The real day did.",
+        text: `10,000 replays of the rest of the session, 10:15 AM to 3:55 PM (68 five-minute bars), seed 19.
+Each bar is drawn whole from DUOL's own 5-min bars at the same time of day (+-2 bars) over its last 46 full sessions (2026-08-12 to 2026-11-03).
+
+  target first   0.0 %
+  stop first     0.1 %
+  neither        100.0 %  still open at 3:55 PM
+  green          52.5 %   target first, or above the entry at 3:55 PM
+
+  Price at 3:55 PM: median 174.50, 90 % of replays between 167.99 and 181.16.
+
+History: the same rule (15-min opening range, stop at the opening-range midpoint, 2R target) on each of those 46 real sessions fired 20 times: 6 target, 6 stop, 8 neither. Average R +0.470.
+
+A simulation built from DUOL's own last 46 full sessions. It is not a prediction: earnings, news and halts can do things those sessions never did.`,
+      },
+      {
+        label: "trader-budget: the size",
+        mono: true,
+        text: `Limits (whole shares; the smallest one wins):
+  max loss      $50 max loss / 13.49 risk a share                            3 shares  <- binds
+  position cap  75% of $5,000 = $3,750 / 174.24                             21 shares
+  max order     $4,000 / 174.24                                             22 shares
+  cash          budget $5,000 minus the $500 cash buffer = $4,500 / 174.24  25 shares
+
+Size: 3 shares of DUOL = $522.72 at 174.24. Max loss at the stop: 3 x 13.49 = $40.47.
+
+Proposed bracket order (place_stock_order arguments, nothing has been placed):
+  buy 3 DUOL, market, day, take-profit 201.22, stop-loss 160.75`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What is the Day Trader skill?",
+      a: "A free pack of 11 Claude skills for intraday stock trading by Jake Schincariol: chart scanner, news monitor, entry timer, exit planner, Time Machine, risk manager, budget manager, order executor, price alerts, earnings analyst and a Congress trade tracker. Each one is a short Python script plus instructions that tell Claude when and how to run it.",
+    },
+    {
+      q: "Can it place trades on its own?",
+      a: "No. Only trader-broker can lead to an order, and only after trader-risk passes that exact order and you type yes in the chat. It sends orders through Alpaca's MCP server, which defaults to a paper account, and the README asks you to set that connector to Needs approval so Claude asks again. We did not connect a broker.",
+    },
+    {
+      q: "What is the Time Machine?",
+      a: "A Monte Carlo replay of the rest of the trading day. It rebuilds the session 10,000 times from the stock's own 5-minute bars at the same time of day over its recent full sessions, and counts how often your target or your stop came first. It also runs the same rule on each of those real sessions. It cannot know about news: on our test day DUOL had jumped 36% and kept moving far more than any replay, so the replays said 100% would hit neither line, and the stop was hit.",
+    },
+    {
+      q: "Do I need API keys or a paid data feed?",
+      a: "No. The data comes from Yahoo Finance's free chart endpoint, Nasdaq Trader's symbol files, SEC EDGAR and the House Clerk, with no signup. Yahoo's endpoint is unofficial and can lag, change or rate-limit, so check anything that matters against your broker. The SEC tools ask for your name and email as a user agent, which the SEC requires.",
+    },
+    {
+      q: "Can I test it without risking money?",
+      a: "Yes. Every tool takes a --now time, so you can replay any recent session as if it were still running, which is how we tested it. Paper trading is the default for orders, and the pack refuses options, margin and short selling unless you turn them on.",
+    },
+    {
+      q: "Does it handle the pattern day trader rule?",
+      a: "The README notes that FINRA removed the $25,000 pattern day trader minimum on 4 June 2026 and that brokers may phase the change in until October 2027. If yours still applies the old rule, set pdt_guard to true and trader-risk counts your day trades.",
+    },
+    {
+      q: "Is it financial advice?",
+      a: "No. The author says it is software that reads public data and does arithmetic, that most people who day trade lose money, and that you should talk to a licensed professional if you need advice. Our test is one replayed trade, and it lost on paper.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes, under the MIT licence. The tools are standard-library Python with nothing to install. You pay for the Claude plan or API usage you run it with; our replay cost $0.68 at API prices.",
+    },
+  ],
+};
+
+## What we tested
+
+We wanted to see the pack run end to end on real data with an outcome we could check, without a broker. So we picked a finished session, Wednesday 4 November 2026, and asked Claude Code to replay it as if it were 10:15 AM New York time: scan for opening-range breakouts, pick the strongest, plan the stop and target, run the Time Machine, size the trade for a $5,000 paper account with a $50 max loss, place nothing, and then say whether the stop or the target was hit first.
+
+The plugin was loaded from the repository at commit 3d0f4ef (version 2.0.0). Claude Code saw all 11 skills, ran the scanner, entry, exit, Time Machine and budget tools with the --now flag set to 10:15, and saved every step into a trader/ folder.
+
+## What we found
+
+- **The pipeline ran without help.** Universe, scan, entry check, exit plan, 10,000 replays and sizing took 9 minutes and 28 turns. Every number in the answer traces back to a JSON file the tools wrote, and the scanner says plainly when it checked only part of the list (200 of 1,025 candidates).
+- **The agent chased.** It picked DUOL because it was furthest above its opening range at 10:15, up 36% on the day. The breakout had fired at 10:00 at 165.79; by 10:15 the price was 174.24. trader-entry said "A late entry is a different trade". The agent used the late price anyway, which put the stop 7.74% away and the 2R target at 201.22, 15% above the entry.
+- **The Time Machine could not see this day coming.** Built from DUOL's previous 46 ordinary sessions, the replays put 100% of outcomes between the lines at the close, with a median of 174.50. On the real day DUOL had opened 26% above the previous close and kept swinging. The tool prints its own warning that news and earnings can do what past sessions never did, and this was that case.
+- **The sizing worked as promised.** The $50 max loss allowed 3 shares, $522.72. The stop filled near 160.75 on the 15:10 bar, so the paper loss was about $40, inside the limit. A late stop-out is exactly what the size is for.
+- **It skipped a step.** The agent never ran trader-news, which the README puts second in the flow. A news check would have shown why DUOL was up 36% that morning.
+
+One replayed trade with one model is an example, not a measure of the strategy. The agent did the arithmetic right; the trade it chose was the problem.

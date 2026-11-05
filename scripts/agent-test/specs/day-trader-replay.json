@@ -1,0 +1,12 @@
+{
+  "kind": "skill",
+  "name": "day-trader-replay",
+  "repo": "https://github.com/Jakeschincariol/day-trader-skill",
+  "commit": "3d0f4ef",
+  "install": {
+    "claude": { "plugin": "." }
+  },
+  "task": "Use the day trader skills. The US market closed today, Wednesday November 4, 2026. Replay today's session as if it were 10:15 AM New York time: scan for opening-range breakouts, pick the strongest one, plan the exit (stop and target), run the Time Machine on that plan, and size it for a $5,000 paper account with a $50 max loss per trade. Don't place any orders and don't connect a broker. Then check what that stock actually did for the rest of today and tell me whether the stop or the target was hit first. Keep all files in ./trader in this folder. Don't ask me questions: decide yourself.",
+  "env": { "DO_NOT_TRACK": "1" },
+  "timeoutMinutes": 60
+}

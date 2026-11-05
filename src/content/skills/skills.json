@@ -129,6 +129,20 @@
       "language": "Works on videos in any language (on-screen text is read in Chinese and English, or Japanese); the agent replied in English when asked, but report.html, report.md and the generated prompts are in Chinese",
       "produces": "A shot-by-shot breakdown of how a video was made (filmed, AI video, 3D, code-rendered, screen recording and more), its captions, edit and sound, a remake plan, and report.html, report.md, breakdown.json, frame sheets and separated voice and music tracks",
       "checked_on": "2026-11-04"
+    },
+    {
+      "slug": "day-trader-skill",
+      "name": "Day Trader skill",
+      "display_name": "day-trader-skill",
+      "author": "Jake Schincariol (opusjake.ai)",
+      "repo": "https://github.com/Jakeschincariol/day-trader-skill",
+      "license": "MIT",
+      "version": "2.0.0",
+      "agents": "Claude Code (as a plugin or copied skills) and Claude chat with a single SKILL.md pasted in, without the Python tools",
+      "install": "Paste the repository link into Claude with \"install skill\", or run /plugin marketplace add Jakeschincariol/day-trader-skill, then /plugin install day-trader-skill@day-trader-skill; or copy the trader-* folders into ~/.claude/skills/. Needs Python 3.8 or later, nothing to pip install",
+      "language": "English",
+      "produces": "Opening-range breakout scans, entry checks, exit plans, 10,000-run Time Machine odds, position sizes and bracket orders for paper or Alpaca trading, price alerts, earnings summaries and Congress trade disclosures, all as files in a trader/ folder",
+      "checked_on": "2026-11-05"
     }
   ]
 }

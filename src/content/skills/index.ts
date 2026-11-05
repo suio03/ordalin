@@ -17,5 +17,6 @@ export const REGISTRY: SkillsRegistry = {
     "cloudflare-security-audit": { status: "published", load: () => import("./skills/cloudflare-security-audit.mdx") },
     "taste-skill": { status: "published", load: () => import("./skills/taste-skill.mdx") },
     "rea-video": { status: "published", load: () => import("./skills/rea-video.mdx") },
+    "day-trader-skill": { status: "published", load: () => import("./skills/day-trader-skill.mdx") },
   },
 };
