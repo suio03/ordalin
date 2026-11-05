@@ -1,0 +1,143 @@
+export const metadata = {
+  title: "Viggle Remake: free video-remake model, GPUs, ComfyUI and MCP",
+  description: "Viggle Remake recasts the people in a video or changes its scene while the motion, camera and soundtrack stay. What it does, where to try it free, which GPU you need, how ComfyUI and the MCP agent work, and the licence terms.",
+  author: "Ordalin",
+  publishedAt: "2026-11-06",
+  updatedAt: "2026-11-06",
+  status: "published",
+  topics: ["Video & Animation"],
+  tools: ["viggle", "minimax-h3", "comfyui"],
+  relatedLinks: [
+    { href: "/categories/video/video-editing", label: "AI video editing tools" },
+    { href: "/guides/openjutsu", label: "Openjutsu guide" },
+    { href: "/mcp", label: "MCP servers" },
+  ],
+};
+
+export const demos = [
+  { src: "swap-pineapple-mascot", caption: "Swap: a pizza maker becomes a pineapple mascot, dough toss and all (9 s)." },
+  { src: "swap-astronaut", caption: "Swap: a dancer becomes an astronaut in one handheld take (14 s)." },
+  { src: "swap-flamingos", caption: "Swap: both dancers of a ballroom couple are recast at once (14 s)." },
+  { src: "edit-remove-turbines", caption: "Edit: the wind turbines are removed from a drone shot (9 s)." },
+  { src: "edit-add-whale", caption: "Edit: a humpback whale is added to a sea of clouds (11 s)." },
+  { src: "edit-storm-rainbow", caption: "Edit: a sunny river meadow becomes the moment after a storm, with a rainbow (12 s)." },
+];
+
+**Viggle Remake** is an open-weights video model from Viggle that remakes an existing clip. Give it a video, one to four "painted" frames that show what you want, and a written description, and it recasts the people (into other people, animals or mascots) or changes the scene: objects added or removed, a new background, different weather or light. The camera, the motion, the timing and the original soundtrack stay. Viggle published it on Hugging Face on 4 November 2026. It is free to download, but running it yourself takes a large GPU; the easier ways in are a free Hugging Face demo for 5-second clips and the [Viggle app](/tools/viggle).
+
+Everything below comes from Viggle's [model card](https://huggingface.co/Viggle/Viggle-Remake), its ComfyUI, prompting and MCP documents, and the [Hugging Face Space](https://huggingface.co/spaces/Viggle/viggle-remake), checked on 6 November 2026. We have not run the model ourselves; the speed and memory figures are Viggle's own measurements on NVIDIA B200 cards.
+
+## What the results look like
+
+These are Viggle's own example clips, played from the model's Hugging Face page. Each shows the source on the left and the remake on the right.
+
+{demos.map((demo) => (
+    <figure key={demo.src}>
+      <video
+        src={`https://huggingface.co/Viggle/Viggle-Remake/resolve/main/examples/media/${demo.src}.mp4`}
+        controls
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      />
+      <figcaption>{demo.caption}</figcaption>
+    </figure>
+  ))}
+
+The model card has more, including whole film scenes remade with their original soundtracks. The source footage in all of them is third-party and credited on the card.
+
+## Viggle Remake at a glance
+
+- **Made by:** Viggle, the company behind the Viggle app. Viggle calls it the "Viggle-Animate v2" it previewed earlier: [Viggle-Animate](https://huggingface.co/Viggle/Viggle-Animate) replaces a character, Remake also edits objects and scenes.
+- **What it is:** two LoRA adapters, `swap` and `edit`, on top of [MiniMax H3](/tools/minimax-h3), MiniMax's open video model. You need the H3 base model as well.
+- **Price:** free to download. The weights fall under the MiniMax H3 Community License; the code is Apache 2.0 (see the licence section below).
+- **Input:** a source video, one to four painted reference frames, and a prompt in MiniMax H3's six-section format.
+- **Output:** the remade video at 24 fps, 832×480 or 1280×736, with the source soundtrack. It does not create new sound.
+- **Length:** one render covers about 12 seconds (90–345 frames). Longer videos are split into windows, which the MCP agent does for you.
+- **Hardware:** one 80 GB+ GPU for the reference script; ComfyUI with the int8 or GGUF files runs on cards from 12 GB.
+
+## Two modes: swap and edit
+
+- **Swap** (`lora/swap`) replaces people and characters, one or several at a time. The new character can be another person, an animal, a mascot or a cartoon, as long as you can paint it into a frame.
+- **Edit** (`lora/edit`) does everything else: remove, replace or insert objects, change the background, the weather or the light, or restyle the shot. The people stay.
+
+You pick one mode per render.
+
+## Three ways to use it
+
+### 1. In the browser, free: the Hugging Face Space
+
+The [Viggle Remake Space](https://huggingface.co/spaces/Viggle/viggle-remake) runs on Hugging Face's free ZeroGPU hardware. You upload a video, one to three reference images and a six-section prompt, pick swap or edit, and optionally pin each reference to a frame. It renders **up to 124 frames (5.2 seconds)**; longer sources are cut. The first render of a new prompt waits about a minute longer, because the prompt is encoded on the CPU first. You still have to paint the reference frames and write the prompt yourself.
+
+### 2. In the Viggle app
+
+The model card points people who "just want to use it" to the [Viggle app](https://viggle.ai/meme/app/home?ui=v2), which runs Remake for you with no setup or GPU. The app's plans and credits are on our [Viggle page](/tools/viggle).
+
+### 3. On your own GPU: `sample.py` or ComfyUI
+
+**The reference script.** Download about 144 GB of MiniMax H3 files and about 5.5 GB of Remake LoRAs and scripts, then run `inference/sample.py` with `--mode swap` or `--mode edit`, your painted frames (`--ref`), optional pins (`--pin`) and the prompt. It needs **one GPU with 80 GB or more** at bf16; Viggle measured 87 GiB in use for a 226-frame render at 832×480. Do **not** `git clone` the repository: the full repo is about 210 GB. Smaller LoRA files at rank 128 and 64 (1.34 and 0.67 GB) give near-identical output.
+
+**ComfyUI.** ComfyUI already supports MiniMax H3; Remake adds a small node pack and ready workflows for swap and edit (tested with ComfyUI 0.42.0). With the bf16 base and the LoRA it runs in 80 GB. For smaller cards, Viggle ships each mode as a single merged file:
+
+| Your GPU | At 832×480 (Viggle's recommendation) |
+| --- | --- |
+| 12 GB | GGUF Q4_K_M or Q8_0, with `--reserve-vram 8` |
+| 16 GB | int8; or GGUF Q4_K_M / Q6_K with `--reserve-vram 6` |
+| 24 GB | int8 or Q4_K_M; Q6_K or Q8_0 with `--reserve-vram 6` |
+| 32 GB and up | int8 or Q8_0 |
+
+The files are 14.3 GB (Q4_K_M) to 22.3 GB (Q8_0). Two things to know:
+
+- **System RAM matters.** ComfyUI kept 47–55 GB in RAM at 832×480, and 55–80 GB at 1280×736 with the smaller files.
+- **The small cards were emulated.** Viggle ran these tests on B200s capped to the stated memory, and has not timed real consumer cards. Expect them to be slower than the B200's roughly 85–95 seconds for a 9-second clip at 832×480.
+
+In ComfyUI, load the LoRA with **LoraLoaderBypassModelOnly**, not LoraLoaderModelOnly: the plain loader merges it at bf16 and loses much of it. Viggle measured the merged render as visibly further from the reference.
+
+## The agent: Viggle Remake MCP
+
+The repository also contains an MCP server that lets a coding agent such as Claude Code or Codex remake a whole film from one sentence ("recast the band as cats"). The agent finds the cuts, plans who is where, has keyframes painted by an image model, writes the prompts, queues renders, reviews the takes and assembles the result with the soundtrack. The server gives it 27 tools and enforces image and spend budgets.
+
+What it needs:
+
+- **Your own render GPUs.** The MCP server itself needs no GPU, but each render worker runs bf16 on one card and needs **about 94 GiB free** (a 96 GB card) for drafts; 80 GB cards are refused. Each worker also uses about 58 GiB of system RAM. The worker does not quantize or offload.
+- **An image model for the keyframes**: an OpenAI-compatible images API (`gpt-image-2` by default, the only paid step, capped at $10 a session by default), or a Codex login on a ChatGPT plan, whose image quota is used instead.
+
+Viggle's example run recast a 2-minute music video with eight characters in 86 minutes on two workers, with 81 image calls and no API spend. For Claude Code, you register the server with `claude mcp add`, add the server's `AGENTS.md` rules to your project, and raise the tool timeout, because a render wait can block for 30 minutes. Install the MCP folder with `hf download Viggle/Viggle-Remake --include "mcp/*"`, not the whole repository.
+
+## Painted frames and the prompt
+
+Remake does not take a plain instruction. You give it:
+
+- **Painted frames:** frames of the source repainted in an image editor to show the result (the new character, the turbines gone). They decide the identity and the look. Viggle made its examples with OpenAI's `gpt-image`. One painted frame per shot is usually enough.
+- **Pins (optional):** the source frame each painted frame came from. A pinned frame is held at that point of the output. Pin when the clip has cuts or the composition matters; the output then copies the painted frame's composition there.
+- **A six-section prompt** in MiniMax H3's format: subject definitions, summary, what is kept, a shot-by-shot description with timestamps, soundscape and music.
+
+Viggle's three tips: describe the target video rather than give an order ("a pineapple mascot tosses the dough", not "replace the man with a pineapple"); say plainly what changes, because the "what is kept" section is followed literally; and describe each subject well enough to tell it apart from anyone similar in the frame. Free-form prompts are untested. The exact prompts behind the example clips are in the repository's `examples/prompts/` folder, and are the quickest way to learn the format.
+
+## Limitations
+
+- **About 12 seconds per render;** longer videos are rendered in windows and spliced.
+- **Heavy setup** on your own hardware: the 144 GB base model, an 80 GB GPU for the reference script, or 12–32 GB plus 50 GB or more of RAM through ComfyUI.
+- **Sound is carried, not made.** A silent source gives a silent result.
+- **Known failures** listed by Viggle: a non-humanoid character in one long take, small artefacts in fine detail, and shots drifting in time when a multi-shot clip is rendered without pins.
+- **No identity or consent check.** The face comes from whatever frame you paint, and the model cannot verify who it is. Viggle asks you to use it only on people who have agreed and to label the output as AI-generated.
+
+## Licence and commercial use
+
+The weights are a derivative of MiniMax H3, so the **MiniMax H3 Community License** applies. If you ship a product or service on them, the model card lists these duties:
+
+- show "MiniMax H3" prominently in the product's interface;
+- pass the licence and the `NOTICE` file on with the weights and mark modified files;
+- get written permission from MiniMax first if your products and services make more than US$20 million a year.
+
+Viggle also asks for a visible "Powered by Viggle Remake" credit. The scripts, ComfyUI nodes and MCP server are Apache 2.0. Neither licence covers the third-party footage in the examples or the likenesses of people in it. The MCP's optional face check uses InsightFace models licensed for non-commercial research only, so leave it off for commercial work.
+
+## Viggle Remake vs Openjutsu and the Viggle app
+
+- **[Openjutsu](/guides/openjutsu)** is a community ComfyUI app on the same MiniMax H3 base. It tracks people with SAM and paints the first frame for you, and its author tested it on a 16 GB card. Remake gives you Viggle's trained swap and edit adapters, but you paint the frames and write the six-section prompt yourself.
+- **The Viggle app** is the no-setup route to the same model, with Viggle's own plans and credits. The open weights are for people who want to run it locally, inside ComfyUI, or through an agent.
+
+We have not compared output quality side by side.
+
+Sources: [Viggle Remake model card](https://huggingface.co/Viggle/Viggle-Remake) with its `COMFYUI.md`, `PROMPTING.md`, `mcp/README.md` and licence files, and the [Viggle Remake Space](https://huggingface.co/spaces/Viggle/viggle-remake). Checked on 6 November 2026.

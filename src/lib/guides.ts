@@ -38,6 +38,7 @@ const guideLoaders: Record<string, GuideLoader> = {
   "nemotron-3-5-transcribe": () => import("@/content/guides/nemotron-3-5-transcribe.mdx"),
   "openjutsu": () => import("@/content/guides/openjutsu.mdx"),
   "suno-mcp": () => import("@/content/guides/suno-mcp.mdx"),
+  "viggle-remake": () => import("@/content/guides/viggle-remake.mdx"),
   "yue2-prompting-guide": () => import("@/content/guides/yue2-prompting-guide.mdx"),
 };
 

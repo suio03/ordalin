@@ -142,6 +142,9 @@
 .prose pre { overflow-x: auto; margin: 0 0 var(--space-xl); padding: var(--space-lg); border-radius: var(--radius-medium); color: var(--color-text-primary); background: var(--color-surface-raised); }
 .prose pre code { padding: 0; background: transparent; }
 .prose img { max-width: 100%; height: auto; border-radius: var(--radius-medium); }
+.prose figure { margin: 0 0 var(--space-xl); }
+.prose video { display: block; width: 100%; height: auto; border-radius: var(--radius-medium); background: var(--color-surface-muted); }
+.prose figcaption { margin-top: var(--space-xs); color: var(--color-text-secondary); font-size: var(--font-size-body-compact); line-height: var(--line-height-body); }
 .prose table { display: block; overflow-x: auto; margin: 0 0 var(--space-xl); border-collapse: collapse; font-size: var(--font-size-body-compact); line-height: var(--line-height-body); }
 .prose th,
 .prose td { padding: var(--space-sm) var(--space-md); border-bottom: var(--border-width) solid var(--color-border-subtle); text-align: left; vertical-align: top; }
