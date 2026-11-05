@@ -73,6 +73,10 @@ export function SiteHeader() {
 
 type FooterColumn = { title: string; links: Array<{ href: string; label: string }> };
 
+// Footer lists of content pages show the newest entries; older ones stay two clicks
+// away through the hub linked at the end of the column.
+const FOOTER_RECENT_LIMIT = 15;
+
 // Footer directory: links every indexable listing page so crawlers reach each one
 // within two clicks of any page. Categories below indexableCategoryMinimum are noindex.
 async function directoryColumns(): Promise<FooterColumn[]> {
@@ -82,8 +86,9 @@ async function directoryColumns(): Promise<FooterColumn[]> {
     listTasks(),
     listCollections(),
   ]).catch(() => [[], [], [], []] as const);
-  const skills = publishedSkillSlugs();
-  const servers = publishedServerSlugs();
+  // Registries are appended in publish order, so reversing puts the newest first.
+  const skills = publishedSkillSlugs().reverse().slice(0, FOOTER_RECENT_LIMIT);
+  const servers = publishedServerSlugs().reverse().slice(0, FOOTER_RECENT_LIMIT);
   const guides = await listPublishedGuides().catch(() => []);
   return [
     {
@@ -108,16 +113,22 @@ async function directoryColumns(): Promise<FooterColumn[]> {
     },
     {
       title: "Agent skills",
-      links: skills.map((slug) => ({ href: skillsPath.skill(slug), label: skillName(getSkill(slug)) })),
+      links: [
+        ...skills.map((slug) => ({ href: skillsPath.skill(slug), label: skillName(getSkill(slug)) })),
+        ...(skills.length ? [{ href: skillsPath.overview, label: "All agent skills" }] : []),
+      ],
     },
     {
       title: "MCP servers",
-      links: servers.map((slug) => ({ href: mcpPath.server(slug), label: getServer(slug).name })),
+      links: [
+        ...servers.map((slug) => ({ href: mcpPath.server(slug), label: getServer(slug).name })),
+        ...(servers.length ? [{ href: mcpPath.overview, label: "All MCP servers" }] : []),
+      ],
     },
     {
       // Newest first, from listPublishedGuides().
       title: "Guides",
-      links: [...guides.map((guide) => ({ href: `/guides/${guide.slug}`, label: guide.title })), { href: "/guides", label: "All guides" }],
+      links: [...guides.slice(0, FOOTER_RECENT_LIMIT).map((guide) => ({ href: `/guides/${guide.slug}`, label: guide.title })), { href: "/guides", label: "All guides" }],
     },
   ].filter((column) => column.links.length);
 }
