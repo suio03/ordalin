@@ -71,6 +71,13 @@
       "when": 1791457463449,
       "tag": "0009_ai_detection_tag",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1793936495562,
+      "tag": "0010_3d_generation_tag",
+      "breakpoints": true
     }
   ]
 }

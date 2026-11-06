@@ -23,6 +23,7 @@
     { "slug": "image-generation", "name": "Image generation", "kind": "category", "group": "image", "description": "Create images and visual concepts from prompts or references." },
     { "slug": "image-editing", "name": "Image editing", "kind": "category", "group": "image", "description": "Retouch, transform, expand, or refine existing images." },
     { "slug": "brand-design", "name": "Brand design", "kind": "category", "group": "image", "description": "Create reusable brand identities and campaign systems." },
+    { "slug": "3d-generation", "name": "3D generation", "kind": "category", "group": "image", "description": "Generate, texture, and convert 3D models, scenes, and relief prints from text or images." },
     { "slug": "video-generation", "name": "Video generation", "kind": "category", "group": "video", "description": "Generate video from text, images, briefs, or references." },
     { "slug": "video-editing", "name": "Video editing", "kind": "category", "group": "video", "description": "Edit and polish recorded or generated video." },
     { "slug": "screen-recording", "name": "Screen recording", "kind": "category", "group": "video", "description": "Record screens and turn captures into product demos." },
