@@ -36,6 +36,9 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
     devDependencies:
+      '@mdx-js/mdx':
+        specifier: 3.1.1
+        version: 3.1.1
       '@opennextjs/cloudflare':
         specifier: ^1.19.4
         version: 1.20.2(next@16.2.11(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(wrangler@4.125.0(@cloudflare/workers-types@5.20260822.1))
