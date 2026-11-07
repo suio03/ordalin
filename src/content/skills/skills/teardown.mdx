@@ -1,0 +1,150 @@
+export const meta = {
+  title: "Teardown Tested: A Claude Code Skill That Builds 3D Machine Simulators",
+  description:
+    "Teardown is a free Claude Code skill that builds a working 3D simulator of a real machine as one offline HTML page, then films it with sound. See our excavator test.",
+  verdict:
+    "Asked for a hydraulic excavator arm, it built a working 3D simulator of a 20-tonne excavator as one 814 KB offline page and filmed a 20-second 1080p, 60 fps video with sound. Its numbers came within about 3 % of a Cat 320 spec sheet. It took 38 minutes, 124 turns and $9.29 at API prices, and rendering needed the real GPU, outside Claude Code's command sandbox.",
+  summary:
+    "Teardown is a free, MIT-licensed skill for Claude Code by elvarofficial. You ask how a machine works, an engine, a landing gear, a pump, a walking linkage, and it builds the machine in three.js as one offline HTML page: the machine runs in the middle, panels around it read the real numbers, buttons open the part doing the work, and when nobody touches the page it tours itself with a cursor. The same code records that tour frame by frame to a 60 fps MP4, with a sound score generated in Python from the same timeline. Its rules: start from a real reference, use real dimensions, and drive everything from one input so the gauges can never disagree with the motion. We asked it for a hydraulic excavator arm and a 20-second video.",
+  bestFor: [
+    "Explainer videos and interactive pages about how a machine or mechanism works",
+    "Teachers, engineers and technical writers who want the numbers on screen to be real",
+    "Claude Code users with a GPU who can let a long render run",
+  ],
+  notFor: [
+    "Quick clips: our 20-second video took 38 minutes and $9.29",
+    "Machines with no published dimensions; the skill tells the agent never to invent one from a sentence",
+    "Fully sandboxed setups: headless Chromium inside Claude Code's command sandbox had no WebGL, so rendering had to run outside it",
+  ],
+  gallery: {
+    heading: "The author's demos",
+    intro:
+      "Three simulators from the README, each a robotic animal built with the skill. The repository also ships three complete machines to start from: a cross-plane V8, the Cessna 337 main landing gear and Theo Jansen's Strandbeest.",
+    items: [
+      { src: "/skills/teardown/bee.jpg", label: "Robotic bee", title: "Mellis HB-7", caption: "A robotic bee simulator with live panels around the model.", video: "https://raw.githubusercontent.com/elvarofficial/teardown/a91262a/docs/bee.gif" },
+      { src: "/skills/teardown/scorpion.jpg", label: "Robotic scorpion", title: "Telson SC-8", caption: "A robotic scorpion simulator.", video: "https://raw.githubusercontent.com/elvarofficial/teardown/a91262a/docs/scorpion.gif" },
+      { src: "/skills/teardown/octopus.jpg", label: "Robotic octopus", title: "Pelagos OC-8", caption: "A robotic octopus simulator.", video: "https://raw.githubusercontent.com/elvarofficial/teardown/a91262a/docs/octopus.gif" },
+    ],
+    credit:
+      "Demo animations by elvarofficial, from the teardown repository (MIT). The skill builds on whaleyxbt/claude-motion (MIT); its recorded sound samples are CC0 from Freesound, prepared by Barty-Bart/motion-graphics.",
+  },
+  howItWorks: [
+    {
+      title: "Real numbers first",
+      text: "The agent finds a reference and the real dimensions (bore, stroke, tooth count, link lengths) before it models anything. The math lives in its own file, with one input, such as a crank angle or a cylinder stroke, posing every part and computing every readout.",
+    },
+    {
+      title: "The machine, the panels, the tour",
+      text: "Geometry is built from code in three.js, panels and charts sit in a fixed 1600 × 900 overlay, and a script of camera moves, cutaways and button presses is written as a pure function of time. The live page plays that script as an auto tour until someone clicks, drags or presses a key.",
+    },
+    {
+      title: "Review sheets, not guesses",
+      text: "The agent cannot watch video, so the skill has it render sheets of stills at every beat of the timeline and check them against a list: parts touch and never pass through each other, numbers match the pose, one focal point per frame, labels readable at phone width. It fixes and re-renders until a pass finds nothing.",
+    },
+    {
+      title: "Film and score",
+      text: "capture.mjs renders the film frame by frame to a 60 fps MP4. A Python sound engine builds the score from the same timeline, accents only, mastered to −14 LUFS, and ffmpeg joins the two.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Install",
+      code: "npx skills add elvarofficial/teardown -g -a claude-code",
+      note: "Then once, in the installed skill folder: npm install && npx playwright install chromium. Needs Node.js 20 or newer, ffmpeg for the video and Python 3 for the sound.",
+    },
+    {
+      label: "Ask for a machine",
+      code: "How does a mechanical watch keep time? Show me as a simulator.",
+      note: "Or build one of the bundled examples first: node sims/build.mjs v8-live writes an offline page to teardown-out/dist/.",
+    },
+    {
+      label: "What we asked",
+      code: "Make a teardown of a hydraulic excavator arm and record a 20-second video of it. Put the HTML page and the video in ./teardown-out in this folder. Do the skill's first-run setup yourself.",
+    },
+  ],
+  test: {
+    date: "2026-11-07",
+    agent: "Claude Code 2.1.319, headless (claude -p), skill installed in the project's .claude/skills",
+    model: "claude-opus-5-5",
+    commit: "a91262a",
+    task: "One of the README's own example requests: a teardown of a hydraulic excavator arm with a 20-second video, in an empty folder, with the agent doing the skill's first-run setup itself.",
+    samples: [
+      {
+        label: "From its final report: accuracy against a Cat 320",
+        mono: true,
+        text: "| Spec                 | Cat 320 reference | Model   |\n| Max dig depth        | 6.72 m            | 6.62 m  |\n| Reach at ground      | 9.86 m            | 9.97 m  |\n| Cutting height       | 9.45 m            | 9.13 m  |\n| Bucket digging force | 163 kN            | 165 kN  |\n| Stick digging force  | 107 kN            | 107 kN  |\n| Main relief pressure | 35 MPa            | 35 MPa  |",
+        note: "The agent picked the Cat 320 as its reference and fitted the pin positions to published range diagrams, not factory drawings, which it said accounts for the up-to-3 % gaps.",
+      },
+      {
+        label: "From its final report: what was missing",
+        text: "The command sandbox has no GPU. Headless Chromium there fails with \"Could not create a WebGL context\", and the skill's bundled Cessna example fails the same way. I worked around it by pointing CHROMIUM at the full Google Chrome for Testing binary and running capture outside the sandbox. That gave the real GPU (Apple M5 Max, Metal).",
+      },
+    ],
+    runs: [
+      { label: "Excavator arm, 20 s video", outcome: "Working simulator page and a 1080p 60 fps film with sound; specs within 3 % of a Cat 320", time: "38 min", cost: "$9.29", turns: 124, tone: "ok" },
+    ],
+    shots: [
+      {
+        src: "/skills/teardown/test-keyframes.jpg",
+        alt: "Four frames from the excavator film: the hero view digging into a trench with the tooth path drawn, the boom lifted and swung over a soil pile, soil falling onto the pile, and a top view of the dump; panels for cylinders, pump, working range, views and dig cycle frame each shot",
+        caption: "Four moments of the 20-second film at 2, 5, 7 and 15 seconds: dig, lift and swing, dump, and the top view. The cursor presses the view and display buttons on its own.",
+        width: 1920,
+        height: 1080,
+      },
+      {
+        src: "/skills/teardown/test-section.jpg",
+        alt: "Side view of the excavator at the start of a dig, with the section display on: cylinders cut open, panels reading boom, stick and bucket stroke, pressure and flow, pump demand 150 L/min, reach 9.10 m and a working-range diagram",
+        caption: "The side view with cylinders cut open. Every number on the panels, strokes, pressures, flows, reach and digging force, is computed from the same pose that moves the arm.",
+        width: 1600,
+        height: 900,
+      },
+      {
+        src: "/skills/teardown/test-linkage.jpg",
+        alt: "Close-up of the excavator's bucket linkage digging, with the bucket cylinder drawn in red and its panel reading 35.0 MPa, head side, at relief",
+        caption: "The linkage close-up mid-dig: the bucket cylinder hits the 35 MPa relief limit and turns red. In this view the cab passes behind the cylinder panel, one composition miss the review loop let through.",
+        width: 1600,
+        height: 900,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What does teardown make?",
+      a: "Two things from the same code: one offline HTML page with a 3D machine you can drive (buttons, sliders, orbit, zoom, keyboard), which tours itself when left alone, and a 60 fps MP4 of that tour with a generated sound score. In our test the page was 814 KB with three.js inlined, and the film was 1920 × 1080 at exactly 20.0 seconds.",
+    },
+    {
+      q: "Are the numbers on screen real?",
+      a: "They are meant to be. The skill makes the agent find real dimensions and compute every gauge from the same function that poses the parts. Our excavator was fitted to a Cat 320 and came within about 3 % on dig depth, reach and cutting height, and matched digging forces and relief pressure. It is still a model fitted to published figures, not factory data.",
+    },
+    {
+      q: "What do I need to run it?",
+      a: "Node.js 20 or newer, then npm install and Playwright's Chromium in the skill folder, plus ffmpeg for the video and Python 3 for the sound. Rendering needs a working WebGL context; in our run the GPU was not reachable from Claude Code's command sandbox, so the agent ran the capture outside it, which the sandbox asks permission for in normal use.",
+    },
+    {
+      q: "How long does it take and what does it cost?",
+      a: "Our 20-second excavator took 38 minutes, 124 turns and $9.29 at API prices on Claude Opus 5.5, most of it spent on the model, the review loop and frame-by-frame rendering. Starting from one of the bundled examples is quicker.",
+    },
+    {
+      q: "Does the page work offline?",
+      a: "Yes. The build script inlines three.js and the fonts into one HTML file, kept under 1 MB so link previews on X and Slack still read its share card. Big models can be kept as separate files next to the page.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes, MIT-licensed. It credits whaleyxbt/claude-motion (MIT) for the runtime, frame capture, sound engine and review rules, and its recorded sound samples are CC0.",
+    },
+  ],
+};
+
+## What we tested
+
+We installed the skill from commit a91262a into an empty project folder and gave Claude Code on Claude Opus 5.5 one of the README's own example requests: a teardown of a hydraulic excavator arm with a 20-second video. The agent had to do the skill's first-run setup itself.
+
+## What we found
+
+- **It did the research first.** The agent picked the Cat 320 as its reference, read its published spec sheets and fitted the boom, stick and bucket linkage to the published working range. Dig depth, reach and cutting height came within about 3 %, and digging forces and the 35 MPa relief pressure matched.
+- **The physics drives the picture.** Three cylinder strokes pose every pin through an exact linkage solver. Pressures come from the load on each cylinder, a cylinder turns red when it hits relief, and the pump slows everything when demand would pass its 429 L/min.
+- **The film is finished work.** 1920 × 1080 at 60 fps, exactly 20.0 seconds, about two dig cycles with five camera views and a cursor pressing the buttons. The sound follows the same timeline: an engine swell on lift, a hiss at relief, a knock when the teeth enter the ground, soil rattling onto the pile. Mastered to −14 LUFS.
+- **The live page works.** An 814 KB offline file with play and pause, a scrubbable timeline, speeds from 0.25× to 2×, four views, four display modes, orbit and zoom. The agent reported 120 fps in Chrome with no console errors.
+- **Rendering needed the real GPU.** Inside Claude Code's command sandbox, headless Chromium could not create a WebGL context, and neither could the skill's own Cessna example. The agent switched to the full Chrome for Testing binary and ran capture outside the sandbox. In an interactive session you would be asked to approve that.
+- **It is slow and not cheap.** 38 minutes and $9.29. Most of it went into the model and repeated review renders.
+- **Small misses.** In the linkage close-up the cab drifts behind the cylinder panel, which the skill's own checklist warns against. The agent kept everything inside the folder apart from two empty scratch files in /tmp.

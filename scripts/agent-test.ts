@@ -33,7 +33,7 @@ type Spec = {
   /** Folder in scripts/agent-test/fixtures/, or "git:<path>" for the tracked files of a local repository. Empty when omitted. */
   fixture?: string;
   install?: {
-    /** Claude Code: a plugin folder (loaded with --plugin-dir, hooks included) or a skill folder (copied into .claude/skills/). */
+    /** Claude Code: a plugin folder (loaded with --plugin-dir, hooks included) or a skill folder (copied into .claude/skills/); "." is a skill at the repository root, named after the repository. */
     claude?: { plugin?: string; skill?: string };
     /** Codex: a skill folder, copied into .agents/skills/. */
     codex?: { skill?: string };
@@ -88,6 +88,11 @@ const fill = (s: string) =>
     if (!value) throw new Error(`${specArg} needs the ${name} environment variable`);
     return value;
   });
+// Copies a skill folder into an agent's skills folder; "." is the repository root, without .git, named after the repository.
+function copySkill(skill: string, skillsDir: string) {
+  const name = skill === "." ? basename(spec.repo).replace(/\.git$/, "") : basename(skill);
+  cpSync(join(repoDir, skill), join(skillsDir, name), { recursive: true, filter: (src) => basename(src) !== ".git" });
+}
 const sh = (cmd: string, cwd: string) => spawnSync("sh", ["-c", cmd], { cwd, encoding: "utf8", env: { ...process.env, ...spec.env } });
 
 mkdirSync(run, { recursive: true });
@@ -141,7 +146,7 @@ function claudeArgs(variant: "with" | "without", ws: string, task: string) {
   if (variant === "with") {
     const install = spec.install?.claude;
     if (install?.plugin) args.push("--plugin-dir", join(repoDir, install.plugin));
-    if (install?.skill) cpSync(join(repoDir, install.skill), join(ws, ".claude", "skills", basename(install.skill)), { recursive: true });
+    if (install?.skill) copySkill(install.skill, join(ws, ".claude", "skills"));
     if (spec.mcp) {
       const config = { mcpServers: { [spec.name]: { command: fill(spec.mcp.command), args: (spec.mcp.args ?? []).map(fill), env: Object.fromEntries(Object.entries(spec.mcp.env ?? {}).map(([k, v]) => [k, fill(v)])) } } };
       const file = join(run, "mcp.json");
@@ -158,7 +163,7 @@ function codexArgs(variant: "with" | "without", ws: string, task: string) {
   if (flags.model) args.push("-m", flags.model);
   if (variant === "with") {
     const skill = spec.install?.codex?.skill;
-    if (skill) cpSync(join(repoDir, skill), join(ws, ".agents", "skills", basename(skill)), { recursive: true });
+    if (skill) copySkill(skill, join(ws, ".agents", "skills"));
     if (spec.mcp) {
       args.push("-c", `mcp_servers.${spec.name}.command=${JSON.stringify(fill(spec.mcp.command))}`);
       args.push("-c", `mcp_servers.${spec.name}.args=${JSON.stringify((spec.mcp.args ?? []).map(fill))}`);

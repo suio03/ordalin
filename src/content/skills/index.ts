@@ -19,5 +19,7 @@ export const REGISTRY: SkillsRegistry = {
     "rea-video": { status: "published", load: () => import("./skills/rea-video.mdx") },
     "day-trader-skill": { status: "published", load: () => import("./skills/day-trader-skill.mdx") },
     "code-animation-prompts": { status: "published", load: () => import("./skills/code-animation-prompts.mdx") },
+    reanimate: { status: "published", load: () => import("./skills/reanimate.mdx") },
+    teardown: { status: "published", load: () => import("./skills/teardown.mdx") },
   },
 };

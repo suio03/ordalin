@@ -56,7 +56,7 @@ export type GalleryItem = {
   label: string;
   title: string;
   caption: string;
-  /** The author's own hosted film, played in place; never re-uploaded. */
+  /** The author's own hosted film (MP4, or an animated GIF/WebP), played in place; never re-uploaded. */
   video?: string;
   /** Film length as m:ss. */
   duration?: string;

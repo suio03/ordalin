@@ -17,7 +17,7 @@ function groupItems(items: GalleryItem[]) {
 
 /**
  * A skill author's demo films. Items with a `video` open the author's hosted
- * film in a native modal dialog.
+ * film (or animated GIF/WebP) in a native modal dialog.
  */
 export function FilmGallery({ items }: { items: GalleryItem[] }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -103,7 +103,12 @@ export function FilmGallery({ items }: { items: GalleryItem[] }) {
                 Close
               </button>
             </div>
-            <video ref={videoRef} src={playing.video} poster={playing.src} controls autoPlay playsInline className="aspect-video w-full rounded-xl bg-black" />
+            {/\.(gif|webp)$/i.test(playing.video ?? "") ? (
+              // eslint-disable-next-line @next/next/no-img-element -- the author's hosted animation, loaded only when opened
+              <img src={playing.video} alt={`${playing.label}: ${playing.title}`} className="aspect-video w-full rounded-xl bg-black object-contain" />
+            ) : (
+              <video ref={videoRef} src={playing.video} poster={playing.src} controls autoPlay playsInline className="aspect-video w-full rounded-xl bg-black" />
+            )}
           </div>
         )}
       </dialog>

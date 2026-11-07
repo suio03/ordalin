@@ -156,6 +156,32 @@
       "language": "Prompts and guides in Chinese; on-screen text in the language you ask for",
       "produces": "Animations written in HTML and JavaScript in one of 341 styles, rendered to silent MP4 with Playwright and FFmpeg",
       "checked_on": "2026-11-07"
+    },
+    {
+      "slug": "reanimate",
+      "name": "Reanimate",
+      "author": "Niaz Morshed",
+      "repo": "https://github.com/NiazMorshed2007/reanimate",
+      "license": "MIT",
+      "version": "unknown",
+      "agents": "Built and tested for Claude Code; other agents that read SKILL.md can install it, untested",
+      "install": "Run npx skills add NiazMorshed2007/reanimate -g -a claude-code; needs Bun 1.1 or later on macOS or Linux",
+      "language": "English",
+      "produces": "Animation code in your project's stack (CSS, Framer Motion, GSAP, three.js) plus a motion spec, comparison numbers and side-by-side sheets",
+      "checked_on": "2026-11-07"
+    },
+    {
+      "slug": "teardown",
+      "name": "Teardown",
+      "author": "elvarofficial",
+      "repo": "https://github.com/elvarofficial/teardown",
+      "license": "MIT",
+      "version": "unknown",
+      "agents": "Claude Code",
+      "install": "Run npx skills add elvarofficial/teardown -g -a claude-code, then npm install && npx playwright install chromium in the skill folder; needs Node.js 20+, ffmpeg and Python 3",
+      "language": "English",
+      "produces": "One offline HTML page with an interactive 3D machine simulator, and a 60 fps MP4 of its tour with a generated sound score",
+      "checked_on": "2026-11-07"
     }
   ]
 }
