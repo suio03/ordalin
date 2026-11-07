@@ -1,0 +1,47 @@
+export const meta = {
+  title: "Turnstone AI: Free Mac Agent App on Your Own ChatGPT or Claude Plan",
+  description:
+    "Turnstone is a free Mac app from Crow Inc. (YC W26) that runs a team of AI Agents on your ChatGPT, Claude, Gemini or Grok plan. Not open source; Cloud is $49.",
+  summary:
+    "Turnstone is a Mac app from Crow Inc., a Y Combinator Winter 2026 company, for running a small team of persistent AI Agents. It isn't a model: each Agent runs on an AI plan you already pay for (ChatGPT through Codex, Claude through Claude Code, Gemini, Grok, Cursor or OpenRouter), an API key or a local Ollama model, and Turnstone adds no usage meter of its own. A Chief of Staff Agent sets up one Agent per job; they share a memory of your people and projects stored as plain files on your Mac, work across 60+ apps such as Gmail, Slack and iMessage, and run on Schedules while the app is open. The Mac app is free. Turnstone Cloud, which keeps Agents working with your Mac closed, is announced at $49 a month but not out yet. This profile is based on Turnstone's official pages and docs, not hands-on testing.",
+  bestFor: [
+    "Mac users who already pay for ChatGPT, Claude or Grok and want agents without buying credits",
+    "People who want a shared memory they can open and correct, instead of one opaque chat history",
+    "Moving Grok Bots over, through Turnstone's MCP server or a Grok Bot marketplace link",
+  ],
+  notFor: [
+    "Windows, Linux or Android users: it is Mac only for now",
+    "Anyone who needs open-source code they can audit or self-host",
+    "Agents that must run while your Mac is closed, until Turnstone Cloud ships",
+  ],
+  faq: [
+    {
+      q: "Is Turnstone free?",
+      a: "The Mac app is free, with no card and no Turnstone usage meter. Model use counts against the plan or API key you connect, and with an API key you pay the provider directly. Turnstone Cloud, which keeps Agents running while your Mac is closed, is announced at $49 a month and is still waitlist only; Turnstone says the first 1,000 people get the first month free.",
+    },
+    {
+      q: "Is Turnstone open source? Is there a Turnstone GitHub repo?",
+      a: "No. Turnstone doesn't publish its source code, and its website and docs link no GitHub repository. Its terms bar attempts to reverse-engineer the service. If you want an open-source agent you can read and self-host, Hermes Agent (MIT) and OpenClaw are the closest options; see Turnstone vs Hermes Agent.",
+    },
+    {
+      q: "Who makes Turnstone, and how is it funded?",
+      a: "Crow Inc. in San Francisco, founded by Aryan Vij and Jai Bhatia, who went through Y Combinator's Winter 2026 batch. Turnstone says its funding was led by Y Combinator and others; it hasn't published an amount or the other investors.",
+    },
+    {
+      q: "Which AI models does Turnstone use?",
+      a: "Whichever you connect: your ChatGPT plan through OpenAI's Codex app and login, your Claude plan through Claude Code and Anthropic's login, a Gemini, Grok or Cursor account, an OpenRouter key, an OpenAI or Anthropic API key, or local models through Ollama. You pick a model for each Agent and can switch it mid-conversation.",
+    },
+    {
+      q: "Does Turnstone see or train on my chats?",
+      a: "Turnstone says your prompts go from your Mac straight to the provider you chose, under your own account, and don't pass through its servers, so it never receives them and can't train on them. The Brain memory, your files and your API keys stay on your Mac. What the provider does with your data depends on your agreement with that provider. Connected apps such as Gmail are authorized through a service called Composio.",
+    },
+    {
+      q: "Will Turnstone send email or messages without asking?",
+      a: "That depends on the permission you give each Agent: Read only blocks changes, Ask first pauses for approval, and Always Allow removes the ordinary pauses, though sensitive connected-app actions may still need review. Replies it drafts in your voice wait for you to send them.",
+    },
+    {
+      q: "Does Turnstone work on Windows or iPhone?",
+      a: "Not yet. Turnstone runs on Apple silicon and Intel Macs. An iPhone app, a web app and Turnstone Cloud are listed as coming soon; Windows, Linux and Android are not available and have no announced date.",
+    },
+  ],
+};

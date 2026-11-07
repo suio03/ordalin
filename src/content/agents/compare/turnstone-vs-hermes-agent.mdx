@@ -1,0 +1,110 @@
+export const meta = {
+  title: "Turnstone vs Hermes Agent (2026): Subscriptions, Platforms, Open Source",
+  description:
+    "Turnstone is a free closed-source Mac app on your ChatGPT or Claude plan; Hermes Agent is free MIT software for any OS or server. Official facts, dated.",
+  subtitle:
+    "Both are free agents that run on AI you bring yourself, keep a memory and work on a schedule. They differ in who they're built for: Turnstone is a no-setup Mac app, Hermes Agent is open-source software you install and run anywhere. Facts from Turnstone's and Nous Research's own pages and docs, checked November 7, 2026.",
+  verdict:
+    "Pick Turnstone if you're on a Mac, want no terminal at all and pay for Claude Pro, which Hermes can't sign in with. Pick Hermes Agent if you need Windows, Linux or a server, want to message your agent from Telegram or WhatsApp, want it running around the clock today, or want code you can read.",
+  picks: [
+    [
+      "You use a Mac and want an app you sign into, with no installer script, terminal or server.",
+      "You pay for Claude Pro or another Claude plan with Claude Code and want Agents to use that plan; Hermes needs Claude Max with extra usage credits or an API key.",
+      "You want one shared memory, organized into About You, People, Timeline and Work, that you can open and edit in the app.",
+      "You want a team of named Agents set up for you by a Chief of Staff, each with its own model and permission level.",
+    ],
+    [
+      "You're on Windows or Linux, or want the agent on a VPS, GPU box or serverless backend instead of your laptop.",
+      "You want to talk to it from Telegram, Discord, Slack, WhatsApp, Signal or email.",
+      "You need it running while your computer is off now: Hermes Cloud and self-hosting work today, Turnstone Cloud is still a waitlist.",
+      "You want open-source (MIT) code you can audit, modify and self-host.",
+    ],
+  ],
+  faq: [
+    {
+      q: "Is Turnstone or Hermes Agent free?",
+      a: "Both. The Turnstone Mac app is free and adds no usage meter; Hermes Agent is free, open-source software. In both cases you pay for the AI you connect. The optional extras differ: Turnstone Cloud is announced at $49 a month but not available yet, while Nous Portal (Free, $20, $100 or $200 a month) bundles models and tools for Hermes, and Hermes Cloud bills an always-on agent by the day plus inference.",
+    },
+    {
+      q: "Can I use my ChatGPT or Claude subscription with them?",
+      a: "ChatGPT works with both: Turnstone through OpenAI's Codex app and login, Hermes through ChatGPT OAuth with Codex models. Claude is where they split. Turnstone runs through Claude Code on your own Claude plan. Hermes' docs say Claude Pro can't use its sign-in path at all, and Claude Max works only with purchased extra usage credits, never the plan's base allowance; otherwise you use a pay-per-token Anthropic API key.",
+    },
+    {
+      q: "Is Turnstone open source like Hermes Agent?",
+      a: "No. Hermes Agent is MIT-licensed, with its code on GitHub. Turnstone doesn't publish its source code, its site and docs link no GitHub repository, and its terms bar attempts to reverse-engineer the service.",
+    },
+    {
+      q: "Do they work on Windows?",
+      a: "Hermes Agent does: native Windows is supported through a PowerShell installer or a signed desktop package, alongside macOS, Linux, WSL2 and Android through Termux. Turnstone is Mac only; iPhone and web apps are listed as coming soon, and Windows, Linux and Android are not available.",
+    },
+    {
+      q: "Which one keeps working when my computer is off?",
+      a: "Today, only Hermes. You can run it on a server or deploy an always-on agent on Hermes Cloud. Turnstone's Schedules run only while the app is open on your Mac; Turnstone Cloud, which keeps Agents working with the Mac closed, is coming soon at $49 a month.",
+    },
+    {
+      q: "Which is safer to let loose on my accounts?",
+      a: "They control risk differently. Turnstone gives each Agent a permission level (Read only, Ask first or Always Allow) and holds drafted replies for you to send. Hermes checks shell commands against a list of dangerous patterns and asks before running a match, with modes that can auto-approve for unattended runs, plus allowlists for who can message it and container isolation. Neither profile here comes from hands-on testing.",
+    },
+  ],
+};
+
+## Price
+
+Both apps cost nothing. What you pay for is the AI underneath.
+
+**Turnstone** is free on the Mac with no card. It sells no credits and adds no meter: use counts against the ChatGPT, Claude, Gemini, Grok or Cursor plan you sign in with, or you pay the provider per use with an API key. The one paid product, **Turnstone Cloud at $49 a month**, is still a waitlist; Turnstone says the first 1,000 people get their first month free. A "Turnstone AI" option for people without a subscription is mentioned with no price.
+
+**Hermes Agent** is free, MIT-licensed software. You can bring your own provider, or use **Nous Portal**: a free tier with free models, then **Plus at $20, Super at $100 and Ultra at $200 a month**, which bundle 300+ models plus web search, image generation, text-to-speech and a cloud browser. **Hermes Cloud** hosts an always-on agent, billed per day of uptime (storage only when stopped) with inference on top; deploying needs $2 in credit or an active subscription.
+
+**Bottom line:** both are free to start. Turnstone is cheaper to reason about if you already have a plan; Hermes gives you more ways to pay, including hosting today.
+
+## Using the AI plan you already pay for
+
+This is the question most people searching the pair are asking, and the answer depends on which plan you have.
+
+| Your plan | Turnstone | Hermes Agent |
+|---|---|---|
+| ChatGPT | Yes, through OpenAI's Codex app and login | Yes, ChatGPT OAuth with Codex models |
+| Claude Pro | Yes, through Claude Code | No; use a pay-per-token API key instead |
+| Claude Max | Yes, through Claude Code | Only extra usage credits; the base allowance is never used |
+| Grok | Yes, your Grok account | Yes, SuperGrok or X Premium+ sign-in |
+| Gemini | Yes, your Gemini account | API key or Google Vertex AI |
+| Local models | Ollama | Ollama, LM Studio, llama.cpp, vLLM and others |
+
+Hermes also connects to dozens of other providers and OpenRouter. Turnstone covers fewer, but each one is a sign-in rather than a key.
+
+## Where it runs
+
+**Turnstone** is a Mac app for Apple silicon and Intel. It runs Agents on your Mac with each provider's own tooling, and its Schedules run only while the app is open. Turnstone Cloud, an iPhone app and a web app are coming soon; Windows, Linux and Android aren't available.
+
+**Hermes Agent** runs almost anywhere: desktop packages for macOS and Windows, a one-line installer for Linux, macOS and WSL2, native Windows through PowerShell, and Android through Termux. It can also live on a $5 VPS, a GPU cluster or a serverless backend that hibernates when idle, or on Hermes Cloud.
+
+**Bottom line:** if you're not on a Mac, or want an agent that's on all night, Hermes is the only one of the two that does it today.
+
+## How you talk to it
+
+**Turnstone** is an app with a sidebar of named Agents. Your first Agent, the Chief of Staff, sets up one per job, and any Agent can hand work to another. Agents work across 60+ built-in apps such as Gmail, Outlook, Slack, Notion, LinkedIn, iMessage and WhatsApp, their own browser tab and the apps on your Mac, and they can send email, Slack messages and iMessages from your own accounts.
+
+**Hermes Agent** has a full terminal interface and a desktop app, and one gateway process puts it in **Telegram, Discord, Slack, WhatsApp, Signal and email**, with voice memo transcription. It can spawn isolated subagents to work in parallel.
+
+## Memory and skills
+
+Both remember you, and both turn repeated work into reusable skills.
+
+**Turnstone's Brain** is one memory shared by all Agents, stored as plain files on your Mac and organized into areas such as About You, People, Timeline and Work. You can browse and edit it in the app. An Agent may propose a **Skill** after repeatable work; nothing is saved until you review it.
+
+**Hermes** keeps two small files, `MEMORY.md` (about 2,200 characters of its own notes) and `USER.md` (about 1,375 characters about you), and searches past sessions when it needs more. Its headline feature is a **learning loop**: it creates skills on its own after complex tasks and improves them as it uses them, in a format compatible with the agentskills.io standard. Memory plugins such as Honcho and Mem0 add more.
+
+**Bottom line:** Turnstone's memory is easier to see and correct; Hermes does more on its own.
+
+## Safety and privacy
+
+**Approvals.** Turnstone sets a permission level per Agent: **Read only**, **Ask first** or **Always Allow**, with some sensitive connected-app actions still reviewed. New Schedules and Skills show a review card first. Hermes asks before running a shell command that matches its list of dangerous patterns; approval modes are configurable, and scheduled or unattended runs can auto-approve. Allowlists and DM pairing control who can message it, and container backends add isolation.
+
+**Data.** Turnstone says your prompts go from your Mac straight to your chosen provider under your account, never through its servers, and that your Brain, files and API keys stay on your Mac; connected apps are authorized through Composio. Hermes is self-hosted, so your data goes wherever you run it and to the provider you pick; Nous Portal offers a Privacy Mode that opts out of storing and training on certain inference data.
+
+**Code.** Hermes Agent's code is public under the MIT license. Turnstone's isn't.
+
+## Who makes them
+
+**Turnstone** comes from Crow Inc. in San Francisco, founded by Aryan Vij and Jai Bhatia in Y Combinator's Winter 2026 batch; it says its funding was led by Y Combinator and others, without an amount. **Hermes Agent** is built by Nous Research and ships frequent releases on GitHub. Turnstone also publishes its own comparison with Hermes; this one draws on both makers' documentation rather than either side's pitch.

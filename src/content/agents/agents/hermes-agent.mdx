@@ -25,11 +25,15 @@ export const meta = {
     },
     {
       q: "Where can I run Hermes Agent?",
-      a: "On macOS, Windows or Linux through the desktop app or a terminal installer, on Android through Termux, or on a VPS, GPU cluster or serverless backend. Terminal backends include local, Docker, SSH, Singularity and Modal. Hermes Cloud hosts an always-on agent for you, billed daily from Nous credit: $0.56 a day running for Standard or $1.09 for Pro, $0.03 a day when stopped, with inference and tool use charged on top.",
+      a: "On macOS, Windows or Linux through the desktop app or a terminal installer, on Android through Termux, or on a VPS, GPU cluster or serverless backend. Terminal backends include local, Docker, SSH, Modal, Daytona and Vercel Sandbox. Hermes Cloud hosts an always-on agent for you, billed per day of uptime (storage only when stopped), with inference and tool use charged on top; deploying needs $2 in credit or an active subscription.",
     },
     {
       q: "Which models does Hermes Agent support?",
       a: "Any model you connect: Nous Portal, OpenRouter, OpenAI, a custom endpoint and many other providers. You can switch models with the hermes model command without changing code.",
+    },
+    {
+      q: "Can I use my ChatGPT or Claude subscription with Hermes Agent?",
+      a: "ChatGPT, yes: Hermes signs in with ChatGPT OAuth and uses Codex models. SuperGrok and X Premium+ can sign in too. Claude is limited: Hermes' docs say Claude Pro can't use its sign-in path, and Claude Max works only with purchased extra usage credits, never the plan's base allowance. Otherwise use a pay-per-token Anthropic API key. For a Mac app that runs on your Claude plan through Claude Code, see Turnstone vs Hermes Agent.",
     },
     {
       q: "Will Hermes Agent ask before doing something risky?",

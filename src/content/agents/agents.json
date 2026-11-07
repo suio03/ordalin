@@ -450,7 +450,7 @@
       "access": {
         "free_tier": "yes — free, open-source software (MIT); model and hosting costs depend on what you connect",
         "paid_plans": [],
-        "billing_note": "Optional: Nous Portal plans with monthly model and tool credits (Plus $20, Super $100, Ultra $200 a month; free tier with free models only). Optional Hermes Cloud hosting is billed daily from Nous credit ($0.56 or $1.09 a day running, plus inference)"
+        "billing_note": "Optional: Nous Portal plans with monthly model and tool credits (Plus $20, Super $100, Ultra $200 a month; free tier with free models only). Optional Hermes Cloud hosting is billed per day of uptime (storage only when stopped), plus inference and tool use; deploying needs $2 in credit or an active subscription"
       },
       "platforms": {
         "macos": true,
@@ -468,7 +468,7 @@
         "CLI"
       ],
       "actions": "creates and improves reusable skills from experience; keeps persistent memory; natural-language scheduled automations; parallel subagents; web search, browser automation, vision, image generation and text-to-speech",
-      "execution": "Self-hosted on your computer, a VPS, a GPU cluster or serverless, with terminal backends including local, Docker, SSH, Singularity and Modal; desktop apps for macOS and Windows; or an always-on Hermes Cloud agent hosted by Nous",
+      "execution": "Self-hosted on your computer, a VPS, a GPU cluster or serverless, with terminal backends including local, Docker, SSH, Modal, Daytona and Vercel Sandbox; desktop apps for macOS and Windows and native Windows support; or an always-on Hermes Cloud agent hosted by Nous",
       "safety": "Dangerous shell commands need explicit approval (configurable modes, including auto-approve for cron and unattended runs); DM pairing and allowlists control who can talk to the agent; container isolation",
       "model": "any — Nous Portal, OpenRouter, OpenAI or a custom endpoint",
       "license": "MIT",
@@ -478,12 +478,72 @@
         "https://hermes-agent.nousresearch.com/docs/user-guide/security",
         "https://portal.nousresearch.com/cloud",
         "https://portal.nousresearch.com/business",
-        "https://portal.nousresearch.com/privacy"
+        "https://portal.nousresearch.com/privacy",
+        "https://hermes-agent.nousresearch.com/docs/integrations/providers"
       ],
-      "checked_on": "2026-10-09",
+      "checked_on": "2026-11-07",
       "privacy": {
         "training": "Depends on the model provider you connect. Nous Portal's privacy policy lets you turn on Privacy Mode to opt out of storage and use of certain inference payloads for training"
-      }
+      },
+      "repo": "https://github.com/NousResearch/hermes-agent"
+    },
+    {
+      "slug": "turnstone",
+      "name": "Turnstone",
+      "vendor": "Crow Inc.",
+      "channel": "personal",
+      "category": "personal agent (Mac app on your own AI plan)",
+      "official_url": "https://myturnstone.ai/",
+      "checked_on": "2026-11-07",
+      "catalogue_slug": "turnstone",
+      "access": {
+        "free_tier": "yes — the Mac app is free with no card and no Turnstone usage meter; model use counts against the AI plan or API key you connect",
+        "paid_plans": [
+          {
+            "name": "Cloud add-on",
+            "price_usd_month": "49",
+            "note": "Coming soon (waitlist); keeps Agents running with your Mac closed; first month free for the first 1,000 people"
+          }
+        ],
+        "billing_note": "Turnstone sells no credits. With an API key you pay the provider directly. A Turnstone AI option for people without their own subscription is mentioned with no published price; free open-source models run through the OpenCode Zen gateway"
+      },
+      "platforms": {
+        "macos": true,
+        "ios": "coming soon",
+        "web": "coming soon"
+      },
+      "regions": "unknown",
+      "actions": "a Chief of Staff Agent sets up one persistent Agent per job; Agents write and send email, Slack messages and iMessages from your own accounts, work in their own browser tab and on your Mac's apps, run Schedules, hand tasks to each other and propose reusable Skills you review before saving",
+      "connectors_notable": [
+        "Gmail",
+        "Outlook",
+        "Slack",
+        "Notion",
+        "LinkedIn",
+        "iMessage",
+        "WhatsApp"
+      ],
+      "connectors_count": "60+ built-in apps, plus connectors you add",
+      "execution": "Runs on your Mac using the provider's own tooling (Codex for ChatGPT, Claude Code for Claude) signed in with your account; Schedules run only while Turnstone is open. Turnstone Cloud, for Agents that keep working with the Mac closed, is coming soon",
+      "safety": "Each Agent is set to Read only, Ask first or Always Allow; sensitive connected-app actions may still need review. Replies drafted in your voice wait for you to send; new Schedules and Skills show a review card before they are saved",
+      "privacy": {
+        "training": "Prompts go from your Mac to the provider you chose under your own account, not through Turnstone's servers, and Turnstone says it never receives them, so it cannot train on them. The Brain memory, files and API keys stay on your Mac. Connected-app sign-in runs through Composio",
+        "delete_data": "unknown"
+      },
+      "model": "any you connect — ChatGPT (via Codex), Claude (via Claude Code), Gemini, Grok, Cursor, OpenRouter, OpenAI or Anthropic API keys, or local Ollama models",
+      "license": "Not open source; no public source code or GitHub repository",
+      "sources": [
+        "https://myturnstone.ai/",
+        "https://myturnstone.ai/facts",
+        "https://myturnstone.ai/plan",
+        "https://myturnstone.ai/privacy",
+        "https://myturnstone.ai/terms",
+        "https://myturnstone.ai/about",
+        "https://docs.myturnstone.ai/controls/permissions",
+        "https://docs.myturnstone.ai/concepts/brain",
+        "https://docs.myturnstone.ai/concepts/automations",
+        "https://docs.myturnstone.ai/concepts/skills"
+      ]
     },
     {
       "slug": "hark-pro",
