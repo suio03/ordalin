@@ -1,0 +1,12 @@
+{
+  "kind": "skill",
+  "name": "code-animation-z5",
+  "repo": "https://github.com/XiaoyeCodes/code-animation-prompts",
+  "commit": "2e6396a",
+  "install": {
+    "claude": { "skill": "skills/code-animation-prompts" }
+  },
+  "task": "Use the code-animation-prompts skill to make a 12-second New Year opening title in style Z5 (paper-cut), 16:9, 1920×1080, 30 fps. On-screen text: \"A new year, anything is possible\". Red paper, cream rice paper, layered shadows. No sound. Deliver an editable HTML file, keyframe previews and an MP4 in ./out in this folder. If rendering needs Python packages, install them into a virtual environment in this folder (.venv); do not install anything globally. If something is missing, say exactly what. Answer in English and don't ask me questions.",
+  "env": { "DO_NOT_TRACK": "1" },
+  "timeoutMinutes": 60
+}

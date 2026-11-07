@@ -143,6 +143,19 @@
       "language": "English",
       "produces": "Opening-range breakout scans, entry checks, exit plans, 10,000-run Time Machine odds, position sizes and bracket orders for paper or Alpaca trading, price alerts, earnings summaries and Congress trade disclosures, all as files in a trader/ folder",
       "checked_on": "2026-11-05"
+    },
+    {
+      "slug": "code-animation-prompts",
+      "name": "Code Animation Prompts",
+      "author": "Fuyang Guanzhao (curator) and XiaoyeCodes (skill packaging)",
+      "repo": "https://github.com/XiaoyeCodes/code-animation-prompts",
+      "license": "Free to use and share, not to resell; third-party packs keep their MIT licences",
+      "version": "unknown",
+      "agents": "Claude Code and Codex",
+      "install": "Clone the repository and run python scripts/install_skill.py --target claude (or --target codex)",
+      "language": "Prompts and guides in Chinese; on-screen text in the language you ask for",
+      "produces": "Animations written in HTML and JavaScript in one of 341 styles, rendered to silent MP4 with Playwright and FFmpeg",
+      "checked_on": "2026-11-07"
     }
   ]
 }
