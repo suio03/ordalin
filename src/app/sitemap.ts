@@ -1,3 +1,4 @@
+import { freeToolPath, freeTools, freeToolsHubPath } from "@/lib/free-tools/registry";
 import type { MetadataRoute } from "next";
 import { listPublishedGuides } from "@/lib/guides";
 import {
@@ -46,12 +47,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),
-    { url: `${baseUrl}/free-tools/ai-visibility-checker`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/free-tools/llms-txt-generator`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/free-tools/llms-txt-checker`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/free-tools/og-image-checker`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/free-tools/ai-label-remover`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/free-tools/ai-metadata-remover`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}${freeToolsHubPath}`, changeFrequency: "weekly", priority: 0.7 },
+    ...freeTools.map((tool) => ({ url: `${baseUrl}${freeToolPath(tool.slug)}`, changeFrequency: "monthly" as const, priority: 0.7 })),
     { url: `${baseUrl}/about/how-we-review`, changeFrequency: "monthly", priority: 0.4 },
   ];
 

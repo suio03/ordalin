@@ -1,3 +1,4 @@
+import { freeToolPath, freeTools, freeToolsHubPath } from "@/lib/free-tools/registry";
 import { editorialHref, editorialIsComplete, listEditorialPages } from "@/lib/editorial";
 import { listCategories, listCollections, listPublishedToolSlugs, listTasks } from "@/lib/repositories/catalog";
 
@@ -35,14 +36,7 @@ export async function GET() {
     ...section("Categories", categories.map((category) => link(`/categories/${category.slug}`, category.name, category.description))),
     ...section("Goals", tasks.map((task) => link(`/tasks/${task.slug}`, task.name, task.outcome))),
     ...section("Guides", editorial.map((page) => link(editorialHref(page), page.title, page.description))),
-    ...section("Free tools", [
-      link("/free-tools/ai-visibility-checker", "AI visibility checker", "Test whether AI search crawlers can reach and read a website"),
-      link("/free-tools/llms-txt-generator", "llms.txt generator", "Generate an llms.txt file from a site's sitemap"),
-      link("/free-tools/llms-txt-checker", "llms.txt checker", "Validate an llms.txt file's format, delivery and links"),
-      link("/free-tools/og-image-checker", "OG image checker", "Test a page's Open Graph tags and og:image, and preview its share cards"),
-      link("/free-tools/ai-label-remover", "AI label remover", "See which hidden fields make platforms label an image as AI, and remove them in the browser"),
-      link("/free-tools/ai-metadata-remover", "AI metadata remover", "View and remove C2PA, XMP, EXIF and prompt metadata from images, losslessly, in the browser"),
-    ]),
+    ...section("Free tools", [link(freeToolsHubPath, "All free tools", "Every free Ordalin tool, grouped by use"), ...freeTools.map((tool) => link(freeToolPath(tool.slug), tool.name, tool.summary))]),
     ...section("About", [
       link("/about/how-we-review", "How we review", "How tool profiles are researched, checked and kept current"),
       link("/submit", "Submit a tool", "Free listing for AI tool makers"),

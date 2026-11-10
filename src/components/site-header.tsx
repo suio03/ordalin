@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { indexableCategoryMinimum } from "@/lib/catalog";
 import { editorialHref, listEditorialPages } from "@/lib/editorial";
+import { freeToolPath, freeTools, freeToolsHubPath } from "@/lib/free-tools/registry";
 import { listPublishedGuides } from "@/lib/guides";
 import { listBrowseCategories, listCategories, listCollections, listTasks } from "@/lib/repositories/catalog";
 import { getServer, mcpPath, publishedServerSlugs, visibleServerSlugs } from "@/lib/mcp/data";
@@ -172,6 +173,7 @@ export async function SiteFooter() {
         ...(visibleSkillSlugs().length ? [{ href: skillsPath.overview, label: "Agent skills" }] : []),
         ...(visibleServerSlugs().length ? [{ href: mcpPath.overview, label: "MCP servers" }] : []),
         { href: "/guides", label: "Guides" },
+        { href: freeToolsHubPath, label: "Free tools" },
         { href: "/search", label: "Advanced search" },
       ],
     },
@@ -188,16 +190,14 @@ export async function SiteFooter() {
       links: [...alternativesPages.map((page) => ({ href: editorialHref(page), label: page.title })), { href: "/alternatives", label: "All alternatives" }],
     }] : []),
     {
+      title: "Free tools",
+      links: [...freeTools.map((tool) => ({ href: freeToolPath(tool.slug), label: tool.name })), { href: freeToolsHubPath, label: "All free tools" }],
+    },
+    {
       title: "Ordalin",
       links: [
         { href: "/about/how-we-review", label: "How we review" },
         { href: "/submit", label: "Submit a tool" },
-        { href: "/free-tools/ai-visibility-checker", label: "AI visibility checker" },
-        { href: "/free-tools/llms-txt-generator", label: "llms.txt generator" },
-        { href: "/free-tools/llms-txt-checker", label: "llms.txt checker" },
-        { href: "/free-tools/og-image-checker", label: "OG image checker" },
-        { href: "/free-tools/ai-label-remover", label: "AI label remover" },
-        { href: "/free-tools/ai-metadata-remover", label: "AI metadata remover" },
         { href: "https://github.com/suio03/ordalin", label: "GitHub" },
       ],
     },
