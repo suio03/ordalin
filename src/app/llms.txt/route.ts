@@ -40,6 +40,8 @@ export async function GET() {
       link("/free-tools/llms-txt-generator", "llms.txt generator", "Generate an llms.txt file from a site's sitemap"),
       link("/free-tools/llms-txt-checker", "llms.txt checker", "Validate an llms.txt file's format, delivery and links"),
       link("/free-tools/og-image-checker", "OG image checker", "Test a page's Open Graph tags and og:image, and preview its share cards"),
+      link("/free-tools/ai-label-remover", "AI label remover", "See which hidden fields make platforms label an image as AI, and remove them in the browser"),
+      link("/free-tools/ai-metadata-remover", "AI metadata remover", "View and remove C2PA, XMP, EXIF and prompt metadata from images, losslessly, in the browser"),
     ]),
     ...section("About", [
       link("/about/how-we-review", "How we review", "How tool profiles are researched, checked and kept current"),

@@ -123,7 +123,7 @@ export default function OgImageCheckerPage() {
           ))}
           <p>
             More free tools: the <Link href="/free-tools/ai-visibility-checker">AI visibility checker</Link> and the{" "}
-            <Link href="/free-tools/llms-txt-generator">llms.txt generator</Link>. If you build an AI tool, an <Link href="/submit">Ordalin listing</Link> is free.
+            <Link href="/free-tools/llms-txt-generator">llms.txt generator</Link>, and the <Link href="/free-tools/ai-metadata-remover">AI metadata remover</Link> for images. If you build an AI tool, an <Link href="/submit">Ordalin listing</Link> is free.
           </p>
         </section>
       </div>
