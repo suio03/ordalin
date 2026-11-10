@@ -71,7 +71,7 @@ async function homeData() {
 
 function ShelfTool({ tool }: { tool: ToolCard }) {
   return (
-    <Link className={styles.toolCard} href={`/tools/${tool.slug}`}>
+    <Link prefetch={false} className={styles.toolCard} href={`/tools/${tool.slug}`}>
       <ToolMark name={tool.name} logoAssetKey={tool.logoAssetKey} />
       <strong>{tool.name}</strong>
       <span className={styles.toolTagline}>{tool.tagline}</span>
@@ -230,7 +230,7 @@ export default async function Home({ searchParams }: HomeProps) {
               <ul className={styles.toolGrid}>
                 {skills.map((skill) => (
                   <li key={skill.slug}>
-                    <Link className={`${styles.toolCard} ${styles.skillCard}`} href={skillsPath.skill(skill.slug)}>
+                    <Link prefetch={false} className={`${styles.toolCard} ${styles.skillCard}`} href={skillsPath.skill(skill.slug)}>
                       <strong>{skillName(skill)}</strong>
                       <span className={styles.toolTagline}>{skill.produces}</span>
                       <span className={styles.toolMeta}>By {skill.author}</span>

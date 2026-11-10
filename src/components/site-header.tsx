@@ -143,7 +143,7 @@ function FooterColumns({ columns, className }: { columns: FooterColumn[]; classN
             {column.links.map((link) => (
               <li key={link.href}>
                 {link.href.startsWith("/")
-                  ? <Link href={link.href}>{link.label}</Link>
+                  ? <Link prefetch={false} href={link.href}>{link.label}</Link>
                   : <a href={link.href}>{link.label}</a>}
               </li>
             ))}

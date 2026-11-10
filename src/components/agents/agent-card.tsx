@@ -21,7 +21,7 @@ export function AgentCard({ agent, rank, children }: { agent: Agent; rank?: numb
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <h3 className="font-serif text-[26px] font-medium md:text-[30px]">
           {rank != null && <span className="mr-2 font-mono text-[18px] text-muted">{rank}.</span>}
-          {link.internal ? <Link href={link.href} className="text-ink">{displayName(agent)}</Link> : displayName(agent)}
+          {link.internal ? <Link prefetch={false} href={link.href} className="text-ink">{displayName(agent)}</Link> : displayName(agent)}
         </h3>
         <span className="text-[14px] text-muted">
           {vendorShort(agent)} · {capitalize(agent.category)}
@@ -37,7 +37,7 @@ export function AgentCard({ agent, rank, children }: { agent: Agent; rank?: numb
         ))}
       </dl>
       <div className="flex flex-wrap gap-4 text-[15px] font-semibold">
-        {link.internal && <Link href={link.href}>Full profile →</Link>}
+        {link.internal && <Link prefetch={false} href={link.href}>Full profile →</Link>}
         <a href={outbound(agent.official_url)} rel="noopener">
           Official site ↗
         </a>

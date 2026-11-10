@@ -10,7 +10,7 @@ export function ToolRow({ tool }: { tool: ToolCard }) {
     <article className={styles.toolRow}>
       <ToolMark name={tool.name} logoAssetKey={tool.logoAssetKey} />
       <div className={styles.toolMain}>
-        <Link className={styles.toolName} href={`/tools/${tool.slug}`}>
+        <Link prefetch={false} className={styles.toolName} href={`/tools/${tool.slug}`}>
           {tool.name}
           {tool.lastCheckedAt ? (
             <span className={styles.freshDot} aria-label="Recently checked" />
@@ -19,7 +19,7 @@ export function ToolRow({ tool }: { tool: ToolCard }) {
         <span className={styles.toolPurpose}>{tool.tagline}</span>
       </div>
       <div className={styles.toolMeta}>
-        <Link href={`/categories/${tool.primaryCategory.slug}`}>
+        <Link prefetch={false} href={`/categories/${tool.primaryCategory.slug}`}>
           {tool.primaryCategory.name}
         </Link>
         <span>{formatPricingModel(tool.pricingModel)}</span>

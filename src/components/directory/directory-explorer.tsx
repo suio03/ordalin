@@ -263,7 +263,7 @@ export function DirectoryExplorer({
             <h2>Useful ways in</h2>
             <div className={styles.collectionList}>
               {collections.slice(0, 4).map((collection) => (
-                <Link key={collection.slug} href={`/collections/${collection.slug}`}>
+                <Link prefetch={false} key={collection.slug} href={`/collections/${collection.slug}`}>
                   <span>{collection.name}</span>
                   <small>{collection.publishedToolCount} tools</small>
                 </Link>
@@ -280,7 +280,7 @@ export function DirectoryExplorer({
             <ol className={styles.pickList}>
               {editorPicks.map((tool) => (
                 <li key={tool.id}>
-                  <Link href={`/tools/${tool.slug}`}>{tool.name}</Link>
+                  <Link prefetch={false} href={`/tools/${tool.slug}`}>{tool.name}</Link>
                   <span>{tool.primaryCategory.name}</span>
                 </li>
               ))}

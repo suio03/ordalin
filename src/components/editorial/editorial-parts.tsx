@@ -134,7 +134,7 @@ export function PickEntry({ pick, tool, rank }: { pick: EditorialPick; tool: Edi
       </dl>
       <footer className={styles.pickActions}>
         <span className={styles.checked}><span aria-hidden="true" />{checkedLabel(tool)}</span>
-        <Link href={`/tools/${tool.slug}`}>Full profile</Link>
+        <Link prefetch={false} href={`/tools/${tool.slug}`}>Full profile</Link>
         <a href={catalogWebsiteOutboundUrl(tool.websiteUrl)} data-tool={tool.slug} data-placement="editorial" target="_blank" rel={catalogWebsiteRel(tool.sourceProvider)}>
           Visit website ↗
         </a>
@@ -161,7 +161,7 @@ export function FactsTable({ tools, caption }: { tools: EditorialTool[]; caption
             <th scope="col"><span className={styles.srOnly}>Fact</span></th>
             {tools.map((tool) => (
               <th scope="col" key={tool.slug}>
-                <Link href={`/tools/${tool.slug}`}>{tool.name}</Link>
+                <Link prefetch={false} href={`/tools/${tool.slug}`}>{tool.name}</Link>
               </th>
             ))}
           </tr>
@@ -222,7 +222,7 @@ export function EditorialCard({ page, tools }: { page: EditorialPage; tools?: Ma
     : page.picks.map((pick) => pick.toolSlug);
   const marks = tools ? slugs.map((slug) => tools.get(slug)).filter((tool): tool is EditorialTool => Boolean(tool)).slice(0, 5) : [];
   return (
-    <Link className={styles.card} href={editorialHref(page)}>
+    <Link prefetch={false} className={styles.card} href={editorialHref(page)}>
       <span className={styles.cardKind}>{editorialKindLabels[page.kind]}</span>
       <strong>{page.title}</strong>
       <span className={styles.cardDescription}>{page.description}</span>
