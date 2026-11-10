@@ -94,6 +94,15 @@ production D1 and R2. Apply D1 migrations before pushing code that needs them.
 A maintainer can still deploy manually with `pnpm run deploy` (`pnpm deploy`
 is a built-in pnpm command, not this script).
 
+`deploy:production` also notifies Bing through IndexNow (`scripts/indexnow.mjs`,
+Bing only; Google does not use IndexNow). Before the deploy it fingerprints
+every live sitemap page (title, meta, canonical, JSON-LD, visible text, images;
+scripts ignored) into `.indexnow-snapshot.json`; after it, it reads them again
+and submits the new, changed and removed URLs. About 1 minute each side. Both
+steps are `|| true`, so they never fail a deploy. The key file
+`public/9955257e71a362a1019fdef3d65e4284.txt` is public by protocol. Manual:
+`pnpm indexnow submit <url>…` or `--all`; add `--dry-run` to print only.
+
 After a push, confirm the build for that commit before checking the site:
 
 ```bash

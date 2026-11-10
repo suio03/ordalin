@@ -42,3 +42,6 @@ wrangler.production.jsonc
 *.log
 backups/
 exports/
+
+# IndexNow deploy snapshot
+.indexnow-snapshot.json
