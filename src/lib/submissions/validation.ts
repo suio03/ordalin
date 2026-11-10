@@ -3,7 +3,6 @@ import { assertPublicHttpsUrl } from "@/lib/catalog-enrichment/url-policy";
 import { cleanCatalogWebsiteUrl } from "@/lib/catalog-links";
 import { SubmissionError } from "./http";
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CONTROL_CHARACTERS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/;
 
 function textField(value: FormDataEntryValue | null, label: string, min: number, max: number) {
@@ -51,8 +50,11 @@ export function canonicalWebsite(input: string) {
 }
 
 export function parsePublishedSubmission(form: FormData) {
-  const email = textField(form.get("contactEmail"), "Contact email", 5, 254).toLowerCase();
-  if (!EMAIL_PATTERN.test(email)) throw new SubmissionError("Enter a valid contact email.", 400, "invalid_field", { field: "Contact email" });
+  // The contact email is the signed-in Google account; the form no longer carries one.
+  const funding = String(form.get("funding") ?? "");
+  if (funding !== "free" && funding !== "credit") {
+    throw new SubmissionError("Choose the free submission or a credit.", 400, "invalid_field", { field: "Submission type" });
+  }
   const pricingModel = String(form.get("pricingModel") ?? "");
   if (!pricingModels.includes(pricingModel as PricingModel)) {
     throw new SubmissionError("Choose a valid pricing model.", 400, "invalid_field", { field: "Pricing" });
@@ -77,7 +79,7 @@ export function parsePublishedSubmission(form: FormData) {
     name: textField(form.get("name"), "Name", 2, 80),
     tagline: textField(form.get("tagline"), "Short description", 20, 180),
     description: textField(form.get("description"), "Detailed description", 60, 1_200),
-    contactEmail: email,
+    funding: funding as "free" | "credit",
     pricingModel: pricingModel as PricingModel,
     primaryCategorySlug,
     categorySlugs,

@@ -435,9 +435,24 @@ small OpenAI API model because it must respond interactively to website users.
 
 ## 9. Submission and moderation
 
-Public submission:
+Public submission (accounts and listing credits approved 2026-11-08):
 
-- no account required;
+- sign in with Google before submitting; no password or email-link accounts;
+- each person gets one free submission, reviewed to the strict catalogue rules
+  (no brand-borrowing model wrappers, site farms or non-tools); a rejected free
+  submission does not return the free claim;
+- listing credits: one tier, US$9 for 3 credits through PayPal, buyable in any
+  quantity, no subscription; credits never expire; 1 credit = 1 product;
+- a credit-funded submission is reviewed within 48 hours and may be a third-party
+  model wrapper, labelled "third-party, not official" in its profile; a rejected
+  credit-funded submission returns its credit; a previously rejected domain may be
+  resubmitted with a credit;
+- paid and free listings are researched, labelled, linked (`rel="ugc"`), indexed
+  and ordered the same way; payment never buys rank, badges or editorial verdicts;
+- unused credits are refundable for 14 days; PayPal refunds and chargebacks
+  remove the matching credits;
+- the free claim is guarded by account, normalized Gmail address, device cookie
+  and salted IP hash; shared signals are shown to the reviewer;
 - begin with an HTTPS public product website and extract a bounded set of public facts;
 - let the submitter correct the name, tagline, description, pricing, categories,
   platforms, attributes, product mark, features, pricing details, use cases, and
@@ -669,11 +684,11 @@ The MVP is complete when:
 ## 16. Decisions intentionally deferred
 
 - production domain and hosting cutover
-- public accounts and authentication
+- public accounts beyond Google sign-in for submitters
 - public saves and behaviour-derived public rankings
 - reciprocal-link crawler and partner dashboard
 - ownership claims and anonymous edits to existing profiles
-- sponsored inventory and billing
+- sponsored inventory (listing credits are not placements)
 - multilingual URLs
 - scheduled screenshot refreshes beyond new imports
 - Queues, Workflows, Durable Objects, and database sharding

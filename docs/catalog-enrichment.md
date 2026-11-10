@@ -146,7 +146,26 @@ image, uploads a replacement, or keeps the letter fallback, then submits a new
 unique-domain profile for review. The submission is stored as a hidden
 `pending_review` tool and a `pending` submission; nothing is public yet.
 Existing canonical domains stop at duplicate detection and cannot be
-overwritten anonymously; a domain already in review is reported as such.
+overwritten; a domain already in review is reported as such. A previously
+declined domain may return only as a credit submission, which replaces the
+declined record.
+
+Every submission belongs to a signed-in Google account and is either the
+account's one free submission or paid with a credit. They are reviewed
+differently (`MVP_PLAN.md` §9):
+
+- **Free**: the strict rules. Decline resellers, brand-borrowing model wrappers,
+  same-template site farms and non-tools. A declined free submission is not
+  returned.
+- **Credit**: review within 48 hours. A working site built on third-party models
+  is accepted; its profile must say so, with the overview naming whose model it
+  runs and a `limitations` entry titled `Third-party site, not official`
+  quoting the site. Unsafe, deceptive, broken and non-AI sites are still
+  declined, and the decline returns the credit.
+
+Paid and free listings get the same page, ranking, labels and `ugc` links.
+`imports:prepare --submissions` lists credit submissions first and flags free
+claims that share a network with another free claim.
 
 Ordalin then researches the submission to `docs/catalog-profile-standard.md`
 in the back office:

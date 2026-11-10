@@ -21,9 +21,21 @@ const inline = argument("urls")?.split(",") ?? [];
 const fromFile = listFile ? (await readFile(path.resolve(listFile), "utf8")).split("\n") : [];
 // Visitor submissions wait hidden as pending_review until a researched bundle publishes them.
 const inReview = "SELECT t.website_url, t.canonical_domain FROM tools t WHERE t.status = 'pending_review' AND EXISTS (SELECT 1 FROM tool_sources s WHERE s.tool_id = t.id AND s.provider = 'submission')";
-const submissions = process.argv.includes("--submissions")
-  ? (await d1Query<{ website_url: string }>(projectRoot, mode, `${inReview} ORDER BY t.created_at`)).map((row) => row.website_url)
+// Credit submissions come first: they are promised a review within 48 hours and may be
+// third-party model sites (labelled unofficial). Free ones follow the strict rules.
+type SubmissionRow = { website_url: string; canonical_domain: string; funding: string | null; shared_network: number };
+const submissionRows = process.argv.includes("--submissions")
+  ? await d1Query<SubmissionRow>(projectRoot, mode, `SELECT t.website_url, t.canonical_domain, s.funding,
+      (SELECT COUNT(*) FROM account_signals mine JOIN account_signals other ON other.kind = 'ip_prefix' AND other.value_hash = mine.value_hash AND other.user_id <> mine.user_id JOIN free_claims f ON f.user_id = other.user_id WHERE mine.user_id = s.user_id AND mine.kind = 'ip_prefix') AS shared_network
+    FROM tools t LEFT JOIN submissions s ON s.id = (SELECT id FROM submissions WHERE canonical_domain = t.canonical_domain AND status = 'pending' ORDER BY created_at DESC LIMIT 1)
+    WHERE t.status = 'pending_review' AND EXISTS (SELECT 1 FROM tool_sources src WHERE src.tool_id = t.id AND src.provider = 'submission')
+    ORDER BY s.funding = 'credit' DESC, t.created_at`)
   : [];
+for (const row of submissionRows) {
+  const flags = [row.funding ?? "legacy", row.funding === "free" && row.shared_network ? "free claim shares a network with another free claim: check for a second account" : ""].filter(Boolean);
+  console.log(`${row.canonical_domain}: ${flags.join(" · ")}`);
+}
+const submissions = submissionRows.map((row) => row.website_url);
 const urls = [...submissions, ...inline, ...fromFile].map((line) => line.replace(/#.*/, "").trim()).filter(Boolean);
 if (!urls.length) throw new Error("Provide --submissions, --urls=https://a.example,https://b.example or --file=<one URL per line>.");
 if (urls.length > 10) throw new Error("Prepare at most 10 official websites per manifest.");

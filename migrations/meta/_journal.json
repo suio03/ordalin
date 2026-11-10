@@ -78,6 +78,13 @@
       "when": 1793936495562,
       "tag": "0010_3d_generation_tag",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1794122882754,
+      "tag": "0011_accounts_and_credits",
+      "breakpoints": true
     }
   ]
 }

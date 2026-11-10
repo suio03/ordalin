@@ -179,11 +179,15 @@ export const submissions = sqliteTable(
       .default("pending"),
     turnstileMetadataJson: text("turnstile_metadata_json").notNull(),
     moderationNote: text("moderation_note"),
+    // Null for submissions made before Google sign-in (2026-11-08).
+    userId: text("user_id"),
+    funding: text("funding", { enum: ["free", "credit"] }),
     createdAt: integer("created_at").notNull(),
     updatedAt: integer("updated_at").notNull(),
   },
   (table) => [
     index("submissions_status_created").on(table.status, table.createdAt),
+    index("submissions_user_created").on(table.userId, table.createdAt),
     index("submissions_domain_created").on(
       table.canonicalDomain,
       table.createdAt,
@@ -401,3 +405,99 @@ export const moderationEvents = sqliteTable(
     ),
   ],
 );
+
+// Submitter accounts (Google sign-in only) and listing credits. See MVP_PLAN.md §9.
+export const users = sqliteTable(
+  "users",
+  {
+    id: text("id").primaryKey(),
+    googleSub: text("google_sub").notNull(),
+    email: text("email").notNull(),
+    emailNormalized: text("email_normalized").notNull(),
+    name: text("name"),
+    status: text("status", { enum: ["active", "blocked"] }).notNull().default("active"),
+    createdAt: integer("created_at").notNull(),
+    lastLoginAt: integer("last_login_at").notNull(),
+  },
+  (table) => [
+    uniqueIndex("users_google_sub_unique").on(table.googleSub),
+    index("users_email_normalized").on(table.emailNormalized),
+  ],
+);
+
+export const userSessions = sqliteTable(
+  "user_sessions",
+  {
+    // SHA-256 of the cookie token; the token itself is never stored.
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    expiresAt: integer("expires_at").notNull(),
+    createdAt: integer("created_at").notNull(),
+  },
+  (table) => [index("user_sessions_user").on(table.userId), index("user_sessions_expires").on(table.expiresAt)],
+);
+
+// Append-only; a balance is SUM(delta). (kind, reference) makes grants idempotent.
+export const creditLedger = sqliteTable(
+  "credit_ledger",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    delta: integer("delta").notNull(),
+    kind: text("kind", { enum: ["purchase", "spend", "refund_rejected", "refund_failed", "reversal", "adjustment"] }).notNull(),
+    reference: text("reference").notNull(),
+    note: text("note"),
+    createdAt: integer("created_at").notNull(),
+  },
+  (table) => [
+    uniqueIndex("credit_ledger_kind_reference").on(table.kind, table.reference),
+    index("credit_ledger_user_created").on(table.userId, table.createdAt),
+  ],
+);
+
+export const payments = sqliteTable(
+  "payments",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    provider: text("provider", { enum: ["paypal"] }).notNull(),
+    orderId: text("order_id").notNull(),
+    captureId: text("capture_id"),
+    quantity: integer("quantity").notNull(),
+    credits: integer("credits").notNull(),
+    amountCents: integer("amount_cents").notNull(),
+    currency: text("currency").notNull(),
+    status: text("status", { enum: ["created", "pending", "completed", "refunded", "partially_refunded", "reversed", "failed"] }).notNull(),
+    payerEmail: text("payer_email"),
+    createdAt: integer("created_at").notNull(),
+    updatedAt: integer("updated_at").notNull(),
+  },
+  (table) => [
+    uniqueIndex("payments_order_unique").on(table.orderId),
+    uniqueIndex("payments_capture_unique").on(table.captureId),
+    index("payments_user_created").on(table.userId, table.createdAt),
+  ],
+);
+
+// Salted hashes only: ip, ip_prefix (/24 or /48) and the first-party device cookie.
+export const accountSignals = sqliteTable(
+  "account_signals",
+  {
+    userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    kind: text("kind", { enum: ["ip", "ip_prefix", "device"] }).notNull(),
+    valueHash: text("value_hash").notNull(),
+    firstSeenAt: integer("first_seen_at").notNull(),
+    lastSeenAt: integer("last_seen_at").notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.kind, table.valueHash] }),
+    index("account_signals_kind_value").on(table.kind, table.valueHash, table.lastSeenAt),
+  ],
+);
+
+// One row per person who used the free submission; the primary key stops a second claim.
+export const freeClaims = sqliteTable("free_claims", {
+  userId: text("user_id").primaryKey().references(() => users.id, { onDelete: "cascade" }),
+  submissionId: text("submission_id").notNull(),
+  createdAt: integer("created_at").notNull(),
+});

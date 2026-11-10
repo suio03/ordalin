@@ -45,18 +45,30 @@ try {
   const bytes = await sharp({ create: { width: 1440, height: 900, channels: 3, background: '#123456' } }).webp().toBuffer();
   const bucket = await mf.getR2Bucket('CATALOG_ASSETS');
   await bucket.put('fixture.webp', bytes);
-  const hash = createHash('sha256').update('ordalin-local-submission:198.51.100.10').digest('hex');
-  const headers = { 'cf-connecting-ip': '198.51.100.10' };
+  const hashFor = (ip) => createHash('sha256').update(`ordalin-local-submission:${ip}`).digest('hex');
   const now = Math.floor(Date.now() / 1000);
-  async function draft(id) {
-    const website = `https://${id}.example/`;
-    const candidate = { schemaVersion: 1, status: 'pending_review', websiteUrl: website, canonicalDomain: `${id}.example`, fetchedAt: new Date().toISOString(), identity: { name: null, tagline: null }, assets: [], pricingSignals: [], platforms: [], officialLinks: [], evidencePages: [], warnings: [] };
-    const analysis = { schemaVersion: 1, name: 'Runtime tool', tagline: 'A tool for organizing meeting notes.', description: 'This tool organizes meeting notes and keeps them accessible to the entire team in one workspace.', pricingModel: 'unknown', evidence: { identity: [], description: [], pricing: [], classification: [] } };
-    await db.prepare("INSERT INTO submission_drafts (id, website_url, canonical_domain, candidate_json, actor_hash, status, expires_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?)").bind(id, website, candidate.canonicalDomain, JSON.stringify({ schemaVersion: 2, candidate, analysis }), hash, now + 600, now, now).run();
+  // Signed-in submitters: a session cookie per user, plus a device cookie and an IP per request.
+  // emailNormalized is what normalizeEmail stores at sign-in (unit-tested separately).
+  async function user(id, email, emailNormalized, credits = 0) {
+    const token = `token-${id}-${'x'.repeat(24)}`;
+    await db.prepare("INSERT INTO users (id, google_sub, email, email_normalized, name, status, created_at, last_login_at) VALUES (?, ?, ?, ?, ?, 'active', ?, ?)").bind(id, `sub-${id}`, email, emailNormalized, id, now, now).run();
+    await db.prepare('INSERT INTO user_sessions (id, user_id, expires_at, created_at) VALUES (?, ?, ?, ?)').bind(createHash('sha256').update(token).digest('hex'), id, now + 3600, now).run();
+    if (credits) await db.prepare("INSERT INTO credit_ledger (id, user_id, delta, kind, reference, note, created_at) VALUES (?, ?, ?, 'purchase', ?, NULL, ?)").bind(`credit-${id}`, id, credits, `capture-${id}`, now).run();
+    return token;
   }
-  function form(id, choice, image = bytes) {
+  const as = (token, ip, device) => ({ 'cf-connecting-ip': ip, cookie: `ordalin_session=${token}; ordalin_device=${device}` });
+  const balance = async (id) => (await db.prepare('SELECT COALESCE(SUM(delta), 0) AS value FROM credit_ledger WHERE user_id = ?').bind(id).first()).value;
+  const alice = await user('user-alice', 'al.ice+tools@gmail.com', 'alice@gmail.com', 3);
+  const headers = as(alice, '198.51.100.10', 'device-alice-0000000000');
+  async function draft(id, ip = '198.51.100.10', domain = id) {
+    const website = `https://${domain}.example/`;
+    const candidate = { schemaVersion: 1, status: 'pending_review', websiteUrl: website, canonicalDomain: `${domain}.example`, fetchedAt: new Date().toISOString(), identity: { name: null, tagline: null }, assets: [], pricingSignals: [], platforms: [], officialLinks: [], evidencePages: [], warnings: [] };
+    const analysis = { schemaVersion: 1, name: 'Runtime tool', tagline: 'A tool for organizing meeting notes.', description: 'This tool organizes meeting notes and keeps them accessible to the entire team in one workspace.', pricingModel: 'unknown', evidence: { identity: [], description: [], pricing: [], classification: [] } };
+    await db.prepare("INSERT INTO submission_drafts (id, website_url, canonical_domain, candidate_json, actor_hash, status, expires_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?)").bind(id, website, candidate.canonicalDomain, JSON.stringify({ schemaVersion: 2, candidate, analysis }), hashFor(ip), now + 600, now, now).run();
+  }
+  function form(id, choice, image = bytes, funding = 'credit') {
     const data = new FormData();
-    const fields = { draftId: id, name: 'Runtime tool', tagline: 'A tool for organizing meeting notes.', description: 'This tool organizes meeting notes and keeps them accessible to the entire team in one workspace.', contactEmail: 'test@example.com', pricingModel: 'unknown', primaryCategorySlug: 'runtime-group', categorySlugs: '["runtime-group"]', tagSlugs: '["runtime-meeting"]', turnstileToken: 'development-bypass', features: 'My submitted feature.', screenshotChoice: choice };
+    const fields = { draftId: id, name: 'Runtime tool', tagline: 'A tool for organizing meeting notes.', description: 'This tool organizes meeting notes and keeps them accessible to the entire team in one workspace.', funding, pricingModel: 'unknown', primaryCategorySlug: 'runtime-group', categorySlugs: '["runtime-group"]', tagSlugs: '["runtime-meeting"]', turnstileToken: 'development-bypass', features: 'My submitted feature.', screenshotChoice: choice };
     for (const [key, value] of Object.entries(fields)) data.set(key, value);
     if (choice !== 'none') data.set('screenshotFile', new File([image], 'preview.webp', { type: 'image/webp' }));
     return data;
@@ -71,7 +83,10 @@ try {
   response = await dispatch('http://localhost/publish', { method: 'POST', headers, body: form('runtime-uploaded', 'uploaded') });
   const publication = await response.json();
   assert.equal(response.status, 202, JSON.stringify(publication));
-  assert.deepEqual(publication, { status: 'in_review' }, 'no public listing exists yet');
+  assert.deepEqual(publication, { status: 'in_review', funding: 'credit' }, 'no public listing exists yet');
+  assert.equal(await balance('user-alice'), 2, 'a credit submission spends one credit');
+  const stored = await db.prepare("SELECT user_id, funding, contact_email FROM submissions WHERE canonical_domain = 'runtime-uploaded.example'").first();
+  assert.deepEqual(stored, { user_id: 'user-alice', funding: 'credit', contact_email: 'al.ice+tools@gmail.com' }, 'the submission belongs to the signed-in account');
   const tool = await db.prepare('SELECT * FROM tools WHERE canonical_domain = ?').bind('runtime-uploaded.example').first();
   assert.equal(tool.status, 'pending_review', 'a submission stays hidden until it is researched');
   assert.equal(tool.published_at, null);
@@ -97,5 +112,41 @@ try {
   }
   response = await dispatch('http://localhost/runtime-limited', { method: 'POST', headers });
   assert.equal(response.status, 429);
+  // Accounts: sign-in, one free submission per person, credits, declined domains.
+  await draft('runtime-anonymous', '198.51.100.20');
+  response = await dispatch('http://localhost/publish', { method: 'POST', headers: { 'cf-connecting-ip': '198.51.100.20' }, body: form('runtime-anonymous', 'none') });
+  assert.equal(response.status, 401, 'publishing requires a signed-in account');
+  await draft('runtime-free', '198.51.100.21');
+  response = await dispatch('http://localhost/publish', { method: 'POST', headers: as(alice, '198.51.100.21', 'device-alice-0000000000'), body: form('runtime-free', 'none', bytes, 'free') });
+  assert.equal(response.status, 202, await response.clone().text());
+  assert.equal(await balance('user-alice'), 1, 'the free submission does not touch credits');
+  assert.ok(await db.prepare("SELECT 1 FROM free_claims WHERE user_id = 'user-alice'").first(), 'the free submission is recorded');
+  await draft('runtime-free-again', '198.51.100.21');
+  response = await dispatch('http://localhost/publish', { method: 'POST', headers: as(alice, '198.51.100.21', 'device-alice-0000000000'), body: form('runtime-free-again', 'none', bytes, 'free') });
+  assert.equal((await response.json()).code, 'free_used', 'an account gets one free submission');
+  const bob = await user('user-bob', 'bob@example.com', 'bob@example.com');
+  await draft('runtime-same-device', '203.0.113.30');
+  response = await dispatch('http://localhost/publish', { method: 'POST', headers: as(bob, '203.0.113.30', 'device-alice-0000000000'), body: form('runtime-same-device', 'none', bytes, 'free') });
+  assert.equal((await response.json()).code, 'free_linked', 'a second account on the same browser gets no free submission');
+  const carol = await user('user-carol', 'alice@googlemail.com', 'alice@gmail.com');
+  await draft('runtime-same-gmail', '192.0.2.40');
+  response = await dispatch('http://localhost/publish', { method: 'POST', headers: as(carol, '192.0.2.40', 'device-carol-0000000000'), body: form('runtime-same-gmail', 'none', bytes, 'free') });
+  assert.equal(response.status, 402, 'a dotted or plus Gmail variant gets no free submission');
+  await draft('runtime-no-credits', '192.0.2.41');
+  response = await dispatch('http://localhost/publish', { method: 'POST', headers: as(carol, '192.0.2.41', 'device-carol-0000000000'), body: form('runtime-no-credits', 'none') });
+  assert.equal((await response.json()).code, 'no_credits');
+  assert.equal(await db.prepare("SELECT 1 FROM tools WHERE canonical_domain = 'runtime-no-credits.example'").first(), null, 'nothing is stored without a credit');
+  assert.equal(await balance('user-carol'), 0);
+  await db.prepare("UPDATE tools SET status = 'rejected' WHERE canonical_domain = 'runtime-free.example'").run();
+  const dave = await user('user-dave', 'dave@example.org', 'dave@example.org');
+  await draft('runtime-declined-free', '192.0.2.50', 'runtime-free');
+  response = await dispatch('http://localhost/publish', { method: 'POST', headers: as(dave, '192.0.2.50', 'device-dave-00000000000'), body: form('runtime-declined-free', 'none', bytes, 'free') });
+  assert.equal(response.status, 409, 'a declined domain cannot come back as a free submission');
+  await draft('runtime-declined-credit', '198.51.100.22', 'runtime-free');
+  response = await dispatch('http://localhost/publish', { method: 'POST', headers: as(alice, '198.51.100.22', 'device-alice-0000000000'), body: form('runtime-declined-credit', 'none') });
+  assert.equal(response.status, 202, await response.clone().text());
+  assert.equal((await db.prepare("SELECT status FROM tools WHERE canonical_domain = 'runtime-free.example'").first()).status, 'pending_review', 'a credit replaces the declined record');
+  assert.equal(await balance('user-alice'), 0);
+  console.log('workerd: accounts, free claim guards, credit spend and declined-domain resubmission passed');
   console.log('workerd: private capture, multipart uploads, provenance, hidden D1 submission, exact R2 image and capture limit passed');
 } finally { await mf.dispose(); }

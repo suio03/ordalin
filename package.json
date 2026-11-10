@@ -32,6 +32,7 @@
     "imports:browser-evidence": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/add-browser-evidence.ts",
     "imports:prepare": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/prepare-manual-imports.ts",
     "imports:apply": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/apply-catalog-import.ts",
+    "submissions:reject": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/reject-submission.ts",
     "imports:screenshots": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/capture-import-screenshots.ts",
     "radar": "node --experimental-strip-types --experimental-specifier-resolution=node scripts/radar.ts",
     "test:submissions:runtime": "node scripts/test-submission-runtime.mjs",

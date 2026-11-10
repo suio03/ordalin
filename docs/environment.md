@@ -41,6 +41,23 @@ isolated tests without configured keys; local catalogue preview cannot submit.
 For production, set `NEXT_PUBLIC_TURNSTILE_SITE_KEY` in the build environment and
 store `TURNSTILE_SECRET_KEY` and a stable `SUBMISSION_HASH_SALT` as Worker secrets.
 
+Submitters sign in with Google and pay for listing credits through PayPal
+(`MVP_PLAN.md` §9). Store these as Worker secrets: `GOOGLE_CLIENT_ID`,
+`GOOGLE_CLIENT_SECRET`, `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`,
+`PAYPAL_WEBHOOK_ID`, and set `PAYPAL_ENV` to `sandbox` or `live`. The Google
+OAuth client allows the redirect `<NEXT_PUBLIC_APP_URL>/api/auth/google/callback`;
+the PayPal webhook points at `/api/billing/paypal-webhook` with the
+`PAYMENT.CAPTURE.COMPLETED`, `PAYMENT.CAPTURE.REFUNDED` and
+`PAYMENT.CAPTURE.REVERSED` events. Without the Google values `/submit` reports
+that sign-in is unavailable; without the PayPal values `/account` says payments
+open soon. `SUBMISSION_HASH_SALT` also salts the IP and device hashes that limit
+the free submission, so never rotate it. Local preview cannot sign in or pay
+(development is read-only) and shows a sample account instead;
+`pnpm test:submissions:runtime` covers accounts, free-claim guards, credit spend
+and declined-domain resubmission. Decline a submission with
+`pnpm submissions:reject -- --remote --domain=<domain> --reason="<why>"`, which
+returns the credit for credit submissions.
+
 Interactive submission analysis uses the OpenAI Responses API. Store
 `OPENAI_API_KEY` as a Worker secret and optionally set
 `OPENAI_ANALYSIS_MODEL`; the default is `gpt-5.6-luna`. If the key is absent,
@@ -237,7 +254,8 @@ server components only add `data-*` attributes.
 | `Tool Open` | `tool`, `from`, `search`, `placement` (when tagged) | an internal link to `/tools/[slug]` is clicked |
 | `Search` | `query`, `results` | a new non-empty query renders its first page (`/tools`, `/search`) |
 | `Submission Started` | — | the submit website check returns a draft |
-| `Submission Sent` | — | a submission is accepted for review |
+| `Submission Sent` | `funding` (`free`, `credit`) | a submission is accepted for review |
+| `Credits Purchased` | `packs` | a PayPal credit purchase completes on `/account` |
 
 - `placement` comes from `data-placement` (`profile`, `row`, `task`, `compare`,
   `editorial`), falling back to the page's first path segment for outbound

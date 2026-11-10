@@ -10,7 +10,7 @@ function validForm() {
     "description",
     "Voice Studio turns written scripts into narration and lets teams organize the resulting audio in a shared browser workspace.",
   );
-  form.set("contactEmail", "OWNER@EXAMPLE.COM");
+  form.set("funding", "credit");
   form.set("pricingModel", "freemium");
   form.set("primaryCategorySlug", "audio");
   form.set("categorySlugs", JSON.stringify(["audio", "productivity"]));
@@ -43,8 +43,14 @@ describe("submission validation", () => {
 
   it("accepts and normalizes confirmed fields", () => {
     const result = parsePublishedSubmission(validForm());
-    expect(result.contactEmail).toBe("owner@example.com");
+    expect(result.funding).toBe("credit");
     expect(result.categorySlugs).toEqual(["audio", "productivity"]);
+  });
+
+  it("requires a free or credit funding choice", () => {
+    const form = validForm();
+    form.set("funding", "sponsored");
+    expect(() => parsePublishedSubmission(form)).toThrow(SubmissionError);
   });
 
   it("requires the primary category in the selected set", () => {

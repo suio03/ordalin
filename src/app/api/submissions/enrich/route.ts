@@ -9,6 +9,8 @@ import { knownToolError, SubmissionError, submissionErrorResponse, type KnownToo
 import { actorHash, clientAddress, consumeSubmissionLimit, submissionHashSalt } from "@/lib/submissions/request";
 import { verifyTurnstile } from "@/lib/submissions/turnstile";
 import { canonicalWebsite } from "@/lib/submissions/validation";
+import { readCookie } from "@/lib/account/crypto";
+import { SESSION_COOKIE, sessionUser } from "@/lib/account/session";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +38,10 @@ export async function POST(request: Request) {
       OPENAI_API_KEY?: string;
       OPENAI_ANALYSIS_MODEL?: string;
     };
+    // Drafts call OpenAI, so only signed-in submitters can start one.
+    if (!(await sessionUser(env.DB, readCookie(request.headers.get("cookie"), SESSION_COOKIE)))) {
+      throw new SubmissionError("Sign in with Google to submit a tool.", 401, "signin_required");
+    }
     const address = clientAddress(request);
     const hash = await actorHash(address, submissionHashSalt(runtimeEnv.SUBMISSION_HASH_SALT));
     await consumeSubmissionLimit(env.DB, hash, "enrich", 10);
@@ -46,7 +52,8 @@ export async function POST(request: Request) {
       .prepare("SELECT slug, name, status FROM tools WHERE canonical_domain = ? LIMIT 1")
       .bind(requested.canonicalDomain)
       .first<KnownTool>();
-    if (duplicate) throw knownToolError(duplicate);
+    // A declined domain may come back, but only as a credit submission.
+    if (duplicate && duplicate.status !== "rejected") throw knownToolError(duplicate);
 
     const candidate = await enrichCatalogSite(requested.url.href).catch(() => ({
       schemaVersion: 1 as const, status: "pending_review" as const,
@@ -59,7 +66,8 @@ export async function POST(request: Request) {
       .prepare("SELECT slug, name, status FROM tools WHERE canonical_domain = ? LIMIT 1")
       .bind(candidate.canonicalDomain)
       .first<KnownTool>();
-    if (postFetchDuplicate) throw knownToolError(postFetchDuplicate);
+    if (postFetchDuplicate && postFetchDuplicate.status !== "rejected") throw knownToolError(postFetchDuplicate);
+    const creditOnly = Boolean(duplicate || postFetchDuplicate);
 
     const taxonomy = await loadCatalogTaxonomy(env.DB);
     let analysis = fallbackCatalogAnalysis(candidate, taxonomy);
@@ -102,7 +110,7 @@ export async function POST(request: Request) {
         ),
     ]);
 
-    return Response.json({ draftId, candidate, analysis });
+    return Response.json({ draftId, candidate, analysis, creditOnly });
   } catch (error) {
     return submissionErrorResponse(error);
   }

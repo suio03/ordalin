@@ -21,7 +21,9 @@ type Tag = {
   groupSlug: string | null;
   groupName: string | null;
 };
-export type Draft = { draftId: string; candidate: CatalogEnrichmentCandidate; analysis: CatalogAnalysis };
+export type Draft = { draftId: string; candidate: CatalogEnrichmentCandidate; analysis: CatalogAnalysis; creditOnly?: boolean };
+export type SubmitAccount = { email: string; balance: number; free: "available" | "used" | "linked" };
+type Funding = "free" | "credit";
 type ExistingTool = { slug: string; name: string };
 
 const PRICING_OPTIONS = [
@@ -114,16 +116,20 @@ const PAGE_LABELS: Record<EnrichmentEvidencePage["role"], string> = {
   homepage: "Homepage", pricing: "Pricing page", features: "Features page", docs: "Docs", security: "Security page", privacy: "Privacy page",
 };
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 function textProblem(value: string, min: number, empty: string) {
   const length = value.replace(/\s+/g, " ").trim().length;
   if (!length) return empty;
   return length < min ? `Use at least ${min} characters · ${length} so far.` : "";
 }
 
-type FieldName = "name" | "tagline" | "description" | "contactEmail";
-const STEP_FIELDS: FieldName[][] = [["name", "tagline", "description"], [], [], [], ["contactEmail"]];
+type FieldName = "name" | "tagline" | "description";
+const STEP_FIELDS: FieldName[][] = [["name", "tagline", "description"], [], [], [], []];
+
+const FREE_NOTES: Record<SubmitAccount["free"], string> = {
+  available: "Strict review. Model wrappers and resellers are declined, and a declined free submission is not returned.",
+  used: "This account has already used its free submission.",
+  linked: "A free submission was already used from this browser or network.",
+};
 
 const sameText = (a: string, b: string) => a.replace(/\s+/g, " ").trim() === b.replace(/\s+/g, " ").trim();
 
@@ -140,7 +146,7 @@ function FieldSource({ value, original, urls, pages, optional = false }: { value
   );
 }
 
-export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, initialWebsite = "" }: { categories: Category[]; tags: Tag[]; turnstileSiteKey?: string; initialDraft?: Draft; initialWebsite?: string }) {
+export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initialDraft, initialWebsite = "" }: { account: SubmitAccount; categories: Category[]; tags: Tag[]; turnstileSiteKey?: string; initialDraft?: Draft; initialWebsite?: string }) {
   const [details, setDetails] = useState<Record<DetailField, string>>({ features: "", pricingDetails: "", useCases: "" });
   const [preparedLogo, setPreparedLogo] = useState<File | null>(null);
   const preparedLogoPreview = useMemo(() => preparedLogo ? URL.createObjectURL(preparedLogo) : null, [preparedLogo]);
@@ -170,7 +176,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
   const [name, setName] = useState("");
   const [tagline, setTagline] = useState("");
   const [description, setDescription] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
+  const [funding, setFunding] = useState<Funding>(account.free === "available" ? "free" : "credit");
   const [pricingModel, setPricingModel] = useState("unknown");
   const initialCategory = categories[0]?.slug ?? "";
   const [primaryCategory, setPrimaryCategory] = useState(initialCategory);
@@ -246,7 +252,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
 
   function applyDraft(next: Draft, capture: boolean) {
     activeDraft.current = next.draftId;
-    setDraft(next); setStep(0); setFurthest(0); setCheckedSteps([]); setLogoUpload(null); setScreenshot(null); setScreenshotChoice("none"); setCaptureAttempts(0);
+    setDraft(next); if (next.creditOnly) setFunding("credit"); setStep(0); setFurthest(0); setCheckedSteps([]); setLogoUpload(null); setScreenshot(null); setScreenshotChoice("none"); setCaptureAttempts(0);
     setDetails(Object.fromEntries(detailFields.map(key => [key, next.analysis.details?.[key]?.text ?? ""])) as Record<DetailField, string>);
     if (capture) void captureScreenshot(next.draftId);
     const candidate = next.candidate;
@@ -316,7 +322,6 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
     name: textProblem(name, 2, "Enter the tool name."),
     tagline: textProblem(tagline, 20, "Add a short description."),
     description: textProblem(description, 60, "Describe what the tool does."),
-    contactEmail: !contactEmail.trim() ? "Enter an email so we can reach you about this listing." : EMAIL_PATTERN.test(contactEmail.trim()) ? "" : "Enter a valid email address.",
   };
   function stepMessage(index: number) {
     if (index === 1 && logoChoice === "upload" && !logoUpload) return "Upload a logo or choose the letter mark.";
@@ -365,7 +370,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
       const categorySlugs = [...new Set([primaryCategory, ...selectedGroupSlugs])].slice(0, 4);
       const fields: Record<string, string> = {
         ...details, screenshotChoice,
-        draftId: draft.draftId, name, tagline, description, contactEmail, pricingModel,
+        draftId: draft.draftId, name, tagline, description, funding, pricingModel,
         primaryCategorySlug: primaryCategory, categorySlugs: JSON.stringify(categorySlugs),
         tagSlugs: JSON.stringify(tagSlugs), turnstileToken,
       };
@@ -373,7 +378,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
       if (screenshot) form.set("screenshotFile", screenshot);
       if (preparedLogo) form.set("logoFile", preparedLogo);
       await responseJson(await fetch("/api/submissions/publish", { method: "POST", body: form }));
-      trackEvent("Submission Sent");
+      trackEvent("Submission Sent", { funding });
       setSubmitted(true);
     } catch (caught) {
       setError(messageFrom(caught)); setTurnstileToken(""); setTurnstileVersion((version) => version + 1);
@@ -382,6 +387,9 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
 
   if (submitted) return <SubmitSuccess name={name} tagline={tagline} logoSrc={preparedLogoPreview} />;
 
+  const freeAllowed = account.free === "available" && !draft?.creditOnly;
+  const creditAllowed = account.balance >= 1;
+  const fundingReady = funding === "free" ? freeAllowed : creditAllowed;
   const invalid = (field: FieldName) => shownProblem(field) ? { "aria-invalid": true, "aria-describedby": `${field}-problem` } : {};
   const fieldNote = (field: FieldName, fallback: ReactNode) => shownProblem(field)
     ? <span className={styles.fieldError} id={`${field}-problem`}>{shownProblem(field)}</span>
@@ -434,7 +442,7 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
           <div className={styles.stageNotes}>
             <p><span>01</span> We inspect a small set of public pages.</p>
             <p><span>02</span> You check each part of the draft before anything is sent.</p>
-            <p><span>03</span> Existing domains cannot be submitted again.</p>
+            <p><span>03</span> Listed tools and tools already in review cannot be submitted again.</p>
           </div>
         </section>
       ) : (
@@ -543,11 +551,21 @@ export function SubmitFlow({ categories, tags, turnstileSiteKey, initialDraft, i
             </section>
           </article> : null}
           <section hidden={!reviewing} className={styles.publishSection} aria-labelledby="publish-title">
-            <div><p className={styles.stepLabel}>Final confirmation</p><h3 id="publish-title">Submit for review</h3><p>Ordalin researches the official website before the listing goes live. Existing domains cannot be overwritten through this form.</p></div>
-            <label className={styles.emailField}><span>Private contact email</span><input name="contactEmail" type="email" autoComplete="email" value={contactEmail} onChange={(event) => setContactEmail(event.target.value)} aria-required="true" {...invalid("contactEmail")} />{fieldNote("contactEmail", <small>Used only if Ordalin needs to contact you about this listing.</small>)}</label>
+            <div><p className={styles.stepLabel}>Final confirmation · {account.email}</p><h3 id="publish-title">Submit for review</h3><p>Ordalin researches the official website before the listing goes live. Free and credit listings get the same page, ranking and labels.</p></div>
+            <fieldset className={styles.fundingChoices}>
+              <legend>Submission type</legend>
+              <label data-selected={funding === "free" ? "" : undefined} data-disabled={!freeAllowed ? "" : undefined}>
+                <input type="radio" name="funding" value="free" checked={funding === "free"} disabled={!freeAllowed} onChange={() => setFunding("free")} />
+                <span><strong>Free submission</strong><small>{draft.creditOnly ? "This domain was declined before. It can come back only with a credit." : FREE_NOTES[account.free]}</small></span>
+              </label>
+              <label data-selected={funding === "credit" ? "" : undefined} data-disabled={!creditAllowed ? "" : undefined}>
+                <input type="radio" name="funding" value="credit" checked={funding === "credit"} disabled={!creditAllowed} onChange={() => setFunding("credit")} />
+                <span><strong>Use 1 credit · {account.balance} left</strong><small>Reviewed within 48 hours. Sites built on third-party models are accepted and labelled as unofficial. A declined credit submission returns the credit.</small>{account.balance < 1 ? <a href="/account">Buy credits · $9 for 3 →</a> : null}</span>
+              </label>
+            </fieldset>
             <div className={styles.turnstile}><TurnstileBox key={turnstileVersion} siteKey={turnstileSiteKey} onToken={handleToken} /></div>
             {error && reviewing ? <div className={styles.error} role="alert">{error}</div> : null}
-            <button className={styles.publishButton} type="submit" disabled={busy || captureBusy || !reviewing || !turnstileToken || selectedBrowseCategoryCount === 0 || !hasPrimaryGroupCategory}>{busy ? "Submitting…" : `Submit ${name || "tool"} →`}</button>
+            <button className={styles.publishButton} type="submit" disabled={busy || captureBusy || !reviewing || !fundingReady || !turnstileToken || selectedBrowseCategoryCount === 0 || !hasPrimaryGroupCategory}>{busy ? "Submitting…" : `Submit ${name || "tool"} →`}</button>
           </section>
         </form>
       )}
