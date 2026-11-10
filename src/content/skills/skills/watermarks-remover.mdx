@@ -1,0 +1,146 @@
+export const meta = {
+  title: "Watermarks Remover Tested: A Claude Code Skill That Strips AI Watermarks and C2PA",
+  description:
+    "Watermarks Remover is a free agent skill that strips C2PA, AI metadata and hidden Unicode marks from text and files. See what our test verified, and what it couldn't.",
+  verdict:
+    "On an image we made with a signed C2PA manifest and AI labels in its EXIF, XMP and IPTC metadata, it removed all of them, and the pixels stayed identical. On a note with 15 hidden or unusual characters, it removed every one without changing a word. It took 1.5 minutes, 14 turns and $0.53 at API prices. Its other half, rewriting text to break statistical watermarks, needs a model backend we didn't set up, and nothing can verify it.",
+  summary:
+    "Our test checked the parts of Watermarks Remover that can be checked. It is a free, MIT-licensed project by Guillaume Meyer: an agent skill, remove-ai-marks, plus a small Python service that does the actual cleaning. The skill is only instructions. It tells the agent to send each file to the service on your machine (by default 127.0.0.1:8765), read the report and save the cleaned copy. The service removes three kinds of mark: invisible Unicode characters in text (Layer A), statistical watermarks hidden in word choice by rewriting the text (Layer B), and provenance metadata such as C2PA Content Credentials, EXIF, XMP and document properties in images, PDFs, Office files, audio and video. Labels like these are how many AI tools disclose that content is machine-made, and the EU AI Act's Article 50 asks AI providers to mark their output, so this is a tool for content you own and may publish without the label. We gave it an image and a note we made ourselves, each carrying known marks, and checked every byte before and after.",
+  bestFor: [
+    "Stripping metadata from your own images and documents before sharing them, for privacy",
+    "Removing zero-width characters, odd spaces and tag characters that break diffs, search and copy-paste",
+    "Seeing exactly which provenance labels a file carries: its inspect step reports them before anything changes",
+    "Researchers studying how robust C2PA and text watermarks are",
+  ],
+  notFor: [
+    "Hiding that content is AI-made where you are required to disclose it, by law, by a platform or by your school; the project's own ethics note rules that out",
+    "Proving a text is human-written: a removed mark says nothing about who wrote it, as the skill itself reminds you",
+    "Watermarks inside the pixels, such as SynthID: those need optional heavy backends, and our run couldn't check for them",
+    "Setups where you can't run a local service: the skill does nothing without it",
+  ],
+  howItWorks: [
+    {
+      title: "Start the service",
+      text: "The cleaning runs in a small Python service from the repository, using only Python's standard library: make serve, a Docker image, or python3 service/scripts/server.py. The skill checks its /health endpoint first and stops with a clear message if it isn't running; it never cleans files any other way. Optional tools on the same machine, c2patool, exiftool, qpdf and Ghostscript, widen what the service can read.",
+    },
+    {
+      title: "Inspect first",
+      text: "The agent sends each file, base64-encoded, to /inspect. The report lists what it found: C2PA manifests, AI-related metadata fields, and every invisible or unusual character by code point. Our run reported all of the marks we had planted.",
+    },
+    {
+      title: "Clean",
+      text: "Then it sends the file to /clean and writes the result to a separate *.cleaned file unless you ask for in-place. Images and documents lose their provenance metadata; by default that is a full metadata strip, so camera and copyright fields go too. Text loses its invisible characters, and odd spaces become normal ones.",
+    },
+    {
+      title: "Rewrite (Layer B), if configured",
+      text: "Statistical watermarks live in which words a model picks, so the only remedy is rewording. Since v0.7.0 the service's text route runs a rewrite after Layer A, using an LLM endpoint you configure and a roberta-large model. Without them it refuses with an error. The README is frank that this is best-effort, flattens the writing, and can't be proven to work while vendors keep their detectors private.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Install in Claude Code",
+      code: "/plugin marketplace add guillaumemeyer/watermarks-remover\n/plugin install watermarks-remover@watermarks-remover",
+      note: "This installs both skills and a PostToolUse hook that checks every file the agent writes for marks (check mode by default). For a plain skill install instead, clone the repository and run python3 install_skill.py --skill remove-ai-marks --target claude-code; there are targets for Codex, Cursor and claude.ai uploads too.",
+    },
+    {
+      label: "Start the service",
+      code: "git clone https://github.com/guillaumemeyer/watermarks-remover\ncd watermarks-remover && make serve",
+      note: "Needs Python 3.10 or later. If it runs elsewhere, set WATERMARKS_SERVICE_URL. A second skill in the repository, clean-user-facing-text, handles invisible characters on its own without the service.",
+    },
+    {
+      label: "What we asked",
+      code: "/remove-ai-marks Clean the two files in this folder, harbour.jpg (an image I made) and note.txt (my own note), and write the cleaned copies to ./cleaned/. First inspect both and tell me what marks you find. For the text, remove the hidden characters but don't rewrite my wording; just tell me what a rewrite would add.",
+      note: "The task also asked it to clone the repository and start and stop the service itself.",
+    },
+  ],
+  test: {
+    date: "2026-11-10",
+    agent: "Claude Code 2.1.322, headless (claude -p), skill installed in the project's .claude/skills",
+    model: "claude-opus-5-5",
+    commit: "5a62be6",
+    task: "Inspect and clean two files we made ourselves, so we knew every mark they carried: a 1200×800 JPEG with a C2PA manifest signed with the C2PA test certificate and declaring it AI-generated, plus AI labels in EXIF, XMP and IPTC; and a 46-word English note with 15 hidden or unusual characters (zero-width characters, a byte-order mark, three Unicode tag characters spelling AI, and five look-alike spaces). We checked the results ourselves with exiftool 13.55, c2patool 0.28.6 and a code-point count.",
+    samples: [
+      {
+        label: "Our check of the image, before and after",
+        mono: true,
+        text: "$ c2patool harbour.jpg | grep validation_state\n  \"validation_state\": \"Valid\"\n$ exiftool -XMP:all -EXIF:all -IPTC:all harbour.jpg | wc -l\n      20\n\n$ c2patool cleaned/harbour.jpg\nError: No claim found\n$ exiftool -XMP:all -EXIF:all -IPTC:all cleaned/harbour.jpg | wc -l\n       0",
+        note: "Decoded pixels of the two files are identical; the file shrank from 313,697 to 188,544 bytes, mostly because the manifest carried a thumbnail.",
+      },
+      {
+        label: "Our check of the note",
+        mono: true,
+        text: "note.txt          291 bytes  15 non-ASCII or invisible code points\ncleaned/note.txt  249 bytes   0 non-ASCII or invisible code points\nwords unchanged: true",
+        note: "We built the expected result ourselves (spaces normalised, invisible characters dropped) and it matched the cleaned file exactly.",
+      },
+      {
+        label: "From the agent's report",
+        text: "The service's normal text route always rewrites the text as well (Layer B). Here it refused with a 400 because no rewrite backend is configured. So I sent the note under the name note.md, which the service handles as a Markdown file: hidden-character removal only, no rewrite.",
+      },
+    ],
+    runs: [
+      { label: "Image with C2PA, EXIF, XMP and IPTC, plus a note with 15 hidden characters", outcome: "Manifest and all 20 tags removed, pixels identical; all 15 characters removed or normalised, words unchanged. Layer B rewrite not run", time: "1.5 min", cost: "$0.53", turns: 14, tone: "ok" },
+    ],
+    shots: [
+      {
+        src: "/skills/watermarks-remover/test-image-metadata.png",
+        alt: "Two panels. Before: the test image with a list of red metadata entries, a valid C2PA manifest with source type trainedAlgorithmicMedia, XMP, EXIF and IPTC fields naming ExampleGen 3 and saying AI-generated, 313,697 bytes and 20 metadata tags. After: the same image, c2patool reports no claim found, no XMP, EXIF or IPTC, pixels identical, 188,544 bytes and 0 metadata tags.",
+        caption: "The image before and after, as read by exiftool and c2patool. The picture is ours, and so is the C2PA manifest, signed with the C2PA test certificate.",
+        width: 1600,
+        height: 900,
+      },
+      {
+        src: "/skills/watermarks-remover/test-text-hidden-chars.png",
+        alt: "The test note shown twice. Before, each hidden character is drawn as a red label: BOM at the start, NBSP, ZWSP, NNBSP, a TAG:AI+END sequence after tired dogs, THIN, ZWJ, ZWNJ, WJ, EM SP, HAIR and two more ZWSP. After, the same four lines of text in plain ASCII with no labels.",
+        caption: "The note before cleaning, with each hidden character drawn as a red label so you can see it, and the cleaned copy. The three tag characters after \"tired dogs.\" spell AI, a kind of hidden mark the inspector flagged by name.",
+        width: 1600,
+        height: 760,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What does Watermarks Remover remove?",
+      a: "Three things. Invisible Unicode in text: zero-width characters, tag characters, bidirectional controls and look-alike spaces. Provenance metadata in files: C2PA Content Credentials, EXIF, XMP, IPTC and document properties in images, PDF, Office, EPUB, HTML, Markdown, audio and video. And, with a model backend you configure, statistical text watermarks, by rewriting the text. We verified the first two.",
+    },
+    {
+      q: "Can it remove SynthID or other invisible watermarks?",
+      a: "Not by default. Watermarks woven into an image's pixels, such as Google's SynthID, survive a metadata strip. The project has optional, heavy backends for pixel removal and SynthID scoring, which we did not set up. For SynthID in text, Layer B rewrites the wording, and the README says no tool can certify that a vendor's detector will fail afterwards.",
+    },
+    {
+      q: "Does it change my image or my words?",
+      a: "In our test, no. The cleaned image decoded to exactly the same pixels, and the cleaned note had the same words, with only the hidden characters gone and odd spaces made normal. The default metadata strip does remove everything, including camera and copyright fields, unless you ask it to keep non-AI metadata.",
+    },
+    {
+      q: "Is it legal to remove AI watermarks?",
+      a: "It depends on where you are and what the content is for. Labels like C2PA and IPTC's AI source type are how AI content is disclosed, and rules such as the EU AI Act's Article 50 and many platforms' policies expect AI-made content to be identifiable. The project says to use it only on content you own or are authorised to process, and not to hide AI assistance where disclosure is required.",
+    },
+    {
+      q: "What is the stealer module?",
+      a: "A research tool in the repository's stealer folder, added in v0.7.0. It queries a watermarked model and an unwatermarked one with many prompts, counts which next tokens the watermark seems to favour, and outputs a score table that a paraphraser can use to avoid those tokens. It does not recover the secret key, and the skill doesn't use it. We didn't run it.",
+    },
+    {
+      q: "What do I need?",
+      a: "An agent that reads skills (Claude Code, Codex, Cursor and others), Python 3.10 or later for the service, and optionally c2patool, exiftool, qpdf and Ghostscript for wider file support. Layer B needs an LLM endpoint and the roberta-large model. It's free and MIT-licensed.",
+    },
+  ],
+};
+
+## What we tested
+
+We installed the skill from commit 5a62be6 into a project folder with two files we made ourselves. The first was a 1200×800 JPEG with a C2PA manifest, signed with the C2PA test certificate, that declares the image AI-generated, plus AI labels in its EXIF, XMP and IPTC metadata. The second was a 46-word English note carrying 15 hidden or unusual characters: zero-width spaces and joiners, a word joiner, a byte-order mark, three Unicode tag characters that spell "AI", and five look-alike spaces. We asked Claude Code on Claude Opus 5.5 to inspect both, clean them into a separate folder and leave the wording alone, and to start the service itself. Then we checked the outputs with exiftool, c2patool and a code-point count, not just the agent's word.
+
+## What we found
+
+- **The metadata really went.** All 20 XMP, EXIF and IPTC tags and the C2PA manifest were gone; c2patool found no claim at all. The pixels were byte-for-byte the same after decoding. The inspect step had listed every label first, including that the manifest appeared twice in the file.
+- **Every hidden character went, and no words changed.** The note dropped from 291 to 249 bytes and became plain ASCII. It matched, exactly, the copy we built ourselves by removing the invisible characters and normalising the spaces.
+- **The text route expects a rewrite.** Since v0.7.0 the service rewrites text after removing hidden characters, and with no rewrite model configured it refused the .txt file. The agent worked around it by sending the note as Markdown, which cleans characters only, and said so plainly in its report.
+- **The rewrite half is unverified.** We didn't configure Layer B. Even if we had, there's no public detector for Claude's, OpenAI's or Gemini's text watermarks to test against, which the README itself says.
+- **It handled the setup on its own.** It cloned the repository, found port 8765 taken by another process, ran the service on 8766 instead, and stopped it at the end. The whole run took 1.5 minutes.
+
+## Limitations
+
+- **It removes disclosure labels.** C2PA, IPTC's AI source type and similar fields are how AI tools say content is machine-made, and laws such as the EU AI Act's Article 50 and many platforms' rules expect that to stay visible. Use it on content you own and may share unlabelled; the project's ethics note says the same.
+- **Layer B is unverified.** We did not test the rewrite. The README calls it best-effort, warns that it degrades the writing, and says no tool can certify a vendor detector will fail.
+- **It needs a local service.** The skill does nothing on its own. You run a Python service, locally or in Docker, and the agent talks to it over HTTP. Optional backends for pixel watermarks, SynthID scoring and Layer B add large models and dependencies.
+- **It ships a watermark-stealing module.** The repository's stealer folder estimates which tokens a text watermark favours by querying a watermarked model at scale, for use by a paraphraser. The author frames it as robustness research; the skill doesn't call it, and we didn't run it.
+- **Pixel and soft-bound marks can survive.** A metadata strip doesn't touch a watermark inside the pixels. C2PA soft binding can also link a stripped image back to its manifest online.

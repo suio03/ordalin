@@ -21,5 +21,6 @@ export const REGISTRY: SkillsRegistry = {
     "code-animation-prompts": { status: "published", load: () => import("./skills/code-animation-prompts.mdx") },
     reanimate: { status: "published", load: () => import("./skills/reanimate.mdx") },
     teardown: { status: "published", load: () => import("./skills/teardown.mdx") },
+    "watermarks-remover": { status: "published", load: () => import("./skills/watermarks-remover.mdx") },
   },
 };

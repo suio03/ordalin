@@ -182,6 +182,19 @@
       "language": "English",
       "produces": "One offline HTML page with an interactive 3D machine simulator, and a 60 fps MP4 of its tour with a generated sound score",
       "checked_on": "2026-11-07"
+    },
+    {
+      "slug": "watermarks-remover",
+      "name": "Watermarks Remover",
+      "author": "Guillaume Meyer",
+      "repo": "https://github.com/guillaumemeyer/watermarks-remover",
+      "license": "MIT",
+      "version": "0.7.0",
+      "agents": "Claude Code (skill or plugin), Codex, Cursor, Grok and claude.ai uploads; tested in Claude Code",
+      "install": "Run /plugin marketplace add guillaumemeyer/watermarks-remover, then /plugin install watermarks-remover@watermarks-remover, or python3 install_skill.py --skill remove-ai-marks --target claude-code; start the service with make serve (Python 3.10+)",
+      "language": "English",
+      "produces": "Cleaned copies of text and files without invisible Unicode or C2PA/EXIF/XMP metadata, plus an inspect report; optional rewritten text",
+      "checked_on": "2026-11-10"
     }
   ]
 }

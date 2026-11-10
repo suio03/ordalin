@@ -1,0 +1,11 @@
+{
+  "kind": "skill",
+  "name": "remove-ai-marks",
+  "repo": "https://github.com/guillaumemeyer/watermarks-remover",
+  "commit": "5a62be6",
+  "fixture": "ai-marks",
+  "install": { "claude": { "skill": "skills/remove-ai-marks" } },
+  "task": "/remove-ai-marks Clean the two files in this folder, harbour.jpg (an image I made) and note.txt (my own note), and write the cleaned copies to ./cleaned/. First inspect both and tell me what marks you find. For the text, remove the hidden characters but don't rewrite my wording; just tell me what a rewrite would add. The skill needs its service: clone https://github.com/guillaumemeyer/watermarks-remover at commit 5a62be6 into ./service-src in this folder and start the service from there yourself, and stop it when you are done. Don't delete or change anything outside this folder. If something is missing, say exactly what. Answer in English and don't ask me questions.",
+  "env": { "DO_NOT_TRACK": "1" },
+  "timeoutMinutes": 45
+}
