@@ -1,0 +1,167 @@
+export const meta = {
+  title: "refactor-codebase Skill Tested: Cleaning Up AI-Written Code with Claude Fable 5.2",
+  description:
+    "refactor-codebase is a free MIT skill from dzhng/skills that refactors a whole codebase in one run. We ran it with Claude Fable 5.2 on a sloppy invoicing app: 8 commits, 3 real bugs fixed, 15 tests passing.",
+  verdict:
+    "On our deliberately messy invoicing app, refactor-codebase ran unattended for 11 minutes with Claude Fable 5.2, landed eight focused commits, fixed three real bugs and finished with 15 passing tests. It is thorough, not cheap: the run cost $6.71 at API prices for about 400 lines of code.",
+  summary:
+    "Our test: we wrote a 419-line TypeScript invoicing CLI with the kind of debt AI-written code piles up (pricing logic copied four times, three status flags, a global state object, a one-plugin plugin system, swallowed errors and a skipped test) and typed /refactor-codebase in Claude Code with Claude Fable 5.2. The skill had subagents hunt for implicit state machines and overengineering, wrote a list of fixes with the problems each one removes, then landed them one commit at a time, re-audited with fresh subagents, and finished by auditing the tests. It ended with 377 lines, 15 passing tests instead of 9 plus a skipped one, and every behaviour change named in its commit message. Three of the problems it fixed were real bugs, two of which we had not planted on purpose. refactor-codebase is one skill in David Zhang's dzhng/skills, an MIT-licensed pack of plan, implement and review skills for Claude Code, Codex and other agents; the author says Claude Fable 5.2 distilled it from his own session history.",
+  bestFor: [
+    "Codebases grown with an AI assistant, where the same logic got copied and special cases piled up",
+    "Running a cleanup as one unattended goal and reviewing the commits afterwards, one fix per commit",
+    "Developers who already use Claude Code or Codex and want a repeatable de-slop pass, not a one-off prompt",
+  ],
+  notFor: [
+    "Tight budgets: our 400-line app cost $6.71 at API prices, and the skill expects to run over a whole codebase",
+    "Projects without tests or a check command; the skill leans on them as its safety net",
+    "Expecting no behaviour change at all; it fixes bugs it finds and lists them, so read the commit messages before merging",
+  ],
+  howItWorks: [
+    {
+      title: "One question for every piece of code",
+      text: "Should these pieces change together? The skill names three ways code gets that wrong: hidden links (copied logic, modules reading state another module sets), needless links (callers reaching into internals, parameters only one caller understands) and surplus (pass-through wrappers, config for things that never vary, dead code).",
+    },
+    {
+      title: "List everything before changing anything",
+      text: "It writes every problem and every special case (an if for one value, a swallowed exception, a retry or sleep, a disabled test) into a file. Subagents run the specialist hunts from the same pack: find-state-machines, find-overengineering and ratchet-files.",
+    },
+    {
+      title: "Redesign, then land one fix at a time",
+      text: "Each fix is one mechanism written above the problems it removes, and lands as one commit with the project's checks passing, following refactor-change and code-review. Behaviour changes go in the commit message. Fresh subagents then search again, and the run closes with audit-tests over the suites it touched.",
+    },
+    {
+      title: "You start it; it does not start itself",
+      text: "The skill sets disable-model-invocation, so the agent never loads it on its own. You type /refactor-codebase, optionally naming an area to start with.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Install the pack",
+      code: "npx skills add dzhng/skills",
+      note: "Installs through the Skills CLI for Claude Code, Codex, Cursor, opencode and other agents. Add --list to pick skills; refactor-codebase calls find-state-machines, find-overengineering, ratchet-files, refactor-change, code-review and audit-tests, so keep those too.",
+    },
+    {
+      label: "Run it",
+      code: "/refactor-codebase",
+      note: "In a clean git branch with your tests passing. Add an area after the command to start there, e.g. /refactor-codebase the billing module.",
+    },
+  ],
+  test: {
+    date: "2026-11-11",
+    agent: "Claude Code 2.1.322, headless (claude -p), project settings only, the skill and its six helper skills copied into .claude/skills/, one message",
+    model: "claude-fable-5-2",
+    commit: "873aba8",
+    task: "/refactor-codebase — This is a small invoicing CLI an AI assistant wrote over a few weekends. Run the skill to the end on its own: I won't answer questions, so make the calls yourself. `npm test` is the project's check. Commit each fix with git as the skill says. Keep all files inside this folder. When you're done, give a short summary of what you found and what you changed.",
+    runs: [
+      { label: "refactor-codebase, Claude Fable 5.2", outcome: "8 commits, 419 → 377 lines, 15 of 15 tests pass, 3 bugs fixed", time: "11 min", cost: "$6.71", turns: 30, tone: "ok" },
+    ],
+    shots: [
+      {
+        src: "/skills/refactor-codebase/commits-and-tests.webp",
+        alt: "Terminal output: eight commits from one refactor-codebase run, from 'Give quotes and invoices one owner for totals, validation and numbering' to 'Cover the remaining rules and drop the dynamic test imports', then 15 files changed with 217 insertions and 257 deletions, and npm test going from 9 passing and 1 skipped to 15 passing",
+        caption: "The run's eight commits, the overall diff and the test results before and after. Retyped from our test's git log and npm test output.",
+        width: 2400,
+        height: 1132,
+      },
+      {
+        src: "/skills/refactor-codebase/before-after-cli.webp",
+        alt: "Two terminals side by side. Before: a cancelled invoice can still be paid and is counted in the report, accepting a quote twice creates two invoices, and a broken data.json is treated as empty and then overwritten. After: paying a cancelled invoice is refused, the second accept returns the same invoice, and a broken data.json stops the command with an error",
+        caption: "The same commands run against our starting code and the refactored code. We ran these ourselves after the test; the outputs are shortened.",
+        width: 2400,
+        height: 940,
+      },
+    ],
+    samples: [
+      {
+        label: "One commit message, unchanged",
+        mono: true,
+        note: "Every commit names the behaviour it changes, as the skill asks, so a change in behaviour traces back to one fix.",
+        text: `Give invoices one status field instead of three flags
+
+isSent/isPaid/isCancelled allowed combinations that mean nothing, and
+the status function, the report and the CSV export each derived the
+real state their own way. An invoice now has status draft, sent, paid
+or cancelled, changed only by the transitions in invoiceService.
+
+Behavior changes:
+- A cancelled invoice can no longer be paid ("Invoice is cancelled").
+  Before, send, cancel, pay left it listed as cancelled but counted in
+  the report's Paid total.
+- data.json stores "status" in place of the three flags. Files in the
+  old format are upgraded when read (storage.ts withStatus); an invoice
+  that was both paid and cancelled becomes cancelled.`,
+      },
+      {
+        label: "The new shared billing module",
+        mono: true,
+        note: "Pricing had been written four times, with the tax rate spelled three ways. The hard-coded discount for one customer was kept, but moved into a single table; the agent said moving it onto the customer record would need a new command and a data change.",
+        text: `const TAX_RATE = 0.1;
+
+// Negotiated discounts, taken off the subtotal before tax.
+const DISCOUNT_BY_CUSTOMER = new Map([["acme", 0.05]]);
+
+export function billableTotal({ customerId, lines }) {
+  const subtotal = lines.reduce((sum, l) => sum + l.amount, 0)
+    * (1 - (DISCOUNT_BY_CUSTOMER.get(customerId) ?? 0));
+  return round(subtotal + subtotal * TAX_RATE);
+}`,
+      },
+      {
+        label: "What it left alone, from its final report",
+        mono: true,
+        note: "Translated: our test machine's settings made the agent write its report in Chinese. It listed gaps it found but treated as new behaviour rather than refactoring.",
+        text: `Not handled (new behaviour, not a refactor):
+- A customer id can be an empty string.
+- An amount like 0.001 that rounds to 0 creates a $0 invoice.
+- A hand-edited data.json missing the "quotes" key fails with a
+  TypeError that doesn't name the file.`,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What is refactor-codebase?",
+      a: "An agent skill that refactors a whole codebase as one goal, aimed at the layered debt AI-written code accumulates. It lists every hidden link, needless link, surplus piece and special case first, redesigns from that list, lands one fix per commit with tests passing, searches again with fresh subagents, and ends by auditing the tests. It is part of dzhng/skills by David Zhang.",
+    },
+    {
+      q: "Does it change what my code does?",
+      a: "It aims to keep behaviour the same apart from bugs it fixes, and names every behaviour change in a commit message. In our test it listed seven behaviour changes, including refusing to pay a cancelled invoice, returning the same invoice when a quote is accepted twice, and stopping with an error instead of silently overwriting a broken data file. The rest of the app behaved the same in the agent's own 28-command check and in the commands we ran.",
+    },
+    {
+      q: "How much does a run cost?",
+      a: "Ours took 11 minutes, 30 turns and $6.71 at API prices with Claude Fable 5.2, as reported by Claude Code, for about 400 lines of code. Most of that went on subagents reading and re-reading the code. On a subscription it counts against your usage; on a large codebase expect a much longer run.",
+    },
+    {
+      q: "Do I need the other skills in the pack?",
+      a: "Yes for the full workflow. refactor-codebase hands work to find-state-machines, find-overengineering and ratchet-files during the hunt, follows refactor-change and code-review for each fix, and finishes with audit-tests. Installing the whole pack with npx skills add dzhng/skills keeps those links working.",
+    },
+    {
+      q: "Which agents does it work with?",
+      a: "The repository says the skills work with any harness that loads skills, naming Claude Code, Codex, opencode, Cursor and duet, and installs through the Skills CLI. We tested it in Claude Code only.",
+    },
+    {
+      q: "What else is in dzhng/skills?",
+      a: "Plan skills (explore-unknowns, write-spec, auto-research), implement skills (implement-spec, write-tests, write-docs, port-features and others) and review skills (review, code-review, audit-decisions, audit-tests, find-overengineering and more), plus visual review and graphics skills. The author runs them as one loop: map the unknowns, write a spec, build it unattended, then review the decisions the agent made.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes. The skills are open source under the MIT licence. You pay for the agent and model you run them with.",
+    },
+  ],
+};
+
+## What we tested
+
+We wrote a small invoicing app for the command line in TypeScript: customers, quotes and invoices stored in a JSON file, with a report of outstanding and paid totals. It had 419 lines and 10 tests, one of them skipped. We gave it the debt that builds up when an assistant adds features over several sessions: the price calculation (subtotal, one customer's 5% discount, 10% tax, rounding) written separately in four places, invoice status kept in three true/false flags, the currency passed between modules through a global object, a storage "driver" factory with one driver, a plugin system with one empty plugin, an unused CSV export, a retry loop that swallowed errors, and a skipped test marked "flaky on CI".
+
+We installed refactor-codebase from the repository at commit 873aba8, together with the six skills it links to, and sent one message starting with /refactor-codebase, using Claude Fable 5.2 in Claude Code. The agent could read and edit files, run commands, commit with git and start subagents. Afterwards we read every commit, ran the tests, and ran the same commands against the starting code and the result.
+
+## What we found
+
+- **It followed its own process.** Two subagents hunted for state machines and overengineering without changing anything, while the main agent wrote a refactor list with each fix above the problems it removes. It then landed six fixes as six commits, sent a fresh subagent to re-audit, acted on what it found, ran a final search, and finished with two test-audit commits.
+- **It found real bugs.** A cancelled invoice could still be paid and was then counted as paid income; accepting the same quote twice created a second invoice; and a broken data file was read as empty, so the next command overwrote everyone's data. We had planted the swallowed errors, but not the first two. Each fix is named in its commit message, and we confirmed all three by running both versions.
+- **It removed what had no reason to exist.** The plugin system, the storage factory, the config object, the global state, the CSV export and an old validator are gone; a new 18-line billing module owns totals, validation and numbering for both quotes and invoices.
+- **The tests got stronger.** The skipped test became a real one, a test that only compared the quote code with a copy of itself was given fixed expected values, and regression tests cover each fixed bug. 15 tests pass.
+- **One file outside the folder.** Despite our instruction, the agent left a scratch file in the system temp folder. Its tests, like our originals, also leave temporary folders behind.
+
+The run took 30 turns, 11 minutes and $6.71 at API prices, as reported by Claude Code. This is one small, purpose-built app with one model, so read it as an example of what the skill does, not a benchmark.

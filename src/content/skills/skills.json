@@ -208,6 +208,33 @@
       "language": "English",
       "produces": "Cleaned copies of text and files without invisible Unicode or C2PA/EXIF/XMP metadata, plus an inspect report; optional rewritten text",
       "checked_on": "2026-11-10"
+    },
+    {
+      "slug": "refactor-codebase",
+      "name": "refactor-codebase",
+      "author": "David Zhang (dzhng)",
+      "repo": "https://github.com/dzhng/skills",
+      "license": "MIT",
+      "version": "unknown",
+      "agents": "Claude Code, Codex, opencode, Cursor, duet and other agents that load skills; tested in Claude Code",
+      "install": "Run npx skills add dzhng/skills (add --list to pick skills, keeping the six review skills refactor-codebase links to), then type /refactor-codebase",
+      "language": "English; works with any programming language",
+      "produces": "A refactored codebase landed as one commit per fix, with behaviour changes named in each commit message and an audited test suite",
+      "checked_on": "2026-11-11"
+    },
+    {
+      "slug": "stickman-video-director",
+      "name": "Stickman Video Director",
+      "display_name": "directing-stickman-videos",
+      "author": "kaomei (Crazy Kaomei)",
+      "repo": "https://github.com/kaomei/stickman-video-director",
+      "license": "MIT",
+      "version": "unknown",
+      "agents": "Codex (recommended by the author), Claude Code, Cursor and other agents with file and terminal access; Director mode in any skill-compatible assistant; tested in Claude Code",
+      "install": "Ask your agent to install https://github.com/kaomei/stickman-video-director, or copy skills/directing-stickman-videos into .claude/skills; Autopilot mode also needs Node 20+, FFmpeg/FFprobe and npm ci in the skill folder",
+      "language": "English",
+      "produces": "Director mode: a treatment and scene-by-scene prompts for 10-second video clips; Autopilot mode: a narrated MP4 with captions, illustrations and sound effects (image tool and TTS service required)",
+      "checked_on": "2026-11-11"
     }
   ]
 }

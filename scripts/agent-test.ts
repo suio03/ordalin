@@ -33,8 +33,8 @@ type Spec = {
   /** Folder in scripts/agent-test/fixtures/, or "git:<path>" for the tracked files of a local repository. Empty when omitted. */
   fixture?: string;
   install?: {
-    /** Claude Code: a plugin folder (loaded with --plugin-dir, hooks included) or a skill folder (copied into .claude/skills/); "." is a skill at the repository root, named after the repository. */
-    claude?: { plugin?: string; skill?: string };
+    /** Claude Code: a plugin folder (loaded with --plugin-dir, hooks included) or a skill folder (copied into .claude/skills/); "." is a skill at the repository root, named after the repository. A list installs sibling skills that link to each other. */
+    claude?: { plugin?: string; skill?: string | string[] };
     /** Codex: a skill folder, copied into .agents/skills/. */
     codex?: { skill?: string };
   };
@@ -146,7 +146,7 @@ function claudeArgs(variant: "with" | "without", ws: string, task: string) {
   if (variant === "with") {
     const install = spec.install?.claude;
     if (install?.plugin) args.push("--plugin-dir", join(repoDir, install.plugin));
-    if (install?.skill) copySkill(install.skill, join(ws, ".claude", "skills"));
+    for (const skill of [install?.skill ?? []].flat()) copySkill(skill, join(ws, ".claude", "skills"));
     if (spec.mcp) {
       const config = { mcpServers: { [spec.name]: { command: fill(spec.mcp.command), args: (spec.mcp.args ?? []).map(fill), env: Object.fromEntries(Object.entries(spec.mcp.env ?? {}).map(([k, v]) => [k, fill(v)])) } } };
       const file = join(run, "mcp.json");

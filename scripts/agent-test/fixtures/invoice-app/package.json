@@ -1,0 +1,7 @@
+{
+  "name": "invoice-app",
+  "private": true,
+  "type": "module",
+  "bin": { "invoice": "src/cli.ts" },
+  "scripts": { "test": "node --experimental-strip-types --test test/*.test.ts" }
+}

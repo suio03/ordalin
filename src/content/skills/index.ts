@@ -23,5 +23,7 @@ export const REGISTRY: SkillsRegistry = {
     reanimate: { status: "published", load: () => import("./skills/reanimate.mdx") },
     teardown: { status: "published", load: () => import("./skills/teardown.mdx") },
     "watermarks-remover": { status: "published", load: () => import("./skills/watermarks-remover.mdx") },
+    "refactor-codebase": { status: "published", load: () => import("./skills/refactor-codebase.mdx") },
+    "stickman-video-director": { status: "published", load: () => import("./skills/stickman-video-director.mdx") },
   },
 };

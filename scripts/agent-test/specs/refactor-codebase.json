@@ -1,0 +1,30 @@
+{
+  "kind": "skill",
+  "name": "refactor-codebase",
+  "repo": "https://github.com/dzhng/skills",
+  "commit": "873aba8",
+  "fixture": "invoice-app",
+  "install": {
+    "claude": {
+      "skill": [
+        "skills/review/refactor-codebase",
+        "skills/review/find-state-machines",
+        "skills/review/find-overengineering",
+        "skills/review/ratchet-files",
+        "skills/review/refactor-change",
+        "skills/review/code-review",
+        "skills/review/audit-tests",
+        "skills/review/review",
+        "skills/implement/write-tests"
+      ]
+    }
+  },
+  "task": "/refactor-codebase\n\nThis is a small invoicing CLI an AI assistant wrote over a few weekends. Run the skill to the end on its own: I won't answer questions, so make the calls yourself. `npm test` is the project's check. Commit each fix with git as the skill says. Keep all files inside this folder. When you're done, give a short summary of what you found and what you changed.",
+  "env": { "DO_NOT_TRACK": "1", "GIT_AUTHOR_NAME": "ordalin-test", "GIT_AUTHOR_EMAIL": "test@ordalin.invalid", "GIT_COMMITTER_NAME": "ordalin-test", "GIT_COMMITTER_EMAIL": "test@ordalin.invalid" },
+  "after": [
+    "npm test 2>&1 | grep -E '^# (tests|pass|fail|skipped)'",
+    "git log --oneline",
+    "find src test -name '*.ts' | xargs wc -l | tail -1"
+  ],
+  "timeoutMinutes": 60
+}

@@ -1,0 +1,13 @@
+{
+  "kind": "skill",
+  "name": "stickman-director",
+  "repo": "https://github.com/kaomei/stickman-video-director",
+  "commit": "8643650",
+  "install": { "claude": { "skill": "skills/directing-stickman-videos" } },
+  "task": "Use Director Mode / mode A of the stickman video skill to turn this topic into a stickman video: why we open the fridge again and again when we're bored, even though nothing new is in it. Requirements: landscape 16:9, A3 \"Prehistoric Cave\" style, 30 seconds. Give me the director's treatment first. Save everything you write into ./out as Markdown files as well. Answer in English and don't ask me questions beyond the skill's approval step.",
+  "followUps": [
+    "Approved as written. Now give me the scene-by-scene video prompts, and save them to ./out/prompts.md too."
+  ],
+  "env": { "DO_NOT_TRACK": "1" },
+  "timeoutMinutes": 30
+}

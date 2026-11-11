@@ -1,0 +1,10 @@
+{
+  "kind": "skill",
+  "name": "stickman-autopilot",
+  "repo": "https://github.com/kaomei/stickman-video-director",
+  "commit": "8643650",
+  "install": { "claude": { "skill": "skills/directing-stickman-videos" } },
+  "task": "Use Autopilot Mode / mode B of the stickman video skill to turn this topic into a YouTube video: why we open the fridge again and again when we're bored, even though nothing new is in it. Requirements: landscape 16:9, B1 \"Minimal Line Art\" style, captions and sound effects. Check the image generation, voiceover and video-rendering setup first, as the skill says, then give me a script and a 20-second preview with sound, rendered to ./out/preview.mp4. I approve the script you write for this preview in advance. Important limits for this machine: no image-generation or text-to-speech service is configured, and you must not sign up for one, use any API key, pick a voice, or use the operating system's built-in speech. Within those limits, make the most complete 20-second preview the skill allows: you may draw the illustrations yourself in code, and if there is no narration, render it without a voice and say so plainly. Run npm ci and anything else you need inside this folder only (the skill's copy in .claude/skills is inside it); don't install or change anything outside this folder. If something can't be done, say exactly what and why. Answer in English and don't ask me questions.",
+  "env": { "DO_NOT_TRACK": "1" },
+  "timeoutMinutes": 75
+}

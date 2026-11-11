@@ -1,0 +1,174 @@
+export const meta = {
+  title: "Stickman Video Director Tested: A Free Skill for Faceless Stickman YouTube Videos",
+  description:
+    "Stickman Video Director is a free, MIT-licensed agent skill that writes stickman video prompts or renders whole narrated videos in 11 styles. See our Claude Code test and all 22 author demos.",
+  verdict:
+    "Director mode is cheap and good: in under five minutes for $1.20, Claude Code wrote a tight 30-second treatment and three ready-to-paste video prompts. Autopilot mode really renders video on your computer, but a finished film needs an image tool and a TTS voice you pay for and choose; without them our run made a silent 20-second preview with code-drawn art for $3.27.",
+  summary:
+    "Our test ran both modes of this skill in Claude Code on Opus 5.5 with one topic: why we keep opening the fridge when we're bored. Stickman Video Director, by kaomei (Crazy Kaomei), is one skill with 11 styles in two modes. Director mode plans a video and writes scene-by-scene prompts for about 10-second clips that you generate in Gemini Omni Flash, Google Flow, Runway, Luma or Kling, then edit yourself. Autopilot mode has the agent produce the finished MP4 on your machine, with narration, captions, illustrations, light animation and sound effects, after you approve a script and a 20-second sample. Below are our test preview, all 22 demos the author publishes, how it works and how to start.",
+  bestFor: [
+    "Faceless YouTube and Shorts channels that tell stories or explain ideas with stick figures",
+    "Planning a stickman video for an AI video generator, with consistent characters across clips",
+    "Claude Code, Codex or Cursor users who want a narrated explainer rendered locally from a brief",
+  ],
+  notFor: [
+    "A finished Autopilot video with no paid services: you need an image tool and a text-to-speech service, and you choose the voice",
+    "Director mode users who want a video file from the skill itself; it writes prompts, and you generate and edit the clips",
+    "Anyone expecting the author's Autopilot look from Claude Code without an image model; the author made those demos in Codex with GPT's built-in image model",
+  ],
+  gallery: {
+    heading: "All 22 author demos, two for each of the 11 styles",
+    intro:
+      "Stickman Video Director is one skill with 11 styles in two modes, so there is one install and you pick the style in your request. The A styles are Director mode: the skill writes the treatment and clip prompts, and the author generated the clips in a video model and edited them. The B styles are Autopilot mode: the agent renders the whole film itself, with narration, captions and sound.",
+    items: [
+      { group: "A1 · Classic Black & White", src: "/skills/stickman-video-director/a1-light.jpg", label: "Director mode", title: "Black on white", caption: "The classic stick figure on a white page, here walking through a hall of monoliths.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/light-theme-demo.mp4", duration: "0:10", uses: ["Explainers", "Shorts"] },
+      { group: "A1 · Classic Black & White", src: "/skills/stickman-video-director/a1-dark.jpg", label: "Director mode", title: "White on black", caption: "The same style inverted, for a darker mood.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/dark-theme-demo.mp4", duration: "0:10", uses: ["Explainers", "Shorts"] },
+      { group: "A2 · Modern Pop", src: "/skills/stickman-video-director/a2-tech.jpg", label: "Director mode", title: "Minimal Tech", caption: "Flat colour fields and a round-headed figure, for tech and product topics.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/style-2a-demo.mp4", duration: "0:10", uses: ["Tech explainers", "Product stories"] },
+      { group: "A2 · Modern Pop", src: "/skills/stickman-video-director/a2-story.jpg", label: "Director mode", title: "Colorful Story", caption: "The brighter variant of Modern Pop, for everyday stories.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/style-2b-demo.mp4", duration: "0:10", uses: ["Storytelling", "Shorts"] },
+      { group: "A3 · Prehistoric Cave", src: "/skills/stickman-video-director/a3-first-job.jpg", label: "Director mode", title: "How did humans get their first job?", caption: "A caveman comedy with bilingual captions, the style our Director-mode test used.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/style-3-demo.mp4", duration: "0:30", uses: ["History jokes", "Shorts"] },
+      { group: "A3 · Prehistoric Cave", src: "/skills/stickman-video-director/a3-fire.jpg", label: "Director mode", title: "The first discovery of fire", caption: "A community-made film in the same cave style, shared in the repository.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/style-3-community-fire.mp4", duration: "0:30", uses: ["History jokes", "Shorts"] },
+      { group: "A4 · Cozy Storytelling", src: "/skills/stickman-video-director/a4-station.jpg", label: "Director mode", title: "Subway station", caption: "Soft light and warm colours for quiet, slice-of-life scenes.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/style-4-cozy-station.mp4", duration: "0:10", uses: ["Relaxing stories", "Lo-fi channels"] },
+      { group: "A4 · Cozy Storytelling", src: "/skills/stickman-video-director/a4-cafe.jpg", label: "Director mode", title: "Café", caption: "The same cozy look in a café.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/style-4-cozy-cafe.mp4", duration: "0:10", uses: ["Relaxing stories", "Lo-fi channels"] },
+      { group: "A5 · Historical Cartoon", src: "/skills/stickman-video-director/a5-japan.jpg", label: "Director mode", title: "Edo Japan", caption: "A cartoon history scene set in Edo-period Japan.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/style-5-japan.mp4", duration: "0:30", uses: ["History channels", "Education"] },
+      { group: "A5 · Historical Cartoon", src: "/skills/stickman-video-director/a5-egypt.jpg", label: "Director mode", title: "Ancient Egypt", caption: "The same style in ancient Egypt.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/style-5-egypt.mp4", duration: "0:10", uses: ["History channels", "Education"] },
+      { group: "A6 · Amber Noir", src: "/skills/stickman-video-director/a6-prices.jpg", label: "Director mode", title: "What if everything cost 10,000 times less?", caption: "A dark, amber-lit what-if story with narration, made through a video-generation MCP server.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/style-6-amber-noir-mcp.mp4", duration: "0:20", uses: ["What-if stories", "Narrated shorts"] },
+      { group: "A6 · Amber Noir", src: "/skills/stickman-video-director/a6-shop.jpg", label: "Director mode", title: "Google Flow example", caption: "A single Amber Noir clip generated in Google Flow from the skill's prompt.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/style-6-amber-noir-flow.mp4", duration: "0:08", uses: ["What-if stories", "Narrated shorts"] },
+      { group: "B1 · Minimal Line Art", src: "/skills/stickman-video-director/b1-faceless.jpg", label: "Autopilot mode", title: "YouTube without showing your face", caption: "Hand-drawn line art on white with narration, captions and sound, rendered end to end by the agent.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/b1-minimal-handdrawn.mp4", duration: "0:16", uses: ["Faceless YouTube", "Explainers"] },
+      { group: "B1 · Minimal Line Art", src: "/skills/stickman-video-director/b1-posting.jpg", label: "Autopilot mode", title: "Posting every day: why is nobody watching?", caption: "The approved B1 sample that ships inside the skill as its reference.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/skills/directing-stickman-videos/assets/b1/approved-2026-10-23.mp4", duration: "0:21", uses: ["Faceless YouTube", "Creator advice"] },
+      { group: "B2 · Colorful Hand-Drawn", src: "/skills/stickman-video-director/b2-sleep.jpg", label: "Autopilot mode", title: "Why does trying to sleep keep you awake?", caption: "Coloured hand-drawn scenes for psychology topics.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/b2-colorful-sleep.mp4", duration: "0:20", uses: ["Psychology", "Everyday science"] },
+      { group: "B2 · Colorful Hand-Drawn", src: "/skills/stickman-video-director/b2-phone.jpg", label: "Autopilot mode", title: "You unlocked your phone and forgot why", caption: "A longer B2 film, just over a minute.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/b2-colorful-phone-weather.mp4", duration: "1:02", uses: ["Psychology", "Everyday science"] },
+      { group: "B3 · Retro TV", src: "/skills/stickman-video-director/b3-tv.jpg", label: "Autopilot mode", title: "What if your TV turns on at 3 AM?", caption: "A dark, retro-TV look for mystery and night stories.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/b3-tv-night-signal.mp4", duration: "0:22", uses: ["Mystery", "What-if stories"] },
+      { group: "B3 · Retro TV", src: "/skills/stickman-video-director/b3-dog.jpg", label: "Autopilot mode", title: "Is your dog guilty, or just scared?", caption: "The same look for a lighter animal-behaviour topic.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/b3-tv-dog.mp4", duration: "0:28", uses: ["Pets", "Everyday science"] },
+      { group: "B4 · Survival Thriller", src: "/skills/stickman-video-director/b4-dispatch.jpg", label: "Autopilot mode", title: "911 dispatcher rules: do not send police", caption: "A tense rules-style horror story, the longest demo at over a minute and a half.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/b4-dispatch.mp4", duration: "1:33", uses: ["Horror", "Rules stories"] },
+      { group: "B4 · Survival Thriller", src: "/skills/stickman-video-director/b4-death-clock.jpg", label: "Autopilot mode", title: "What if you saw death coming?", caption: "A shorter survival-thriller what-if.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/b4-death-clock.mp4", duration: "0:19", uses: ["Horror", "What-if stories"] },
+      { group: "B5 · Character Explainer", src: "/skills/stickman-video-director/b5-help.jpg", label: "Autopilot mode", title: "Why is asking for help so hard?", caption: "A presenter character explains beside on-screen text, with its own renderer.", video: "https://cdn.jsdelivr.net/gh/kaomei/stickman-video-director@8643650/assets/readme/b5-character-explainer.mp4", duration: "0:23", uses: ["Explainers", "Creator channels"] },
+      { group: "B5 · Character Explainer", src: "/skills/stickman-video-director/b5-mistakes.jpg", label: "Autopilot mode", title: "Stop making these three video mistakes", caption: "The author's own cartoon host presents a numbered list.", video: "https://raw.githubusercontent.com/kaomei/stickman-video-director/8643650794f88ac0dc86423044e15282f8559ab5/assets/readme/b5-character-explainer-crazymei.mp4", duration: "0:49", uses: ["Listicles", "Creator channels"] },
+    ],
+    credit:
+      "Films by kaomei (Crazy Kaomei) and contributors, from the stickman-video-director repository (MIT), shown unchanged and played from the repository. The A3 fire film is a community submission the author shares there. They are not output from our test.",
+  },
+  howItWorks: [
+    {
+      title: "Pick a mode and a style",
+      text: "You ask for Director mode (A) or Autopilot mode (B) and name one of the styles: A1 to A6 for Director mode, B1 to B5 for Autopilot. The skill then fixes the aspect ratio, style and length before it writes anything. Director-mode videos come in 10-second steps, 60 seconds by default.",
+    },
+    {
+      title: "Director mode: a treatment, then prompts",
+      text: "The agent writes a director's treatment first: hook, cast cards, one location layout, a storyboard for each 10-second clip, narration, music and sound. Only after you approve it does it write one standalone prompt per clip, repeating the cast and narrator description word for word so clips stay consistent. You paste them into a video generator and assemble the clips in CapCut, Premiere or another editor.",
+    },
+    {
+      title: "Autopilot mode: script, sample, film",
+      text: "The agent checks your setup with the skill's doctor command, writes a script for approval, then renders a 20-second sample with sound for a second approval before the full video. Rendering is the skill's own Node scripts with FFmpeg and canvas libraries, so no GPU is needed. Images and the voice come from services you set up; the skill states costs before any paid call and never falls back to the computer's built-in speech on its own.",
+    },
+    {
+      title: "Optional thumbnail and upload kit",
+      text: "After either mode, you can ask for a matching thumbnail and upload copy (title, description, tags). Nothing is uploaded or published for you.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Ask your agent to install it",
+      code: "Install this Skill for me:\nhttps://github.com/kaomei/stickman-video-director\n\nOnce installed, read the installed SKILL.md right away.\nExplain what each mode produces, the tools it needs, and the workflow\nin plain language, with examples I can copy.",
+      note: "The author's own install prompt, shortened. It works in Claude Code, Codex, Cursor and other agents with file access. In our test we copied skills/directing-stickman-videos into the project's .claude/skills folder.",
+    },
+    {
+      label: "Plan a video in Director mode",
+      code: "Use Director Mode / mode A to turn the following topic into a stickman video:\nwhy we open the fridge again and again when we're bored.\n\nRequirements: landscape 16:9, A3 \"Prehistoric Cave\" style, starting with 30 seconds.\nGive me the director's treatment first. After I approve it, provide scene-by-scene video prompts.",
+      note: "The author's example request with our topic. Replace the topic and style with your own.",
+    },
+    {
+      label: "Or render one in Autopilot mode",
+      code: "Use Autopilot Mode / mode B to turn the following topic into a compelling YouTube video:\n[your topic, article or link]\n\nRequirements: landscape 16:9, B1 \"Minimal Line Art\" style, with voiceover, captions, and sound effects.\nCheck the image generation, voiceover, and video-rendering setup first. Then give me a script and a 20-second preview with sound.",
+      note: "Needs Node 20 or newer and FFmpeg, plus an image tool and a voice service you configure.",
+    },
+  ],
+  test: {
+    date: "2026-11-11",
+    agent: "Claude Code 2.1.322, headless (claude -p), skill installed in an empty project's .claude/skills; two separate runs, one per mode",
+    model: "claude-opus-5-5",
+    commit: "8643650",
+    task: "Director mode: turn \"why we open the fridge again and again when we're bored\" into a 30-second 16:9 video in the A3 Prehistoric Cave style, treatment first, then (after we approved it) the clip prompts. Autopilot mode: the same topic in B1 Minimal Line Art with captions and sound effects, check the setup, write a script and render a 20-second preview, with no image or voice service, no API keys and no voice choice, and render without a voice if there is no narration.",
+    samples: [
+      {
+        label: "From the Director-mode treatment",
+        text: "Clip 2 (10-20 s): \"He isn't hungry. He's bored. And a bored brain goes hunting for a tiny reward. The thrill isn't the fish. It's the maybe.\"\n\nClip 3 payoff: Grok happily knapping a spear on the left. Alone on the right, Nana Oka glances at him, then at the boulder, and quietly rolls it open a crack and peeks. A small golden ember pops above her head. Hard cut to black.",
+        note: "Shortened. The treatment, titled The Maybe Rock, also has cast cards, a fixed cave layout with exactly three foods in the larder, continuity joins between clips, music and sound cues, and optional on-screen text for the edit.",
+      },
+      {
+        label: "From the Director-mode clip prompt for clip 1",
+        mono: true,
+        text: "OUTPUT: Approximately 10-second video, 16:9 landscape, 720p target, 24 FPS, with synchronized audio.\n\nSTYLE: Crude hand-drawn 2D cartoon animation with slightly irregular, wobbly black outlines and a subtle warm paper texture. Characters have round white-filled heads, thin black stick limbs, and simple expressive cartoon faces...\n\nCHARACTER (the only character in this clip): GROK, an adult man of about 30, tall and lanky...",
+        note: "One of three standalone prompts for Gemini Omni Flash. Each repeats the full style, cast, layout and narrator description.",
+      },
+      {
+        label: "From the Autopilot run's final report",
+        text: "I rendered the 20-second preview to ./out/preview.mp4, but it has no voice. ... The skill requires narration in every Autopilot video, so this preview doesn't meet that requirement.\n\nTo make it a complete preview: a voice service and voice that you choose. Then I'd record the script at normal speed, match the captions to the real words, re-time the shots to the speech and re-render. The artwork and sound effects can be reused.",
+      },
+    ],
+    runs: [
+      { label: "Director mode (A3)", outcome: "Treatment approved, then three 10-second Omni Flash prompts; text only, no video", time: "4.6 min", cost: "$1.20", turns: 16, tone: "ok" },
+      { label: "Autopilot mode (B1)", outcome: "Rendered a 20-second 1280×720 preview with captions and synthesized sound effects, no narration; art drawn in code", time: "22 min", cost: "$3.27", turns: 52 },
+    ],
+    shots: [
+      {
+        src: "/skills/stickman-video-director/test-preview-poster.jpg",
+        video: "/skills/stickman-video-director/test-preview.mp4",
+        alt: "Our Autopilot test preview: a stick figure opens a fridge holding half a lemon and a mustard bottle, sits back on the couch, a close-up marks the same items SAME, a crossed-out sandwich reads NOT HUNGER beside BOREDOM, and a cartoon brain searches a phone, the fridge and a cookie for a TINY REWARD",
+        caption: "The 20-second preview Claude Code rendered in our Autopilot test, unchanged (0.8 MB). There is no narration, because we gave it no voice service; captions are timed to an estimated reading pace and the sound effects were synthesized in code. The agent drew the B1-style art itself in code, with no image model.",
+        width: 1280,
+        height: 720,
+      },
+      {
+        src: "/skills/stickman-video-director/test-preview-sheet.jpg",
+        alt: "Ten frames from the preview, one every two seconds: opening the fridge, NOTHING NEW, ten minutes later on the couch, the same lemon and mustard, so why do we keep checking, not hunger, boredom, and the brain looking for a tiny reward",
+        caption: "The preview at one frame every two seconds.",
+        width: 2000,
+        height: 450,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "Is Stickman Video Director free?",
+      a: "The skill is free and MIT-licensed, for personal and commercial use. You pay for whatever you connect: the AI agent you run it in, and for Autopilot mode an image tool and a text-to-speech service. In our test, Director mode cost $1.20 in Claude Code at API prices and the Autopilot preview $3.27, without any image or voice service. Director mode's clips are generated in a video tool such as Gemini Omni Flash in Google Flow, which has its own pricing.",
+    },
+    {
+      q: "What do I need installed?",
+      a: "For Director mode, nothing beyond an agent that can load skills; it only writes text. For Autopilot mode: Node 20 or newer, FFmpeg and FFprobe, and the skill's npm packages (npm ci in the skill folder installs @napi-rs/canvas and sharp), plus an image-generation tool and a TTS service you choose. No GPU is needed. The skill's doctor command checks all of it.",
+    },
+    {
+      q: "Can I use it for a faceless YouTube channel?",
+      a: "That's what it's built for: stickman explainers, what-if stories, psychology and history topics, and horror rules stories, in 16:9 or 9:16. The author says the scripts and staging are original enough to monetize under the YouTube Partner Program. That is the author's claim, and YouTube decides case by case. Nothing is uploaded for you.",
+    },
+    {
+      q: "Does it work in Claude Code, or only in Codex?",
+      a: "Both. Our two runs were in Claude Code on Opus 5.5. The author recommends Codex for results closest to the demos, because the Autopilot demos were made there with GPT's built-in image model. In Claude Code without an image tool, the agent drew the illustrations itself in code, which looks simpler than the demos.",
+    },
+    {
+      q: "Which voice does it use?",
+      a: "The one you set up. The skill doesn't bundle a voice service and never switches to the computer's built-in speech on its own. Most styles let you choose; B4 Survival Thriller is fixed to the ElevenLabs voice Brian, and A6 Amber Noir uses a Gemini voice in Director mode. Director mode describes a narrator in each prompt for the video model to voice.",
+    },
+    {
+      q: "Can Autopilot mode run without narration?",
+      a: "Not as the skill intends: it requires narration in every Autopilot video. In our test, with no voice service allowed, the agent rendered a preview over a labelled silent placeholder track, said plainly that it doesn't meet the skill's requirement, and listed what a voice would change.",
+    },
+    {
+      q: "What's the difference between the two modes?",
+      a: "Director mode writes a treatment and video prompts; you generate the clips in a video model and edit them, which suits the cinematic A styles. Autopilot mode has the agent render the whole video locally from illustrations, narration, captions and sound effects, which suits longer explainers in the B styles.",
+    },
+  ],
+};
+
+## What we tested
+
+We installed the skill (commit 8643650) into an empty project and gave Claude Code on Opus 5.5 one topic in two separate headless runs: why we keep opening the fridge when we're bored. The first used Director mode in the A3 Prehistoric Cave style at 30 seconds; we approved the treatment with one follow-up message. The second used Autopilot mode in B1 Minimal Line Art. The machine had Node and FFmpeg but no image-generation tool and no text-to-speech key, and we told the agent not to sign up for anything, choose a voice or use the computer's built-in speech.
+
+## What we found
+
+- **Director mode delivered in under five minutes.** The treatment, The Maybe Rock, turns the topic into a caveman who keeps rolling the stone off his food store, with a deadpan payoff where the elder who stops him does the same thing. It came with cast cards, a fixed cave layout, timed narration (61 words for 30 seconds), music and sound cues and continuity joins. After approval it wrote three standalone prompts for Gemini Omni Flash. We didn't generate the clips, so we can't say how well a video model follows them.
+- **Autopilot mode rendered real video, but not a finished one.** The skill's doctor check passed rendering (Node, FFmpeg, canvas, fonts) and reported no image or voice service. The agent wrote a nine-line script, drew the B1 illustrations itself in code, synthesized its own sound effects, and rendered a 20-second 1280×720 preview with captions that passed the skill's checks. It fixed two drawing problems after looking at its own frames.
+- **No voice means no complete preview.** The renderer needs a narration track, so the agent used a silent placeholder, timed captions to an estimated reading pace and kept the effects quiet for a voice later. It said all of this plainly and didn't record the sample as approved.
+- **Code-drawn art is simpler than the demos.** Our preview is clean but plain next to the author's B1 films, which were made with an image model. Give the agent an image tool for results closer to the gallery above.
+- **It stayed in its folder.** Both runs left nothing new in the home folder beyond the usual temporary files.
+
+For a faceless channel, Director mode is the low-cost way in if you already use a video generator. Autopilot mode is the fuller pipeline, and it's honest about what it can't do without the services you choose.
