@@ -22,6 +22,7 @@ import styles from "@/components/home/home.module.css";
 
 export const dynamic = "force-dynamic";
 
+const HOME_SKILLS_SHOWN = 6;
 const legacyCatalogueParams = ["q", "category", "pricing", "sort", "page"];
 
 export const metadata: Metadata = withSocial({
@@ -111,8 +112,10 @@ export default async function Home({ searchParams }: HomeProps) {
   };
   const guides = [...editorial.pages].sort((left, right) => pinRank(left) - pinRank(right)).slice(0, 3);
 
-  const skills = publishedSkillSlugs().map(getSkill);
-  const skillsHub = skills.length >= HUB_INDEX_MINIMUM;
+  // The shelf shows the newest few; the full list lives on the skills hub and in the footer.
+  const allSkills = publishedSkillSlugs().map(getSkill);
+  const skillsHub = allSkills.length >= HUB_INDEX_MINIMUM;
+  const skills = [...allSkills].sort((left, right) => right.checked_on.localeCompare(left.checked_on)).slice(0, HOME_SKILLS_SHOWN);
   const mcpHub = publishedServerSlugs().length >= MCP_HUB_MINIMUM;
 
   const baseUrl = appBaseUrl();
