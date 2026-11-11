@@ -48,7 +48,7 @@ export function FilmGallery({ items }: { items: GalleryItem[] }) {
               {group.items.map((item) => (
                 <figure key={item.src} className="flex flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
                   <div className="relative">
-                    <Image src={item.src} unoptimized alt={`${item.label} style: ${item.title}`} width={800} height={450} loading="lazy" className="aspect-video h-auto w-full object-cover" />
+                    <Image src={item.src} unoptimized alt={item.source ? `${item.label}, made with ${item.title}` : `${item.label} style: ${item.title}`} width={800} height={450} loading="lazy" className="aspect-video h-auto w-full object-cover" />
                     {item.video && (
                       <button
                         type="button"
@@ -70,6 +70,11 @@ export function FilmGallery({ items }: { items: GalleryItem[] }) {
                     <span className="text-[14px] text-muted">
                       <i>{item.title}</i>. {item.caption}
                     </span>
+                    {item.source && (
+                      <a href={item.source.href} target="_blank" rel="noopener" className="font-mono text-[12px] text-muted-2 underline decoration-line underline-offset-2 hover:text-muted">
+                        {item.source.repo} · {item.source.license}
+                      </a>
+                    )}
                     {item.uses && (
                       <ul className="flex flex-wrap gap-1.5" aria-label="Suits">
                         {item.uses.map((use) => (
@@ -105,7 +110,7 @@ export function FilmGallery({ items }: { items: GalleryItem[] }) {
             </div>
             {/\.(gif|webp)$/i.test(playing.video ?? "") ? (
               // eslint-disable-next-line @next/next/no-img-element -- the author's hosted animation, loaded only when opened
-              <img src={playing.video} alt={`${playing.label}: ${playing.title}`} className="aspect-video w-full rounded-xl bg-black object-contain" />
+              <img src={playing.video} alt={playing.source ? `${playing.label}, made with ${playing.title}` : `${playing.label}: ${playing.title}`} className="aspect-video w-full rounded-xl bg-black object-contain" />
             ) : (
               <video ref={videoRef} src={playing.video} poster={playing.src} controls autoPlay playsInline className="aspect-video w-full rounded-xl bg-black" />
             )}

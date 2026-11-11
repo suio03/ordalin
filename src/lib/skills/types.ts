@@ -71,6 +71,8 @@ export type GalleryItem = {
   duration?: string;
   /** What the author says the style suits. */
   uses?: string[];
+  /** Repository the film comes from, when a gallery mixes several authors. */
+  source?: { repo: string; href: string; license: string };
 };
 
 export type Gallery = {

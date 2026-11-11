@@ -1,5 +1,6 @@
 import { cache } from "react";
 import type { ComponentType } from "react";
+import type { GalleryItem } from "@/lib/skills/types";
 
 export type GuideStatus = "draft" | "published";
 
@@ -19,11 +20,15 @@ export type GuideMetadata = {
 };
 
 export type GuideSummary = GuideMetadata & { slug: string };
-export type PublishedGuide = GuideSummary & { Content: ComponentType };
+/** A wall of demo films shown full width under the guide text. */
+export type GuideGallery = { id: string; heading: string; intro?: string; items: GalleryItem[]; credit?: string };
+
+export type PublishedGuide = GuideSummary & { Content: ComponentType; gallery?: GuideGallery };
 
 type GuideModule = {
   default: ComponentType;
   metadata: unknown;
+  gallery?: GuideGallery;
 };
 
 type GuideLoader = () => Promise<GuideModule>;
@@ -33,6 +38,7 @@ type GuideLoader = () => Promise<GuideModule>;
 const guideLoaders: Record<string, GuideLoader> = {
   "1password-for-agents": () => import("@/content/guides/1password-for-agents.mdx"),
   "artcraft-download": () => import("@/content/guides/artcraft-download.mdx"),
+  "claude-motion-graphics": () => import("@/content/guides/claude-motion-graphics.mdx"),
   "clean-your-tv": () => import("@/content/guides/clean-your-tv.mdx"),
   "dessa": () => import("@/content/guides/dessa.mdx"),
   "nemotron-3-5-transcribe": () => import("@/content/guides/nemotron-3-5-transcribe.mdx"),
@@ -148,7 +154,7 @@ export async function getPublishedGuide(slug: string): Promise<PublishedGuide | 
   const guideModule = await load();
   const metadata = parseGuideMetadata(slug, guideModule.metadata);
   if (metadata.status !== "published") return null;
-  return { ...metadata, Content: guideModule.default };
+  return { ...metadata, Content: guideModule.default, gallery: guideModule.gallery };
 }
 
 export function formatGuideDate(value: string) {

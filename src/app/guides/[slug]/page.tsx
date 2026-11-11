@@ -7,6 +7,7 @@ import {
   getPublishedGuide,
   listPublishedGuides,
 } from "@/lib/guides";
+import { FilmGallery } from "@/components/skills/film-gallery";
 import styles from "../guides.module.css";
 
 type GuideParams = { params: Promise<{ slug: string }> };
@@ -93,6 +94,14 @@ export default async function GuidePage({ params }: GuideParams) {
             <Content />
           </div>
         </div>
+        {guide.gallery ? (
+          <section id={guide.gallery.id} className={styles.guideGallery} aria-labelledby={`${guide.gallery.id}-heading`}>
+            <h2 id={`${guide.gallery.id}-heading`}>{guide.gallery.heading}</h2>
+            {guide.gallery.intro ? <p className={styles.guideGalleryIntro}>{guide.gallery.intro}</p> : null}
+            <FilmGallery items={guide.gallery.items} />
+            {guide.gallery.credit ? <p className={styles.guideGalleryCredit}>{guide.gallery.credit}</p> : null}
+          </section>
+        ) : null}
       </article>
     </main>
   );
