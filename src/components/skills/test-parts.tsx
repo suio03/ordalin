@@ -47,8 +47,12 @@ export function TestShots({ shots }: { shots: TestShot[] }) {
       {shots.map((shot) => (
         <figure key={shot.src} className="flex flex-col gap-2">
           <div className="flex aspect-[16/10] items-center justify-center overflow-hidden rounded-2xl border border-line bg-surface-2 shadow-card">
-            {/* eslint-disable-next-line @next/next/no-img-element -- static files from public/, sized by width and height */}
-            <img src={shot.src} alt={shot.alt} width={shot.width} height={shot.height} loading="lazy" className="block max-h-full w-auto max-w-full object-contain" />
+            {shot.video ? (
+              <video src={shot.video} poster={shot.src} aria-label={shot.alt} width={shot.width} height={shot.height} controls playsInline preload="none" className="block max-h-full w-auto max-w-full object-contain" />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element -- static files from public/, sized by width and height
+              <img src={shot.src} alt={shot.alt} width={shot.width} height={shot.height} loading="lazy" className="block max-h-full w-auto max-w-full object-contain" />
+            )}
           </div>
           <figcaption className="text-[14px] text-muted-2">{shot.caption}</figcaption>
         </figure>

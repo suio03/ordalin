@@ -46,7 +46,16 @@ export type TestRun = {
 };
 
 /** A picture of what a test run produced, served from public/. */
-export type TestShot = { src: string; alt: string; caption: string; width: number; height: number };
+export type TestShot = {
+  /** Still image; the poster frame when `video` is set. */
+  src: string;
+  alt: string;
+  caption: string;
+  width: number;
+  height: number;
+  /** The film our test produced (MP4 in public/), played inline with controls. */
+  video?: string;
+};
 
 /** A still the skill's author published, served from public/ under the author's licence. */
 export type GalleryItem = {

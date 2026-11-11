@@ -1,11 +1,11 @@
 export const meta = {
-  title: "Cinetic Tested: A Claude Code Skill for Product Launch Videos in Remotion",
+  title: "Cinetic Tested on Claude Fable 5.2: A Skill for Product Launch Videos in Remotion",
   description:
-    "Cinetic is a free skill that has Claude Code make product launch films and update videos in Remotion, with licensed music and synced sound. See the demos and our test run.",
+    "Cinetic is a free skill that has Claude Code make product launch films and update videos in Remotion. Watch the film Claude Fable 5.2 made in our test, and the author's demos.",
   verdict:
-    "It rendered a polished 14-second update film with licensed music in 18 minutes for $3.60, but setup is heavy and the template fits the film to the music's bars, not your exact length.",
+    "On Claude Fable 5.2 it rendered a finished 15-second update film with licensed music and synced sound in 18 minutes for $6.26; the same brief on Opus 5.5 cost $3.60 and came out at 14 seconds. Setup is heavy, and the Fable run left files in the home folder although we asked it not to.",
   summary:
-    "Cinetic is a free agent skill by Leon Lin (Leonxlnx) for product videos: launch teasers, update films, feature loops, logo stings and vertical social cuts. The agent writes the film as a Remotion project from templates and a bank of ready scenes, picks a licensed human-made music track, places real sound effects on every cut and checks the result with its own quality gates before it delivers an MP4. Below you can watch all five of the author's demo films, see how it works, and read what happened when we asked Claude Code for a 15-second update video.",
+    "Cinetic is a free agent skill by Leon Lin (Leonxlnx) for product videos: launch teasers, update films, feature loops, logo stings and vertical social cuts. The agent writes the film as a Remotion project from templates and a bank of ready scenes, picks a licensed human-made music track, places real sound effects on every cut and checks the result with its own quality gates before it delivers an MP4. Below you can watch the film Claude Fable 5.2 made in our test and all five of the author's demo films, see how it works, and compare the same 15-second brief on Fable 5.2 and Opus 5.5.",
   bestFor: [
     "Launch teasers, \"what's new\" update films and feature loops for software products",
     "Founders and developers who want a product video they can edit and re-render as code",
@@ -13,7 +13,7 @@ export const meta = {
   ],
   notFor: [
     "A quick clip on a bare machine; it needs Node 22, ffmpeg 6, Python 3.11 with a dozen packages, a headless Chromium and its own sound library",
-    "Exact durations; the update template snaps the ending to the music's bar lines, so our 15-second brief came out at 13.97 seconds",
+    "Exact durations; the update template snaps the ending to the music's bar lines, so our 15-second brief came out at 15.13 seconds on Fable 5.2 and 13.97 seconds on Opus 5.5",
     "Companies of four or more people without a Remotion company licence (Remotion's own terms, not cinetic's)",
   ],
   gallery: {
@@ -62,37 +62,46 @@ export const meta = {
   ],
   test: {
     date: "2026-11-11",
-    agent: "Claude Code, headless (claude -p), skill installed in an empty project's .claude/skills",
-    model: "claude-opus-5-5",
+    agent: "Claude Code 2.1.322, headless (claude -p), skill installed in an empty project's .claude/skills; the same brief also run on claude-opus-5-5",
+    model: "claude-fable-5-2",
     commit: "a6a6a02",
     task: "Use the cinetic skill to make a 15-second update video for an invented note-taking app's v2, showing three changes. Invent the brand, the app name and the three changes. Render the finished film to ./out/film.mp4 at 1920x1080 with music and sound. Do the skill's setup yourself inside this folder, and don't change anything outside it.",
     samples: [
       {
         label: "From the film's credits file",
         mono: true,
-        text: "## Music\n### \"Summer Days\" by Coverr\n- Licence: Coverr License\n- Credit: not required (a courtesy line is given below)\n- Edited for this film: edited at bar lines for the film; levels adjusted.\n\n## Sound effects\n- \"Cool interface click tone\" (Mixkit): Mixkit Sound Effects Free License, no credit required\n- \"Soft typing on a digital keyboard\" (Mixkit): ...\n- \"Pages of paper moving\" (Mixkit): ...",
-        note: "Shortened. The full file lists eleven sound effects, each with its source page and licence.",
+        text: "## Music\n### \"One More Dance\" by Arulo\n- Source: Mixkit\n- Licence: Mixkit Stock Music Free License\n- Credit: not required (a courtesy line is given below)\n- Edited for this film: edited at bar lines for the film; levels adjusted.\n\n## Sound effects\n- \"Elevator tone\" (Mixkit): Mixkit Sound Effects Free License, no credit required\n- \"Cool interface click tone\" (Mixkit): ...\n- \"Soft typing on a digital keyboard\" (Mixkit): ...",
+        note: "From the Fable 5.2 run, shortened. The full file lists eleven Mixkit sound effects, each with its source page and licence.",
       },
       {
-        label: "From the agent's final report",
-        text: "The skill's update-film template fits the film to the music's bars and won't let you raise its timing limits. It landed the final hit at 13.97 s. The next bar line would have made it about 15.7 s.",
+        label: "From Fable 5.2's final report",
+        text: "Length: 15.13 s rather than exactly 15, because the cut follows whole bars of the 110 BPM track.\n\nThe skill's full forensics check reports 3 failures and 18 warnings, which I left in.",
       },
     ],
     runs: [
-      { label: "15 s update film, invented notes app", outcome: "Rendered 1920×1080 with licensed music and synced sound; 13.97 s, four visual checks still flagged", time: "18 min", cost: "$3.60", turns: 91, tone: "ok" },
+      { label: "Claude Fable 5.2", outcome: "Rendered 1920×1080 with licensed music and synced sound; 15.13 s; 3 forensic checks failed, 18 warnings", time: "18 min", cost: "$6.26", turns: 83, tone: "ok" },
+      { label: "Claude Opus 5.5, same brief", outcome: "Rendered 1920×1080 with licensed music and synced sound; 13.97 s; four visual checks flagged", time: "18 min", cost: "$3.60", turns: 91, tone: "ok" },
     ],
     shots: [
       {
-        src: "/skills/cinetic/test-frames.jpg",
-        alt: "Four frames from the test film in a grid: a large search bar reading Where do we stay? with a pointer; a stack of dark notifications on crimson saying Talia checked off Book venue and Elias added 3 workshops; a tilted page titled Lisbon Offsite with a to-do table and owners; and the Notara logo with a red 2.0 badge",
-        caption: "Four moments from our test film: change 1 (ask your notes), change 2 (live edits as notifications with Burst stock faces), change 3 (a voice memo turned into a page) and the end card. The motion blur on the notifications is the template's camera move.",
+        src: "/skills/cinetic/test-film-poster.jpg",
+        video: "/skills/cinetic/test-film.mp4",
+        alt: "Our test film from Claude Fable 5.2: a 15-second update video for Pagewren 2.0, an invented notes app, opening on the title, then Ask your notes with a typed question, Shared notes update live with a stack of teammate notifications on crimson, Voice memos become pages with a Design Review page, and the Pagewren logo with a 2.0 badge",
+        caption: "The film Claude Fable 5.2 made, with sound, unchanged from the render (15 s, 5.5 MB). Brand, app, copy and content are the agent's inventions; the scenes come from cinetic's update template.",
         width: 1600,
         height: 900,
       },
       {
-        src: "/skills/cinetic/test-sheet.jpg",
-        alt: "A contact sheet of 14 frames, one per second, from the Notara 2.0 update film: the title, the three change headlines, the scenes for each change and the logo end card",
-        caption: "One frame per second across the whole 14-second film. The headline cards, scenes and end card all come from the update template; the agent supplied the brand, the copy and the invented content.",
+        src: "/skills/cinetic/test-fable-sheet.jpg",
+        alt: "A contact sheet of 15 frames, one per second, from the Pagewren 2.0 film: the title, the three change headlines with their scenes, the logo mark and the end card",
+        caption: "The Fable 5.2 film at one frame per second. The two dark frames near the end are the logo's camera pull-back.",
+        width: 1600,
+        height: 540,
+      },
+      {
+        src: "/skills/cinetic/test-opus-frames.jpg",
+        alt: "Four frames from the Opus 5.5 run in a grid: a search bar reading Where do we stay? with a pointer; dark notifications on crimson; a tilted page titled Lisbon Offsite with a to-do table; and the Notara logo with a red 2.0 badge",
+        caption: "Four moments from the Opus 5.5 film for the same brief (Notara 2.0, 14 s). It uses the same template scenes with different copy; we kept only stills from that run.",
         width: 1600,
         height: 900,
       },
@@ -121,21 +130,26 @@ export const meta = {
     },
     {
       q: "How long does a film take?",
-      a: "The skill estimates one to two hours for one agent on its default path. Our 14-second update film took 18 minutes and $3.60 on Claude Opus 5.5, including the whole setup, because we let the agent keep four flagged checks instead of fixing the template's scenes.",
+      a: "The skill estimates one to two hours for one agent on its default path. Our 15-second update film took 18 minutes on both models, including the whole setup, because we let the agent keep the flagged checks instead of fixing the template's scenes.",
+    },
+    {
+      q: "Does cinetic work with Claude Fable 5.2?",
+      a: "Yes. Claude Code on Claude Fable 5.2 set up the skill and rendered a finished 15-second film in one headless run, in 83 turns for $6.26 at API prices. Opus 5.5 did the same brief for $3.60. The films look much alike, because most of the look comes from cinetic's template scenes rather than the model.",
     },
   ],
 };
 
 ## What we tested
 
-We installed cinetic 1.5.1 (commit a6a6a02) into an empty project and gave Claude Code on Claude Opus 5.5 the brief above, headless, with no follow-up. The machine had Node, ffmpeg and uv but only Python 3.10 and no earshot, so the agent had to do the skill's setup first. We asked it to keep everything inside the project folder.
+We installed cinetic 1.5.1 (commit a6a6a02) into an empty project and gave Claude Code the brief above, headless, with no follow-up: once on Claude Fable 5.2 and once on Claude Opus 5.5, each in a fresh folder. The machine had Node, ffmpeg and uv but only Python 3.10 and no earshot, so each run had to do the skill's setup first. We asked both to keep everything inside the project folder.
 
 ## What we found
 
-- **It delivered a finished film.** The result was a 1920×1080, 30 fps MP4 of 13.97 seconds for "Notara 2.0", an invented team notes app, with three changes, a licensed Coverr music track, eleven Mixkit sound effects, a mix at −14 LUFS, posters and a credits file. It looks like a real product update video.
-- **Setup worked without help.** The agent created a Python 3.11 environment with uv, built earshot 0.4.1 from its tagged source, and pointed the skill's caches into the project. One slip: some cinetic scripts ignore that setting and wrote three files to `~/.cinetic`. The agent noticed, moved them into the project and removed the folder.
-- **The template sets the length.** The update template fits the film to the music's bars and locks its timing limits, so the ending landed at 13.97 seconds instead of 15. The next bar would have made it about 15.7 seconds. Changing the copy didn't move it.
-- **The checks are strict, and some still failed.** Four visual checks flagged moments inside the template's own scenes: two camera push-and-back moves, an abrupt stop before the logo, and half a headline popping in within two frames. The agent judged them part of the template and left them. It did act on its own review once: the typed question in change 1 was hard to read, so it swapped in a large-type scene.
+- **Fable 5.2 delivered a finished film.** A 1920×1080, 30 fps MP4 of 15.13 seconds for "Pagewren 2.0", an invented notes app by an invented studio, with three changes (ask your notes, shared notes that update live, voice memos that become pages), a licensed Mixkit music track, recorded Mixkit sound effects, a mix at −14 LUFS, a poster and a credits file. You can watch it above.
+- **Opus 5.5 did the same for less.** Its film, "Notara 2.0", came out at 13.97 seconds with a Coverr track, in 18 minutes and 91 turns for $3.60. Fable 5.2 took the same 18 minutes in 83 turns but cost $6.26, about 1.7 times as much. The two films look alike because both used the update template's scenes.
+- **Setup worked without help, but not cleanly.** Both runs created a Python 3.11 environment with uv and built earshot 0.4.1 from its GitHub tag (the PyPI package of that name is an unrelated library, as Fable noted). Some cinetic scripts ignore the cache setting and write to `~/.cinetic`. Opus noticed and moved the files back; Fable reported them and left them, along with about 1.6 GB of earshot audio-model caches in `~/.cache/earshot`, which also ignored its redirect.
+- **The template sets the length.** The update template fits the film to the music's bars and locks its timing limits, so neither run hit 15 seconds exactly: 15.13 on Fable's 110 BPM track, 13.97 on Opus's.
+- **The checks are strict, and some still failed.** Fable's run ended with 3 failed forensic checks and 18 warnings (a 1-pixel camera settle read as a push-and-back, a one-frame pop, light-background banding, one headline at 2.65:1 contrast); Opus's with four flagged moments in the template's own scenes. Both agents judged them minor and left them, and said so.
 - **Most of the look comes from the skill.** The headline cards, notification stack, flying page and logo pull-back are cinetic's scenes. The agent wrote the brand, the copy and the content, and chose the scenes. That is why a short run already looks finished, and also why films can share a family look.
 
-The author's demos above are longer and more varied than our 14-second run. For a real launch, budget the skill's own one to two hours, supply your actual logo and screenshots, and expect to accept the length the music gives you or tune the template.
+The author's demos above are longer and more varied than our 15-second runs. For a real launch, budget the skill's own one to two hours, supply your actual logo and screenshots, and expect to accept the length the music gives you or tune the template.
