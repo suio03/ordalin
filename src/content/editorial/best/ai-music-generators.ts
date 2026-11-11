@@ -4,10 +4,10 @@ export const aiMusicGenerators: BestPage = {
   kind: "best",
   slug: "ai-music-generators",
   title: "The best AI music generators",
-  description: "Seven AI music generators compared on full songs versus background tracks, editing control, commercial licences and what the free plans allow.",
+  description: "Eight AI music generators compared on full songs versus background tracks, editing control, commercial licences and what the free plans allow.",
   author: "Ordalin",
   publishedAt: "2026-10-09",
-  updatedAt: "2026-10-15",
+  updatedAt: "2026-11-12",
   status: "published",
   groupSlug: "music",
   intro: [
@@ -30,6 +30,16 @@ export const aiMusicGenerators: BestPage = {
       summary: [
         "Suno turns a genre, mood, theme or your lyrics into a full track with vocals and instruments, and Remix can change a song's style or lyrics or rebuild it around your own recording. On eligible paid plans it can sing in a voice you record.",
         "It goes further than most song generators once a track exists. Paid plans split songs into time-aligned stems for another audio workstation, and Premier adds Suno Studio, a browser workstation with MIDI, effects and automation. Downloads are counted: 20 a month on Pro and 60 on Premier. The free plan gives 50 credits a day and up to 7 lifetime trial downloads for personal use, without commercial rights or stems.",
+      ],
+    },
+    {
+      toolSlug: "ace-music",
+      label: "Best for songs that start from a melody",
+      bestFor: "Songwriters who want to hum, play or upload a melody and get a full vocal song, and who need to download many songs.",
+      notIdealIf: "You want mobile apps, an API, or free downloads of its main model.",
+      summary: [
+        "ACE Music builds complete songs from text or lyrics, but also from a hummed recording, notes played on an on-screen or MIDI keyboard, a MIDI or MusicXML score, an image or reference songs. Its ACE Music v1 model ranked first on Artificial Analysis's AA-Music-Vocal v1.1 blind leaderboard at 1160 Elo, just ahead of Suno v6; the ranking covers vocal music only. Songs convert to MIDI, and stems and melody-and-chords scores can be exported.",
+        "Paid plans start at $9.90 a month with unlimited downloads and commercial rights. The free plan allows up to 10 ACE Music v1 songs a day with no downloads, but songs from the open-source ACE-Step v1.5 model on the site are unlimited, download as MP3 and may be used commercially.",
       ],
     },
     {
@@ -96,6 +106,7 @@ export const aiMusicGenerators: BestPage = {
   decisionGuide: [
     { situation: "I want a full song with vocals from my own lyrics", toolSlug: "suno" },
     { situation: "I want to finish a generated song in my own audio workstation", toolSlug: "suno" },
+    { situation: "I want to hum or play a melody and turn it into a full song", toolSlug: "ace-music" },
     { situation: "I know the sound I want and can point to reference tracks", toolSlug: "udio" },
     { situation: "I want to release generated beats on Spotify and keep the royalties", toolSlug: "soundraw" },
     { situation: "I need background music that stays licensed after I cancel", toolSlug: "soundraw" },
@@ -111,7 +122,7 @@ export const aiMusicGenerators: BestPage = {
   faq: [
     {
       question: "Which AI music generators have a free plan?",
-      answer: "Suno gives 50 credits a day and Udio 10 credits a day, up to three full-length songs. Mubert's free plan allows 25 generations and 5 downloads a month with credit to Mubert, and Sonilo gives 2,000 credits every two weeks at preview quality. Free output from Suno, Mubert and Sonilo is not licensed for commercial use. Musicfy's pricing page shows no free plan, and our profiles do not establish one for SOUNDRAW or Stable Audio.",
+      answer: "Suno gives 50 credits a day and Udio 10 credits a day, up to three full-length songs. ACE Music allows up to 10 ACE Music v1 songs a day without downloads, plus unlimited ACE-Step v1.5 songs that download as MP3 and may be used commercially. Mubert's free plan allows 25 generations and 5 downloads a month with credit to Mubert, and Sonilo gives 2,000 credits every two weeks at preview quality. Free output from Suno, Mubert and Sonilo is not licensed for commercial use. Musicfy's pricing page shows no free plan, and our profiles do not establish one for SOUNDRAW or Stable Audio.",
     },
     {
       question: "Can I use AI-generated music in monetized YouTube videos?",

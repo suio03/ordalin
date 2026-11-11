@@ -4,16 +4,16 @@ export const sunoAlternatives: AlternativesPage = {
   kind: "alternatives",
   slug: "suno",
   title: "Suno alternatives: AI music generators without monthly download caps",
-  description: "Suno now counts downloads: 20 a month on Pro, 60 on Premier. Five alternatives compared on downloads, vocals, your own voice and licences.",
+  description: "Suno now counts downloads: 20 a month on Pro, 60 on Premier. Six alternatives compared on downloads, vocals, your own voice and licences.",
   author: "Ordalin",
   publishedAt: "2026-10-18",
-  updatedAt: "2026-10-29",
+  updatedAt: "2026-11-12",
   status: "published",
   groupSlug: "music",
   anchorSlug: "suno",
   intro: [
     "Suno still turns a description or your lyrics into a full song with vocals, but downloads are now counted. Pro includes 20 song downloads a month and Premier 60, unused downloads do not roll over, and the limits also apply to songs made before they took effect. The free plan has up to 7 lifetime trial downloads for personal, non-commercial use.",
-    "If the files matter more than the generator, the alternatives below each replace a different part of Suno: songs rendered on your own computer, instrumentals with unlimited downloads, background music for videos, generation from your own material, or songs sung in your own trained voice. The comparisons come from each vendor's official pages and help articles, checked on the dates shown, not from running the same prompts through every tool.",
+    "If the files matter more than the generator, the alternatives below each replace a different part of Suno: a hosted song generator with unlimited downloads on paid plans, songs rendered on your own computer, instrumentals with unlimited downloads, background music for videos, generation from your own material, or songs sung in your own trained voice. The comparisons come from each vendor's official pages and help articles, checked on the dates shown, not from running the same prompts through every tool.",
   ],
   whySwitch: [
     "You make more songs than you can download. Pro includes 20 and Premier 60 song downloads a month, unused downloads do not roll over, and extra downloads cost more.",
@@ -21,6 +21,16 @@ export const sunoAlternatives: AlternativesPage = {
     "You buy credits in bursts. Included credits do not roll over, and purchased top-up credits can only be used with an active subscription.",
   ],
   picks: [
+    {
+      toolSlug: "ace-music",
+      label: "Best for vocal songs with unlimited downloads",
+      bestFor: "Suno users who want the same describe-or-paste-lyrics workflow in the browser, with no monthly download count on paid plans.",
+      notIdealIf: "You want free downloads of its main model, mobile apps, an API or an AI-assistant connector.",
+      summary: [
+        "ACE Music, from the company behind the ACE Studio workstation, makes full songs from a description, your lyrics, a hummed melody, keyboard or MIDI notes, a score, an image or reference songs. Its ACE Music v1 model ranked first on Artificial Analysis's AA-Music-Vocal v1.1 blind leaderboard at 1160 Elo, just ahead of Suno v6 at 1144; the ranking covers vocal music only. Generated songs convert to MIDI, and stems and melody-and-chords scores can be exported.",
+        "Creator costs $9.90 a month, or $7.90 billed yearly, and includes 1,000 credits, unlimited downloads and commercial rights; Artist at $29 adds the ACE Studio desktop app. The free plan allows up to 10 ACE Music v1 songs a day with no downloads, while songs from the open-source ACE-Step v1.5 model on the same site are unlimited, download as MP3 and may be used commercially. Our ACE Music vs Suno comparison has the details.",
+      ],
+    },
     {
       toolSlug: "yue2-studio",
       label: "Best for songs with vocals and no download limit",
@@ -73,6 +83,7 @@ export const sunoAlternatives: AlternativesPage = {
     },
   ],
   decisionGuide: [
+    { situation: "I want a browser song generator with vocals and unlimited downloads", toolSlug: "ace-music" },
     { situation: "I want songs with vocals from my lyrics and no download count", toolSlug: "yue2-studio" },
     { situation: "I don't want my music sent to a cloud service", toolSlug: "yue2-studio" },
     { situation: "I need instrumentals I can release on Spotify", toolSlug: "soundraw" },
@@ -92,7 +103,7 @@ export const sunoAlternatives: AlternativesPage = {
     },
     {
       question: "Is there a free Suno alternative with downloads?",
-      answer: "YuE2 Studio is free and open source and saves songs with vocals to your own disk, but it needs Windows and a GPU with at least 6 GB of VRAM. Mubert's free plan allows 5 downloads a month for personal, non-commercial use, with credit to Mubert.",
+      answer: "ACE Music's free plan includes unlimited songs from the open-source ACE-Step v1.5 model, with MP3 downloads and commercial use; songs from its main ACE Music v1 model cannot be downloaded on the free plan. YuE2 Studio is free and open source and saves songs with vocals to your own disk, but it needs Windows and a GPU with at least 6 GB of VRAM. Mubert's free plan allows 5 downloads a month for personal, non-commercial use, with credit to Mubert.",
     },
     {
       question: "Which alternative lets me release songs on streaming services?",
