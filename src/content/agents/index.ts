@@ -15,6 +15,7 @@ export const REGISTRY: AgentsRegistry = {
     "hark-pro-vs-muse": { sides: ["hark-pro","meta-muse"], load: () => import("./compare/hark-pro-vs-muse.mdx") },
     "tab-vs-instinct": { sides: ["tab","instinct"], load: () => import("./compare/tab-vs-instinct.mdx") },
     "turnstone-vs-hermes-agent": { sides: ["turnstone","hermes-agent"], load: () => import("./compare/turnstone-vs-hermes-agent.mdx") },
+    "nod-vs-openclaw": { sides: ["nod","openclaw"], load: () => import("./compare/nod-vs-openclaw.mdx") },
   },
   agentPages: {
     "airtap": () => import("./agents/airtap.mdx"),
@@ -30,6 +31,7 @@ export const REGISTRY: AgentsRegistry = {
     "openclaw": () => import("./agents/openclaw.mdx"),
     "hermes-agent": () => import("./agents/hermes-agent.mdx"),
     "turnstone": () => import("./agents/turnstone.mdx"),
+    "nod": () => import("./agents/nod.mdx"),
     "tab": () => import("./agents/tab.mdx"),
     "kanana-space": () => import("./agents/kanana-space.mdx"),
     "eney": () => import("./agents/eney.mdx"),

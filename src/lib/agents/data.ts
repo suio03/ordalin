@@ -112,6 +112,8 @@ const PLATFORM_LABELS: Record<string, string> = {
   teams: "Microsoft Teams",
   sms: "SMS",
   glasses: "Glasses",
+  apple_watch: "Apple Watch",
+  wear_os: "Wear OS",
   x: "X",
 };
 

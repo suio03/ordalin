@@ -1,0 +1,53 @@
+export const meta = {
+  title: "Nod by n8n: Free Open-Source Personal Agent for Mac and Windows",
+  description:
+    "Nod is n8n's free, Apache-2.0 personal agent. It runs on your Mac, Windows PC or server with ChatGPT Plus or your own AI key and asks before it acts. Official facts.",
+  summary:
+    "Nod is a personal agent from n8n labs, the team behind the n8n automation platform, released as a research preview; its first public version, 0.6.0, came out on November 9, 2026. You talk to it in one chat, in the app, a browser, Telegram or WhatsApp, and it works for you in Gmail, Calendar, Slack, Notion, Linear and other apps, and on real websites in its own browser with logins you save: chasing invoices, cancelling trials, asking for refunds, downloading statements, writing a one-page brief before each call. It runs on your own Mac (macOS 14 or later), on Windows 11 in preview, or on a Linux server or Mac mini you host for one person. Nod is free and open source under Apache 2.0, and doesn't need n8n. You connect the AI: a ChatGPT Plus or Pro sign-in, an API key from OpenAI, Anthropic, Gemini, OpenRouter and many others, or a local model through Ollama. A separate trust check compares each action with your own words and asks you when they don't cover it; every payment waits for your yes. This profile is based on n8n's official site, docs and GitHub repository, not hands-on testing.",
+  bestFor: [
+    "Freelancers and small-business owners who lose afternoons to invoices, supplier portals and follow-ups",
+    "People who want an agent on their own computer, with code they can read, instead of a vendor's cloud",
+    "ChatGPT Plus or Pro subscribers who want an agent without paying for API tokens",
+    "Messaging your agent from Telegram or WhatsApp while it works on your machine",
+  ],
+  notFor: [
+    "Anyone who wants a polished, finished product: n8n calls Nod an early preview with rough edges and breaking changes",
+    "Agents that must keep running while your laptop is closed, unless you host it on a server or an always-on Mac mini",
+    "Teams: today one Nod has one owner; sharing one Nod is on the roadmap",
+    "iPhone or Android users looking for a native phone app; on a phone you reach it through Telegram or WhatsApp",
+  ],
+  faq: [
+    {
+      q: "Is Nod free?",
+      a: "Yes. Nod is free to download and open source, and n8n doesn't charge for it. You pay for the AI you connect: your ChatGPT Plus or Pro plan, or per-use fees from an API provider. Nod shows estimated model costs in Usage, and with an API connection you can set a monthly spending limit. A local model through Ollama costs nothing per request. A managed hosted version is on the roadmap with no published price.",
+    },
+    {
+      q: "Do I need n8n to use Nod?",
+      a: "No. Nod is its own app, made by the team behind n8n, and it isn't the n8n AI Assistant. If you do use n8n, you can connect it and ask Nod to build, test and publish workflows there; without it, Nod uses its own tasks and schedules.",
+    },
+    {
+      q: "Is Nod open source? Where is the Nod GitHub repo?",
+      a: "Yes. The code is at github.com/n8n-io/nod under the Apache 2.0 license, and the Mac and Windows installers are published there as releases. n8n invites changes back through pull requests.",
+    },
+    {
+      q: "Which AI models does Nod work with?",
+      a: "Whichever you connect in Settings → Models: a ChatGPT Plus or Pro sign-in, or an API key from OpenAI, Anthropic, Google Gemini, OpenRouter, Amazon Bedrock, Azure OpenAI, Google Vertex AI, Cloudflare Workers AI and 20+ other providers, or any OpenAI-compatible server, including local models through Ollama.",
+    },
+    {
+      q: "Will Nod send emails or pay for things without asking?",
+      a: "It checks first. A trust check in Nod's server compares each app action, browser step and sign-in with what you asked for, and asks you when your words don't cover it; every payment waits for your approval. Saved logins and cards sit in a Vault the model never sees. n8n is open that this check is itself a model's judgement and can be wrong, which is why it asks rather than guesses.",
+    },
+    {
+      q: "Where does my data go?",
+      a: "Nod keeps its database, files, memory and saved logins on the computer or server that runs it. Model requests go to the provider you picked, and app connections pass through n8n's hosted connection service and Composio by default. Nod shares usage data with n8n by default, without your messages or Nod's replies, and you can turn it off; conversation traces are off unless you turn them on.",
+    },
+    {
+      q: "Does Nod work on Windows, Linux or a phone?",
+      a: "Mac with macOS 14 or later (Apple silicon or Intel) is the main desktop app. Windows 11 is in preview. On Linux you run it as a self-hosted server with Docker. There's no phone app, but you can chat with the same Nod from Telegram or WhatsApp while it runs.",
+    },
+    {
+      q: "How is Nod different from OpenClaw?",
+      a: "Both are free, open-source agents that run on your own machine with the model you choose. Nod is a desktop app built around a browser that does errands on real websites, with a separate approval check and a Vault for logins. OpenClaw is mostly reached through chat apps, has more of them and more platforms, and leans on a large plugin and skill ecosystem. See Nod vs OpenClaw for the full comparison.",
+    },
+  ],
+};

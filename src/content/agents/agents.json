@@ -10,7 +10,7 @@
       "category": "personal agent",
       "launch_date": "2026-09-08",
       "official_url": "https://muse.ai",
-      "checked_on": "2026-11-07",
+      "checked_on": "2026-11-11",
       "access": {
         "free_tier": "yes — free with a usage limit that refreshes (limit not stated officially)",
         "paid_plans": [
@@ -33,6 +33,8 @@
         "android": true,
         "web": true,
         "macos": true,
+        "apple_watch": true,
+        "wear_os": true,
         "glasses": "coming soon"
       },
       "messaging": [
@@ -43,7 +45,18 @@
       "connectors_notable": [
         "Link (Stripe)",
         "Shop Pay (coming soon)",
-        "1Password (rolling out)"
+        "1Password (rolling out)",
+        "Asana",
+        "Canva",
+        "Dropbox",
+        "Figma",
+        "QuickBooks",
+        "GitHub",
+        "Klaviyo",
+        "Zoom",
+        "Notion",
+        "Granola",
+        "Meta ad accounts"
       ],
       "execution": "Muse Secure VM — dedicated cloud VM holding agent + user data; Sentinel agent must approve anything that reaches the internet",
       "safety": "Checks with the person before sensitive actions like sending an email or making a purchase; approval modes: Ask for some actions (every write and important read) or Always ask",
@@ -62,7 +75,9 @@
         "https://www.meta.com/help/subscriptions/1021145227643680/",
         "https://www.meta.com/help/artificial-intelligence/1126304576638594/",
         "https://www.meta.com/help/artificial-intelligence/1385290430137537/",
-        "https://www.meta.com/help/artificial-intelligence/2225571704857152/"
+        "https://www.meta.com/help/artificial-intelligence/2225571704857152/",
+        "https://apps.apple.com/us/app/muse-from-meta/id6760173601",
+        "https://play.google.com/store/apps/details?id=com.facebook.aura"
       ]
     },
     {
@@ -937,6 +952,68 @@
         "https://claude.com/pricing"
       ],
       "needs_update": "Research preview by waitlist from 2026-10-21; Anthropic says more safety details are coming. Re-check access, privacy and regions when the waitlist opens wider"
+    },
+    {
+      "slug": "nod",
+      "name": "Nod",
+      "display_name": "Nod by n8n",
+      "vendor": "n8n (n8n labs)",
+      "channel": "personal",
+      "category": "open-source personal agent (desktop app or self-hosted, on your own AI plan)",
+      "official_url": "https://nod.n8n.io/",
+      "checked_on": "2026-11-11",
+      "access": {
+        "free_tier": "yes — free, open-source app with no Nod subscription; model use is billed by the AI provider or ChatGPT Plus/Pro plan you connect, and local models cost nothing per request",
+        "paid_plans": [],
+        "billing_note": "Nod doesn't charge you. Usage shows estimated model costs, and with an API connection you can set a monthly spending limit. A managed hosted version is on the roadmap with no price"
+      },
+      "platforms": {
+        "macos": true,
+        "windows": "preview",
+        "linux": "self-hosted server"
+      },
+      "messaging": [
+        "Telegram",
+        "WhatsApp"
+      ],
+      "regions": "Anywhere your computer runs, including the EU, the UK and Switzerland (your AI provider's terms still apply)",
+      "actions": "one chat that reads and acts in Gmail, Calendar, Slack, Notion, Linear, Drive and other apps, works on real websites in its own browser with your saved logins (invoice chasing, cancelling trials, refunds, bookings, downloading statements), writes daily call briefs, drafts replies in your style and runs schedules and background checks",
+      "connectors_notable": [
+        "Gmail",
+        "Google Calendar",
+        "Google Drive",
+        "Slack",
+        "Notion",
+        "Linear",
+        "Outlook",
+        "n8n (builds workflows in your n8n)"
+      ],
+      "execution": "Runs on your Mac or Windows PC, or on your own Linux server or Mac mini (one person per server), with its own Linux workspace container and a separate browser container. It must stay on and awake for schedules; a managed hosted version is on the roadmap",
+      "safety": "A server-side trust check compares each app action, browser step and sign-in with your own words and asks you when they don't cover it; every payment waits for your approval. Saved logins and cards sit in a Vault the model never sees. Usage records every app change, send, sign-in and card use. n8n calls Nod an early preview and says the check is a model's judgement that can make mistakes",
+      "privacy": {
+        "training": "Your database, files, memory and saved logins stay on the computer or server running Nod; model requests go to the provider you choose. App connections pass through n8n's hosted connection service and Composio by default. Usage data is shared with n8n by default (no message contents) and can be turned off; conversation traces are off by default",
+        "delete_data": "Forget single memory notes in Settings → Memory and delete Vault items; deletion of data already sent to n8n is requested through Send feedback or by email"
+      },
+      "model": "any you connect — ChatGPT Plus or Pro sign-in, OpenAI, Anthropic, Gemini, OpenRouter, Bedrock, Azure, Vertex and 20+ other providers, or a local OpenAI-compatible server such as Ollama",
+      "license": "Apache-2.0",
+      "repo": "https://github.com/n8n-io/nod",
+      "sources": [
+        "https://nod.n8n.io/",
+        "https://github.com/n8n-io/nod",
+        "https://nod.n8n.io/docs/get-started/what-is-nod/",
+        "https://nod.n8n.io/docs/get-started/install-desktop/",
+        "https://nod.n8n.io/docs/connect/models/",
+        "https://nod.n8n.io/docs/connect/apps/",
+        "https://nod.n8n.io/docs/connect/local-models/",
+        "https://nod.n8n.io/docs/trust/",
+        "https://nod.n8n.io/docs/trust/privacy/",
+        "https://nod.n8n.io/docs/use/channels/",
+        "https://nod.n8n.io/docs/use/spending/",
+        "https://nod.n8n.io/docs/use/memory/",
+        "https://nod.n8n.io/docs/deploy/self-host/",
+        "https://nod.n8n.io/docs/use/n8n/"
+      ],
+      "launch_date": "2026-11-09"
     }
   ]
 }

@@ -1,0 +1,92 @@
+export const meta = {
+  title: "Nod vs OpenClaw (2026): Two Free Open-Source Personal Agents Compared",
+  description:
+    "Nod (n8n, Apache 2.0) and OpenClaw (MIT) are free agents that run on your machine. Nod is a desktop app that does errands on websites; OpenClaw lives in your chat apps.",
+  subtitle:
+    "Both are free, open-source personal agents that run on your own computer or server with the AI model you choose, and neither sells a subscription. They are built around different ideas: Nod is a desktop app with its own browser and a strict approval check, OpenClaw is an assistant you message from almost any chat app. Facts from n8n's and OpenClaw's own sites, docs and repositories, checked November 11, 2026.",
+  verdict:
+    "Pick Nod if you want an app you install like any other, errands done on real websites with your saved logins, and a check that stops it acting beyond what you asked. Pick OpenClaw if you want to live in chat apps such as iMessage, Discord, Signal or Slack, need iPhone, Android or Linux apps, or want to share one assistant with your team.",
+  picks: [
+    [
+      "You want a desktop app for Mac (Windows in preview) with no terminal, npm or Docker for the basic setup.",
+      "Your errands happen on websites behind logins: supplier portals, invoices, bank statements, cancelling trials.",
+      "You want a separate check that compares every action with your own words, a Vault the model can't read, and a record of every send, sign-in and card use.",
+      "You pay for ChatGPT Plus or Pro and want to use that plan instead of API tokens.",
+    ],
+    [
+      "You want to talk to your assistant from iMessage, Discord, Slack, Teams, Signal, Google Chat or 20+ other chat apps, not only Telegram and WhatsApp.",
+      "You need native apps on iPhone, Android or Linux desktops.",
+      "You want one assistant shared with your team; Nod is one owner per Nod for now.",
+      "You prefer a mature, community-driven project to an early preview from one company.",
+    ],
+  ],
+  faq: [
+    {
+      q: "Are Nod and OpenClaw free?",
+      a: "Both are free, open-source software with no subscription. You pay only for the model you connect (and your own hosting, if you use a server). Nod can use a ChatGPT Plus or Pro plan, any of 20+ API providers or a local model, and shows estimated costs with an optional monthly limit. OpenClaw says it has no hosted tier and no token; you bring your own model subscription or API key.",
+    },
+    {
+      q: "What licenses do they use?",
+      a: "Nod is Apache 2.0 (github.com/n8n-io/nod). OpenClaw is MIT (github.com/openclaw/openclaw). Both let you read, modify and self-host the code.",
+    },
+    {
+      q: "Who makes them?",
+      a: "Nod comes from n8n labs, the team behind the n8n automation platform, and n8n runs the default service its app connections pass through. OpenClaw was created by Peter Steinberger and is now stewarded by the OpenClaw Foundation, an independent 501(c)(3).",
+    },
+    {
+      q: "Which one is safer to give access to my accounts?",
+      a: "Nod is built around that question: a server-side trust check compares each app action, browser step and sign-in with what you asked for and asks you when your words don't cover it, every payment waits for approval, and saved logins sit in a Vault the model never sees. OpenClaw requires pairing approval for direct-message channels, runs tools on the host for the main session unless you configure sandboxing, and its docs tell you to treat inbound messages as untrusted and read the security guide before exposing it remotely. Neither profile here comes from hands-on testing.",
+    },
+    {
+      q: "Do they keep running when my laptop is closed?",
+      a: "Only if you run them somewhere that stays on. Nod needs the computer running it to stay awake, so n8n suggests a server or an always-on Mac mini; a managed hosted Nod is on the roadmap. OpenClaw runs through a Gateway on your computer or server, so the same applies.",
+    },
+    {
+      q: "Can I use them from my phone?",
+      a: "Nod has no phone app; you chat with the same Nod through Telegram or WhatsApp while it runs. OpenClaw lists iOS and Android apps and works from WhatsApp, Telegram, iMessage, Signal and many other chat apps.",
+    },
+  ],
+};
+
+## Price
+
+Neither one sells anything. What you pay for is the AI model, and your own server if you use one.
+
+**Nod** is free from n8n. You connect a ChatGPT Plus or Pro plan, an API key from OpenAI, Anthropic, Gemini, OpenRouter, Bedrock, Azure, Vertex or 20+ other providers, or a local model server such as Ollama. Usage shows estimated model costs, and with an API key you can set a monthly spending limit. A managed hosted version is on the roadmap without a price.
+
+**OpenClaw** is free software with "no subscription, no hosted tier, no token". You pay for your hosting and for the model API or subscription you connect, such as Claude, Codex or a local model.
+
+**Bottom line:** both cost what your model costs. Nod's spending limit and ChatGPT-plan support make the bill easier to predict.
+
+## Where they run
+
+| | Nod | OpenClaw |
+|---|---|---|
+| Mac | Desktop app, macOS 14 or later | Desktop app |
+| Windows | Windows 11, preview | Desktop app (installer in beta) |
+| Linux | Self-hosted server with Docker | Desktop app, installer, npm, Docker or Nix |
+| iPhone / Android | No app; chat through Telegram or WhatsApp | iOS and Android apps |
+| Always-on | Your own server or Mac mini; managed hosting planned | Your own computer or server |
+| Who it's for | One owner per Nod; sharing planned | You, or shared with your team |
+
+## How you use them
+
+**Nod** is one conversation that shows up in the desktop app, your browser, Telegram and WhatsApp. It has its own Linux workspace for files and commands and its own browser, which you can take over when a site needs you. It reads and acts in Gmail, Calendar, Slack, Notion, Linear, Drive and other apps you connect, runs schedules ("every Friday at 5 pm, send me a recap"), and watches pages for changes. If you use n8n, it can build and test workflows there too.
+
+**OpenClaw** is an assistant you message from the chat apps you already use: WhatsApp, Telegram, iMessage, Discord, Slack, Teams, Signal, Google Chat and 20+ more. It handles your inbox, email, calendar and flight check-ins, runs scheduled jobs and reminders, and extends through skills and plugins that run on the machine where it's installed.
+
+**Bottom line:** Nod is built for errands on websites from one app; OpenClaw is built to meet you in whichever chat app you're in.
+
+## Safety and privacy
+
+**Approvals.** Nod's trust check runs in its server, outside the model, and compares each action with your own words; it asks when they don't cover it, and every payment waits for your yes. n8n says plainly that the check is a model's judgement and can be wrong. OpenClaw asks for pairing approval before a new direct-message contact can use it, and runs tools on the host unless you set up sandboxing.
+
+**Secrets.** Nod keeps saved logins, verification codes and cards in a Vault: the model sees account names and status, never the secret. Commands run as an unprivileged user in a workspace container, and the browser in a separate container.
+
+**Data.** Nod stores its database, files, memory and logins where it runs. App connections go through n8n's hosted connection service and Composio by default, and usage data (no message contents) is shared with n8n unless you turn it off. OpenClaw has no hosted service; by default it sends only a daily version check, and anonymous feature statistics are opt-in.
+
+**Bottom line:** Nod has the more opinionated guardrails out of the box; OpenClaw sends less to its makers and leaves more of the setup to you.
+
+## Maturity
+
+**Nod** is new: its first public release, 0.6.0, came out on November 9, 2026, and n8n labels it an early preview with rough edges and breaking changes. **OpenClaw** is an established project run by an independent foundation, with a wide plugin and skills ecosystem. If you want something stable today, that difference matters more than any feature on this page.
