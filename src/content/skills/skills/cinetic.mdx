@@ -1,0 +1,141 @@
+export const meta = {
+  title: "Cinetic Tested: A Claude Code Skill for Product Launch Videos in Remotion",
+  description:
+    "Cinetic is a free skill that has Claude Code make product launch films and update videos in Remotion, with licensed music and synced sound. See the demos and our test run.",
+  verdict:
+    "It rendered a polished 14-second update film with licensed music in 18 minutes for $3.60, but setup is heavy and the template fits the film to the music's bars, not your exact length.",
+  summary:
+    "Cinetic is a free agent skill by Leon Lin (Leonxlnx) for product videos: launch teasers, update films, feature loops, logo stings and vertical social cuts. The agent writes the film as a Remotion project from templates and a bank of ready scenes, picks a licensed human-made music track, places real sound effects on every cut and checks the result with its own quality gates before it delivers an MP4. Below you can watch all five of the author's demo films, see how it works, and read what happened when we asked Claude Code for a 15-second update video.",
+  bestFor: [
+    "Launch teasers, \"what's new\" update films and feature loops for software products",
+    "Founders and developers who want a product video they can edit and re-render as code",
+    "Claude Code users comfortable installing Python, ffmpeg and Node tooling",
+  ],
+  notFor: [
+    "A quick clip on a bare machine; it needs Node 22, ffmpeg 6, Python 3.11 with a dozen packages, a headless Chromium and its own sound library",
+    "Exact durations; the update template snaps the ending to the music's bar lines, so our 15-second brief came out at 13.97 seconds",
+    "Companies of four or more people without a Remotion company licence (Remotion's own terms, not cinetic's)",
+  ],
+  gallery: {
+    heading: "All five author demos",
+    intro:
+      "These are the films the author publishes with the repository: one update video for cinetic itself and four films for invented products. Each shows a different kind of product video.",
+    items: [
+      { src: "/skills/cinetic/update.jpg", label: "Update film", title: "New in cinetic 1.1", caption: "The author's own release video: words arrive one at a time, every sound lands on a cut, and it ends on the cinetic logo.", video: "https://github.com/Leonxlnx/cinetic/releases/download/v1.1.0/cinetic-1.1-update.mp4", duration: "0:30", uses: ["Release notes", "Changelogs", "Product updates"] },
+      { src: "/skills/cinetic/kiln.jpg", label: "Launch teaser", title: "Kiln", caption: "A teaser for an invented CI build cache: \"One line changed.\" \"Only what changed.\"", video: "https://cdn.jsdelivr.net/gh/Leonxlnx/cinetic@152fab4/kiln-launch-teaser.mp4", duration: "0:25", uses: ["Launches", "Developer tools", "Waitlists"] },
+      { src: "/skills/cinetic/ledgerly.jpg", label: "Feature loop", title: "Ledgerly", caption: "A 10-second loop for an invented bill-splitting app, built on one joke: Jonas only had salad.", video: "https://cdn.jsdelivr.net/gh/Leonxlnx/cinetic@152fab4/ledgerly-feature-loop.mp4", duration: "0:10", uses: ["Feature demos", "Landing pages", "App stores"] },
+      { src: "/skills/cinetic/quire.jpg", label: "Vertical social", title: "Quire", caption: "A 9:16 cut for an invented reading app's streaks: \"Every Monday… Every day.\"", video: "https://cdn.jsdelivr.net/gh/Leonxlnx/cinetic@152fab4/quire-streaks-vertical.mp4", duration: "0:12", uses: ["Reels and Shorts", "TikTok", "Stories"] },
+      { src: "/skills/cinetic/halden.jpg", label: "Logo sting", title: "Halden", caption: "A six-second logo reveal for an invented brand.", video: "https://cdn.jsdelivr.net/gh/Leonxlnx/cinetic@152fab4/halden-logo-sting.mp4", duration: "0:06", uses: ["Intros and outros", "Brand openers", "Video signatures"] },
+    ],
+    credit:
+      "Films by Leon Lin (Leonxlnx), from the cinetic repository (MIT), shown unchanged. The update film plays from the v1.1.0 GitHub release and the other four from the repository's media branch. The author made them with cinetic 1.0 and 1.1; the README's spots for 1.5 examples were still empty when we checked. They are not output from our test.",
+  },
+  howItWorks: [
+    {
+      title: "A brief, then a plan",
+      text: "The agent writes a short brief for the film: the product, the changes or the story, the format and the length. A deck of 35 directions and a book of 466 devices in 25 families help it choose a look, and a script deals the brand's fonts, colours and logo treatment.",
+    },
+    {
+      title: "Templates and ready scenes",
+      text: "Each film is a Remotion project started from one of eight templates (update, UI walkthrough, capability reel, camera teaser, prompt run, social ad, type explainer or a plain starter). Version 1.5 added a bank of 34 house scenes, such as notification stacks, typed prompts and flying pages, filled with consistent invented content: names, faces, dates and numbers that add up across screens.",
+    },
+    {
+      title: "Licensed music and real sound",
+      text: "A script searches free libraries for a human-made track (no AI music) and fits the film's timing to its bars. Sound effects are real recordings placed on each cut, with earshot, the author's sound tool, handling the mix. Every asset keeps its licence record, and a credits file comes with the film.",
+    },
+    {
+      title: "Checks before delivery",
+      text: "Copy, lint, timing, loudness and visual checks run on drafts and the final render, flagging things like text that pops in too fast or a camera that pushes in and back. One agent finishes the default path in one to two hours, by the skill's own estimate.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Install the skill",
+      code: "npx skills add Leonxlnx/cinetic",
+      note: "Add -g -a claude-code -y to install it globally for Claude Code. You also need Node 22 or newer, ffmpeg 6 or newer and Python 3.11 or newer; the agent can set up the Python packages, earshot and the headless Chromium itself.",
+    },
+    {
+      label: "Ask Claude Code for a film",
+      code: "Use the cinetic skill to make a 15-second update video for our notes app's v2, showing three changes: ask your notes anything, live edits, and voice memos that become pages. Render it to out/film.mp4 at 1920x1080 with music and sound.",
+      note: "A shortened version of what we asked. Name your real product and changes, and add your logo if you have one.",
+    },
+  ],
+  test: {
+    date: "2026-11-11",
+    agent: "Claude Code, headless (claude -p), skill installed in an empty project's .claude/skills",
+    model: "claude-opus-5-5",
+    commit: "a6a6a02",
+    task: "Use the cinetic skill to make a 15-second update video for an invented note-taking app's v2, showing three changes. Invent the brand, the app name and the three changes. Render the finished film to ./out/film.mp4 at 1920x1080 with music and sound. Do the skill's setup yourself inside this folder, and don't change anything outside it.",
+    samples: [
+      {
+        label: "From the film's credits file",
+        mono: true,
+        text: "## Music\n### \"Summer Days\" by Coverr\n- Licence: Coverr License\n- Credit: not required (a courtesy line is given below)\n- Edited for this film: edited at bar lines for the film; levels adjusted.\n\n## Sound effects\n- \"Cool interface click tone\" (Mixkit): Mixkit Sound Effects Free License, no credit required\n- \"Soft typing on a digital keyboard\" (Mixkit): ...\n- \"Pages of paper moving\" (Mixkit): ...",
+        note: "Shortened. The full file lists eleven sound effects, each with its source page and licence.",
+      },
+      {
+        label: "From the agent's final report",
+        text: "The skill's update-film template fits the film to the music's bars and won't let you raise its timing limits. It landed the final hit at 13.97 s. The next bar line would have made it about 15.7 s.",
+      },
+    ],
+    runs: [
+      { label: "15 s update film, invented notes app", outcome: "Rendered 1920×1080 with licensed music and synced sound; 13.97 s, four visual checks still flagged", time: "18 min", cost: "$3.60", turns: 91, tone: "ok" },
+    ],
+    shots: [
+      {
+        src: "/skills/cinetic/test-frames.jpg",
+        alt: "Four frames from the test film in a grid: a large search bar reading Where do we stay? with a pointer; a stack of dark notifications on crimson saying Talia checked off Book venue and Elias added 3 workshops; a tilted page titled Lisbon Offsite with a to-do table and owners; and the Notara logo with a red 2.0 badge",
+        caption: "Four moments from our test film: change 1 (ask your notes), change 2 (live edits as notifications with Burst stock faces), change 3 (a voice memo turned into a page) and the end card. The motion blur on the notifications is the template's camera move.",
+        width: 1600,
+        height: 900,
+      },
+      {
+        src: "/skills/cinetic/test-sheet.jpg",
+        alt: "A contact sheet of 14 frames, one per second, from the Notara 2.0 update film: the title, the three change headlines, the scenes for each change and the logo end card",
+        caption: "One frame per second across the whole 14-second film. The headline cards, scenes and end card all come from the update template; the agent supplied the brand, the copy and the invented content.",
+        width: 1600,
+        height: 900,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What does cinetic do?",
+      a: "It gives a coding agent everything needed to make a short product video in code: templates for common formats, a bank of ready scenes, brand and font tools, a music finder for licensed human-made tracks, real sound effects, and quality checks. You describe the product and the film; the agent writes a Remotion project, renders it and delivers an MP4 with a credits file.",
+    },
+    {
+      q: "Does it use AI video or AI music?",
+      a: "No. Every frame is drawn by Remotion (or HyperFrames, the HTML and GSAP alternative) from code. The skill refuses AI-generated music and AI-generated stock clips; it uses human-made tracks from free libraries and real sound-effect recordings, each with a licence record. Faces in the product scenes come from Burst, Shopify's free stock photo site.",
+    },
+    {
+      q: "How do I install it?",
+      a: "Run npx skills add Leonxlnx/cinetic, or add -g -a claude-code -y to install it globally for Claude Code. In our test it was copied into the project's .claude/skills folder, which works the same way.",
+    },
+    {
+      q: "What do I need on my computer?",
+      a: "Node 22 or newer, ffmpeg 6 or newer, Python 3.11 or newer with packages such as numpy, scipy, librosa and opencv-python, earshot 0.4 in its own Python environment, and a headless Chromium for rendering. In our test, Claude Code set up the Python environments with uv and built earshot from source on its own.",
+    },
+    {
+      q: "Is it free to use commercially?",
+      a: "The skill is MIT-licensed. Remotion, the default engine, has its own licence: free for individuals and teams of up to three people, with a paid company licence from four. The music and sound effects the skill picks come with their own free licences, recorded in the film's credits file.",
+    },
+    {
+      q: "How long does a film take?",
+      a: "The skill estimates one to two hours for one agent on its default path. Our 14-second update film took 18 minutes and $3.60 on Claude Opus 5.5, including the whole setup, because we let the agent keep four flagged checks instead of fixing the template's scenes.",
+    },
+  ],
+};
+
+## What we tested
+
+We installed cinetic 1.5.1 (commit a6a6a02) into an empty project and gave Claude Code on Claude Opus 5.5 the brief above, headless, with no follow-up. The machine had Node, ffmpeg and uv but only Python 3.10 and no earshot, so the agent had to do the skill's setup first. We asked it to keep everything inside the project folder.
+
+## What we found
+
+- **It delivered a finished film.** The result was a 1920×1080, 30 fps MP4 of 13.97 seconds for "Notara 2.0", an invented team notes app, with three changes, a licensed Coverr music track, eleven Mixkit sound effects, a mix at −14 LUFS, posters and a credits file. It looks like a real product update video.
+- **Setup worked without help.** The agent created a Python 3.11 environment with uv, built earshot 0.4.1 from its tagged source, and pointed the skill's caches into the project. One slip: some cinetic scripts ignore that setting and wrote three files to `~/.cinetic`. The agent noticed, moved them into the project and removed the folder.
+- **The template sets the length.** The update template fits the film to the music's bars and locks its timing limits, so the ending landed at 13.97 seconds instead of 15. The next bar would have made it about 15.7 seconds. Changing the copy didn't move it.
+- **The checks are strict, and some still failed.** Four visual checks flagged moments inside the template's own scenes: two camera push-and-back moves, an abrupt stop before the logo, and half a headline popping in within two frames. The agent judged them part of the template and left them. It did act on its own review once: the typed question in change 1 was hard to read, so it swapped in a large-type scene.
+- **Most of the look comes from the skill.** The headline cards, notification stack, flying page and logo pull-back are cinetic's scenes. The agent wrote the brand, the copy and the content, and chose the scenes. That is why a short run already looks finished, and also why films can share a family look.
+
+The author's demos above are longer and more varied than our 14-second run. For a real launch, budget the skill's own one to two hours, supply your actual logo and screenshots, and expect to accept the length the music gives you or tune the template.

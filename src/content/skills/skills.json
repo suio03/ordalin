@@ -1,6 +1,19 @@
 {
   "skills": [
     {
+      "slug": "cinetic",
+      "name": "Cinetic",
+      "author": "Leon Lin (Leonxlnx)",
+      "repo": "https://github.com/Leonxlnx/cinetic",
+      "license": "MIT (Remotion, the default engine, needs a company licence for teams of four or more)",
+      "version": "1.5.1",
+      "agents": "Built for Claude Code; installs through the Skills CLI for other agents that load SKILL.md folders",
+      "install": "Run npx skills add Leonxlnx/cinetic (add -g -a claude-code -y for a global Claude Code install); needs Node 22+, ffmpeg 6+ and Python 3.11+",
+      "language": "English",
+      "produces": "Product launch teasers, update videos, feature loops, logo stings and vertical social cuts rendered in Remotion, with licensed music, real sound effects and a credits file",
+      "checked_on": "2026-11-11"
+    },
+    {
       "slug": "human-writing",
       "name": "Human Writing",
       "author": "KKKKhazix",

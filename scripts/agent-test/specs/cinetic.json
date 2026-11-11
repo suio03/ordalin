@@ -1,0 +1,10 @@
+{
+  "kind": "skill",
+  "name": "cinetic",
+  "repo": "https://github.com/Leonxlnx/cinetic",
+  "commit": "a6a6a02",
+  "install": { "claude": { "skill": "skills/cinetic" } },
+  "task": "Use the cinetic skill to make a 15-second update video for an invented note-taking app's v2, showing three changes. Invent the brand, the app name and the three changes. Render the finished film to ./out/film.mp4 at 1920x1080 with music and sound. Do the skill's setup yourself: put any Python environments (cinetic's packages, earshot 0.4) and downloads inside this folder, not in the home folder. Don't delete or change anything outside this folder. If something can't be done, say exactly what and why. Answer in English and don't ask me questions.",
+  "env": { "DO_NOT_TRACK": "1" },
+  "timeoutMinutes": 75
+}
