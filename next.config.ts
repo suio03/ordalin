@@ -9,7 +9,12 @@ const nextConfig: NextConfig = {
   htmlLimitedBots: /.*/,
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   // General chatbots are not AI agents; their comparison left /agents on 2026-10-09.
-  redirects: async () => [{ source: "/agents/compare/grok-vs-chatgpt", destination: "/agents/personal", permanent: true }],
+  redirects: async () => [
+    { source: "/agents/compare/grok-vs-chatgpt", destination: "/agents/personal", permanent: true },
+    // Localized free tools: English is unprefixed (docs/i18n/README.md).
+    { source: "/en/free-tools", destination: "/free-tools", permanent: true },
+    { source: "/en/free-tools/:path*", destination: "/free-tools/:path*", permanent: true },
+  ],
 };
 
 // GitHub-flavoured Markdown for guide tables. Turbopack needs the plugin by name.

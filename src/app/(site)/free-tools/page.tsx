@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { freeToolGroups, freeToolPath, freeTools, freeToolsHubPath } from "@/lib/free-tools/registry";
 import { withSocial } from "@/lib/seo";
-import styles from "@/app/guides/guides.module.css";
+import styles from "@/app/(site)/guides/guides.module.css";
 import hub from "./free-tools.module.css";
 
 export const metadata: Metadata = withSocial({
   title: "Free tools",
   description:
-    "Free Ordalin tools for checking how AI search sees a website and for removing the metadata that gets images labelled as AI. No sign-up.",
-  alternates: { canonical: freeToolsHubPath },
+    "Free Ordalin tools for checking how AI search sees a website, cropping and squaring images, and removing the metadata that gets images labelled as AI. No sign-up.",
+  alternates: { canonical: freeToolsHubPath, languages: { en: freeToolsHubPath, ja: `/ja${freeToolsHubPath}`, "x-default": freeToolsHubPath } },
 });
 
 export default function FreeToolsPage() {
@@ -22,7 +22,7 @@ export default function FreeToolsPage() {
       <header className={styles.indexHeader}>
         <div>
           <p className={styles.eyebrow}>Ordalin free tools</p>
-          <h1>Free tools for AI search and AI images.</h1>
+          <h1>Free tools for AI search and images.</h1>
           <p>Each tool runs for free with no sign-up. Image tools work in your browser, so files are never uploaded.</p>
         </div>
         <p className={styles.issueCount}>{freeTools.length} tools</p>

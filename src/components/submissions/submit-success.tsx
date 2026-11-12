@@ -78,6 +78,8 @@ export function SubmitSuccess({ name, tagline, logoSrc }: Props) {
       </div>
       <div className={styles.successActions}>
         <Link className={styles.publishButton} href="/tools">Browse the catalogue →</Link>
+        {/* Full reload on purpose: it resets the submit form state. */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/submit">Submit another tool</a>
       </div>
     </section>

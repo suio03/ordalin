@@ -1,10 +1,13 @@
-import { Analytics } from "@/components/analytics";
 import type { Metadata, Viewport } from "next";
 import { defaultSocialImage } from "@/lib/seo";
+import { Analytics } from "@/components/analytics";
 import { SiteFooter, SiteHeader } from "@/components/site-header";
-import "./globals.css";
 
-export const metadata: Metadata = {
+// Shared by the two root layouts: app/(site) (English) and app/(i18n)/[locale].
+// Two roots so localized free tools get the right <html lang> while every
+// other page stays static.
+
+export const rootMetadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
   ),
@@ -60,11 +63,11 @@ const themeInitializationScript = `
   })();
 `;
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export function RootDocument({ lang, children }: { lang: string; children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
+      {/* Root document shared by both root layouts, so this is still the layout <head>. */}
+      {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitializationScript }} />
       </head>

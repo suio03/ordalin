@@ -1,4 +1,6 @@
 import { freeToolPath, freeTools, freeToolsHubPath } from "@/lib/free-tools/registry";
+import { languageAlternates, localesFor, localizePath, toolLocales } from "@/lib/free-tools/i18n";
+import { localizedHubs } from "@/lib/free-tools/image-shape/pages";
 import type { MetadataRoute } from "next";
 import { listPublishedGuides } from "@/lib/guides";
 import {
@@ -16,6 +18,14 @@ import { indexableModelsMinimum, modelTagSlug } from "@/lib/catalog";
 import { listPublishedToolSlugs, listPublishedTools, listSitemapEntries } from "@/lib/repositories/catalog";
 
 export const dynamic = "force-dynamic";
+
+const hubAlternates = {
+  en: freeToolsHubPath,
+  ...Object.fromEntries(Object.keys(localizedHubs).map((locale) => [locale, `/${locale}${freeToolsHubPath}`])),
+  "x-default": freeToolsHubPath,
+};
+const absolute = (baseUrl: string, languages: Record<string, string>) =>
+  Object.fromEntries(Object.entries(languages).map(([lang, path]) => [lang, `${baseUrl}${path}`]));
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
@@ -47,8 +57,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),
-    { url: `${baseUrl}${freeToolsHubPath}`, changeFrequency: "weekly", priority: 0.7 },
-    ...freeTools.map((tool) => ({ url: `${baseUrl}${freeToolPath(tool.slug)}`, changeFrequency: "monthly" as const, priority: 0.7 })),
+    { url: `${baseUrl}${freeToolsHubPath}`, changeFrequency: "weekly", priority: 0.7, alternates: { languages: absolute(baseUrl, hubAlternates) } },
+    ...Object.keys(localizedHubs).map((locale) => ({
+      url: `${baseUrl}/${locale}${freeToolsHubPath}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+      alternates: { languages: absolute(baseUrl, hubAlternates) },
+    })),
+    // Every published locale of a free tool, each with the same hreflang set (docs/i18n/README.md).
+    ...freeTools.flatMap((tool) => {
+      const path = freeToolPath(tool.slug);
+      const locales = localesFor(tool.slug);
+      const alternates = tool.slug in toolLocales ? { languages: absolute(baseUrl, languageAlternates(path, locales)) } : undefined;
+      return locales.map((locale) => ({
+        url: `${baseUrl}${localizePath(path, locale)}`,
+        changeFrequency: "monthly" as const,
+        priority: locale === "en" ? 0.7 : 0.6,
+        ...(alternates ? { alternates } : {}),
+      }));
+    }),
     { url: `${baseUrl}/about/how-we-review`, changeFrequency: "monthly", priority: 0.4 },
   ];
 

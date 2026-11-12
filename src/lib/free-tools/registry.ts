@@ -6,7 +6,7 @@ export type FreeTool = { slug: string; name: string; summary: string; group: Fre
 // Hub sections, in display order.
 export const freeToolGroups: { id: FreeToolGroup; title: string; intro: string }[] = [
   { id: "site", title: "Website and AI search", intro: "Check how AI crawlers, answer engines and social previews see a website." },
-  { id: "image", title: "Images and AI labels", intro: "Inspect and remove the hidden metadata that makes platforms label an image as AI. Files stay in your browser." },
+  { id: "image", title: "Images", intro: "Crop, square and clean images, including the hidden metadata that makes platforms label an image as AI. Files stay in your browser." },
 ];
 
 export const freeTools: FreeTool[] = [
@@ -16,6 +16,8 @@ export const freeTools: FreeTool[] = [
   { slug: "og-image-checker", name: "OG image checker", summary: "Test a page's Open Graph tags and og:image, and preview its share cards", group: "site" },
   { slug: "ai-label-remover", name: "AI label remover", summary: "See which hidden fields make platforms label an image as AI, and remove them in the browser", group: "image" },
   { slug: "ai-metadata-remover", name: "AI metadata remover", summary: "View and remove C2PA, XMP, EXIF and prompt metadata from images, losslessly, in the browser", group: "image" },
+  { slug: "circle-crop-image", name: "Circle crop image", summary: "Crop an image into a circle and download a transparent PNG, in the browser", group: "image" },
+  { slug: "square-an-image", name: "Square an image", summary: "Make an image square without cropping, with a blurred or solid fill, or crop it 1:1", group: "image" },
 ];
 
 export const freeToolsHubPath = "/free-tools";
