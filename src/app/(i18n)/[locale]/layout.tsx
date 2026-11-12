@@ -8,7 +8,6 @@ import "../../globals.css";
 export const metadata = rootMetadata;
 export { viewport } from "@/components/root-document";
 
-export const dynamicParams = false;
 export const generateStaticParams = () => extraLocales.map((locale) => ({ locale }));
 
 export default async function LocaleLayout({

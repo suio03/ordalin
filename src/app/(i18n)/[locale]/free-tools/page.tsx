@@ -12,7 +12,6 @@ type Props = { params: Promise<{ locale: string }> };
 const hubFor = (locale: string) => localizedHubs[locale as ExtraLocale];
 
 // Only locales with two or more localized tools have a hub (docs/i18n/README.md).
-export const dynamicParams = false;
 export const generateStaticParams = () => extraLocales.filter((locale) => localizedHubs[locale]).map((locale) => ({ locale }));
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

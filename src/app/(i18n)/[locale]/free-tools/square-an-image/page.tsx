@@ -9,8 +9,9 @@ import { freeToolPath } from "@/lib/free-tools/registry";
 const SLUG = "square-an-image";
 type Props = { params: Promise<{ locale: string }> };
 
-// Only the locales listed for this tool in i18n toolLocales; the rest 404.
-export const dynamicParams = false;
+// Prerender the locales listed in i18n toolLocales; the page guard 404s the rest.
+// No dynamicParams = false: OpenNext has no incremental cache here, and a cache
+// miss on a fallback: false route returns 404 (NoFallbackError) on Workers.
 export const generateStaticParams = () => localesFor(SLUG).filter(isExtraLocale).map((locale) => ({ locale }));
 
 export async function generateMetadata({ params }: Props) {
