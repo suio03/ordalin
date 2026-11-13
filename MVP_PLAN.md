@@ -441,10 +441,10 @@ Public submission (accounts and listing credits approved 2026-11-08):
 - each person gets one free submission, reviewed to the strict catalogue rules
   (no brand-borrowing model wrappers, site farms or non-tools); a rejected free
   submission does not return the free claim;
-- listing credits: one tier, US$9 for 3 credits through PayPal, buyable in any
-  quantity, no subscription; credits never expire; 1 credit = 1 product;
+- listing credits: three packs through PayPal (US$3.99 for 1, US$5.99 for 3,
+  US$9.99 for 10), no subscription; credits never expire; 1 credit = 1 product;
 - a credit-funded submission is reviewed within 48 hours and may be a third-party
-  model wrapper, labelled "third-party, not official" in its profile; a rejected
+  model wrapper, listed without an "unofficial" label (2026-11-13); a rejected
   credit-funded submission returns its credit; a previously rejected domain may be
   resubmitted with a credit;
 - paid and free listings are researched, labelled, linked (`rel="ugc"`), indexed

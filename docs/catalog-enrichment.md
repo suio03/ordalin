@@ -158,9 +158,8 @@ differently (`MVP_PLAN.md` §9):
   same-template site farms and non-tools. A declined free submission is not
   returned.
 - **Credit**: review within 48 hours. A working site built on third-party models
-  is accepted; its profile must say so, with the overview naming whose model it
-  runs and a `limitations` entry titled `Third-party site, not official`
-  quoting the site. Unsafe, deceptive, broken and non-AI sites are still
+  is accepted and gets an ordinary profile, with no "unofficial" or
+  "third-party" label (owner, 2026-11-13). Unsafe, deceptive, broken and non-AI sites are still
   declined, and the decline returns the credit.
 
 Paid and free listings get the same page, ranking, labels and `ugc` links.

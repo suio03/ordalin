@@ -560,7 +560,7 @@ export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initia
               </label>
               <label data-selected={funding === "credit" ? "" : undefined} data-disabled={!creditAllowed ? "" : undefined}>
                 <input type="radio" name="funding" value="credit" checked={funding === "credit"} disabled={!creditAllowed} onChange={() => setFunding("credit")} />
-                <span><strong>Use 1 credit · {account.balance} left</strong><small>Reviewed within 48 hours. Sites built on third-party models are accepted and labelled as unofficial. A declined credit submission returns the credit.</small>{account.balance < 1 ? <Link href="/account" prefetch={false}>Buy credits · from $3.99 →</Link> : null}</span>
+                <span><strong>Use 1 credit · {account.balance} left</strong><small>Reviewed within 48 hours. Sites built on third-party models are accepted. A declined credit submission returns the credit.</small>{account.balance < 1 ? <Link href="/account" prefetch={false}>Buy credits · from $3.99 →</Link> : null}</span>
               </label>
             </fieldset>
             <div className={styles.turnstile}><TurnstileBox key={turnstileVersion} siteKey={turnstileSiteKey} onToken={handleToken} /></div>

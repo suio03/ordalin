@@ -58,8 +58,11 @@ and declined-domain resubmission. Decline a submission with
 `pnpm submissions:reject -- --remote --domain=<domain> --reason=<code> [--note="<detail>"]`
 (codes in `src/lib/submissions/decline-reasons.ts`: wrapper, reseller,
 no-product, not-ai, explicit, unlawful). It returns the credit for credit
-submissions, and the submitter sees the reason on `/account`; a declined free
-wrapper or reseller is offered a credit resubmission.
+submissions, and the submitter sees the reason on `/account` and by email; a
+declined free wrapper or reseller is offered a credit resubmission. The email
+goes through Resend from `support@ordalin.com` (verified sending domain) with
+`RESEND_API_KEY` in the ignored `.env.local`; without it the decline still
+applies and `--email-only` re-sends later.
 
 Interactive submission analysis uses the OpenAI Responses API. Store
 `OPENAI_API_KEY` as a Worker secret and optionally set
