@@ -3,7 +3,8 @@ import Link from "next/link";
 import { BuyCredits } from "@/components/account/buy-credits";
 import { getCloudflareEnv } from "@/lib/cloudflare";
 import { currentAccount } from "@/lib/account/current";
-import { listAccountSubmissions, listLedger, packSummary, type AccountSubmission, type LedgerEntry } from "@/lib/account/credits";
+import { SUPPORT_EMAIL, listAccountSubmissions, listLedger, packSummary, type AccountSubmission, type LedgerEntry } from "@/lib/account/credits";
+import { explainDecline } from "@/lib/submissions/decline-reasons";
 import styles from "@/components/account/account.module.css";
 
 export const dynamic = "force-dynamic";
@@ -45,7 +46,10 @@ const PREVIEW = {
     { delta: -1, kind: "spend", reference: "submission_preview", createdAt: 1_794_096_000 },
     { delta: 3, kind: "purchase", reference: "capture_preview", createdAt: 1_794_009_600 },
   ] satisfies LedgerEntry[],
-  submissions: [{ name: "Voice Studio", domain: "voicestudio.example", status: "pending", funding: "credit", createdAt: 1_794_096_000, toolSlug: null }] satisfies AccountSubmission[],
+  submissions: [
+    { name: "Voice Studio", domain: "voicestudio.example", status: "pending", funding: "credit", createdAt: 1_794_096_000, toolSlug: null, moderationNote: null },
+    { name: "Chat Mirror", domain: "chatmirror.example", status: "rejected", funding: "free", createdAt: 1_793_923_200, toolSlug: null, moderationNote: JSON.stringify({ reason: "wrapper", note: "The chat runs on a third-party model API with no added workflow." }) },
+  ] satisfies AccountSubmission[],
 };
 
 export default async function AccountPage({ searchParams }: { searchParams: Promise<{ signin?: string | string[] }> }) {
@@ -98,12 +102,25 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         <h2 id="submissions-title">Your submissions</h2>
         {submissions.length ? (
           <ul className={styles.rows}>
-            {submissions.map((item) => (
-              <li key={`${item.domain}-${item.createdAt}`}>
-                <span><strong>{item.toolSlug && item.status === "accepted" ? <Link href={`/tools/${item.toolSlug}`}>{item.name}</Link> : item.name}</strong><small>{item.domain} · {item.funding === "credit" ? "Credit" : "Free"} · {date(item.createdAt)}</small></span>
-                <span className={styles.badge} data-status={item.status}>{SUBMISSION_STATUS[item.status] ?? item.status}</span>
-              </li>
-            ))}
+            {submissions.map((item) => {
+              const decline = item.status === "rejected" ? explainDecline(item.moderationNote) : null;
+              return (
+                <li key={`${item.domain}-${item.createdAt}`}>
+                  <span>
+                    <strong>{item.toolSlug && item.status === "accepted" ? <Link href={`/tools/${item.toolSlug}`}>{item.name}</Link> : item.name}</strong>
+                    <small>{item.domain} · {item.funding === "credit" ? "Credit" : "Free"} · {date(item.createdAt)}</small>
+                    {decline ? (
+                      <span className={styles.decline}>
+                        Why: {decline.text}{decline.note ? ` ${decline.note}` : ""}
+                        {decline.creditCanList && item.funding === "free" ? <> You can submit it again with a credit; it will be listed and labelled as unofficial. <Link href="/submit" prefetch={false}>Submit again</Link></> : null}
+                        {" "}Questions: <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className={styles.badge} data-status={item.status}>{SUBMISSION_STATUS[item.status] ?? item.status}</span>
+                </li>
+              );
+            })}
           </ul>
         ) : <p className={styles.empty}>No submissions yet.</p>}
       </section>

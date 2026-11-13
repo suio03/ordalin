@@ -56,15 +56,15 @@ export async function listLedger(db: D1Database, userId: string, limit = 50): Pr
   return results.map((row) => ({ delta: row.delta, kind: row.kind, reference: row.reference, createdAt: row.created_at }));
 }
 
-export type AccountSubmission = { name: string; domain: string; status: string; funding: string | null; createdAt: number; toolSlug: string | null };
+export type AccountSubmission = { name: string; domain: string; status: string; funding: string | null; createdAt: number; toolSlug: string | null; moderationNote: string | null };
 
 export async function listAccountSubmissions(db: D1Database, userId: string, limit = 50): Promise<AccountSubmission[]> {
   const { results } = await db
-    .prepare("SELECT s.submitted_name, s.canonical_domain, s.status, s.funding, s.created_at, t.slug AS tool_slug FROM submissions s LEFT JOIN tools t ON t.canonical_domain = s.canonical_domain AND t.status = 'published' WHERE s.user_id = ? ORDER BY s.created_at DESC LIMIT ?")
+    .prepare("SELECT s.submitted_name, s.canonical_domain, s.status, s.funding, s.created_at, s.moderation_note, t.slug AS tool_slug FROM submissions s LEFT JOIN tools t ON t.canonical_domain = s.canonical_domain AND t.status = 'published' WHERE s.user_id = ? ORDER BY s.created_at DESC LIMIT ?")
     .bind(userId, limit)
-    .all<{ submitted_name: string; canonical_domain: string; status: string; funding: string | null; created_at: number; tool_slug: string | null }>();
-  return results.map((row) => ({ name: row.submitted_name, domain: row.canonical_domain, status: row.status, funding: row.funding, createdAt: row.created_at, toolSlug: row.tool_slug }));
+    .all<{ submitted_name: string; canonical_domain: string; status: string; funding: string | null; created_at: number; moderation_note: string | null; tool_slug: string | null }>();
+  return results.map((row) => ({ name: row.submitted_name, domain: row.canonical_domain, status: row.status, funding: row.funding, createdAt: row.created_at, toolSlug: row.tool_slug, moderationNote: row.status === "rejected" ? row.moderation_note : null }));
 }
 
-/** Refund and account requests; routed by Cloudflare Email Routing. */
+/** Refund and account requests; forwarded by Fastmail. */
 export const SUPPORT_EMAIL = "support@ordalin.com";

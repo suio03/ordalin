@@ -126,7 +126,7 @@ type FieldName = "name" | "tagline" | "description";
 const STEP_FIELDS: FieldName[][] = [["name", "tagline", "description"], [], [], [], []];
 
 const FREE_NOTES: Record<SubmitAccount["free"], string> = {
-  available: "Strict review. Model wrappers and resellers are declined, and a declined free submission is not returned.",
+  available: "Strict review. Model wrappers and resellers are declined, and a declined free submission is not returned; your account page shows the reason.",
   used: "This account has already used its free submission.",
   linked: "A free submission was already used from this browser or network.",
 };
