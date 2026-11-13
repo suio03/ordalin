@@ -1,4 +1,4 @@
-import { creditEntryStatement, CREDIT_PACK } from "./credits";
+import { creditEntryStatement } from "./credits";
 import type { CaptureSummary } from "./paypal";
 
 export type PaymentRow = { id: string; user_id: string; order_id: string; capture_id: string | null; quantity: number; credits: number; amount_cents: number; currency: string; status: string };
@@ -32,15 +32,15 @@ export async function settleCapture(db: D1Database, payment: PaymentRow, capture
   }
   if (capture.amountCents !== payment.amount_cents || capture.currency !== payment.currency) throw new BillingError("The paid amount does not match the order.", 409, "amount_mismatch");
   await db.batch([
-    creditEntryStatement(db, { userId: payment.user_id, delta: payment.credits, kind: "purchase", reference: capture.captureId, note: `PayPal ${payment.quantity} × ${CREDIT_PACK.credits}` }, now),
+    creditEntryStatement(db, { userId: payment.user_id, delta: payment.credits, kind: "purchase", reference: capture.captureId, note: `PayPal pack of ${payment.credits}` }, now),
     db.prepare("UPDATE payments SET status = 'completed', capture_id = ?, payer_email = COALESCE(?, payer_email), updated_at = ? WHERE id = ? AND status IN ('created', 'pending', 'failed')").bind(capture.captureId, capture.payerEmail, now, payment.id),
   ]);
   return "completed" as const;
 }
 
-/** Credits a refund removes: whole packs refunded, at most what the capture granted. */
+/** Credits a refund removes: its share of the payment, at most what the capture granted. */
 export function refundedCredits(payment: Pick<PaymentRow, "credits" | "amount_cents">, refundCents: number) {
   if (refundCents >= payment.amount_cents) return payment.credits;
-  // Credits cost the same within a payment, so a partial refund removes its share ($3 per credit).
+  // Credits cost the same within a payment, so a partial refund removes its share.
   return Math.min(payment.credits, Math.round((refundCents * payment.credits) / payment.amount_cents));
 }

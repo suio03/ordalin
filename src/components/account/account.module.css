@@ -12,11 +12,17 @@
 .panel > div > p { margin: var(--space-xs) 0 0; color: var(--color-text-secondary); font-size: var(--font-size-caption); line-height: var(--line-height-body); }
 .panel a { color: var(--color-text-primary); text-underline-offset: 3px; }
 .buy { display: grid; gap: var(--space-md); max-width: 420px; }
-.quantity { display: grid; gap: var(--space-xs); }
-.quantity span { color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: var(--font-size-metadata); letter-spacing: .06em; text-transform: uppercase; }
-.quantity select { min-height: var(--target-touch); padding: 0 var(--space-md); border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-control); color: var(--color-text-primary); background: var(--color-surface-input); font: inherit; }
+.packs { display: grid; gap: var(--space-xs); margin: 0; padding: 0; border: 0; }
+.packs legend { margin-bottom: var(--space-xs); padding: 0; color: var(--color-text-tertiary); font-family: var(--font-family-metadata); font-size: var(--font-size-metadata); letter-spacing: .06em; text-transform: uppercase; }
+.pack { display: flex; align-items: center; gap: var(--space-md); min-height: var(--target-touch); padding: var(--space-sm) var(--space-md); border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-control); background: var(--color-surface-input); cursor: pointer; }
+.pack:has(input:checked) { border-color: var(--color-accent-primary); background: var(--color-accent-soft); }
+.pack:has(input:focus-visible) { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
+.pack input { margin: 0; accent-color: var(--color-accent-primary); }
+.pack span { display: grid; flex: 1; gap: var(--space-2xs); }
+.pack strong { color: var(--color-text-primary); font-weight: var(--font-weight-strong); }
+.pack small { color: var(--color-text-tertiary); font-size: var(--font-size-metadata); }
+.pack b { color: var(--color-text-primary); font-size: var(--font-size-panel-heading); font-weight: var(--font-weight-strong); }
 .total { margin: 0; color: var(--color-text-secondary); font-size: var(--font-size-caption); }
-.total strong { color: var(--color-text-primary); font-size: var(--font-size-panel-heading); }
 .paypal { min-height: 110px; }
 .rows { display: grid; margin: 0; padding: 0; list-style: none; }
 .rows li { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding: var(--space-md); border-radius: var(--radius-control); background: var(--color-surface-muted); }

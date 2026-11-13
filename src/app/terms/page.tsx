@@ -32,10 +32,11 @@ export default function TermsPage() {
         <section>
           <h2>Listing credits</h2>
           <ul>
-            <li>Credits cost US$9 for 3, paid once through PayPal. There is no subscription.</li>
+            <li>Credits come in three packs, paid once through PayPal: US$3.99 for 1, US$5.99 for 3 or US$9.99 for 10. There is no subscription.</li>
+            <li>Credits you have bought keep their value if prices change later.</li>
             <li>Credits never expire. One credit covers one submitted product.</li>
             <li>Credit submissions are reviewed within 48 hours. Sites built on third-party models are accepted and labelled in their profile as third-party, not official.</li>
-            <li>We still decline submissions that are unsafe, deceptive, not working, or not an AI product. A declined credit submission gets its credit back.</li>
+            <li>We still decline submissions that are not an AI product, have no working product, show sexually explicit content, or are illegal or infringe someone else&apos;s rights (for example using a real person&apos;s name or likeness without consent, or content involving minors). A declined credit submission gets its credit back.</li>
             <li>A domain that was declined before may be submitted again with a credit.</li>
           </ul>
         </section>

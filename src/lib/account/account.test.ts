@@ -1,5 +1,5 @@
 import { refundedCredits } from "./billing";
-import { packTotal } from "./credits";
+import { packSummary, packTotal } from "./credits";
 import { normalizeEmail } from "./email";
 import { safeNextPath } from "./google";
 import { ipPrefix } from "./signals";
@@ -18,19 +18,21 @@ describe("account helpers", () => {
     expect(ipPrefix("unavailable")).toBeNull();
   });
 
-  it("prices packs and caps the quantity", () => {
-    expect(packTotal(2)).toEqual({ quantity: 2, credits: 6, amountCents: 1800, currency: "USD" });
-    expect(packTotal(0)).toBeNull();
-    expect(packTotal(21)).toBeNull();
-    expect(packTotal(1.5)).toBeNull();
+  it("prices the three packs and rejects anything else", () => {
+    expect(packTotal("one")).toEqual({ pack: "one", quantity: 1, credits: 1, amountCents: 399, currency: "USD" });
+    expect(packTotal("three")).toEqual({ pack: "three", quantity: 1, credits: 3, amountCents: 599, currency: "USD" });
+    expect(packTotal("ten")).toEqual({ pack: "ten", quantity: 1, credits: 10, amountCents: 999, currency: "USD" });
+    expect(packTotal(2)).toBeNull();
+    expect(packTotal("twenty")).toBeNull();
+    expect(packSummary()).toBe("$3.99 for 1 credit · $5.99 for 3 · $9.99 for 10");
   });
 
   it("removes refunded credits in proportion to the refund", () => {
-    const payment = { credits: 6, amount_cents: 1800 };
-    expect(refundedCredits(payment, 1800)).toBe(6);
-    expect(refundedCredits(payment, 300)).toBe(1);
-    expect(refundedCredits(payment, 900)).toBe(3);
-    expect(refundedCredits(payment, 5000)).toBe(6);
+    const payment = { credits: 10, amount_cents: 999 };
+    expect(refundedCredits(payment, 999)).toBe(10);
+    expect(refundedCredits(payment, 100)).toBe(1);
+    expect(refundedCredits(payment, 500)).toBe(5);
+    expect(refundedCredits(payment, 5000)).toBe(10);
   });
 
   it("only returns to known pages after sign-in", () => {

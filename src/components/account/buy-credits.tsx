@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { CREDIT_PACK } from "@/lib/account/credits";
+import { CREDIT_PACKS, formatCents, type CreditPackId } from "@/lib/account/credits";
 import { trackEvent } from "@/lib/analytics";
 import styles from "./account.module.css";
 
@@ -42,10 +42,10 @@ async function json(response: Response) {
 
 export function BuyCredits({ clientId }: { clientId: string | null }) {
   const router = useRouter();
-  const [quantity, setQuantity] = useState(1);
-  // PayPal keeps the first createOrder callback, so it reads the current quantity from a ref.
-  const quantityRef = useRef(quantity);
-  useEffect(() => { quantityRef.current = quantity; }, [quantity]);
+  const [pack, setPack] = useState<CreditPackId>("three");
+  // PayPal keeps the first createOrder callback, so it reads the current pack from a ref.
+  const packRef = useRef(pack);
+  useEffect(() => { packRef.current = pack; }, [pack]);
   const target = useRef<HTMLDivElement>(null);
   const [message, setMessage] = useState<{ kind: "error" | "status"; text: string } | null>(null);
 
@@ -60,7 +60,7 @@ export function BuyCredits({ clientId }: { clientId: string | null }) {
         async createOrder() {
           setMessage(null);
           const value = await json(await fetch("/api/billing/orders", {
-            method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ quantity: quantityRef.current }),
+            method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ pack: packRef.current }),
           }));
           return value.orderId!;
         },
@@ -68,7 +68,7 @@ export function BuyCredits({ clientId }: { clientId: string | null }) {
           try {
             const value = await json(await fetch(`/api/billing/orders/${encodeURIComponent(orderID)}/capture`, { method: "POST" }));
             if (value.status === "completed") {
-              trackEvent("Credits Purchased", { packs: String(quantityRef.current) });
+              trackEvent("Credits Purchased", { pack: packRef.current });
               setMessage({ kind: "status", text: `Payment received. ${value.credits} credits added.` });
             } else {
               setMessage({ kind: "status", text: "PayPal is still processing this payment. Credits are added as soon as it clears." });
@@ -90,15 +90,17 @@ export function BuyCredits({ clientId }: { clientId: string | null }) {
 
   return (
     <div className={styles.buy}>
-      <label className={styles.quantity}>
-        <span>Packs</span>
-        <select value={quantity} onChange={(event) => setQuantity(Number(event.target.value))}>
-          {Array.from({ length: CREDIT_PACK.maxQuantity }, (_, index) => index + 1).map((value) => (
-            <option key={value} value={value}>{value} × {CREDIT_PACK.credits} credits</option>
-          ))}
-        </select>
-      </label>
-      <p className={styles.total}><strong>${(quantity * CREDIT_PACK.priceCents / 100).toFixed(2)}</strong> for {quantity * CREDIT_PACK.credits} credits · one-time · never expire</p>
+      <fieldset className={styles.packs}>
+        <legend>Credit pack</legend>
+        {CREDIT_PACKS.map((option) => (
+          <label key={option.id} className={styles.pack}>
+            <input type="radio" name="pack" value={option.id} checked={pack === option.id} onChange={() => setPack(option.id)} />
+            <span><strong>{option.credits} {option.credits === 1 ? "credit" : "credits"}</strong><small>${formatCents(Math.round(option.priceCents / option.credits))} each</small></span>
+            <b>${formatCents(option.priceCents)}</b>
+          </label>
+        ))}
+      </fieldset>
+      <p className={styles.total}>One-time payment · credits never expire</p>
       {clientId ? <div ref={target} className={styles.paypal} /> : <p className={styles.notice}>Payments open soon.</p>}
       {message ? <p className={message.kind === "error" ? styles.error : styles.notice} role={message.kind === "error" ? "alert" : "status"}>{message.text}</p> : null}
     </div>

@@ -4,6 +4,7 @@ import { withSocial } from "@/lib/seo";
 import { SubmitFlow, type SubmitAccount } from "@/components/submissions/submit-flow";
 import { previewDraft } from "@/components/submissions/submit-preview-fixture";
 import { currentAccount } from "@/lib/account/current";
+import { packSummary } from "@/lib/account/credits";
 import {
   listSubmissionCategoryGroups,
   listSubmissionTags,
@@ -15,7 +16,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = withSocial({
   alternates: { canonical: "/submit" },
   title: "Submit a tool",
-  description: "Submit an AI tool to Ordalin. Your first submission is free; credits cost $9 for 3 and never expire.",
+  description: "Submit an AI tool to Ordalin. Your first submission is free; credits start at $3.99 and never expire.",
 });
 
 const SIGN_IN_MESSAGES: Record<string, string> = {
@@ -46,7 +47,7 @@ export default async function SubmitPage({ searchParams }: { searchParams: Searc
   return (
     <main className={styles.main}>
       <header className={styles.intro}>
-        <p className={styles.eyebrow}>First submission free · $9 for 3 credits</p>
+        <p className={styles.eyebrow}>First submission free · credits from $3.99</p>
         <h1>Start with the official website.</h1>
         <p>
           Ordalin drafts a profile from public facts and images. Check each part, correct anything that is wrong, then submit it. We research every tool before it goes live.
@@ -74,11 +75,13 @@ export default async function SubmitPage({ searchParams }: { searchParams: Searc
             <h2 id="signin-title">Sign in to submit</h2>
             <p>Use a Google account so we can reach you about your listing and keep track of your free submission and credits.</p>
             {signInMessage ? <p className={styles.error} role="alert">{signInMessage}</p> : null}
+            {/* OAuth starts on an API route, so it needs a full page navigation. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a className={styles.signInButton} href="/api/auth/google?next=/submit">Continue with Google →</a>
           </div>
           <div className={styles.stageNotes}>
             <p><span>01</span> Your first submission is free and goes through our strict review.</p>
-            <p><span>02</span> Credits cost $9 for 3, never expire, and each one lists one product within 48 hours.</p>
+            <p><span>02</span> Credits cost {packSummary()}, never expire, and each one lists one product within 48 hours.</p>
             <p><span>03</span> A declined credit submission gets its credit back. <Link href="/terms">Terms</Link></p>
           </div>
         </section>

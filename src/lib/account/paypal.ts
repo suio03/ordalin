@@ -1,4 +1,4 @@
-import { CREDIT_PACK, formatCents } from "./credits";
+import { CREDIT_CURRENCY, formatCents } from "./credits";
 
 export type PayPalEnv = { PAYPAL_CLIENT_ID?: string; PAYPAL_CLIENT_SECRET?: string; PAYPAL_WEBHOOK_ID?: string; PAYPAL_ENV?: string };
 export type PayPalConfig = { clientId: string; clientSecret: string; webhookId: string | null; apiBase: string };
@@ -39,8 +39,7 @@ async function call<T>(config: PayPalConfig, path: string, init: { method: strin
   return { ok: response.ok, status: response.status, json };
 }
 
-export async function createOrder(config: PayPalConfig, order: { paymentId: string; userId: string; quantity: number; amountCents: number }) {
-  const unit = formatCents(CREDIT_PACK.priceCents);
+export async function createOrder(config: PayPalConfig, order: { paymentId: string; userId: string; credits: number; amountCents: number }) {
   const total = formatCents(order.amountCents);
   const result = await call<{ id?: string; status?: string }>(config, "/v2/checkout/orders", {
     method: "POST",
@@ -50,9 +49,9 @@ export async function createOrder(config: PayPalConfig, order: { paymentId: stri
       purchase_units: [{
         reference_id: order.paymentId,
         custom_id: order.userId,
-        description: `Ordalin listing credits (${order.quantity * CREDIT_PACK.credits})`,
-        amount: { currency_code: CREDIT_PACK.currency, value: total, breakdown: { item_total: { currency_code: CREDIT_PACK.currency, value: total } } },
-        items: [{ name: `Ordalin listing credits, ${CREDIT_PACK.credits} per pack`, quantity: String(order.quantity), unit_amount: { currency_code: CREDIT_PACK.currency, value: unit }, category: "DIGITAL_GOODS" }],
+        description: `Ordalin listing credits (${order.credits})`,
+        amount: { currency_code: CREDIT_CURRENCY, value: total, breakdown: { item_total: { currency_code: CREDIT_CURRENCY, value: total } } },
+        items: [{ name: `Ordalin listing credits, pack of ${order.credits}`, quantity: "1", unit_amount: { currency_code: CREDIT_CURRENCY, value: total }, category: "DIGITAL_GOODS" }],
       }],
       payment_source: { paypal: { experience_context: { brand_name: "Ordalin", shipping_preference: "NO_SHIPPING", user_action: "PAY_NOW" } } },
     },

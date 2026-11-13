@@ -1,8 +1,27 @@
-export const CREDIT_PACK = { priceCents: 900, credits: 3, currency: "USD", maxQuantity: 20 } as const;
+export const CREDIT_CURRENCY = "USD";
 
-export function packTotal(quantity: number) {
-  if (!Number.isInteger(quantity) || quantity < 1 || quantity > CREDIT_PACK.maxQuantity) return null;
-  return { quantity, credits: quantity * CREDIT_PACK.credits, amountCents: quantity * CREDIT_PACK.priceCents, currency: CREDIT_PACK.currency };
+/** One pack per order. Bought credits keep their value when prices change: the ledger counts credits, not money. */
+export const CREDIT_PACKS = [
+  { id: "one", credits: 1, priceCents: 399 },
+  { id: "three", credits: 3, priceCents: 599 },
+  { id: "ten", credits: 10, priceCents: 999 },
+] as const;
+
+export type CreditPackId = (typeof CREDIT_PACKS)[number]["id"];
+
+export function creditPack(id: unknown) {
+  return CREDIT_PACKS.find((pack) => pack.id === id) ?? null;
+}
+
+export function packTotal(id: unknown) {
+  const pack = creditPack(id);
+  if (!pack) return null;
+  return { pack: pack.id, quantity: 1, credits: pack.credits, amountCents: pack.priceCents, currency: CREDIT_CURRENCY };
+}
+
+/** "$3.99 for 1 credit · $5.99 for 3 · $9.99 for 10" */
+export function packSummary() {
+  return CREDIT_PACKS.map((pack, index) => `$${formatCents(pack.priceCents)} for ${pack.credits}${index === 0 ? (pack.credits === 1 ? " credit" : " credits") : ""}`).join(" · ");
 }
 
 export function formatCents(cents: number) {

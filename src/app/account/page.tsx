@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BuyCredits } from "@/components/account/buy-credits";
 import { getCloudflareEnv } from "@/lib/cloudflare";
 import { currentAccount } from "@/lib/account/current";
-import { listAccountSubmissions, listLedger, type AccountSubmission, type LedgerEntry } from "@/lib/account/credits";
+import { listAccountSubmissions, listLedger, packSummary, type AccountSubmission, type LedgerEntry } from "@/lib/account/credits";
 import styles from "@/components/account/account.module.css";
 
 export const dynamic = "force-dynamic";
@@ -60,9 +60,11 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         <header className={styles.intro}>
           <p className={styles.eyebrow}>Account</p>
           <h1>Sign in to see your credits.</h1>
-          <p>Credits cost $9 for 3, never expire, and each one lists one product. Your first submission is free.</p>
+          <p>Credits cost {packSummary()}, never expire, and each one lists one product. Your first submission is free.</p>
         </header>
         {signin ? <p className={styles.error} role="alert">Google sign-in did not complete. Please try again.</p> : null}
+        {/* OAuth starts on an API route, so it needs a full page navigation. */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a className={styles.primary} href="/api/auth/google?next=/account">Continue with Google →</a>
       </main>
     );
@@ -87,7 +89,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       <section className={styles.panel} aria-labelledby="buy-title">
         <div>
           <h2 id="buy-title">Buy credits</h2>
-          <p>$9 for 3 credits, paid once through PayPal. Reviewed within 48 hours, credit returned if a submission is declined, unused credits refundable within 14 days. <Link href="/terms">Terms</Link></p>
+          <p>Paid once through PayPal. Reviewed within 48 hours, credit returned if a submission is declined, unused credits refundable within 14 days. <Link href="/terms">Terms</Link></p>
         </div>
         {development ? <p className={styles.notice}>Payments are disabled in local preview.</p> : <BuyCredits clientId={env.PAYPAL_CLIENT_ID ?? null} />}
       </section>
