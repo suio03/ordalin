@@ -10,6 +10,8 @@ export default defineConfig([
     ".open-next/**",
     ".wrangler/**",
     ".ordalin-imports/**",
+    // Test fixtures are deliberately messy code that agent skills are asked to fix.
+    "scripts/agent-test/fixtures/**",
     "coverage/**",
     "cloudflare-env.d.ts",
     "next-env.d.ts",
