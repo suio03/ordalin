@@ -1,0 +1,111 @@
+export const metadata = {
+  title: "QVAC BotPsy: Tether's 0.8B on-device agent model, benchmarks and how to run it",
+  description: "BotPsy is Tether's free 0.8B open-weight model that turns requests into tool calls on your own device. What it does, Tether's benchmarks, safety results, and how to run it with llama.cpp, Ollama or LM Studio.",
+  author: "Ordalin",
+  publishedAt: "2026-11-13",
+  updatedAt: "2026-11-13",
+  status: "published",
+  topics: ["Automation & Agents"],
+  relatedLinks: [
+    { href: "/models", label: "AI models" },
+    { href: "/agents", label: "AI agents" },
+  ],
+};
+
+**QVAC BotPsy** is a small, free, open-weight AI model from Tether's QVAC research team, built to act as the brain of a personal assistant that runs on your own phone or computer. You give it a request such as "move my 3 pm meeting and tell Sam", and it decides which tools to call (calendar, messages, search) and with what details. It has about 0.8 billion parameters, small enough that the compressed version is a 529 MB download, and it is a fine-tuned version of Alibaba's Qwen3.5-0.8B. Tether published it on Hugging Face on 11 November 2026 under the Apache 2.0 licence.
+
+BotPsy is a model, not an app. There is no BotPsy assistant to download yet; you run it from code or in a local AI app, and you connect the tools yourself.
+
+Everything below comes from Tether's [model card](https://huggingface.co/qvac/BotPsy-0.8B), its [GGUF page](https://huggingface.co/qvac/BotPsy-0.8B-GGUFs) and its [launch post](https://huggingface.co/blog/qvac/botpsy), checked on 13 November 2026. We have not run the model ourselves, and all benchmark and safety numbers are Tether's own.
+
+## BotPsy at a glance
+
+- **Made by:** Tether AI Research, under its QVAC brand. Other QVAC models include MedPsy (medical), TranscribePsy (speech to text), VisionPsy and TranslatePsy.
+- **Name on Hugging Face:** `qvac/BotPsy-0.8B`, plus `qvac/BotPsy-0.8B-GGUFs` for local apps.
+- **Price:** free. Apache 2.0 allows commercial use.
+- **Size:** 0.8B parameters by Tether's count (Hugging Face shows 0.9B).
+- **Built on:** Qwen3.5-0.8B, text only.
+- **Job:** tool calling and simple agent tasks. Tether's task areas are web search, travel, shopping and payments, business tasks, device and car control, files, calendar, and email and messaging.
+- **Language:** English recommended.
+- **Not:** a knowledge model. It is designed to call tools for facts it doesn't know, and Tether says it suits tasks of low to medium difficulty.
+
+## How good is it?
+
+Tether compares BotPsy with its own base model and other small "thinking" models. Higher is better.
+
+| Benchmark | BotPsy 0.8B | Qwen3.5-0.8B (base) | Qwen3.5-2B | LFM2.5-1.2B | MiniCPM5-1B |
+| --- | --- | --- | --- | --- | --- |
+| BFCL v4 (function calling) | **44.0** | 23.4 | 37.7 | 28.1 | 22.8 |
+| ACEBench | **58.7** | 30.1 | 55.4 | 39.4 | 24.5 |
+| τ-bench | **51.5** | 23.2 | 46.5 | 6.5 | 28.8 |
+| ToolSandbox | **64.6** | 30.5 | 41.2 | 45.7 | 28.1 |
+| Claw-Eval | 46.5 | 39.3 | **48.9** | 31.6 | 31.0 |
+| IFEval (following instructions) | **90.8** | 59.7 | 80.0 | 85.6 | 78.4 |
+| MMLU-Pro (knowledge) | 48.9 | 41.6 | **65.5** | 39.4 | 40.0 |
+| GPQA Diamond (reasoning) | 38.1 | 33.2 | **59.9** | 35.0 | 15.8 |
+
+Across Tether's tool-use tests BotPsy averages 45.0, against 24.7 for its base model and 38.8 for Qwen3.5-2B, a model about 2.5 times larger. On BFCL's multi-turn tasks it goes from 7.5 to 46.1. The trade-off shows in the knowledge and reasoning rows, where the bigger Qwen3.5-2B stays well ahead. Tether ran these tests itself on 3 November 2026; they are not independent results.
+
+## Is it safe to let it act for me?
+
+Tether published its own red-team results, and they are a reason to keep a human in the loop:
+
+- **Harmful requests:** BotPsy gave unsafe responses 21% of the time across six harm categories, down from 36% for its base model (LFM2.5-1.2B: 35%, MiniCPM5-1B: 47%).
+- **Prompt injection** (instructions hidden in a web page or message it reads): unsafe 31% of the time, down from 46% for the base model.
+
+Tether's model card says BotPsy makes mistakes and is not meant for safety-critical or high-stakes automated decisions, or for apps involving money, personal information or health. It is weak at multi-step research, its instruction following slips as instructions pile up, and it scores much lower in Hindi and Russian than in English.
+
+## How to run BotPsy
+
+All routes are free and run on your own machine. Pick the GGUF files for local apps:
+
+| File | Size | Notes |
+| --- | --- | --- |
+| `botpsy-0.8b-q8_0.gguf` | 812 MB | Tether's recommended file |
+| `botpsy-0.8b-q4_k_m-imat.gguf` | 529 MB | Smallest, about 1.5 points lower on average |
+| `botpsy-0.8b-bf16.gguf` | 1.52 GB | Unquantized |
+
+1. **Ollama:** `ollama run hf.co/qvac/BotPsy-0.8B-GGUFs:Q4_K_M`
+2. **LM Studio, Jan or Lemonade:** load it with one click from the [GGUF page](https://huggingface.co/qvac/BotPsy-0.8B-GGUFs).
+3. **llama.cpp** (`brew install llama.cpp` or `winget install llama.cpp`): `llama serve -hf qvac/BotPsy-0.8B-GGUFs:Q4_K_M` starts a local server with a web interface. For an OpenAI-compatible server, Tether's command is:
+
+```bash
+llama-server -m botpsy-0.8b-q8_0.gguf --jinja -c 32768 \
+    --temp 0.3 --top-p 0.95 --top-k 20 --presence-penalty 1.5 \
+    --chat-template-kwargs '{"enable_thinking": true}' --port 8080
+```
+
+4. **vLLM**, for developers serving it with tool calling: `vllm serve qvac/BotPsy-0.8B --language-model-only --enable-auto-tool-choice --tool-call-parser qwen3_xml --reasoning-parser qwen3`
+5. **Transformers** (5.19.0 or a later release with Qwen3.5 support), or Tether's own [QVAC SDK](https://qvac.tether.io/dev/sdk/) for building local apps.
+
+Two settings matter. BotPsy was trained to think before it answers, but its chat template defaults to non-thinking, so turn thinking on (`enable_thinking`). And allow at least 2,048 output tokens, because the reasoning block comes before the answer. Tether recommends temperature 0.3, top_p 0.95, top_k 20 and presence penalty 1.5.
+
+The model only decides which tool to call. To have it actually send a message or add a calendar event, your app has to define those tools and carry out the calls.
+
+## Want an agent you can use today?
+
+BotPsy is for people building their own assistant. If you just want an agent that does tasks for you, see the [AI agents we track](/agents), including on-device options such as [Underdog](/agents/underdog), and browse other open [AI models](/models).
+
+## FAQ
+
+### Is BotPsy free?
+
+Yes. The weights are free on Hugging Face under Apache 2.0, which allows commercial use. Tether hasn't released the training code or data.
+
+### Is BotPsy an app I can install on my phone?
+
+Not yet. It is a model for developers and local AI apps. Tether's plan is for phones to be the daily interface for its QVAC assistants, handing heavier jobs to a home PC or trusted peer-to-peer devices, but it hasn't announced a consumer app or a date.
+
+### How much memory does it need?
+
+Tether doesn't publish memory figures. The files give a guide: the smallest version is a 529 MB download and the recommended one 812 MB, so it fits on far smaller devices than most AI models.
+
+### Does BotPsy really beat bigger models?
+
+On tool use, by Tether's own tests: its tool-use average of 45.0 beats Qwen3.5-2B's 38.8. On general knowledge and reasoning (MMLU-Pro, GPQA Diamond) Qwen3.5-2B is clearly better. Test it on your own tasks before relying on it.
+
+### Why is Tether, a stablecoin company, making AI models?
+
+QVAC is Tether's AI research line for private AI that runs on your own devices rather than in the cloud. BotPsy joins its earlier Psy models for medicine, speech, vision and translation.
+
+Checked against Tether's Hugging Face model card, GGUF page and launch post on 13 November 2026. We will update this page if Tether ships an app or new versions.

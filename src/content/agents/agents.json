@@ -10,7 +10,7 @@
       "category": "personal agent",
       "launch_date": "2026-09-08",
       "official_url": "https://muse.ai",
-      "checked_on": "2026-11-11",
+      "checked_on": "2026-11-13",
       "access": {
         "free_tier": "yes — free with a usage limit that refreshes (limit not stated officially)",
         "paid_plans": [
@@ -41,7 +41,7 @@
         "WhatsApp"
       ],
       "regions": "US (rolling out); Japan since 2026-10-23 on iOS, Android and muse.ai, the first region outside North America; Singapore since 2026-10-27 on iOS, Android and muse.ai",
-      "actions": "browse web, fill forms, send email, book travel, purchases, negotiate on user's behalf",
+      "actions": "browse web, fill forms, send email, book travel, purchases, negotiate on user's behalf; paid US subscribers can have it phone US businesses for them (since 2026-11-12)",
       "connectors_notable": [
         "Link (Stripe)",
         "Shop Pay (coming soon)",
@@ -77,7 +77,8 @@
         "https://www.meta.com/help/artificial-intelligence/1385290430137537/",
         "https://www.meta.com/help/artificial-intelligence/2225571704857152/",
         "https://apps.apple.com/us/app/muse-from-meta/id6760173601",
-        "https://play.google.com/store/apps/details?id=com.facebook.aura"
+        "https://play.google.com/store/apps/details?id=com.facebook.aura",
+        "https://x.com/alexandr_wang/status/2120930586827391350"
       ]
     },
     {
@@ -1014,6 +1015,44 @@
         "https://nod.n8n.io/docs/use/n8n/"
       ],
       "launch_date": "2026-11-09"
+    },
+    {
+      "slug": "navoka",
+      "name": "Navoka",
+      "vendor": "Wirex",
+      "channel": "personal",
+      "category": "payments agent (own bank account and card)",
+      "launch_date": "2026-11-12 (invite only)",
+      "official_url": "https://navoka.com/",
+      "checked_on": "2026-11-13",
+      "access": {
+        "free_tier": "unknown",
+        "paid_plans": "unknown",
+        "billing_note": "No prices published. Wirex says access is invite only at launch. The account opens at sign-in and can hold and send USDC and EURC straight away; the IBAN and card need a one-time ID check, or you can carry over verification from Wirex One. Wirex One users get their cashback rate on the agent's card"
+      },
+      "messaging": [
+        "Telegram",
+        "WhatsApp (coming soon)",
+        "iMessage (coming soon)"
+      ],
+      "regions": "unknown",
+      "actions": "pays from its own IBAN, debit card and USDC/EURC wallet, kept apart from your personal accounts: shopping, paying bills and invoices, sending money, paying people and payroll from a sheet, recurring investment buys within a monthly cap; can hold US dollars, euros and pounds and buy, hold and sell USDC, EURC, BTC, ETH and SOL",
+      "connectors_notable": [
+        "ChatGPT",
+        "Claude",
+        "Grok",
+        "MCP endpoint for developers"
+      ],
+      "execution": "Each agent runs on its own isolated virtual machine with encrypted storage; the machine is torn down and rebuilt when you revoke access. The agent holds a card token, never the card number",
+      "safety": "You set allowed merchants, a spending ceiling, a daily limit and allowed countries once; every card authorization is checked against them and anything outside waits for your approval. The agent can read the rules but not change them. Kill switch freezes the card, pauses rules and unlinks connected assistants; every payment records the rule it ran under, who approved it and why",
+      "privacy": "unknown",
+      "model": "unknown",
+      "sources": [
+        "https://navoka.com/",
+        "https://navoka.com/security",
+        "https://www.prnewswire.com/news-releases/wirex-launches-navoka-an-ai-agent-that-pays-from-its-own-bank-account-and-card-302938065.html"
+      ],
+      "needs_update": "Launched invite only on 2026-11-12 with no prices or regions published; re-check pricing, regions, privacy and WhatsApp/iMessage when access opens"
     }
   ]
 }

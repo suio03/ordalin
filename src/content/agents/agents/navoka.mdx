@@ -1,0 +1,48 @@
+export const meta = {
+  title: "Navoka: Wirex's AI Agent With Its Own Bank Account and Card",
+  description:
+    "Navoka is a payments AI agent from Wirex with its own IBAN, debit card and stablecoin wallet. It pays within limits you set, on Telegram. Invite only since Nov 12, 2026.",
+  summary:
+    "Navoka is an AI agent from Wirex that pays for things from its own bank account, debit card and USDC/EURC wallet, kept separate from your personal accounts. You message it on Telegram, or connect it to ChatGPT, Claude or Grok, and it can shop, pay bills and invoices, send money, run payroll from a sheet and make recurring investment buys. You set the rules once (allowed merchants, a spending ceiling, a daily limit and allowed countries); every card payment is checked against them, and anything outside waits for your approval. Wirex launched it on November 12, 2026, invite only, and has not published prices or supported countries. This is an early profile based on Wirex's official pages, not hands-on testing; we will update it as access opens.",
+  bestFor: [
+    "Letting an agent pay for things without handing it your personal card",
+    "Small businesses paying contractors and suppliers within fixed limits",
+    "Developers who want payments in their own agent through an MCP endpoint",
+    "Existing Wirex One users, who can carry over their ID verification",
+  ],
+  notFor: [
+    "Anyone who needs access today without an invite",
+    "People who want published prices, supported countries or privacy terms first",
+    "WhatsApp or iMessage users: only Telegram is live so far",
+  ],
+  faq: [
+    {
+      q: "What is Navoka?",
+      a: "A payments and finance agent from Wirex. Each agent gets its own IBAN, debit card and USDC and EURC wallet, separate from your personal accounts, and it books, buys, pays invoices and sends money within the limits you set.",
+    },
+    {
+      q: "How do I get Navoka?",
+      a: "Wirex says Navoka is invite only at launch (November 12, 2026). Once in, you start by messaging Navoka on Telegram or connecting an assistant. The account and stablecoin wallet open at sign-in; the IBAN and card need a one-time ID check, or you can import your verification from Wirex One.",
+    },
+    {
+      q: "How much does Navoka cost?",
+      a: "Wirex has not published prices. Its site only says Wirex One users get their cashback rate on the agent's card. We will add prices when they are announced.",
+    },
+    {
+      q: "Can it spend more than I allow?",
+      a: "Not according to Wirex. You set allowed merchants, a spending ceiling, a daily limit and allowed countries, and the card checks them on every authorization. Payments outside the rules wait for your approval, and the agent can read the rules but not change them. Saying \"stop everything\" or using the kill switch freezes the card, pauses the rules and unlinks connected assistants.",
+    },
+    {
+      q: "Does the AI see my card number?",
+      a: "No, Wirex says. The agent holds a network token, the card number stays in the issuer's vault, and it never appears in the model's context, logs or chat. Each agent runs on its own isolated machine with encrypted storage.",
+    },
+    {
+      q: "Does Navoka work with ChatGPT, Claude or Grok?",
+      a: "Yes. Wirex says you can connect it to ChatGPT, Claude or Grok through one endpoint you add once. Developers get an MCP endpoint covering the wallet, IBAN, card, payments, payouts and ledger.",
+    },
+    {
+      q: "Is Navoka a bank?",
+      a: "No. Navoka's site says it is software, not a financial service. The accounts, IBANs, cards, payments, exchange and trading come from a separate Wirex group company under its own terms, which you accept during onboarding.",
+    },
+  ],
+};
