@@ -69,7 +69,7 @@ export function BuyCredits({ clientId }: { clientId: string | null }) {
             const value = await json(await fetch(`/api/billing/orders/${encodeURIComponent(orderID)}/capture`, { method: "POST" }));
             if (value.status === "completed") {
               trackEvent("Credits Purchased", { pack: packRef.current });
-              setMessage({ kind: "status", text: `Payment received. ${value.credits} credits added.` });
+              setMessage({ kind: "status", text: `Payment received. ${value.credits} ${value.credits === 1 ? "credit" : "credits"} added.` });
             } else {
               setMessage({ kind: "status", text: "PayPal is still processing this payment. Credits are added as soon as it clears." });
             }
