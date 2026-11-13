@@ -1,3 +1,5 @@
+import { base64Url } from "./crypto";
+
 export type GoogleConfig = { clientId: string; clientSecret: string; redirectUri: string };
 export type GoogleProfile = { sub: string; email: string; emailVerified: boolean; name: string | null };
 
@@ -54,9 +56,40 @@ export async function googleProfile(config: GoogleConfig, code: string, codeVeri
 }
 
 export const OAUTH_COOKIE = "ordalin_oauth";
-const NEXT_PATHS = ["/submit", "/account"] as const;
+const NEXT_PATHS = ["/submit", "/account", "/pricing"] as const;
 
-/** Only the two signed-in pages are post-login destinations. */
+/** Post-login destinations: a fixed set of pages, plus the website being submitted on /submit. */
 export function safeNextPath(value: string | null | undefined) {
-  return NEXT_PATHS.find((path) => path === value) ?? "/submit";
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/submit";
+  let url: URL;
+  try { url = new URL(value, "https://ordalin.invalid"); } catch { return "/submit"; }
+  const path = NEXT_PATHS.find((item) => item === url.pathname);
+  if (!path) return "/submit";
+  const website = path === "/submit" ? url.searchParams.get("website")?.slice(0, 500) : undefined;
+  if (website) return `${path}?${new URLSearchParams({ website })}`;
+  // A pack chosen on /pricing carries through sign-in to the buy panel on /account.
+  const pack = path === "/account" ? url.searchParams.get("pack") : null;
+  if (pack && /^(one|three|ten)$/.test(pack)) return `/account?pack=${pack}#buy`;
+  return path;
+}
+
+/** Adds ?signin=<reason> to a destination so the sign-in dialog can say what went wrong. */
+export function withSignInError(path: string, reason: string) {
+  const [base, hash] = path.split("#");
+  return `${base}${base.includes("?") ? "&" : "?"}signin=${reason}${hash ? `#${hash}` : ""}`;
+}
+
+/** The OAuth cookie value holds state.verifier.next, so the destination is base64url-encoded. */
+export function encodeNext(path: string) {
+  return base64Url(new TextEncoder().encode(path));
+}
+
+export function decodeNext(value: string | undefined) {
+  if (!value) return "/submit";
+  try {
+    const binary = atob(value.replace(/-/g, "+").replace(/_/g, "/"));
+    return safeNextPath(new TextDecoder().decode(Uint8Array.from(binary, (char) => char.charCodeAt(0))));
+  } catch {
+    return "/submit";
+  }
 }

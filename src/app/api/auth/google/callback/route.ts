@@ -1,8 +1,8 @@
 import { getCloudflareEnv } from "@/lib/cloudflare";
 import { cookieHeader, readCookie } from "@/lib/account/crypto";
 import { normalizeEmail } from "@/lib/account/email";
-import { googleConfig, googleProfile, OAUTH_COOKIE } from "@/lib/account/google";
-import { createSession, DEVICE_COOKIE, sessionCookie } from "@/lib/account/session";
+import { decodeNext, googleConfig, googleProfile, OAUTH_COOKIE, withSignInError } from "@/lib/account/google";
+import { createSession, DEVICE_COOKIE, sessionCookies } from "@/lib/account/session";
 import { recordSignalStatements, requestSignals } from "@/lib/account/signals";
 import { clientAddress, submissionHashSalt } from "@/lib/submissions/request";
 
@@ -22,13 +22,13 @@ export async function GET(request: Request) {
   const config = googleConfig(env);
   const stored = readCookie(request.headers.get("cookie"), OAUTH_COOKIE)?.split(".");
   const code = url.searchParams.get("code");
+  const next = decodeNext(stored?.[2]);
   if (!config || !stored || stored.length !== 3 || !code || url.searchParams.get("state") !== stored[0]) {
-    return redirect(url, "/submit?signin=failed", [clearOauth]);
+    return redirect(url, withSignInError(next, "failed"), [clearOauth]);
   }
-  const next = stored[2] === "account" ? "/account" : "/submit";
   try {
     const profile = await googleProfile(config, code, stored[1]);
-    if (!profile.emailVerified) return redirect(url, `${next}?signin=unverified`, [clearOauth]);
+    if (!profile.emailVerified) return redirect(url, withSignInError(next, "unverified"), [clearOauth]);
     const now = Math.floor(Date.now() / 1000);
     const db = env.DB;
     await db
@@ -36,14 +36,14 @@ export async function GET(request: Request) {
       .bind(`user_${crypto.randomUUID()}`, profile.sub, profile.email, normalizeEmail(profile.email), profile.name, now, now)
       .run();
     const user = await db.prepare("SELECT id, status FROM users WHERE google_sub = ?").bind(profile.sub).first<{ id: string; status: string }>();
-    if (!user || user.status !== "active") return redirect(url, `${next}?signin=blocked`, [clearOauth]);
+    if (!user || user.status !== "active") return redirect(url, withSignInError(next, "blocked"), [clearOauth]);
     const signals = await requestSignals(clientAddress(request), readCookie(request.headers.get("cookie"), DEVICE_COOKIE), submissionHashSalt(env.SUBMISSION_HASH_SALT));
     const statements = recordSignalStatements(db, user.id, signals, now);
     if (statements.length) await db.batch(statements);
     const token = await createSession(db, user.id, now);
-    return redirect(url, next, [clearOauth, sessionCookie(token, secure)]);
+    return redirect(url, next, [clearOauth, ...sessionCookies(token, secure)]);
   } catch (error) {
     console.error("Google sign-in failed", error);
-    return redirect(url, `${next}?signin=failed`, [clearOauth]);
+    return redirect(url, withSignInError(next, "failed"), [clearOauth]);
   }
 }

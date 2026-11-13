@@ -18,25 +18,25 @@ export default function RefundsPage() {
         <div>
           <p className={styles.eyebrow}>Updated 13 November 2026</p>
           <h1>Refund policy</h1>
-          <p className={styles.description}>Unused listing credits can be refunded within 14 days of purchase, and a declined credit submission always gets its credit back.</p>
+          <p className={styles.description}>A credit purchase can be refunded within 14 days if none of its credits has been used, and a declined credit submission always gets its credit back.</p>
         </div>
       </header>
       <div className={styles.prose}>
         <section>
-          <h2>Unused credits</h2>
+          <h2>Refunds for unused purchases</h2>
           <ul>
-            <li>Within 14 days of purchase, we refund credits you have not spent, to the PayPal account that paid.</li>
-            <li>If you have spent part of a pack, we refund the unspent share of what you paid. For example, if you bought 3 credits for US$5.99 and used 1, we refund US$3.99 (two thirds), and the remaining 2 credits are removed.</li>
-            <li>Spent credits are not refunded once the submission has been reviewed, whether it was published or declined.</li>
+            <li>Within 14 days of a purchase, if you have not used any of its credits, we refund the full amount to the PayPal account that paid, and the credits are removed.</li>
+            <li>Once you have used a credit from a purchase, that purchase can no longer be refunded, including the credits left in it. For example, if you bought 3 credits for US$5.99 and used 1, the other 2 stay on your account to use later but are not refunded.</li>
+            <li>A credit counts as used when you send a submission with it, whatever the review result.</li>
           </ul>
         </section>
         <section>
           <h2>Declined submissions</h2>
-          <p>If we decline a credit submission, the credit goes back to your balance straight away, to use on another product. Credits do not expire, so this is a credit return, not a cash refund; within the 14 days you can still ask for that credit to be refunded as an unused one.</p>
+          <p>If we decline a credit submission, the credit goes back to your balance straight away, to use on another product. Credits do not expire, so this is a credit return, not a cash refund, and the purchase still counts as used.</p>
         </section>
         <section>
           <h2>Late reviews</h2>
-          <p>Credit submissions are reviewed within 48 hours. If we miss that, tell us and we will refund the credit for that submission on request, even after 14 days.</p>
+          <p>Credit submissions are reviewed within 48 hours. If we miss that, tell us and we will return the credit for that submission to your balance.</p>
         </section>
         <section>
           <h2>How to ask</h2>

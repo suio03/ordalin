@@ -40,9 +40,9 @@ async function json(response: Response) {
   return value;
 }
 
-export function BuyCredits({ clientId }: { clientId: string | null }) {
+export function BuyCredits({ clientId, initialPack }: { clientId: string | null; initialPack?: CreditPackId }) {
   const router = useRouter();
-  const [pack, setPack] = useState<CreditPackId>("three");
+  const [pack, setPack] = useState<CreditPackId>(initialPack ?? "three");
   // PayPal keeps the first createOrder callback, so it reads the current pack from a ref.
   const packRef = useRef(pack);
   useEffect(() => { packRef.current = pack; }, [pack]);

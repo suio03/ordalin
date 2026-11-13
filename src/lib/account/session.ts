@@ -2,6 +2,8 @@ import { cookieHeader, randomToken, sha256Hex } from "./crypto";
 
 export const SESSION_COOKIE = "ordalin_session";
 export const DEVICE_COOKIE = "ordalin_device";
+/** Readable by scripts so the header can show "Account" instead of "Sign in". It grants nothing. */
+export const SIGNED_IN_HINT_COOKIE = "ordalin_signed_in";
 export const SESSION_SECONDS = 60 * 86_400;
 export const DEVICE_SECONDS = 2 * 365 * 86_400;
 
@@ -29,10 +31,16 @@ export async function deleteSession(db: D1Database, token: string) {
   await db.prepare("DELETE FROM user_sessions WHERE id = ?").bind(await sha256Hex(token)).run();
 }
 
-export function sessionCookie(token: string, secure: boolean) {
-  return cookieHeader(SESSION_COOKIE, token, SESSION_SECONDS, secure);
+export function sessionCookies(token: string, secure: boolean) {
+  return [
+    cookieHeader(SESSION_COOKIE, token, SESSION_SECONDS, secure),
+    cookieHeader(SIGNED_IN_HINT_COOKIE, "1", SESSION_SECONDS, secure, "/", false),
+  ];
 }
 
-export function clearSessionCookie(secure: boolean) {
-  return cookieHeader(SESSION_COOKIE, "deleted", 0, secure);
+export function clearSessionCookies(secure: boolean) {
+  return [
+    cookieHeader(SESSION_COOKIE, "deleted", 0, secure),
+    cookieHeader(SIGNED_IN_HINT_COOKIE, "deleted", 0, secure, "/", false),
+  ];
 }

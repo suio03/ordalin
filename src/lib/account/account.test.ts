@@ -41,3 +41,21 @@ describe("account helpers", () => {
     expect(safeNextPath(null)).toBe("/submit");
   });
 });
+
+describe("post-login destination", () => {
+  it("keeps known pages and the submitted website only", async () => {
+    const { safeNextPath, decodeNext, encodeNext, withSignInError } = await import("./google");
+    expect(safeNextPath("/pricing")).toBe("/pricing");
+    expect(safeNextPath("/account#buy")).toBe("/account");
+    expect(safeNextPath("/account?pack=ten#buy")).toBe("/account?pack=ten#buy");
+    expect(safeNextPath("/account?pack=evil")).toBe("/account");
+    expect(withSignInError("/account?pack=one#buy", "failed")).toBe("/account?pack=one&signin=failed#buy");
+    expect(safeNextPath("/submit?website=example.com&x=1")).toBe("/submit?website=example.com");
+    expect(safeNextPath("https://evil.example/submit")).toBe("/submit");
+    expect(safeNextPath("//evil.example/account")).toBe("/submit");
+    expect(safeNextPath("/admin")).toBe("/submit");
+    expect(decodeNext(encodeNext("/submit?website=a.ai"))).toBe("/submit?website=a.ai");
+    expect(decodeNext("@@not-base64")).toBe("/submit");
+    expect(withSignInError("/submit?website=a.ai", "failed")).toBe("/submit?website=a.ai&signin=failed");
+  });
+});

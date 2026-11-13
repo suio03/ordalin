@@ -77,6 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }));
     }),
     { url: `${baseUrl}/about/how-we-review`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${baseUrl}/pricing`, changeFrequency: "monthly", priority: 0.4 },
   ];
 
   // AI agent pages, dated by their last fact check.

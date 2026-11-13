@@ -26,12 +26,12 @@ export function readCookie(header: string | null, name: string) {
     if (index < 0) continue;
     if (part.slice(0, index).trim() === name) {
       const value = part.slice(index + 1).trim();
-      return /^[A-Za-z0-9._~-]{16,200}$/.test(value) ? value : null;
+      return /^[A-Za-z0-9._~-]{16,1200}$/.test(value) ? value : null;
     }
   }
   return null;
 }
 
-export function cookieHeader(name: string, value: string, maxAgeSeconds: number, secure: boolean, path = "/") {
-  return `${name}=${value}; Path=${path}; Max-Age=${maxAgeSeconds}; HttpOnly; SameSite=Lax${secure ? "; Secure" : ""}`;
+export function cookieHeader(name: string, value: string, maxAgeSeconds: number, secure: boolean, path = "/", httpOnly = true) {
+  return `${name}=${value}; Path=${path}; Max-Age=${maxAgeSeconds}${httpOnly ? "; HttpOnly" : ""}; SameSite=Lax${secure ? "; Secure" : ""}`;
 }

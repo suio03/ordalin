@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BuyCredits } from "@/components/account/buy-credits";
+import { SignInButton } from "@/components/account/sign-in";
 import { getCloudflareEnv } from "@/lib/cloudflare";
 import { currentAccount } from "@/lib/account/current";
-import { SUPPORT_EMAIL, listAccountSubmissions, listLedger, packSummary, type AccountSubmission, type LedgerEntry } from "@/lib/account/credits";
+import { SUPPORT_EMAIL, creditPack, listAccountSubmissions, listLedger, packSummary, type AccountSubmission, type LedgerEntry } from "@/lib/account/credits";
 import { explainDecline } from "@/lib/submissions/decline-reasons";
 import styles from "@/components/account/account.module.css";
 
@@ -52,8 +53,8 @@ const PREVIEW = {
   ] satisfies AccountSubmission[],
 };
 
-export default async function AccountPage({ searchParams }: { searchParams: Promise<{ signin?: string | string[] }> }) {
-  const { signin } = await searchParams;
+export default async function AccountPage({ searchParams }: { searchParams: Promise<{ pack?: string | string[] }> }) {
+  const requested = creditPack((await searchParams).pack)?.id;
   const development = process.env.NODE_ENV === "development";
   const env = (await getCloudflareEnv()) as CloudflareEnv & { PAYPAL_CLIENT_ID?: string };
   const account = development ? PREVIEW.account : await currentAccount();
@@ -64,12 +65,11 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         <header className={styles.intro}>
           <p className={styles.eyebrow}>Account</p>
           <h1>Sign in to see your credits.</h1>
-          <p>Credits cost {packSummary()}, never expire, and each one lists one product. Your first submission is free.</p>
+          <p>Credits cost {packSummary()}, never expire, and each one lists one product. Your first submission is free. <Link href="/pricing">See pricing</Link></p>
+          <div className={styles.actions}>
+            <SignInButton className={styles.primary} next="/account" reason="account">Sign in →</SignInButton>
+          </div>
         </header>
-        {signin ? <p className={styles.error} role="alert">Google sign-in did not complete. Please try again.</p> : null}
-        {/* OAuth starts on an API route, so it needs a full page navigation. */}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a className={styles.primary} href="/api/auth/google?next=/account">Continue with Google →</a>
       </main>
     );
   }
@@ -90,12 +90,12 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         </div>
       </header>
 
-      <section className={styles.panel} aria-labelledby="buy-title">
+      <section className={styles.panel} id="buy" aria-labelledby="buy-title">
         <div>
           <h2 id="buy-title">Buy credits</h2>
-          <p>Paid once through PayPal. Reviewed within 48 hours, credit returned if a submission is declined, unused credits refundable within 14 days. <Link href="/refunds">Refund policy</Link></p>
+          <p>Paid once through PayPal. Reviewed within 48 hours, credit returned if a submission is declined. A purchase can be refunded within 14 days if none of its credits has been used. <Link href="/refunds">Refund policy</Link></p>
         </div>
-        {development ? <p className={styles.notice}>Payments are disabled in local preview.</p> : <BuyCredits clientId={env.PAYPAL_CLIENT_ID ?? null} />}
+        {development ? <p className={styles.notice}>Payments are disabled in local preview.</p> : <BuyCredits clientId={env.PAYPAL_CLIENT_ID ?? null} initialPack={requested} />}
       </section>
 
       <section className={styles.panel} aria-labelledby="submissions-title">

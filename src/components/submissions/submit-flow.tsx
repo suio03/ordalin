@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { trackEvent } from "@/lib/analytics";
+import { openSignIn } from "@/components/account/sign-in";
 import { toolMark } from "@/lib/catalog";
 import type { TagKind } from "@/domain/catalog";
 import type { CatalogAnalysis } from "@/lib/catalog-analysis";
@@ -146,7 +147,7 @@ function FieldSource({ value, original, urls, pages, optional = false }: { value
   );
 }
 
-export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initialDraft, initialWebsite = "" }: { account: SubmitAccount; categories: Category[]; tags: Tag[]; turnstileSiteKey?: string; initialDraft?: Draft; initialWebsite?: string }) {
+export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initialDraft, initialWebsite = "" }: { account: SubmitAccount | null; categories: Category[]; tags: Tag[]; turnstileSiteKey?: string; initialDraft?: Draft; initialWebsite?: string }) {
   const [details, setDetails] = useState<Record<DetailField, string>>({ features: "", pricingDetails: "", useCases: "" });
   const [preparedLogo, setPreparedLogo] = useState<File | null>(null);
   const preparedLogoPreview = useMemo(() => preparedLogo ? URL.createObjectURL(preparedLogo) : null, [preparedLogo]);
@@ -176,7 +177,7 @@ export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initia
   const [name, setName] = useState("");
   const [tagline, setTagline] = useState("");
   const [description, setDescription] = useState("");
-  const [funding, setFunding] = useState<Funding>(account.free === "available" ? "free" : "credit");
+  const [funding, setFunding] = useState<Funding>(account?.free === "available" ? "free" : "credit");
   const [pricingModel, setPricingModel] = useState("unknown");
   const initialCategory = categories[0]?.slug ?? "";
   const [primaryCategory, setPrimaryCategory] = useState(initialCategory);
@@ -280,6 +281,8 @@ export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initia
   async function checkWebsite(event: FormEvent) {
     event.preventDefault(); setError(""); setExistingTool(null);
     if (!websiteUrl.trim()) { setError("Enter your product's website, like your-product.com."); return; }
+    // Signing in happens here, so the website comes back filled in after Google.
+    if (!account) { openSignIn(`/submit?${new URLSearchParams({ website: websiteUrl.trim().slice(0, 500) })}`, "submit"); return; }
     if (!checkToken) { setError("Verification is still loading. Try again in a moment."); return; }
     setBusy(true);
     try {
@@ -290,6 +293,7 @@ export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initia
       applyDraft(value as unknown as Draft, true);
     } catch (caught) {
       const value = caught as { code?: string; existingTool?: ExistingTool };
+      if (value.code === "signin_required") { openSignIn(`/submit?${new URLSearchParams({ website: websiteUrl.trim().slice(0, 500) })}`, "submit"); return; }
       if (value.code === "duplicate_domain" && value.existingTool) setExistingTool(value.existingTool);
       setError(messageFrom(caught));
     } finally {
@@ -387,8 +391,8 @@ export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initia
 
   if (submitted) return <SubmitSuccess name={name} tagline={tagline} logoSrc={preparedLogoPreview} />;
 
-  const freeAllowed = account.free === "available" && !draft?.creditOnly;
-  const creditAllowed = account.balance >= 1;
+  const freeAllowed = account?.free === "available" && !draft?.creditOnly;
+  const creditAllowed = (account?.balance ?? 0) >= 1;
   const fundingReady = funding === "free" ? freeAllowed : creditAllowed;
   const invalid = (field: FieldName) => shownProblem(field) ? { "aria-invalid": true, "aria-describedby": `${field}-problem` } : {};
   const fieldNote = (field: FieldName, fallback: ReactNode) => shownProblem(field)
@@ -551,16 +555,16 @@ export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initia
             </section>
           </article> : null}
           <section hidden={!reviewing} className={styles.publishSection} aria-labelledby="publish-title">
-            <div><p className={styles.stepLabel}>Final confirmation · {account.email}</p><h3 id="publish-title">Submit for review</h3><p>Ordalin researches the official website before the listing goes live. Free and credit listings get the same page, ranking and labels.</p></div>
+            <div><p className={styles.stepLabel}>Final confirmation{account ? ` · ${account.email}` : ""}</p><h3 id="publish-title">Submit for review</h3><p>Ordalin researches the official website before the listing goes live. Free and credit listings get the same page, ranking and labels.</p></div>
             <fieldset className={styles.fundingChoices}>
               <legend>Submission type</legend>
               <label data-selected={funding === "free" ? "" : undefined} data-disabled={!freeAllowed ? "" : undefined}>
                 <input type="radio" name="funding" value="free" checked={funding === "free"} disabled={!freeAllowed} onChange={() => setFunding("free")} />
-                <span><strong>Free submission</strong><small>{draft.creditOnly ? "This domain was declined before. It can come back only with a credit." : FREE_NOTES[account.free]}</small></span>
+                <span><strong>Free submission</strong><small>{draft.creditOnly ? "This domain was declined before. It can come back only with a credit." : FREE_NOTES[account?.free ?? "used"]}</small></span>
               </label>
               <label data-selected={funding === "credit" ? "" : undefined} data-disabled={!creditAllowed ? "" : undefined}>
                 <input type="radio" name="funding" value="credit" checked={funding === "credit"} disabled={!creditAllowed} onChange={() => setFunding("credit")} />
-                <span><strong>Use 1 credit · {account.balance} left</strong><small>Reviewed within 48 hours. Sites built on third-party models are accepted. A declined credit submission returns the credit.</small>{account.balance < 1 ? <Link href="/account" prefetch={false}>Buy credits · from $3.99 →</Link> : null}</span>
+                <span><strong>Use 1 credit · {account?.balance ?? 0} left</strong><small>Reviewed within 48 hours. Sites built on third-party models are accepted. A declined credit submission returns the credit.</small>{(account?.balance ?? 0) < 1 ? <Link href="/account" prefetch={false}>Buy credits · from $3.99 →</Link> : null}</span>
               </label>
             </fieldset>
             <div className={styles.turnstile}><TurnstileBox key={turnstileVersion} siteKey={turnstileSiteKey} onToken={handleToken} /></div>

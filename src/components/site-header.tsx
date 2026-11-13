@@ -7,6 +7,7 @@ import { listPublishedGuides } from "@/lib/guides";
 import { listBrowseCategories, listCategories, listCollections, listTasks } from "@/lib/repositories/catalog";
 import { getServer, mcpPath, publishedServerSlugs, visibleServerSlugs } from "@/lib/mcp/data";
 import { displayName as skillName, getSkill, publishedSkillSlugs, skillsPath, visibleSkillSlugs } from "@/lib/skills/data";
+import { AccountControl } from "./account/sign-in";
 import HomePartners from "./home-partners";
 import { MobileMenu } from "./mobile-menu";
 import { NavMenu } from "./nav-menu";
@@ -36,6 +37,7 @@ function primaryNavigation() {
     after: [
       { href: "/tasks", label: "Find by goal" },
       { href: "/collections", label: "Collections" },
+      { href: "/pricing", label: "Pricing" },
     ],
   };
 }
@@ -64,10 +66,11 @@ export function SiteHeader() {
         {after.map(link)}
       </nav>
       <ThemeSelector />
+      <AccountControl className={styles.account} />
       <Link className={styles.submit} href="/submit">
         Submit a tool
       </Link>
-      <MobileMenu items={[...before, ...agents.map(({ href, label }) => ({ href, label })), ...after]} />
+      <MobileMenu items={[...before, ...agents.map(({ href, label }) => ({ href, label })), ...after, { href: "/account", label: "Account" }]} />
     </header>
   );
 }
@@ -198,6 +201,7 @@ export async function SiteFooter() {
       links: [
         { href: "/about/how-we-review", label: "How we review" },
         { href: "/submit", label: "Submit a tool" },
+        { href: "/pricing", label: "Pricing" },
         { href: "https://github.com/suio03/ordalin", label: "GitHub" },
         { href: "/terms", label: "Terms" },
         { href: "/privacy", label: "Privacy" },
