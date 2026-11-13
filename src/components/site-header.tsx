@@ -199,6 +199,9 @@ export async function SiteFooter() {
         { href: "/about/how-we-review", label: "How we review" },
         { href: "/submit", label: "Submit a tool" },
         { href: "https://github.com/suio03/ordalin", label: "GitHub" },
+        { href: "/terms", label: "Terms" },
+        { href: "/privacy", label: "Privacy" },
+        { href: "/refunds", label: "Refunds" },
       ],
     },
   ];

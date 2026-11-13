@@ -44,7 +44,7 @@ export default function HowWeReviewPage() {
         </section>
         <section>
           <h2>Corrections and submissions</h2>
-          <p>Makers can <Link href="/submit">submit a tool</Link>. The first submission is free and follows our strict review. Listing credits pay for a review within 48 hours and allow tools built on third-party models, which are labelled as unofficial; a declined credit is returned. Paid and free listings get the same page, ranking and labels, and neither buys placement in editorial pages. See the <Link href="/terms">submission terms</Link>. Corrections to existing records are handled manually.</p>
+          <p>Makers can <Link href="/submit">submit a tool</Link>. The first submission is free and follows our strict review. Listing credits pay for a review within 48 hours and allow tools built on third-party models, which are labelled as unofficial; a declined credit is returned. Paid and free listings get the same page, ranking and labels, and neither buys placement in editorial pages. See the <Link href="/terms">terms</Link>. Corrections to existing records are handled manually.</p>
           <p><Link href="/tools">Browse all tools</Link> or <Link href="/best">read the best-of lists</Link>.</p>
         </section>
       </div>

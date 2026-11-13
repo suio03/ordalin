@@ -89,7 +89,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       <section className={styles.panel} aria-labelledby="buy-title">
         <div>
           <h2 id="buy-title">Buy credits</h2>
-          <p>Paid once through PayPal. Reviewed within 48 hours, credit returned if a submission is declined, unused credits refundable within 14 days. <Link href="/terms">Terms</Link></p>
+          <p>Paid once through PayPal. Reviewed within 48 hours, credit returned if a submission is declined, unused credits refundable within 14 days. <Link href="/refunds">Refund policy</Link></p>
         </div>
         {development ? <p className={styles.notice}>Payments are disabled in local preview.</p> : <BuyCredits clientId={env.PAYPAL_CLIENT_ID ?? null} />}
       </section>
