@@ -1,6 +1,19 @@
 {
   "skills": [
     {
+      "slug": "fable-video-maker",
+      "name": "Fable Video Maker",
+      "author": "Tobia Donadon",
+      "repo": "https://www.tobiadonadon.com/projects/construct/material/skills/fable-video-maker",
+      "license": "Not stated (free download; the zip ships no licence file)",
+      "version": "1.0",
+      "agents": "Claude Code, tuned for Claude Fable 5.2",
+      "install": "Free download from the author's site after you enter an email address; unzip, run claude in the folder and type hi. Needs Node 18+, ffmpeg and Chrome or Edge",
+      "language": "English",
+      "produces": "Vertical 1080×1920 animated short films drawn frame by frame in code, in 13 looks, with music, optional ElevenLabs voice and word-timed captions",
+      "checked_on": "2026-11-13"
+    },
+    {
       "slug": "cinetic",
       "name": "Cinetic",
       "author": "Leon Lin (Leonxlnx)",

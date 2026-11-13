@@ -1,0 +1,142 @@
+export const meta = {
+  title: "Fable Video Maker Tested on Claude Fable 5.2: Animated Short Films Drawn in Code",
+  description:
+    "Fable Video Maker is a free Claude Code skill that has Claude Fable 5.2 draw a vertical animated film frame by frame in code, with no video model. Watch the 20-second film it made in our test.",
+  verdict:
+    "On Claude Fable 5.2 it turned one paragraph into a finished 20-second painted film with a score written in code, in 30 minutes for $11.36 at API prices, and the file passed every one of the skill's checks. The look is a real step up from slideshow-style AI video, but the figures stay simple shapes, and you have to give an email address to download it.",
+  summary:
+    "Fable Video Maker is a free skill for Claude Code by Tobia Donadon. You say what the film is about; Claude Fable 5.2 writes a shot list, builds the sound first, then draws every frame as code in Canvas, WebGL or Three.js. A headless browser photographs each frame and ffmpeg writes a 1080×1920, 30 fps MP4. Before the render the agent reads stills of its own shots and repaints the weakest ones. There is no video model, no image model and no stock footage. Below you can watch the 20-second film Claude Fable 5.2 made in our test, the author's own demo film, and what changed when it reviewed its stills.",
+  bestFor: [
+    "Short vertical films for Reels, TikTok and Shorts in a painted, ink-wash, anime, noir or low-poly look",
+    "Claude Code users on Fable 5.2 who want an animated short they can re-render and edit as code",
+    "Story and mood pieces where a stylised look matters more than lifelike people",
+  ],
+  notFor: [
+    "Realistic people, faces or close acting; in our film the keeper's head and arm stayed simple shapes under the brushwork",
+    "Cheap or quick clips; our 20-second film took 30 minutes and $11.36 on Fable 5.2 at API prices",
+    "Anyone who does not want to hand over an email address; the download is only sent after you enter one",
+  ],
+  gallery: {
+    heading: "The author's demo film",
+    intro:
+      "The author publishes one finished film made with the skill, The Quiet Blade, plus stills of three shots before and after the agent reviewed its own work.",
+    items: [
+      { src: "/skills/fable-video-maker/quiet-blade.jpg", label: "Ink wash", title: "The Quiet Blade", caption: "A 16-second ink-wash duel made from one paragraph, with music only. The same film ships in the download as the skill's worked example.", video: "https://www.tobiadonadon.com/shop/fable-video-maker/quiet-blade-v1.mp4", duration: "0:16", uses: ["Story shorts", "Martial arts and mood pieces", "Reels and Shorts"] },
+      { group: "First pass vs after its fixes", src: "/skills/fable-video-maker/pair-s02-master.jpg", label: "The master", title: "Left: first pass. Right: after its fixes", caption: "In the first pass the swordsman was hidden behind the master; the agent caught it in its stills and moved him." },
+      { group: "First pass vs after its fixes", src: "/skills/fable-video-maker/pair-s03-draw.jpg", label: "The draw", title: "Left: first pass. Right: after its fixes", caption: "A flat figure with scan lines became a brushed figure." },
+      { group: "First pass vs after its fixes", src: "/skills/fable-video-maker/pair-s04-still.jpg", label: "The blade", title: "Left: first pass. Right: after its fixes", caption: "Small figures over an empty half of the frame were reframed." },
+    ],
+    credit:
+      "Film and stills by Tobia Donadon, from the skill's page on tobiadonadon.com, shown unchanged (the stills are placed side by side). The film plays from the author's site. They are not output from our test.",
+  },
+  howItWorks: [
+    {
+      title: "Four questions, then a script",
+      text: "It asks at most four things: what the film is about, where it goes and how long, which look, and what we hear. Then it writes SCRIPT.md, a logline, palette and shot list with the second each shot starts, and waits for your yes before it draws anything.",
+    },
+    {
+      title: "Sound first",
+      text: "The voice comes from your own ElevenLabs key, with a time for every word, and captions are cut from those words. Without a key it uses audio you bring, music only or silence. Music can be written in code, as in our test. The final mix fixes the film's exact length.",
+    },
+    {
+      title: "Every frame drawn in code",
+      text: "The film is one web page that can draw any second of itself. Each of the 13 looks (painted, ink wash, talking anime, noir, lamp loop, low-poly, papercraft, chalk, data reel, kinetic type, 3D product demo, mentor duo, list explainer) is a recipe file. A check makes sure the same second always draws the same picture.",
+    },
+    {
+      title: "It reviews its own stills",
+      text: "Before the render it captures a still from every shot and a contact sheet, reads them, and repaints the weakest shots up to twice. Then it renders the MP4 and checks the file itself: size, frame rate, length, loudness, true peak, and black or frozen frames.",
+    },
+  ],
+  quickstart: [
+    {
+      label: "Get it and set it up",
+      code: "claude\nhi",
+      note: "Download the zip from the author's page (linked at the bottom; it asks for an email address), unzip it, open a terminal in the folder and type these two lines. It installs itself, makes a six-second test film, then asks what your film is about. You need Claude Code on Fable 5.2 (/model fable), Node 18 or newer, ffmpeg, and Chrome or Edge.",
+    },
+    {
+      label: "Ask for a film",
+      code: "Make a 20-second vertical film in the painted look: an old lighthouse keeper climbs the tower one last time at dusk and lights the lamp for a ship he will never see. Music only, no voice.",
+      note: "A shortened version of what we asked. It shows you the script before it draws; say yes or change it.",
+    },
+  ],
+  test: {
+    date: "2026-11-13",
+    agent: "Claude Code 2.1.323, headless (claude -p), skill installed in an empty project's .claude/skills",
+    model: "claude-fable-5-2",
+    commit: "1aeae65",
+    task: "Use the fable-video-maker skill to make a 20-second vertical film in the 'painted' look: an old lighthouse keeper climbs the tower one last time at dusk and lights the lamp for a ship he will never see. Music only, no voice and no ElevenLabs (build the score in code). Treat this message as the agreed brief and script approval, run unattended, render when the stills pass, and run the skill's verify step. Keep the setup inside this folder.",
+    samples: [
+      {
+        label: "From the skill's verify step",
+        mono: true,
+        text: "ok    size              1080x1920\nok    frames a second   30.00\nok    format            h264 yuv420p\nok    length            20.000 s\nok    fast start        the index is at the front\nok    loudness          -15.9 LUFS (measured, not listened to)\nok    true peak         -3.3 dBTP\nok    frame 0           not black\nnote  the picture jumps nowhere (no hard cuts)\nok    file size         36.7 MB",
+        note: "The second verify. The first failed on true peak (0.0 dBTP) from the bell strike; the agent softened it and remixed without touching the picture.",
+      },
+      {
+        label: "From Fable 5.2's final report",
+        text: "s03-lamp: the weakest. The keeper's head and shoulders are still simple shapes under the brushwork, and his raised arm reads a bit tube-like.\n\nI cannot hear. The score was only measured, not listened to.\n\nI did not watch the film in motion, only stills and frames.",
+      },
+    ],
+    runs: [
+      { label: "Claude Fable 5.2", outcome: "Rendered a 20.0 s 1080×1920 painted film with a coded score; every verify check passed", time: "30 min", cost: "$11.36", turns: 60, tone: "ok" },
+    ],
+    shots: [
+      {
+        src: "/skills/fable-video-maker/test-film-poster.jpg",
+        video: "/skills/fable-video-maker/test-film.mp4",
+        alt: "Our test film from Claude Fable 5.2: a painted lighthouse on a grassy hill at a purple and orange dusk, with a small keeper carrying a lantern up the path",
+        caption: "The film Claude Fable 5.2 made, with its coded score (20 s). Scaled to 720×1280 for the web; the render is 1080×1920 and 36.7 MB.",
+        width: 720,
+        height: 1280,
+      },
+      {
+        src: "/skills/fable-video-maker/test-contact.jpg",
+        alt: "The skill's contact sheet for the film: the lighthouse at dusk, the keeper climbing a stair in a shaft of window light, the keeper raising a taper to the dark lens, the lens lit gold, a sailing ship lit by the beam, and the keeper asleep in a chair beside the glowing lamp",
+        caption: "The contact sheet the agent read before the render: one still per shot, the named seconds inside shots, and how much each shot moves.",
+        width: 1188,
+        height: 1346,
+      },
+    ],
+  },
+  faq: [
+    {
+      q: "What does Fable Video Maker do?",
+      a: "It lets Claude Code make an animated short film entirely in code. The agent writes the script, builds the sound, draws every frame in Canvas, WebGL or Three.js, reviews stills of its own shots, and renders a vertical 1080×1920, 30 fps MP4 with captions on the spoken word.",
+    },
+    {
+      q: "Does it use an AI video or image model?",
+      a: "No. Every frame is drawn by code the agent writes, and a headless browser photographs it. Two looks, mentor duo and list explainer, animate pictures you bring; the other eleven are drawn from scratch. A voice comes from ElevenLabs only if you set your own key.",
+    },
+    {
+      q: "Is it free?",
+      a: "Yes, the download is free, but the author's site asks for an email address before it sends the zip, and the welcome email promotes his paid Construct Pro membership. The zip includes no licence file. You also pay for the Claude usage: our 20-second film came to $11.36 at API prices.",
+    },
+    {
+      q: "Does it need Claude Fable 5.2?",
+      a: "The looks were built and tuned on Fable 5.2, and the skill tells other models to say so and suggest /model fable. We ran it only on Fable 5.2.",
+    },
+    {
+      q: "What do I need on my computer?",
+      a: "Claude Code, Node 18 or newer, ffmpeg, and Chrome or Edge, on Mac, Windows or Linux. Setup adds one small package, the browser driver. In our test it used the Chrome already installed and downloaded no browser.",
+    },
+    {
+      q: "How long does a film take?",
+      a: "Our 20-second film took 30 minutes in one unattended run: setup, script, a coded score, five shots, three rounds of stills, a 4.5-minute capture of 600 frames and a remix to fix a loud bell. Longer films take longer; the kit includes a launcher that resumes a stalled run.",
+    },
+  ],
+};
+
+## What we tested
+
+We downloaded Fable Video Maker 1.0 from the author's page on 2026-11-13, installed the skill into an empty project's `.claude/skills` folder and gave Claude Code on Claude Fable 5.2 the brief above, headless, with no follow-up. We told it to treat the brief as the approved script so it would not stop to ask, to use music only (no ElevenLabs key was set), and to keep its setup inside the project folder. The machine had Node, ffmpeg and Chrome.
+
+## What we found
+
+- **A finished film from one paragraph.** "The Last Light" is a 20-second, 1080×1920, 30 fps MP4 in five shots: the keeper walks up the hill at dusk, climbs the stair, lights the lens, the beam finds a sailing ship, and he falls asleep beside the lamp. The shots are joined by short crossfades with slow push-ins, and there is no text on screen. You can watch it above.
+- **The painted look holds up.** Skies, grass, sea and the lit lens have visible brushwork that moves, which already looks far less like stock slideshow video than most AI clips. The keeper is the weak point: head, shoulders and raised arm stay simple flat shapes, and the agent named that shot as its weakest without being asked.
+- **The score is written in code too.** It wrote a short music piece and a sea bed in a script, mixed them to −15.9 LUFS, and timed the bell to the moment the lamp catches at 11 seconds. Its first file check failed on true peak because the AAC encode overshot on that bell; it softened the attack, remixed and re-muxed from the kept frames without changing the picture.
+- **It reviews itself, within limits.** It ran three rounds of stills (the first plus two repaints) and checked every cut at full size. It said plainly what it could not check: it cannot hear the score and never watched the film in motion.
+- **Setup stayed in the folder.** It installed the browser driver inside the skill folder, kept npm's cache and temp files in the project, used the existing Chrome and downloaded no browser.
+- **It is not cheap.** 60 turns and $11.36 at API prices for 20 seconds, most of it Fable 5.2 drawing and redrawing shots. On a Claude subscription that comes out of your usage instead.
+
+The author's Quiet Blade film above shows what the ink-wash look can do with figures, and his before-and-after stills show the self-review catching real framing mistakes. For other ways to make films with Claude, including the [Cinetic](/skills/cinetic) and [Lemo-Opuscar](/skills/lemo-opuscar) skills, see our [Claude motion graphics guide](/guides/claude-motion-graphics).

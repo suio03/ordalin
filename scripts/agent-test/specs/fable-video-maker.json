@@ -1,0 +1,17 @@
+{
+  "kind": "skill",
+  "name": "fable-video-maker",
+  "repo": "https://www.tobiadonadon.com/projects/construct/material/skills/fable-video-maker",
+  "commit": "1aeae65",
+  "install": {
+    "claude": {
+      "skill": "fable-video-maker"
+    }
+  },
+  "task": "Use the fable-video-maker skill to make a 20-second vertical film in the 'painted' look: an old lighthouse keeper climbs the tower one last time at dusk and lights the lamp for a ship he will never see. Music only, no voice and no ElevenLabs (build the score in code as the quiet-blade example does). The skill is installed at ./.claude/skills/fable-video-maker; KIT is its kit folder there. Do the setup yourself and keep node_modules, downloads and the film inside this folder; don't install anything into the home folder. Treat this message as the agreed brief and script approval: don't ask me questions, run unattended, render when the stills pass. Put the finished video at ./films/<name>/out/film.mp4 and run the skill's verify step. Don't delete or change anything outside this folder. If something can't be done, say exactly what and why. Answer in English.",
+  "env": {
+    "DO_NOT_TRACK": "1",
+    "ELEVENLABS_API_KEY": ""
+  },
+  "timeoutMinutes": 90
+}

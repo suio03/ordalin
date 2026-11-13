@@ -7,6 +7,7 @@ import type { SkillsRegistry } from "@/lib/skills/types";
 export const REGISTRY: SkillsRegistry = {
   overview: () => import("./overview.mdx"),
   skills: {
+    "fable-video-maker": { status: "published", load: () => import("./skills/fable-video-maker.mdx") },
     cinetic: { status: "published", load: () => import("./skills/cinetic.mdx") },
     "human-writing": { status: "published", load: () => import("./skills/human-writing.mdx") },
     "lemo-opuscar": { status: "published", load: () => import("./skills/lemo-opuscar.mdx") },
