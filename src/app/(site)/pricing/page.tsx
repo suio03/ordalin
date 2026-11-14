@@ -9,16 +9,16 @@ import styles from "@/components/account/pricing.module.css";
 export const metadata: Metadata = withSocial({
   alternates: { canonical: "/pricing" },
   title: "Pricing: list your AI tool",
-  description: "Your first Ordalin submission is free. After that, listing credits cost $3.99 for 1, $5.99 for 3 or $9.99 for 10, paid once through PayPal, and never expire.",
+  description: "Your first Ordalin submission is free and reviewed first. Credit listings go live instantly with a dofollow link: $3.99 for 1, $5.99 for 3 or $9.99 for 10, paid once through PayPal.",
 });
 
 const FAQ = [
-  { q: "What does one credit pay for?", a: "One credit lists one product. It covers the review and the listing page; there is no monthly fee and nothing to renew." },
+  { q: "What does one credit pay for?", a: "One credit lists one product. The listing goes live as soon as you publish it, with a dofollow link to your site. There is no monthly fee and nothing to renew." },
   { q: "Do credits expire?", a: "No. Credits stay on your account until you use them, and a later price change does not affect credits you already bought." },
-  { q: "What happens if my submission is declined?", a: "A declined credit submission gets its credit back straight away, and your account page shows the reason. A declined free submission is not returned." },
+  { q: "What happens if my submission is declined?", a: "Credit listings are checked after they go live. If we take one down because it breaks the listing rules, the credit comes back straight away and your account page shows the reason. A declined free submission is not returned." },
   { q: "Can I get a refund?", a: "Within 14 days of buying, if you have not used any of the credits, we refund the purchase in full. Once a credit from a purchase is used, that purchase is no longer refundable." },
   { q: "How do I pay?", a: "Through PayPal, with a PayPal balance or a card. It is a one-time payment; we never store card details." },
-  { q: "Is a paid listing labelled or ranked differently?", a: "No. Free and credit listings get the same page, the same ranking and the same labels, and both are open to search engines." },
+  { q: "What is the difference in links?", a: "The link from a free listing to your site carries rel=\"nofollow\", so it passes no search value. A credit listing links to your site with a normal dofollow link. Both listings are indexed and ranked the same way, and neither carries a sponsored tag." },
 ];
 
 const NEVER = [
@@ -66,8 +66,8 @@ export default function PricingPage() {
             <p>Your first product, under our standard review.</p>
           </header>
           <p className={styles.price}><strong>$0</strong><span>one per person</span></p>
-          <p className={styles.note}>Free listings get the same page and ranking as paid ones. Used your free submission already? Credits start at $3.99.</p>
-          <Features items={["For tools from the company that builds them", "Standard review; model wrappers and resellers declined", "A declined free submission is not returned"]} />
+          <p className={styles.note}>Free listings are ranked the same as paid ones. Used your free submission already? Credits start at $3.99.</p>
+          <Features items={["For tools from the company that builds them", "Live after our review; model wrappers and resellers declined", "Nofollow link to your site", "A declined free submission is not returned"]} />
           <Link className={styles.secondary} href="/submit">Submit a tool</Link>
         </article>
 
@@ -76,13 +76,13 @@ export default function PricingPage() {
             <h2>Listing credits</h2>
             <p>Pay once, use whenever you launch something new.</p>
           </header>
-          <CreditPicker features={<Features items={["Reviewed within 48 hours", "Sites built on third-party models accepted", "Credit back if declined", "Credits never expire"]} />} />
+          <CreditPicker features={<Features items={["Live as soon as you publish", "Dofollow link to your site", "Sites built on third-party models accepted", "Credit back if we take it down", "Credits never expire"]} />} />
         </article>
       </section>
 
       <section className={styles.facts} aria-label="Included with every listing">
-        <div><Svg>{Icon.layers}</Svg><p><strong>Same listing either way</strong>Free and paid tools get the same page, ranking and labels.</p></div>
-        <div><Svg>{Icon.search}</Svg><p><strong>Open to search engines</strong>Every listing is indexed, with no sponsored tag.</p></div>
+        <div><Svg>{Icon.layers}</Svg><p><strong>Same ranking either way</strong>Free and paid tools are sorted by the same rules.</p></div>
+        <div><Svg>{Icon.search}</Svg><p><strong>Dofollow with credits</strong>Every listing is indexed. Paid listings link to your site without nofollow; free ones carry nofollow.</p></div>
         <div><Svg>{Icon.calendar}</Svg><p><strong>Credits never expire</strong>Use them whenever you launch something new.</p></div>
         <div><Svg>{Icon.card}</Svg><p><strong>One-time PayPal payment</strong>Pay with a balance or a card. We never store card details.</p></div>
       </section>

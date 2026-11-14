@@ -41,7 +41,7 @@ export default async function SubmitPage({ searchParams }: { searchParams: Searc
         <p className={styles.eyebrow}>First submission free · credits from $3.99</p>
         <h1>Start with the official website.</h1>
         <p>
-          Ordalin drafts a profile from public facts and images. Check each part, correct anything that is wrong, then submit it. We research every tool before it goes live.
+          Ordalin drafts a profile from public facts and images. Check each part, correct anything that is wrong, then submit it. A free submission goes live after we research it; a credit listing goes live as soon as you publish it.
         </p>
       </header>
       {development ? <p role="status">Local preview shows a sample draft and account in read-only mode. Submissions are disabled.</p> : null}

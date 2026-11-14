@@ -129,12 +129,18 @@ export async function POST(request: Request) {
         customMetadata: { width: "1440", height: "900", source: screenshotChoice === "captured" ? "website-preview" : "public-submission" },
       });
     }
-    // The submission stays hidden until Ordalin researches it to the catalogue
-    // profile standard; `pnpm imports:apply` publishes it (docs/catalog-enrichment.md).
+    // Credit submissions go live straight away from the website facts the submitter
+    // confirmed; Ordalin checks them afterwards and can take one down with
+    // `pnpm submissions:reject` (credit returned). Free submissions stay hidden until
+    // they are researched to the catalogue profile standard and `pnpm imports:apply`
+    // publishes them (docs/catalog-enrichment.md).
+    const live = input.funding === "credit";
+    const categoryNames = categoryRows.results.map((category) => category.name).join(" ");
+    const tagNames = tagRows.results.map((tag) => tag.name).join(" ");
     const statements = [
       env.DB
-        .prepare("INSERT INTO tools (id, slug, name, tagline, description, website_url, canonical_domain, canonical_key, pricing_model, status, primary_category_id, logo_asset_key, screenshot_asset_key, is_editor_pick, source_first_seen_at, published_at, last_checked_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending_review', ?, ?, ?, 0, ?, NULL, ?, ?, ?)")
-        .bind(toolId, slug, input.name, input.tagline, input.description, draft.website_url, draft.canonical_domain, draft.canonical_domain, input.pricingModel, primaryCategory.id, storedLogoKey, storedScreenshotKey, now, candidate.evidencePages.length ? Math.floor(Date.parse(candidate.fetchedAt) / 1000) : null, now, now),
+        .prepare("INSERT INTO tools (id, slug, name, tagline, description, website_url, canonical_domain, canonical_key, pricing_model, status, primary_category_id, logo_asset_key, screenshot_asset_key, is_editor_pick, source_first_seen_at, published_at, last_checked_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)")
+        .bind(toolId, slug, input.name, input.tagline, input.description, draft.website_url, draft.canonical_domain, draft.canonical_domain, input.pricingModel, live ? "published" : "pending_review", primaryCategory.id, storedLogoKey, storedScreenshotKey, now, live ? now : null, candidate.evidencePages.length ? Math.floor(Date.parse(candidate.fetchedAt) / 1000) : null, now, now),
       ...categoryRows.results.map((category) =>
         env.DB
           .prepare("INSERT INTO tool_categories (tool_id, category_id, is_primary) VALUES (?, ?, ?)")
@@ -147,20 +153,24 @@ export async function POST(request: Request) {
         .prepare("INSERT INTO tool_sources (id, tool_id, provider, external_id, source_url, raw_json, first_seen_at, last_seen_at) VALUES (?, ?, 'submission', ?, ?, ?, ?, ?)")
         .bind(`source_${crypto.randomUUID()}`, toolId, input.draftId, candidate.websiteUrl, JSON.stringify({ ...payload, confirmed }), now, now),
       env.DB
-        .prepare("INSERT INTO submissions (id, submitted_name, website_url, canonical_domain, contact_email, description, suggested_category_id, status, turnstile_metadata_json, moderation_note, user_id, funding, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?)")
-        .bind(submissionId, input.name, draft.website_url, draft.canonical_domain, user.email, input.description, primaryCategory.id, JSON.stringify({ success: true, action: turnstile.action ?? null, hostname: turnstile.hostname ?? null }), "Awaiting a researched profile before publication", user.id, input.funding, now, now),
+        .prepare("INSERT INTO submissions (id, submitted_name, website_url, canonical_domain, contact_email, description, suggested_category_id, status, turnstile_metadata_json, moderation_note, user_id, funding, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+        .bind(submissionId, input.name, draft.website_url, draft.canonical_domain, user.email, input.description, primaryCategory.id, live ? "accepted" : "pending", JSON.stringify({ success: true, action: turnstile.action ?? null, hostname: turnstile.hostname ?? null }), live ? "Published immediately as a credit submission" : "Awaiting a researched profile before publication", user.id, input.funding, now, now),
       ...(input.funding === "free"
         ? [env.DB.prepare("INSERT INTO free_claims (user_id, submission_id, created_at) VALUES (?, ?, ?)").bind(user.id, submissionId, now)]
         : []),
       env.DB
-        .prepare("INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (?, 'tool', ?, 'submit', ?, ?, ?)")
-        .bind(`event_${crypto.randomUUID()}`, toolId, `public-submission:${hash.slice(0, 12)}`, JSON.stringify({ submissionId, mode: "review", funding: input.funding, userId: user.id, replacedRejectedTool: replacesRejected ? duplicate!.id : undefined, analysisSchemaVersion: analysis.schemaVersion }), now),
+        .prepare("INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (?, 'tool', ?, ?, ?, ?, ?)")
+        .bind(`event_${crypto.randomUUID()}`, toolId, live ? "publish" : "submit", `public-submission:${hash.slice(0, 12)}`, JSON.stringify({ submissionId, mode: live ? "automatic" : "review", funding: input.funding, userId: user.id, replacedRejectedTool: replacesRejected ? duplicate!.id : undefined, analysisSchemaVersion: analysis.schemaVersion }), now),
+      ...(live
+        ? [env.DB.prepare("INSERT INTO tools_fts (tool_id, name, tagline, description, category_names, tag_names) VALUES (?, ?, ?, ?, ?, ?)").bind(toolId, input.name, input.tagline, input.description, categoryNames, tagNames)]
+        : []),
       env.DB
         .prepare("UPDATE submission_drafts SET status = 'published', updated_at = ? WHERE id = ? AND status = 'pending'")
         .bind(now, input.draftId),
     ];
     await env.DB.batch(statements);
     committed = true;
+    if (live) return Response.json({ status: "published", funding: input.funding, slug, url: `/tools/${slug}` }, { status: 201 });
     return Response.json({ status: "in_review", funding: input.funding }, { status: 202 });
   } catch (error) {
     if (!committed && spentCredit) {

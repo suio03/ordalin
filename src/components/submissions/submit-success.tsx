@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toolMark } from "@/lib/catalog";
 import styles from "./submit.module.css";
 
-type Props = { name: string; tagline: string; logoSrc: string | null };
+/** `slug` is set when the listing went live straight away (credit submissions). */
+type Props = { slug: string | null; name: string; tagline: string; logoSrc: string | null };
 
 const confettiTokens = ["--color-accent-primary", "--color-accent-text", "--color-accent-soft", "--color-text-primary", "--color-focus-ring"];
 
@@ -58,26 +59,41 @@ function burst(canvas: HTMLCanvasElement) {
   return () => cancelAnimationFrame(frame);
 }
 
-export function SubmitSuccess({ name, tagline, logoSrc }: Props) {
+export function SubmitSuccess({ slug, name, tagline, logoSrc }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const [copied, setCopied] = useState(false);
+  const path = slug ? `/tools/${slug}` : null;
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
     return canvas.current ? burst(canvas.current) : undefined;
   }, []);
 
+  async function copyLink() {
+    if (!path) return;
+    try {
+      await navigator.clipboard.writeText(new URL(path, window.location.origin).href);
+      setCopied(true); setTimeout(() => setCopied(false), 2000);
+    } catch { /* Clipboard can be blocked; the link stays visible below. */ }
+  }
+
   return (
     <section className={styles.success} aria-live="polite">
       <canvas ref={canvas} className={styles.confetti} aria-hidden="true" />
-      <p className={styles.successStatus}><span aria-hidden="true" />Submitted</p>
-      <h2>Thanks — {name} is in review.</h2>
-      <p className={styles.successLead}>Before a tool goes live, Ordalin researches its official website for features, pricing, free limits and platforms, the same as every listing in the catalogue. {name} will appear once its profile is complete.</p>
+      <p className={styles.successStatus}><span aria-hidden="true" />{path ? "Published" : "Submitted"}</p>
+      <h2>{path ? `${name} is live on Ordalin.` : `Thanks — ${name} is in review.`}</h2>
+      <p className={styles.successLead}>{path
+        ? "Thanks for listing it. The page is public now and can be found across the catalogue."
+        : <>Before a tool goes live, Ordalin researches its official website for features, pricing, free limits and platforms, the same as every listing in the catalogue. {name} will appear once its profile is complete.</>}</p>
       <div className={styles.successCard}>
         {logoSrc ? <Image className={styles.previewLogo} src={logoSrc} alt="" width={56} height={56} unoptimized /> : <span className={styles.previewLogo}>{toolMark(name)}</span>}
-        <div><strong>{name}</strong><p>{tagline}</p></div>
+        <div><strong>{name}</strong><p>{tagline}</p>{path ? <small>ordalin.com{path}</small> : null}</div>
       </div>
       <div className={styles.successActions}>
-        <Link className={styles.publishButton} href="/tools">Browse the catalogue →</Link>
+        {path ? <>
+          <Link className={styles.publishButton} href={path}>View your listing →</Link>
+          <button type="button" onClick={copyLink}>{copied ? "Link copied" : "Copy link"}</button>
+        </> : <Link className={styles.publishButton} href="/tools">Browse the catalogue →</Link>}
         {/* Full reload on purpose: it resets the submit form state. */}
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/submit">Submit another tool</a>

@@ -5,8 +5,9 @@ import { databaseMode, d1File, d1Query, sqlText } from "./lib/wrangler.ts";
 import { loadLocalEnv, sendDeclineEmail } from "./lib/decline-email.ts";
 import { DECLINE_REASONS, encodeDeclineNote, isDeclineReason } from "../src/lib/submissions/decline-reasons.ts";
 
-// Declines a pending visitor submission. A credit submission gets its credit back
-// (MVP_PLAN.md §9); a free one does not. The submitter sees the reason on
+// Declines a pending visitor submission, or takes down a credit submission that
+// already went live (credit listings publish immediately). A credit submission gets
+// its credit back (MVP_PLAN.md §9); a free one does not. The submitter sees the reason on
 // /account and gets it by email through Resend. Usage:
 //   pnpm submissions:reject --remote --domain=example.com --reason=wrapper [--note="Extra detail for the submitter"]
 //   pnpm submissions:reject --remote --domain=example.com --reason=not-ai --no-email   (/account only, no email)
@@ -21,9 +22,10 @@ const noEmail = process.argv.includes("--no-email");
 if (!domain) throw new Error("Provide --domain=example.com.");
 
 type Row = { submission_id: string; user_id: string | null; funding: string | null; contact_email: string; submitted_name: string; moderation_note: string | null; tool_id: string | null };
-const status = emailOnly ? "rejected" : "pending";
-const [row] = await d1Query<Row>(projectRoot, mode, `SELECT s.id AS submission_id, s.user_id, s.funding, s.contact_email, s.submitted_name, s.moderation_note, t.id AS tool_id FROM submissions s LEFT JOIN tools t ON t.canonical_domain = s.canonical_domain AND t.status = 'pending_review' WHERE s.canonical_domain = ${sqlText(domain)} AND s.status = '${status}' ORDER BY s.created_at DESC LIMIT 1`);
-if (!row) throw new Error(`No ${status} submission for ${domain}.`);
+// Live credit listings are matched too, so a takedown after publication works the same way.
+const statusFilter = emailOnly ? "s.status = 'rejected'" : "(s.status = 'pending' OR (s.status = 'accepted' AND s.funding = 'credit'))";
+const [row] = await d1Query<Row>(projectRoot, mode, `SELECT s.id AS submission_id, s.user_id, s.funding, s.contact_email, s.submitted_name, s.moderation_note, t.id AS tool_id FROM submissions s LEFT JOIN tools t ON t.canonical_domain = s.canonical_domain AND t.status IN ('pending_review', 'published') WHERE s.canonical_domain = ${sqlText(domain)} AND ${statusFilter} ORDER BY s.created_at DESC LIMIT 1`);
+if (!row) throw new Error(`No ${emailOnly ? "declined" : "pending or live credit"} submission for ${domain}.`);
 
 let stored = row.moderation_note ?? "";
 if (!emailOnly) {
@@ -37,7 +39,8 @@ if (!emailOnly) {
   await d1File(projectRoot, mode, [
     `UPDATE submissions SET status = 'rejected', moderation_note = ${sqlText(stored)}, updated_at = ${now} WHERE id = ${sqlText(row.submission_id)}`,
     ...(row.tool_id ? [
-      `UPDATE tools SET status = 'rejected', updated_at = ${now} WHERE id = ${sqlText(row.tool_id)} AND status = 'pending_review'`,
+      `UPDATE tools SET status = 'rejected', updated_at = ${now} WHERE id = ${sqlText(row.tool_id)} AND status IN ('pending_review', 'published')`,
+      `DELETE FROM tools_fts WHERE tool_id = ${sqlText(row.tool_id)}`,
       `INSERT INTO moderation_events (id, entity_type, entity_id, action, actor_identity, metadata_json, created_at) VALUES (${sqlText(`event_${randomUUID()}`)}, 'tool', ${sqlText(row.tool_id)}, 'reject', 'maintainer', ${sqlText(JSON.stringify({ submissionId: row.submission_id, reason, note, funding: row.funding, creditReturned: Boolean(refund) }))}, ${now})`,
     ] : []),
     // Keyed by submission, so running this twice cannot return two credits.

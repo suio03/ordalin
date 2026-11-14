@@ -143,8 +143,10 @@ generated catalogue entry.
 The public `/submit` workflow persists the same candidate as a short-lived
 private draft. The submitter corrects the public fields, chooses a discovered
 image, uploads a replacement, or keeps the letter fallback, then submits a new
-unique-domain profile for review. The submission is stored as a hidden
-`pending_review` tool and a `pending` submission; nothing is public yet.
+unique-domain profile. A free submission is stored as a hidden
+`pending_review` tool and a `pending` submission; nothing is public yet. A
+credit submission is published in the same request (`published` tool,
+`accepted` submission) from the confirmed website facts.
 Existing canonical domains stop at duplicate detection and cannot be
 overwritten; a domain already in review is reported as such. A previously
 declined domain may return only as a credit submission, which replaces the
@@ -157,12 +159,15 @@ differently (`MVP_PLAN.md` §9):
 - **Free**: the strict rules. Decline resellers, brand-borrowing model wrappers,
   same-template site farms and non-tools. A declined free submission is not
   returned.
-- **Credit**: review within 48 hours. A working site built on third-party models
+- **Credit**: live immediately, checked afterwards. A working site built on third-party models
   is accepted and gets an ordinary profile, with no "unofficial" or
   "third-party" label (owner, 2026-11-13). Unsafe, deceptive, broken and non-AI sites are still
-  declined, and the decline returns the credit.
+  taken down with `pnpm submissions:reject`, which also matches live credit
+  listings and returns the credit.
 
-Paid and free listings get the same page, ranking, labels and `ugc` links.
+Paid and free listings get the same ranking. Website links: free submissions
+published from 2026-11-14 carry `nofollow`, credit listings carry no rel marker,
+and earlier submissions keep `ugc`.
 `imports:prepare --submissions` lists credit submissions first and flags free
 claims that share a network with another free claim.
 

@@ -49,14 +49,14 @@ export default function TermsPage() {
             <li>Credits come in three packs, paid once through PayPal: US$3.99 for 1, US$5.99 for 3 or US$9.99 for 10. There is no subscription.</li>
             <li>Credits you have bought keep their value if prices change later.</li>
             <li>Credits never expire. One credit covers one submitted product. Credits cannot be transferred or exchanged for cash, except as a refund under our <Link href="/refunds">refund policy</Link>.</li>
-            <li>Credit submissions are reviewed within 48 hours. Sites built on third-party models are accepted.</li>
+            <li>Credit submissions go live as soon as you publish them, using the facts you confirmed. We check them afterwards; if we take one down because it breaks these terms, the credit returns to your balance. Sites built on third-party models are accepted.</li>
             <li>We still decline submissions that are not an AI product, have no working product, show sexually explicit content, or are illegal or infringe someone else&apos;s rights (for example using a real person&apos;s name or likeness without consent, or content involving minors). A declined credit submission gets its credit back.</li>
             <li>A domain that was declined before may be submitted again with a credit.</li>
           </ul>
         </section>
         <section>
           <h2>What credits do not buy</h2>
-          <p>Paid and free listings get the same profile page, ranking and labels. There is no sponsored badge. Links to your site from free listings carry <code>rel=&quot;nofollow&quot;</code>. Credits do not buy placement in best-of lists, alternatives or comparisons. Listings stay up while the product works and its facts hold; we may edit, relabel or remove a listing whose product stops working, changes materially or breaks these terms.</p>
+          <p>Paid and free listings are ranked by the same rules. There is no sponsored badge. Links to your site from free listings carry <code>rel=&quot;nofollow&quot;</code>; links from credit listings do not. Credits do not buy placement in best-of lists, alternatives or comparisons. Listings stay up while the product works and its facts hold; we may edit, relabel or remove a listing whose product stops working, changes materially or breaks these terms.</p>
         </section>
         <section>
           <h2>Content you submit</h2>

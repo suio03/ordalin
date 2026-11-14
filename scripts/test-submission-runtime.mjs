@@ -82,15 +82,17 @@ try {
   assert.equal(response.status, 400, 'an upload must not claim captured provenance');
   response = await dispatch('http://localhost/publish', { method: 'POST', headers, body: form('runtime-uploaded', 'uploaded') });
   const publication = await response.json();
-  assert.equal(response.status, 202, JSON.stringify(publication));
-  assert.deepEqual(publication, { status: 'in_review', funding: 'credit' }, 'no public listing exists yet');
+  assert.equal(response.status, 201, JSON.stringify(publication));
+  assert.equal(publication.status, 'published', 'a credit submission goes live straight away');
+  assert.equal(publication.url, `/tools/${publication.slug}`);
   assert.equal(await balance('user-alice'), 2, 'a credit submission spends one credit');
   const stored = await db.prepare("SELECT user_id, funding, contact_email FROM submissions WHERE canonical_domain = 'runtime-uploaded.example'").first();
   assert.deepEqual(stored, { user_id: 'user-alice', funding: 'credit', contact_email: 'al.ice+tools@gmail.com' }, 'the submission belongs to the signed-in account');
   const tool = await db.prepare('SELECT * FROM tools WHERE canonical_domain = ?').bind('runtime-uploaded.example').first();
-  assert.equal(tool.status, 'pending_review', 'a submission stays hidden until it is researched');
-  assert.equal(tool.published_at, null);
-  assert.equal((await db.prepare("SELECT status FROM submissions WHERE canonical_domain = 'runtime-uploaded.example'").first()).status, 'pending');
+  assert.equal(tool.status, 'published', 'a credit submission is public immediately');
+  assert.ok(tool.published_at);
+  assert.equal((await db.prepare("SELECT status FROM submissions WHERE canonical_domain = 'runtime-uploaded.example'").first()).status, 'accepted');
+  assert.ok(await db.prepare('SELECT 1 FROM tools_fts WHERE tool_id = ?').bind(tool.id).first(), 'a live credit listing is searchable');
   assert.ok(tool.screenshot_asset_key);
   assert.equal(tool.last_checked_at, null, 'manual completion must not imply a website check');
   assert.deepEqual(Buffer.from(await (await bucket.get(tool.screenshot_asset_key)).arrayBuffer()), bytes);
@@ -101,7 +103,7 @@ try {
   assert.equal(response.status, 200, await response.clone().text());
   const captured = await response.arrayBuffer();
   response = await dispatch('http://localhost/publish', { method: 'POST', headers, body: form('runtime-captured', 'captured', captured) });
-  assert.equal(response.status, 202, await response.clone().text());
+  assert.equal(response.status, 201, await response.clone().text());
   response = await dispatch('http://localhost/runtime-captured', { method: 'POST', headers });
   assert.equal(response.status, 410, 'submitted drafts cannot capture again');
   await draft('runtime-limited');
@@ -119,6 +121,7 @@ try {
   await draft('runtime-free', '198.51.100.21');
   response = await dispatch('http://localhost/publish', { method: 'POST', headers: as(alice, '198.51.100.21', 'device-alice-0000000000'), body: form('runtime-free', 'none', bytes, 'free') });
   assert.equal(response.status, 202, await response.clone().text());
+  assert.equal((await db.prepare("SELECT status FROM tools WHERE canonical_domain = 'runtime-free.example'").first()).status, 'pending_review', 'a free submission stays hidden until it is researched');
   assert.equal(await balance('user-alice'), 1, 'the free submission does not touch credits');
   assert.ok(await db.prepare("SELECT 1 FROM free_claims WHERE user_id = 'user-alice'").first(), 'the free submission is recorded');
   await draft('runtime-free-again', '198.51.100.21');
@@ -144,9 +147,9 @@ try {
   assert.equal(response.status, 409, 'a declined domain cannot come back as a free submission');
   await draft('runtime-declined-credit', '198.51.100.22', 'runtime-free');
   response = await dispatch('http://localhost/publish', { method: 'POST', headers: as(alice, '198.51.100.22', 'device-alice-0000000000'), body: form('runtime-declined-credit', 'none') });
-  assert.equal(response.status, 202, await response.clone().text());
-  assert.equal((await db.prepare("SELECT status FROM tools WHERE canonical_domain = 'runtime-free.example'").first()).status, 'pending_review', 'a credit replaces the declined record');
+  assert.equal(response.status, 201, await response.clone().text());
+  assert.equal((await db.prepare("SELECT status FROM tools WHERE canonical_domain = 'runtime-free.example'").first()).status, 'published', 'a credit replaces the declined record and goes live');
   assert.equal(await balance('user-alice'), 0);
   console.log('workerd: accounts, free claim guards, credit spend and declined-domain resubmission passed');
-  console.log('workerd: private capture, multipart uploads, provenance, hidden D1 submission, exact R2 image and capture limit passed');
+  console.log('workerd: private capture, multipart uploads, provenance, live credit / hidden free D1 submission, exact R2 image and capture limit passed');
 } finally { await mf.dispose(); }

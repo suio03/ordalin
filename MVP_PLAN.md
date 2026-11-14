@@ -443,12 +443,15 @@ Public submission (accounts and listing credits approved 2026-11-08):
   submission does not return the free claim;
 - listing credits: three packs through PayPal (US$3.99 for 1, US$5.99 for 3,
   US$9.99 for 10), no subscription; credits never expire; 1 credit = 1 product;
-- a credit-funded submission is reviewed within 48 hours and may be a third-party
-  model wrapper, listed without an "unofficial" label (2026-11-13); a rejected
-  credit-funded submission returns its credit; a previously rejected domain may be
+- a credit-funded submission is published the moment the submitter confirms the
+  drafted profile, from the fetched website facts (2026-11-14), and is checked
+  afterwards; it may be a third-party model wrapper, listed without an
+  "unofficial" label (2026-11-13); a credit listing taken down
+  (`pnpm submissions:reject`) returns its credit; a previously rejected domain may be
   resubmitted with a credit;
-- paid and free listings are researched, labelled, indexed and ordered the same
-  way; payment never buys rank, badges or editorial verdicts. Website links:
+- free submissions stay hidden until researched and published by `imports:apply`;
+- paid and free listings are indexed and ordered the same way; payment never buys
+  rank, badges or editorial verdicts. Website links:
   free submissions published from 2026-11-14 carry `rel="nofollow"`, credit
   submissions carry no rel marker, and earlier submissions keep `rel="ugc"`;
 - a purchase is refundable within 14 days only if none of its credits has been used (no partial refunds; 2026-11-13); PayPal refunds and chargebacks

@@ -173,7 +173,7 @@ export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initia
   const [existingTool, setExistingTool] = useState<ExistingTool | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState<{ slug: string | null } | null>(null);
   const [name, setName] = useState("");
   const [tagline, setTagline] = useState("");
   const [description, setDescription] = useState("");
@@ -381,15 +381,15 @@ export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initia
       for (const [key, value] of Object.entries(fields)) form.set(key, value);
       if (screenshot) form.set("screenshotFile", screenshot);
       if (preparedLogo) form.set("logoFile", preparedLogo);
-      await responseJson(await fetch("/api/submissions/publish", { method: "POST", body: form }));
+      const value = await responseJson(await fetch("/api/submissions/publish", { method: "POST", body: form }));
       trackEvent("Submission Sent", { funding });
-      setSubmitted(true);
+      setSubmitted({ slug: value.status === "published" && typeof value.slug === "string" ? value.slug : null });
     } catch (caught) {
       setError(messageFrom(caught)); setTurnstileToken(""); setTurnstileVersion((version) => version + 1);
     } finally { setBusy(false); }
   }
 
-  if (submitted) return <SubmitSuccess name={name} tagline={tagline} logoSrc={preparedLogoPreview} />;
+  if (submitted) return <SubmitSuccess slug={submitted.slug} name={name} tagline={tagline} logoSrc={preparedLogoPreview} />;
 
   const freeAllowed = account?.free === "available" && !draft?.creditOnly;
   const creditAllowed = (account?.balance ?? 0) >= 1;
@@ -555,7 +555,7 @@ export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initia
             </section>
           </article> : null}
           <section hidden={!reviewing} className={styles.publishSection} aria-labelledby="publish-title">
-            <div><p className={styles.stepLabel}>Final confirmation{account ? ` · ${account.email}` : ""}</p><h3 id="publish-title">Submit for review</h3><p>Ordalin researches the official website before the listing goes live. Free and credit listings get the same page, ranking and labels.</p></div>
+            <div><p className={styles.stepLabel}>Final confirmation{account ? ` · ${account.email}` : ""}</p><h3 id="publish-title">{funding === "credit" ? "Publish your listing" : "Submit for review"}</h3><p>{funding === "credit" ? "A credit listing goes live as soon as you publish it, with a followed link to your site." : "Ordalin researches the official website before a free listing goes live. Its link to your site carries rel=\"nofollow\"."}</p></div>
             <fieldset className={styles.fundingChoices}>
               <legend>Submission type</legend>
               <label data-selected={funding === "free" ? "" : undefined} data-disabled={!freeAllowed ? "" : undefined}>
@@ -564,12 +564,12 @@ export function SubmitFlow({ account, categories, tags, turnstileSiteKey, initia
               </label>
               <label data-selected={funding === "credit" ? "" : undefined} data-disabled={!creditAllowed ? "" : undefined}>
                 <input type="radio" name="funding" value="credit" checked={funding === "credit"} disabled={!creditAllowed} onChange={() => setFunding("credit")} />
-                <span><strong>Use 1 credit · {account?.balance ?? 0} left</strong><small>Reviewed within 48 hours. Sites built on third-party models are accepted. A declined credit submission returns the credit.</small>{(account?.balance ?? 0) < 1 ? <Link href="/account" prefetch={false}>Buy credits · from $3.99 →</Link> : null}</span>
+                <span><strong>Use 1 credit · {account?.balance ?? 0} left</strong><small>Live as soon as you publish, with a followed link to your site. Sites built on third-party models are accepted. If we take a listing down later, the credit comes back.</small>{(account?.balance ?? 0) < 1 ? <Link href="/account" prefetch={false}>Buy credits · from $3.99 →</Link> : null}</span>
               </label>
             </fieldset>
             <div className={styles.turnstile}><TurnstileBox key={turnstileVersion} siteKey={turnstileSiteKey} onToken={handleToken} /></div>
             {error && reviewing ? <div className={styles.error} role="alert">{error}</div> : null}
-            <button className={styles.publishButton} type="submit" disabled={busy || captureBusy || !reviewing || !fundingReady || !turnstileToken || selectedBrowseCategoryCount === 0 || !hasPrimaryGroupCategory}>{busy ? "Submitting…" : `Submit ${name || "tool"} →`}</button>
+            <button className={styles.publishButton} type="submit" disabled={busy || captureBusy || !reviewing || !fundingReady || !turnstileToken || selectedBrowseCategoryCount === 0 || !hasPrimaryGroupCategory}>{busy ? (funding === "credit" ? "Publishing…" : "Submitting…") : `${funding === "credit" ? "Publish" : "Submit"} ${name || "tool"} →`}</button>
           </section>
         </form>
       )}

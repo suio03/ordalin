@@ -32,11 +32,7 @@ export default function RefundsPage() {
         </section>
         <section>
           <h2>Declined submissions</h2>
-          <p>If we decline a credit submission, the credit goes back to your balance straight away, to use on another product. Credits do not expire, so this is a credit return, not a cash refund, and the purchase still counts as used.</p>
-        </section>
-        <section>
-          <h2>Late reviews</h2>
-          <p>Credit submissions are reviewed within 48 hours. If we miss that, tell us and we will return the credit for that submission to your balance.</p>
+          <p>Credit submissions go live as soon as you publish them, and we check them afterwards. If we take one down because it breaks the listing rules, the credit goes back to your balance straight away, to use on another product. Credits do not expire, so this is a credit return, not a cash refund, and the purchase still counts as used.</p>
         </section>
         <section>
           <h2>How to ask</h2>
