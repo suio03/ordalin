@@ -121,7 +121,7 @@ export const flipPageEn: ToolPageCopy = {
           },
         },
         {
-          p: '"Mirror an image" usually means a horizontal flip. A flipped picture is a mirror image of the original; a rotated one is not. If the photo is just sideways, rotate it instead of flipping it, or the text in it will read backwards.',
+          p: '"Mirror an image" usually means a horizontal flip. A flipped picture is a mirror image of the original; a rotated one is not. If the photo is just sideways, rotate it instead of flipping it, or the text in it will read backwards. For a symmetrical picture or a reflection, use the [mirror image tool](/free-tools/mirror-image).',
         },
       ],
     },
@@ -253,5 +253,5 @@ export const flipPageEn: ToolPageCopy = {
     },
   ],
   closing:
-    "Done with the flip image step and need a different shape too? [Square an image](/free-tools/square-an-image) for posts or [crop an image into a circle](/free-tools/circle-crop-image) for avatars. For more, see the other [free tools](/free-tools) or browse the [Ordalin AI tool directory](/).",
+    "Done with the flip image step and need a different shape too? [Square an image](/free-tools/square-an-image) for posts or [crop an image into a circle](/free-tools/circle-crop-image) for avatars. You can also [make a picture symmetrical or add a reflection](/free-tools/mirror-image). For more, see the other [free tools](/free-tools) or browse the [Ordalin AI tool directory](/).",
 };

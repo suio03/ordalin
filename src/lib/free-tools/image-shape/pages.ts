@@ -10,11 +10,12 @@ import { flipPageEn } from "@/lib/free-tools/flip-image/page.en";
 import { flipPageEs } from "@/lib/free-tools/flip-image/page.es";
 import { flipPageId } from "@/lib/free-tools/flip-image/page.id";
 import { flipPageJa } from "@/lib/free-tools/flip-image/page.ja";
+import { mirrorPageEn } from "@/lib/free-tools/mirror-image/page.en";
 import type { ToolPageCopy } from "./page-copy";
 import { squarePageEn } from "./square-page.en";
 import { squarePageJa } from "./square-page.ja";
 
-export type ShapeSlug = "circle-crop-image" | "square-an-image" | "flip-image";
+export type ShapeSlug = "circle-crop-image" | "square-an-image" | "flip-image" | "mirror-image";
 
 /** Page copy per locale. A locale listed in i18n `toolLocales` must have copy here. */
 export const shapePages: Record<
@@ -35,6 +36,12 @@ export const shapePages: Record<
     name: "Flip Image",
     localNames: { ja: "画像を反転", es: "Voltear imagen", id: "Mirror Foto" },
     copy: { en: flipPageEn, ja: flipPageJa, es: flipPageEs, id: flipPageId },
+  },
+  // English only: ja/es/id mirror wording lives on the localized flip pages.
+  "mirror-image": {
+    name: "Mirror Image",
+    localNames: {},
+    copy: { en: mirrorPageEn },
   },
 };
 

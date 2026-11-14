@@ -4,7 +4,7 @@
 // worker (coefficient transform, like jpegtran); PNG and WebP are redrawn on a
 // canvas at full size. Nothing is uploaded.
 import { zipSync } from "fflate";
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type DragEvent } from "react";
+import { useEffect, useRef, useState, type DragEvent } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { en, type FlipCopy } from "@/lib/free-tools/flip-image/copy";
 import {
@@ -20,64 +20,33 @@ import {
   ROTATE_CW,
   type Orient,
 } from "@/lib/free-tools/flip-image/orient";
-import type { FlipReply } from "@/lib/free-tools/flip-image/worker";
 import { fmt } from "@/lib/free-tools/image-shape/copy";
-import { ACCEPTED_TYPES, LIMITS } from "@/lib/free-tools/image-shape/geometry";
 import { baseName, saveBlob } from "@/lib/free-tools/image-shape/render";
 import shape from "../image-shape/image-shape.module.css";
 import styles from "./flip-image.module.css";
-
-const MAX_FILES = 10;
-const PREVIEW_SIDE = 1024;
-const JPEG_QUALITY = 0.95;
-
-type Kind = "jpeg" | "png" | "webp";
-type Item = { id: number; name: string; file: File; kind: Kind; img: HTMLImageElement; url: string; width: number; height: number; preview: HTMLCanvasElement };
-type Lossless = { ok: true; bytes: ArrayBuffer; width: number; height: number; trimmed: { x: number; y: number } } | { ok: false };
-type Output = { blob: Blob; name: string };
-
-const KIND: Record<string, Kind> = { "image/jpeg": "jpeg", "image/png": "png", "image/webp": "webp" };
-const EXT: Record<Kind, string> = { jpeg: "jpg", png: "png", webp: "webp" };
-const key = (o: Orient) => o.join(",");
-const noSubscribe = () => () => {};
-let webpSupport: boolean | undefined;
-/** Safari can't encode WebP: toDataURL then falls back to PNG. */
-function canEncodeWebp() {
-  if (webpSupport === undefined) {
-    const c = document.createElement("canvas");
-    c.width = c.height = 1;
-    webpSupport = c.toDataURL("image/webp").startsWith("data:image/webp");
-  }
-  return webpSupport;
-}
-
-function loadImage(file: File) {
-  return new Promise<{ img: HTMLImageElement; url: string }>((resolve, reject) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.decoding = "async";
-    img.onload = () => resolve({ img, url });
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
-      reject(new Error("decode"));
-    };
-    img.src = url;
-  });
-}
-
-/** A small copy of the image for previews, so flipping stays instant on large photos. */
-function previewOf(img: HTMLImageElement) {
-  const k = Math.min(1, PREVIEW_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
-  const c = document.createElement("canvas");
-  c.width = Math.max(1, Math.round(img.naturalWidth * k));
-  c.height = Math.max(1, Math.round(img.naturalHeight * k));
-  const ctx = c.getContext("2d");
-  if (ctx) {
-    ctx.imageSmoothingQuality = "high";
-    ctx.drawImage(img, 0, 0, c.width, c.height);
-  }
-  return c;
-}
+import {
+  canvasBlob,
+  DownloadIcon,
+  dropFiles,
+  DropZone,
+  ErrorList,
+  EXT,
+  FileInput,
+  FlipHIcon,
+  FlipVIcon,
+  JPEG_QUALITY,
+  MAX_FILES,
+  orientKey,
+  RemoveIcon,
+  RotateLeftIcon,
+  RotateRightIcon,
+  useImageItems,
+  useLosslessJpeg,
+  useWebpEncode,
+  type Item,
+  type Kind,
+  type Output,
+} from "./shared";
 
 /** Full-size redraw. The browser has already applied any EXIF orientation to `img`. */
 function drawFlipped(img: CanvasImageSource, width: number, height: number, o: Orient) {
@@ -90,10 +59,6 @@ function drawFlipped(img: CanvasImageSource, width: number, height: number, o: O
   ctx.setTransform(...t.matrix);
   ctx.drawImage(img, t.dx, t.dy);
   return c;
-}
-
-function canvasBlob(c: HTMLCanvasElement, type: string, quality?: number) {
-  return new Promise<Blob>((resolve, reject) => c.toBlob((b) => (b ? resolve(b) : reject(new Error("export"))), type, quality));
 }
 
 function Preview({ source, orient, label }: { source: HTMLCanvasElement; orient: Orient; label: string }) {
@@ -112,173 +77,30 @@ function Preview({ source, orient, label }: { source: HTMLCanvasElement; orient:
   return <canvas ref={ref} role="img" aria-label={label} />;
 }
 
-const icon = { "aria-hidden": true, viewBox: "0 0 24 24", width: 20, height: 20, fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" } as const;
-const FlipHIcon = () => (
-  <svg {...icon}>
-    <path d="M12 3v18" strokeDasharray="2 2.5" />
-    <path d="M9 7 3 17h6z" />
-    <path d="m15 7 6 10h-6z" />
-  </svg>
-);
-const FlipVIcon = () => (
-  <svg {...icon}>
-    <path d="M3 12h18" strokeDasharray="2 2.5" />
-    <path d="M7 9 17 3v6z" />
-    <path d="m7 15 10 6v-6z" />
-  </svg>
-);
-const RotateLeftIcon = () => (
-  <svg {...icon}>
-    <path d="M3 4v5h5" />
-    <path d="M3.5 9A9 9 0 1 1 5 17" />
-  </svg>
-);
-const RotateRightIcon = () => (
-  <svg {...icon}>
-    <path d="M21 4v5h-5" />
-    <path d="M20.5 9A9 9 0 1 0 19 17" />
-  </svg>
-);
-const DownloadIcon = () => (
-  <svg {...icon} width={18} height={18}>
-    <path d="M12 4v11" />
-    <path d="m7 10 5 5 5-5" />
-    <path d="M5 20h14" />
-  </svg>
-);
-const RemoveIcon = () => (
-  <svg {...icon} width={18} height={18}>
-    <path d="M6 6l12 12M18 6 6 18" />
-  </svg>
-);
-
 export function FlipImageTool({ t = en }: { t?: FlipCopy }) {
-  const [items, setItems] = useState<Item[]>([]);
   const [orient, setOrient] = useState<Orient>(IDENTITY);
   const [keepExact, setKeepExact] = useState(false);
-  const [lossless, setLossless] = useState<Record<string, Lossless>>({});
-  const [errors, setErrors] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
-  const [over, setOver] = useState(false);
-  const webpOk = useSyncExternalStore(noSubscribe, canEncodeWebp, () => true);
-  const pasteKey = useSyncExternalStore(noSubscribe, () => (/Mac|iPhone|iPad/.test(navigator.userAgent) ? "⌘" : "Ctrl"), () => "Ctrl");
-  const itemsRef = useRef<Item[]>([]);
-  const seq = useRef(0);
-  const workerRef = useRef<Worker | null>(null);
-  const pending = useRef(new Map<number, (r: FlipReply) => void>());
-  const jobs = useRef(new Map<string, Promise<Lossless>>());
-
-  useEffect(() => {
-    const worker = new Worker(new URL("../../../lib/free-tools/flip-image/worker.ts", import.meta.url), { type: "module" });
-    worker.onmessage = (e: MessageEvent<FlipReply>) => {
-      pending.current.get(e.data.id)?.(e.data);
-      pending.current.delete(e.data.id);
-    };
-    workerRef.current = worker;
-    return () => {
-      worker.terminate();
-      for (const it of itemsRef.current) URL.revokeObjectURL(it.url);
-    };
-  }, []);
-
-  /** Lossless JPEG transform for one item, memoised per orientation. */
-  const losslessFor = useCallback((it: Item, o: Orient) => {
-    const k = `${it.id}|${key(o)}`;
-    let job = jobs.current.get(k);
-    if (!job) {
-      job = it.file.arrayBuffer().then(
-        (bytes) =>
-          new Promise<Lossless>((resolve) => {
-            const id = ++seq.current;
-            pending.current.set(id, (r) => resolve(r.ok ? { ok: true, bytes: r.bytes, width: r.width, height: r.height, trimmed: r.trimmed } : { ok: false }));
-            workerRef.current!.postMessage({ id, bytes, orient: o }, [bytes]);
-          }),
-      );
-      jobs.current.set(k, job);
-      void job.then((r) => setLossless((prev) => ({ ...prev, [k]: r })));
-    }
-    return job;
-  }, []);
+  const webpOk = useWebpEncode();
+  const { losslessFor, resultFor, prune, reset } = useLosslessJpeg();
+  const { items, itemsRef, errors, setErrors, add, remove, clearItems } = useImageItems(t, (id) => prune((k) => !k.startsWith(`${id}|`)));
 
   // Flip JPGs in the background as soon as the orientation settles, so the
   // lossless/trim notes show before download and the download is instant.
   useEffect(() => {
     if (isIdentity(orient)) return;
-    const k = key(orient);
-    for (const name of [...jobs.current.keys()]) if (!name.endsWith(`|${k}`)) jobs.current.delete(name);
+    const k = orientKey(orient);
+    prune((name) => name.endsWith(`|${k}`));
     const timer = setTimeout(() => {
       for (const it of items) if (it.kind === "jpeg") void losslessFor(it, orient);
     }, 250);
     return () => clearTimeout(timer);
-  }, [items, orient, losslessFor]);
-
-  const add = useCallback(
-    async (files: File[]) => {
-      const problems: string[] = [];
-      const room = MAX_FILES - itemsRef.current.length;
-      if (files.length > room) problems.push(fmt(t.errors.tooMany, { files: MAX_FILES }));
-      for (const file of files.slice(0, Math.max(0, room))) {
-        const name = file.name || "image.png";
-        const kind = KIND[file.type];
-        if (!kind || !(ACCEPTED_TYPES as readonly string[]).includes(file.type)) {
-          problems.push(fmt(t.errors.type, { name }));
-          continue;
-        }
-        if (file.size > LIMITS.mb * 1024 * 1024) {
-          problems.push(fmt(t.errors.bytes, { name, mb: LIMITS.mb }));
-          continue;
-        }
-        try {
-          const { img, url } = await loadImage(file);
-          const width = img.naturalWidth;
-          const height = img.naturalHeight;
-          if (width * height > LIMITS.megapixels * 1_000_000) {
-            URL.revokeObjectURL(url);
-            problems.push(fmt(t.errors.pixels, { name, mp: Math.round((width * height) / 1e6), max: LIMITS.megapixels }));
-            continue;
-          }
-          const item: Item = { id: ++seq.current, name, file, kind, img, url, width, height, preview: previewOf(img) };
-          itemsRef.current = [...itemsRef.current, item];
-          setItems(itemsRef.current);
-        } catch {
-          problems.push(fmt(t.errors.decode, { name }));
-        }
-      }
-      setErrors(problems);
-    },
-    [t],
-  );
-
-  // Paste a screenshot or copied image anywhere on the page (not while typing in a field).
-  useEffect(() => {
-    const onPaste = (e: ClipboardEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (target?.closest("input, textarea, [contenteditable='true']")) return;
-      const files = [...(e.clipboardData?.files ?? [])].filter((f) => f.type.startsWith("image/"));
-      if (!files.length) return;
-      e.preventDefault();
-      void add(files);
-    };
-    window.addEventListener("paste", onPaste);
-    return () => window.removeEventListener("paste", onPaste);
-  }, [add]);
-
-  const remove = (id: number) => {
-    const it = itemsRef.current.find((x) => x.id === id);
-    if (it) URL.revokeObjectURL(it.url);
-    itemsRef.current = itemsRef.current.filter((x) => x.id !== id);
-    setItems(itemsRef.current);
-    for (const name of [...jobs.current.keys()]) if (name.startsWith(`${id}|`)) jobs.current.delete(name);
-  };
+  }, [items, orient, losslessFor, prune]);
 
   const clear = () => {
-    for (const it of itemsRef.current) URL.revokeObjectURL(it.url);
-    itemsRef.current = [];
-    setItems([]);
-    setErrors([]);
+    clearItems();
     setOrient(IDENTITY);
-    jobs.current.clear();
-    setLossless({});
+    reset();
   };
 
   const apply = (step: Orient) => setOrient((o) => compose(o, step));
@@ -343,14 +165,12 @@ export function FlipImageTool({ t = en }: { t?: FlipCopy }) {
   };
 
   const onDrop = (e: DragEvent<HTMLElement>) => {
-    e.preventDefault();
-    setOver(false);
-    if (e.dataTransfer?.files?.length) void add([...e.dataTransfer.files]);
+    const files = dropFiles(e);
+    if (files.length) void add(files);
   };
 
   const changed = !isIdentity(orient);
-  const k = key(orient);
-  const resultOf = (it: Item) => (it.kind === "jpeg" && changed ? lossless[`${it.id}|${k}`] : undefined);
+  const resultOf = (it: Item) => (it.kind === "jpeg" && changed ? resultFor(it, orient) : undefined);
   const anyTrimmed = items.some((it) => {
     const r = resultOf(it);
     return r?.ok && (r.trimmed.x > 0 || r.trimmed.y > 0);
@@ -371,52 +191,10 @@ export function FlipImageTool({ t = en }: { t?: FlipCopy }) {
     return lines;
   };
 
-  const fileInput = (
-    <input
-      type="file"
-      multiple
-      accept={ACCEPTED_TYPES.join(",")}
-      onChange={(e) => {
-        const files = [...(e.target.files ?? [])];
-        e.target.value = "";
-        if (files.length) void add(files);
-      }}
-    />
-  );
+  const fileInput = <FileInput onFiles={(files) => void add(files)} />;
+  const errorList = <ErrorList errors={errors} />;
 
-  const errorList = errors.length ? (
-    <div role="alert">
-      {errors.map((e) => (
-        <p key={e} className={shape.error}>
-          {e}
-        </p>
-      ))}
-    </div>
-  ) : null;
-
-  if (!items.length) {
-    return (
-      <section className={shape.tool} id="tool" aria-label={t.name}>
-        <label
-          className={shape.drop}
-          data-over={over}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setOver(true);
-          }}
-          onDragLeave={() => setOver(false)}
-          onDrop={onDrop}
-        >
-          {fileInput}
-          <strong>{t.drop.title}</strong>
-          <span className={shape.dropAction}>{t.drop.action}</span>
-          <small>{fmt(t.drop.paste, { key: pasteKey })}</small>
-          <small>{fmt(t.drop.limits, { files: MAX_FILES, mb: LIMITS.mb })}</small>
-        </label>
-        {errorList}
-      </section>
-    );
-  }
+  if (!items.length) return <DropZone t={t} name={t.name} errors={errors} onFiles={(files) => void add(files)} />;
 
   return (
     <section

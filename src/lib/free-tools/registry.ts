@@ -89,6 +89,13 @@ export const freeTools: FreeTool[] = [
       "Flip images horizontally or vertically, or rotate them 90°; JPGs flip losslessly, in the browser",
     group: "image",
   },
+  {
+    slug: "mirror-image",
+    name: "Mirror image",
+    summary:
+      "Mirror an image, make it symmetrical or add a reflection, in the browser",
+    group: "image",
+  },
 ];
 
 export const freeToolsHubPath = "/free-tools";
