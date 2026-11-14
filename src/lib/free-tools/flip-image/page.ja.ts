@@ -5,7 +5,7 @@ import type { ToolPageCopy } from "@/lib/free-tools/image-shape/page-copy";
 // Facts: docs/keywords/flip-image.md, "Verified product facts". Written for Japanese searches, not translated.
 export const flipPageJa: ToolPageCopy = {
   title:
-    "画像を反転する無料ツール｜左右反転・上下反転、写真も劣化なし | Ordalin",
+    "画像を反転する無料ツール｜写真の左右反転・上下反転 | Ordalin",
   description:
     "画像を反転するツールです。写真を左右反転・上下反転、90°回転できます。JPGは再圧縮しないので劣化しません。無料、登録不要、アップロードなし。",
   h1: "画像を反転（左右反転・上下反転）",
