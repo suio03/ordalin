@@ -135,7 +135,7 @@ export function PickEntry({ pick, tool, rank }: { pick: EditorialPick; tool: Edi
       <footer className={styles.pickActions}>
         <span className={styles.checked}><span aria-hidden="true" />{checkedLabel(tool)}</span>
         <Link prefetch={false} href={`/tools/${tool.slug}`}>Full profile</Link>
-        <a href={catalogWebsiteOutboundUrl(tool.websiteUrl)} data-tool={tool.slug} data-placement="editorial" target="_blank" rel={catalogWebsiteRel(tool.sourceProvider)}>
+        <a href={catalogWebsiteOutboundUrl(tool.websiteUrl)} data-tool={tool.slug} data-placement="editorial" target="_blank" rel={catalogWebsiteRel(tool)}>
           Visit website ↗
         </a>
       </footer>

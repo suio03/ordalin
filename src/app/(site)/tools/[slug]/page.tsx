@@ -56,7 +56,7 @@ export default async function ToolPage({ params }: ToolParams) {
   const interfaces = tool.tagDetails.filter((tag) => tag.kind === "interface");
   const attributes = tool.tagDetails.filter((tag) => tag.kind === "attribute");
   const screenshotUrl = profile?.screenshot ?? catalogAssetUrl(tool.screenshotAssetKey);
-  // A researched submission reads like any reviewed listing; only rel="ugc" still marks where it came from.
+  // A researched submission reads like any reviewed listing; only the website link rel (catalogWebsiteRel) still reflects where it came from.
   const isSubmitted = tool.sourceProvider === "submission" && !research;
   const isAutomatedImport = tool.sourceProvider === "toolify" || tool.sourceProvider === "product_hunt";
   const profileLabel = isSubmitted
@@ -106,7 +106,7 @@ export default async function ToolPage({ params }: ToolParams) {
           data-tool={tool.slug}
           data-placement="profile"
           target="_blank"
-          rel={catalogWebsiteRel(tool.sourceProvider)}
+          rel={catalogWebsiteRel(tool)}
         >
           Visit website ↗
         </a>

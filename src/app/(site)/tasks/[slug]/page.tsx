@@ -105,7 +105,7 @@ export default async function TaskPage({ params }: TaskParams) {
                     data-tool={option.slug}
                     data-placement="task"
                     target="_blank"
-                    rel={catalogWebsiteRel(option.sourceProvider)}
+                    rel={catalogWebsiteRel(option)}
                   >
                     Visit website ↗
                   </a>

@@ -56,7 +56,7 @@ export default function TermsPage() {
         </section>
         <section>
           <h2>What credits do not buy</h2>
-          <p>Paid and free listings get the same profile page, ranking and labels. There is no sponsored badge, and links to your site carry <code>rel=&quot;ugc&quot;</code> like every submitted listing. Credits do not buy placement in best-of lists, alternatives or comparisons. Listings stay up while the product works and its facts hold; we may edit, relabel or remove a listing whose product stops working, changes materially or breaks these terms.</p>
+          <p>Paid and free listings get the same profile page, ranking and labels. There is no sponsored badge. Links to your site from free listings carry <code>rel=&quot;nofollow&quot;</code>. Credits do not buy placement in best-of lists, alternatives or comparisons. Listings stay up while the product works and its facts hold; we may edit, relabel or remove a listing whose product stops working, changes materially or breaks these terms.</p>
         </section>
         <section>
           <h2>Content you submit</h2>

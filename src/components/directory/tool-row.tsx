@@ -31,7 +31,7 @@ export function ToolRow({ tool }: { tool: ToolCard }) {
         data-tool={tool.slug}
         data-placement="row"
         target="_blank"
-        rel={catalogWebsiteRel(tool.sourceProvider)}
+        rel={catalogWebsiteRel(tool)}
         aria-label={`Visit ${tool.name} website`}
       >
         Visit <span aria-hidden="true">↗</span>

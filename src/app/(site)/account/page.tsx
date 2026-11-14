@@ -76,7 +76,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
   const [ledger, submissions] = development
     ? [PREVIEW.ledger, PREVIEW.submissions]
-    : await Promise.all([listLedger(env.DB, account.user.id), listAccountSubmissions(env.DB, account.user.id)]);
+    : await Promise.all([listLedger(env.DB, account.user.id), listAccountSubmissions(env.DB, account.user.id, account.user.email)]);
 
   return (
     <main className={styles.main}>
@@ -112,7 +112,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
                     {decline ? (
                       <span className={styles.decline}>
                         Why: {decline.text}{decline.note ? ` ${decline.note}` : ""}
-                        {decline.creditCanList && item.funding === "free" ? <> Credit submissions accept sites built on third-party models, so you can submit it again with a credit. <Link href="/submit" prefetch={false}>Submit again</Link></> : null}
+                        {decline.creditCanList && item.funding !== "credit" ? <> Credit submissions accept sites built on third-party models, so you can submit it again with a credit. <Link href="/submit" prefetch={false}>Submit again</Link></> : null}
                         {" "}Questions: <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
                       </span>
                     ) : null}

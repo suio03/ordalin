@@ -54,8 +54,9 @@ open soon. `SUBMISSION_HASH_SALT` also salts the IP and device hashes that limit
 the free submission, so never rotate it. Local preview cannot sign in or pay
 (development is read-only) and shows a sample account instead;
 `pnpm test:submissions:runtime` covers accounts, free-claim guards, credit spend
-and declined-domain resubmission. Decline a submission with
-`pnpm submissions:reject -- --remote --domain=<domain> --reason=<code> [--note="<detail>"]`
+and declined-domain resubmission. /account also lists pre-sign-in submissions
+whose contact email matches the signed-in Google email. Decline a submission with
+`pnpm submissions:reject -- --remote --domain=<domain> --reason=<code> [--note="<detail>"] [--no-email]`
 (codes in `src/lib/submissions/decline-reasons.ts`: wrapper, reseller,
 no-product, not-ai, explicit, unlawful). It returns the credit for credit
 submissions, and the submitter sees the reason on `/account` and by email; a

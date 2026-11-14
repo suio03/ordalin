@@ -28,9 +28,10 @@ describe("catalog website links", () => {
     expect(cleanCatalogWebsiteUrl("https://hirekai.ai/?dub_id=tLbo3v3IEFe7uBuo").href).toBe("https://hirekai.ai/");
   });
 
-  it("marks public submissions as user-generated links", () => {
-    expect(catalogWebsiteRel("submission")).toBe("noopener ugc");
-    expect(catalogWebsiteRel("toolify")).toBe("noopener");
-    expect(catalogWebsiteRel(null)).toBe("noopener");
+  it("picks rel from the submission link policy", () => {
+    expect(catalogWebsiteRel({ linkPolicy: "free" })).toBe("noopener nofollow");
+    expect(catalogWebsiteRel({ linkPolicy: "legacy" })).toBe("noopener ugc");
+    expect(catalogWebsiteRel({ linkPolicy: "credit" })).toBe("noopener");
+    expect(catalogWebsiteRel({ linkPolicy: null })).toBe("noopener");
   });
 });

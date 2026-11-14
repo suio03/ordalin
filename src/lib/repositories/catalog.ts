@@ -5,6 +5,7 @@ import { cache } from "react";
 import { getCloudflareEnv } from "@/lib/cloudflare";
 import { cataloguePageSize, toFtsQuery, toolCompanions, type CatalogueSort } from "@/lib/catalog";
 import type { TagKind } from "@/domain/catalog";
+import { submissionLinkPolicySql, type SubmissionLinkPolicy } from "@/lib/catalog-links";
 
 export type ToolCard = {
   id: string;
@@ -13,6 +14,8 @@ export type ToolCard = {
   tagline: string;
   websiteUrl: string;
   sourceProvider: string | null;
+  /** Outbound link policy for submitted tools; null for every other source. */
+  linkPolicy: SubmissionLinkPolicy | null;
   canonicalDomain: string;
   pricingModel: string;
   primaryCategory: { slug: string; name: string };
@@ -117,6 +120,7 @@ type ToolRow = {
   tagline: string;
   website_url: string;
   source_provider: string | null;
+  link_policy: SubmissionLinkPolicy | null;
   canonical_domain: string;
   pricing_model: string;
   category_slug: string;
@@ -157,6 +161,7 @@ function mapTool(row: ToolRow): ToolCard {
     tagline: row.tagline,
     websiteUrl: row.website_url,
     sourceProvider: row.source_provider,
+    linkPolicy: row.link_policy ?? null,
     canonicalDomain: row.canonical_domain,
     pricingModel: row.pricing_model,
     primaryCategory: {
@@ -399,6 +404,7 @@ export async function listPublishedTools(
         SELECT provider FROM tool_sources source
         WHERE source.tool_id = t.id ORDER BY source.last_seen_at DESC LIMIT 1
       ) END AS source_provider,
+      ${submissionLinkPolicySql},
       (SELECT GROUP_CONCAT(DISTINCT category_group.slug)
        FROM tool_tags category_tt
        JOIN tags category_tag ON category_tag.id = category_tt.tag_id
@@ -459,6 +465,7 @@ export const getToolBySlug = cache(
             SELECT provider FROM tool_sources source
             WHERE source.tool_id = t.id ORDER BY source.last_seen_at DESC LIMIT 1
           ) END AS source_provider,
+      ${submissionLinkPolicySql},
           (SELECT source_url FROM tool_sources source
            WHERE source.tool_id = t.id ORDER BY source.last_seen_at DESC LIMIT 1) AS source_url,
           (SELECT raw_json FROM tool_sources source WHERE source.tool_id = t.id AND source.provider = 'submission' ORDER BY source.last_seen_at DESC LIMIT 1) AS submission_json,
@@ -553,7 +560,8 @@ export async function listCollectionTools(slug: string): Promise<ToolCard[]> {
         ) THEN 'submission' ELSE (
           SELECT provider FROM tool_sources source
           WHERE source.tool_id = t.id ORDER BY source.last_seen_at DESC LIMIT 1
-        ) END AS source_provider
+        ) END AS source_provider,
+      ${submissionLinkPolicySql}
        FROM collections collection
        JOIN collection_items item ON item.collection_id = collection.id
        JOIN tools t ON t.id = item.tool_id AND t.status = 'published'
@@ -622,6 +630,7 @@ export async function listTaskOptions(slug: string): Promise<TaskOption[]> {
           SELECT provider FROM tool_sources source
           WHERE source.tool_id = t.id ORDER BY source.last_seen_at DESC LIMIT 1
         ) END AS source_provider,
+      ${submissionLinkPolicySql},
         item.best_for,
         item.key_difference, item.limitation
        FROM tasks task
@@ -763,7 +772,8 @@ const toolCardSelect = `SELECT t.id, t.slug, t.name, t.tagline, t.website_url, t
     ) THEN 'submission' ELSE (
       SELECT provider FROM tool_sources source
       WHERE source.tool_id = t.id ORDER BY source.last_seen_at DESC LIMIT 1
-    ) END AS source_provider`;
+    ) END AS source_provider,
+      ${submissionLinkPolicySql}`;
 
 export const listPublishedToolSlugs = cache(async (): Promise<Set<string>> => {
   const database = await getDatabase();

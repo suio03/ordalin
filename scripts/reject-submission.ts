@@ -9,6 +9,7 @@ import { DECLINE_REASONS, encodeDeclineNote, isDeclineReason } from "../src/lib/
 // (MVP_PLAN.md §9); a free one does not. The submitter sees the reason on
 // /account and gets it by email through Resend. Usage:
 //   pnpm submissions:reject --remote --domain=example.com --reason=wrapper [--note="Extra detail for the submitter"]
+//   pnpm submissions:reject --remote --domain=example.com --reason=not-ai --no-email   (/account only, no email)
 //   pnpm submissions:reject --remote --domain=example.com --email-only   (re-send the email for a declined submission)
 const projectRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 loadLocalEnv(projectRoot);
@@ -16,6 +17,7 @@ const mode = databaseMode();
 const argument = (name: string) => process.argv.find((arg) => arg.startsWith(`--${name}=`))?.slice(name.length + 3);
 const domain = argument("domain")?.trim().toLowerCase().replace(/^www\./, "");
 const emailOnly = process.argv.includes("--email-only");
+const noEmail = process.argv.includes("--no-email");
 if (!domain) throw new Error("Provide --domain=example.com.");
 
 type Row = { submission_id: string; user_id: string | null; funding: string | null; contact_email: string; submitted_name: string; moderation_note: string | null; tool_id: string | null };
@@ -46,6 +48,8 @@ if (!emailOnly) {
 
 if (mode === "--local") {
   console.log("Local database: email not sent.");
+} else if (noEmail && !emailOnly) {
+  console.log("--no-email: the reason shows on /account only; send it later with --email-only.");
 } else {
   const result = await sendDeclineEmail({ submissionId: row.submission_id, to: row.contact_email, toolName: row.submitted_name, domain, storedNote: stored, funding: row.funding });
   console.log(result.sent ? `Email sent (${result.id}).` : `Email not sent: ${result.reason}. Re-send later with --email-only.`);
