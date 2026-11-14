@@ -4,7 +4,7 @@
 - Page (Ordalin): /free-tools/flip-image (`flip image`, `image flip`, `image flipper`, `flip picture`, `flip photo online`)
 - Started: 2026-11-14
 - Mode: default stops
-- Now: step 10, launch (ja/es/id included)
+- Now: done (live 2026-11-14, 4cc40be). Next: /free-tools/mirror-image and rotate tool (owner-approved, separate pages)
 
 ## Steps
 
@@ -19,8 +19,8 @@
 | 6 | Examples wall | n/a (skipped, like square) | | |
 | 7 | Page implementation and internal links | done | 2026-11-14 | registry (group image → footer/header/hub/sitemap/llms.txt), hub copy, square + circle closings link here, Plausible goal "Flip Image Download" + props change/formats/lossless/count |
 | 8 | Localization | done: ja (画像 反転), es (voltear imagen), id (mirror foto) + es/id hubs; de, pt-BR not opened; fr skip | 2026-11-14 | [flip-image-localization-2026-11-14.md](flip-image-localization-2026-11-14.md), `src/lib/free-tools/flip-image/page.{ja,es,id}.ts`, `ui-copy.ts` |
-| 9 | Pre-launch SEO | todo | | |
-| 10 | Launch report and commit | todo | | |
+| 9 | Pre-launch SEO | done (subagent: no blockers; es/id titles shortened) | 2026-11-14 | `pnpm seo:check` on prod: all ok |
+| 10 | Launch report and commit | done: en + ja/es/id + es/id hubs live | 2026-11-14 | 4cc40be |
 
 ## Decisions
 
