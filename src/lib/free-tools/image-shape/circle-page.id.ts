@@ -192,5 +192,5 @@ export const circlePageId: ToolPageCopy = {
     },
   ],
   closing:
-    "Butuh seluruh foto jadi persegi, bukan bulat? Pakai [Square an image](/free-tools/square-an-image) (bahasa Inggris) untuk membuat foto persegi tanpa terpotong. Lihat juga [alat gratis](/free-tools) lainnya dan [direktori alat AI Ordalin](/), keduanya dalam bahasa Inggris.",
+    "Butuh seluruh foto jadi persegi, bukan bulat? Pakai [Square an image](/free-tools/square-an-image) (bahasa Inggris) untuk membuat foto persegi tanpa terpotong, atau [mirror foto](/id/free-tools/flip-image) dulu kalau arahnya terbalik. Lihat juga [alat gratis untuk gambar](/id/free-tools) lainnya dan [direktori alat AI Ordalin](/) (dalam bahasa Inggris).",
 };

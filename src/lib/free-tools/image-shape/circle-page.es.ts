@@ -192,5 +192,5 @@ export const circlePageEs: ToolPageCopy = {
     },
   ],
   closing:
-    "¿Prefieres la foto completa en cuadrado en lugar de un círculo? Usa [Square an image](/free-tools/square-an-image) (en inglés) para hacerla cuadrada sin recortarla. Hay más [herramientas gratis](/free-tools) y el [directorio de herramientas de IA de Ordalin](/), ambos en inglés.",
+    "¿Prefieres la foto completa en cuadrado en lugar de un círculo? Usa [Square an image](/free-tools/square-an-image) (en inglés) para hacerla cuadrada sin recortarla, o [voltea la imagen](/es/free-tools/flip-image) primero si mira hacia el lado equivocado. Hay más [herramientas gratis para imágenes](/es/free-tools) y el [directorio de herramientas de IA de Ordalin](/) (en inglés).",
 };

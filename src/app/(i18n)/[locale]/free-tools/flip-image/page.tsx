@@ -1,0 +1,36 @@
+import { notFound } from "next/navigation";
+import { FlipImageTool } from "@/components/free-tools/flip-image/flip-image-tool";
+import { ToolPage } from "@/components/free-tools/image-shape/tool-page";
+import { isExtraLocale, localesFor } from "@/lib/free-tools/i18n";
+import { shapeCopy, shapeMetadata, shapeName } from "@/lib/free-tools/image-shape/pages";
+import { flipUiCopy } from "@/lib/free-tools/flip-image/ui-copy";
+import { freeToolPath } from "@/lib/free-tools/registry";
+
+const SLUG = "flip-image";
+type Props = { params: Promise<{ locale: string }> };
+
+// Prerender the locales listed in i18n toolLocales; the page guard 404s the rest.
+// No dynamicParams = false: OpenNext has no incremental cache here, and a cache
+// miss on a fallback: false route returns 404 (NoFallbackError) on Workers.
+export const generateStaticParams = () => localesFor(SLUG).filter(isExtraLocale).map((locale) => ({ locale }));
+
+export async function generateMetadata({ params }: Props) {
+  const { locale } = await params;
+  if (!isExtraLocale(locale) || !localesFor(SLUG).includes(locale)) return {};
+  return shapeMetadata(SLUG, locale);
+}
+
+export default async function Page({ params }: Props) {
+  const { locale } = await params;
+  if (!isExtraLocale(locale) || !localesFor(SLUG).includes(locale)) notFound();
+  return (
+    <ToolPage
+      copy={shapeCopy(SLUG, locale)}
+      path={freeToolPath(SLUG)}
+      name={shapeName(SLUG, locale)}
+      tool={<FlipImageTool t={flipUiCopy[locale]} />}
+      locale={locale}
+      locales={localesFor(SLUG)}
+    />
+  );
+}

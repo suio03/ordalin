@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import styles from "@/app/(site)/guides/guides.module.css";
 import hub from "@/app/(site)/free-tools/free-tools.module.css";
 import { extraLocales, localeInfo, localizePath, type ExtraLocale } from "@/lib/free-tools/i18n";
-import { localizedHubs, type ShapeSlug } from "@/lib/free-tools/image-shape/pages";
+import { hubLanguages, localizedHubs, type ShapeSlug } from "@/lib/free-tools/image-shape/pages";
 import { freeToolPath, freeToolsHubPath } from "@/lib/free-tools/registry";
 import { withSocial } from "@/lib/seo";
 
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: copy.description,
     alternates: {
       canonical: localizePath(freeToolsHubPath, locale as ExtraLocale),
-      languages: { en: freeToolsHubPath, [locale]: localizePath(freeToolsHubPath, locale as ExtraLocale), "x-default": freeToolsHubPath },
+      languages: hubLanguages,
     },
     openGraph: { locale: localeInfo[locale as ExtraLocale].og },
   });

@@ -202,5 +202,5 @@ export const squarePageJa: ToolPageCopy = {
     },
   ],
   closing:
-    "丸い画像が欲しいときは、[画像を丸く切り抜く](/ja/free-tools/circle-crop-image)ツールで背景透過の円にできます。そのほかの[無料ツール](/ja/free-tools)や、英語版の [Ordalin AI ツールディレクトリ](/)もご覧ください。",
+    "丸い画像が欲しいときは、[画像を丸く切り抜く](/ja/free-tools/circle-crop-image)ツールで背景透過の円にできます。写真の向きが逆のときは[画像を左右反転](/ja/free-tools/flip-image)できます。そのほかの[無料ツール](/ja/free-tools)や、英語版の [Ordalin AI ツールディレクトリ](/)もご覧ください。",
 };

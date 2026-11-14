@@ -2,7 +2,8 @@ import type { ToolPageCopy } from "./page-copy";
 
 // Facts: docs/keywords/circle-crop-image.md, "Verified product facts". Every claim maps to that list.
 export const circlePageEn: ToolPageCopy = {
-  title: "Circle Crop Image: Crop an Image Into a Circle, Free Transparent PNG | Ordalin",
+  title:
+    "Circle Crop Image: Crop an Image Into a Circle, Free Transparent PNG | Ordalin",
   description:
     "Circle crop image files in your browser: place a photo in a circle and download a transparent PNG. Free, with no upload, sign-up or watermark.",
   h1: "Circle Crop Image With a Transparent Background",
@@ -20,7 +21,9 @@ export const circlePageEn: ToolPageCopy = {
             "**Pick the finish and download.** Keep the corners transparent or fill them with a color, add a border if you like, choose a size and format, then download the circle crop image.",
           ],
         },
-        { p: "The two previews show the result on a white page and on a dark page, so you can see the edge before you download." },
+        {
+          p: "The two previews show the result on a white page and on a dark page, so you can see the edge before you download.",
+        },
       ],
     },
     {
@@ -31,14 +34,35 @@ export const circlePageEn: ToolPageCopy = {
           table: {
             head: ["", ""],
             rows: [
-              ["What it is", "A free tool to crop an image into a circle and save it as its own file"],
-              ["Photos it takes", "JPG, PNG or WebP, up to 10 MB and 40 megapixels"],
-              ["Default download", "PNG with fully transparent corners, at the pixel size of the area inside the circle"],
-              ["Other sizes", "512, 1080 or 2048 px across; never larger than 4096 px"],
+              [
+                "What it is",
+                "A free tool to crop an image into a circle and save it as its own file",
+              ],
+              [
+                "Photos it takes",
+                "JPG, PNG or WebP, up to 10 MB and 40 megapixels",
+              ],
+              [
+                "Default download",
+                "PNG with fully transparent corners, at the pixel size of the area inside the circle",
+              ],
+              [
+                "Other sizes",
+                "512, 1080 or 2048 px across; never larger than 4096 px",
+              ],
               ["Formats", "PNG, WebP or JPG"],
-              ["Outside the circle", "Transparent, white, black or any color you pick"],
-              ["Border", "Optional ring of any color, from 0.5% to 5% of the width"],
-              ["Where it runs", "In your browser. The photo is not sent to Ordalin or anyone else"],
+              [
+                "Outside the circle",
+                "Transparent, white, black or any color you pick",
+              ],
+              [
+                "Border",
+                "Optional ring of any color, from 0.5% to 5% of the width",
+              ],
+              [
+                "Where it runs",
+                "In your browser. The photo is not sent to Ordalin or anyone else",
+              ],
             ],
           },
         },
@@ -68,7 +92,7 @@ export const circlePageEn: ToolPageCopy = {
       h2: "Keep the circle crop sharp",
       blocks: [
         {
-          p: "Blurry circles usually come from making the picture bigger than the photo really is. The size menu shows how many pixels the circle covers in your photo, and \"Original\" keeps exactly that, so nothing is stretched.",
+          p: 'Blurry circles usually come from making the picture bigger than the photo really is. The size menu shows how many pixels the circle covers in your photo, and "Original" keeps exactly that, so nothing is stretched.',
         },
         {
           ul: [
@@ -154,7 +178,7 @@ export const circlePageEn: ToolPageCopy = {
     },
     {
       q: "How do I crop an image into a circle with a transparent background?",
-      a: "Leave \"Outside the circle\" on Transparent and download as PNG or WebP. Everything outside the ring is saved as empty pixels, so it shows whatever is behind it.",
+      a: 'Leave "Outside the circle" on Transparent and download as PNG or WebP. Everything outside the ring is saved as empty pixels, so it shows whatever is behind it.',
     },
     {
       q: "Why are the corners of my circle white or black?",
@@ -170,7 +194,7 @@ export const circlePageEn: ToolPageCopy = {
     },
     {
       q: "What size should a round profile picture be?",
-      a: "Profile photos are shown small, so 512 or 1080 px across is plenty for most sites. Keep \"Original\" if you want the most detail the photo has.",
+      a: 'Profile photos are shown small, so 512 or 1080 px across is plenty for most sites. Keep "Original" if you want the most detail the photo has.',
     },
     {
       q: "Does it work on iPhone and Android?",
@@ -190,5 +214,5 @@ export const circlePageEn: ToolPageCopy = {
     },
   ],
   closing:
-    "Need the whole photo as a square instead of a circle? [Square an image](/free-tools/square-an-image) without cropping it. For more, see the other [free tools](/free-tools) or browse the [Ordalin AI tool directory](/).",
+    "Need the whole photo as a square instead of a circle? [Square an image](/free-tools/square-an-image) without cropping it, or [flip the image](/free-tools/flip-image) first if it faces the wrong way. For more, see the other [free tools](/free-tools) or browse the [Ordalin AI tool directory](/).",
 };

@@ -192,5 +192,5 @@ export const circlePageJa: ToolPageCopy = {
     },
   ],
   closing:
-    "丸ではなく、写真全体を正方形にしたいときは[画像を正方形にする](/ja/free-tools/square-an-image)ツールを使えます。そのほかの[無料ツール](/ja/free-tools)や、英語版の [Ordalin AI ツールディレクトリ](/)もご覧ください。",
+    "丸ではなく、写真全体を正方形にしたいときは[画像を正方形にする](/ja/free-tools/square-an-image)ツールを使えます。向きが逆なら先に[画像を反転](/ja/free-tools/flip-image)しておきましょう。そのほかの[無料ツール](/ja/free-tools)や、英語版の [Ordalin AI ツールディレクトリ](/)もご覧ください。",
 };

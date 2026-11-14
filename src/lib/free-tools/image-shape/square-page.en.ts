@@ -2,7 +2,8 @@ import type { ToolPageCopy } from "./page-copy";
 
 // Facts: docs/keywords/square-an-image.md, "Verified product facts". Every claim maps to that list.
 export const squarePageEn: ToolPageCopy = {
-  title: "Square an Image: Make an Image Square Without Cropping, Free | Ordalin",
+  title:
+    "Square an Image: Make an Image Square Without Cropping, Free | Ordalin",
   description:
     "Square an image in your browser: fit the whole photo on a blurred or solid square, or crop it 1:1. Free, no upload or sign-up, never stretched.",
   h1: "Square an Image Without Cropping It",
@@ -20,7 +21,9 @@ export const squarePageEn: ToolPageCopy = {
             "**Set the fill, size and format, then download.** For Fit, pick a blurred background, white, black, transparent or your own color, and add padding if you want space around the photo.",
           ],
         },
-        { p: "The preview updates as you change settings, so what you see is the square image you download." },
+        {
+          p: "The preview updates as you change settings, so what you see is the square image you download.",
+        },
       ],
     },
     {
@@ -59,13 +62,31 @@ export const squarePageEn: ToolPageCopy = {
           table: {
             head: ["", ""],
             rows: [
-              ["What it is", "A free tool to make an image square, either by fitting it whole or by cropping it 1:1"],
-              ["Photos it takes", "JPG, PNG or WebP, up to 10 MB and 40 megapixels"],
-              ["Fill for Fit", "Blurred copy of the photo, white, black, transparent or any color, plus 0–20% padding"],
-              ["Default size", "Fit: the photo's longer side (a 1200 × 1800 portrait becomes 1800 × 1800). Crop: the size of the square you select"],
-              ["Other sizes", "1080, 2048 or 3000 px; never larger than 4096 px"],
+              [
+                "What it is",
+                "A free tool to make an image square, either by fitting it whole or by cropping it 1:1",
+              ],
+              [
+                "Photos it takes",
+                "JPG, PNG or WebP, up to 10 MB and 40 megapixels",
+              ],
+              [
+                "Fill for Fit",
+                "Blurred copy of the photo, white, black, transparent or any color, plus 0–20% padding",
+              ],
+              [
+                "Default size",
+                "Fit: the photo's longer side (a 1200 × 1800 portrait becomes 1800 × 1800). Crop: the size of the square you select",
+              ],
+              [
+                "Other sizes",
+                "1080, 2048 or 3000 px; never larger than 4096 px",
+              ],
               ["Formats", "PNG, WebP or JPG"],
-              ["Where it runs", "In your browser. The photo is not sent to Ordalin or anyone else"],
+              [
+                "Where it runs",
+                "In your browser. The photo is not sent to Ordalin or anyone else",
+              ],
             ],
           },
         },
@@ -107,7 +128,7 @@ export const squarePageEn: ToolPageCopy = {
             "**Instagram feed posts:** 1080 × 1080 px is the standard square post size.",
             "**Profile pictures:** they are shown small, so 1080 px is more than enough for any site.",
             "**Music cover art:** distributors ask for square artwork, commonly 3000 × 3000 px. Check your distributor's own requirements before release.",
-            "**Print or archive:** keep \"Original\", which uses every pixel the photo has.",
+            '**Print or archive:** keep "Original", which uses every pixel the photo has.',
           ],
         },
         {
@@ -173,7 +194,7 @@ export const squarePageEn: ToolPageCopy = {
     },
     {
       q: "How do I add a blurred background to make a photo square?",
-      a: "Choose Fit, then \"Blurred image\" under \"Fill the sides with\". The sides are filled with a soft, enlarged copy of the same photo.",
+      a: 'Choose Fit, then "Blurred image" under "Fill the sides with". The sides are filled with a soft, enlarged copy of the same photo.',
     },
     {
       q: "Can I square an image with a white background?",
@@ -201,5 +222,5 @@ export const squarePageEn: ToolPageCopy = {
     },
   ],
   closing:
-    "Want a round version instead? Use the [circle crop image](/free-tools/circle-crop-image) tool for a transparent circle. For more, see the other [free tools](/free-tools) or browse the [Ordalin AI tool directory](/).",
+    "Want a round version instead? Use the [circle crop image](/free-tools/circle-crop-image) tool for a transparent circle, or [flip an image](/free-tools/flip-image) that faces the wrong way. For more, see the other [free tools](/free-tools) or browse the [Ordalin AI tool directory](/).",
 };

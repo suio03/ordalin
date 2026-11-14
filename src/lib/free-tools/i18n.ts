@@ -17,6 +17,7 @@ export const localeInfo: Record<Locale, { name: string; og: string }> = {
 export const toolLocales: Record<string, Locale[]> = {
   "circle-crop-image": ["en", "ja", "es", "id"],
   "square-an-image": ["en", "ja"],
+  "flip-image": ["en", "ja", "es", "id"],
 };
 
 export const isExtraLocale = (value: string): value is ExtraLocale =>

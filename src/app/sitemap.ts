@@ -1,6 +1,6 @@
 import { freeToolPath, freeTools, freeToolsHubPath } from "@/lib/free-tools/registry";
 import { languageAlternates, localesFor, localizePath, toolLocales } from "@/lib/free-tools/i18n";
-import { localizedHubs } from "@/lib/free-tools/image-shape/pages";
+import { hubLanguages, localizedHubs } from "@/lib/free-tools/image-shape/pages";
 import type { MetadataRoute } from "next";
 import { listPublishedGuides } from "@/lib/guides";
 import {
@@ -19,11 +19,7 @@ import { listPublishedToolSlugs, listPublishedTools, listSitemapEntries } from "
 
 export const dynamic = "force-dynamic";
 
-const hubAlternates = {
-  en: freeToolsHubPath,
-  ...Object.fromEntries(Object.keys(localizedHubs).map((locale) => [locale, `/${locale}${freeToolsHubPath}`])),
-  "x-default": freeToolsHubPath,
-};
+const hubAlternates = hubLanguages;
 const absolute = (baseUrl: string, languages: Record<string, string>) =>
   Object.fromEntries(Object.entries(languages).map(([lang, path]) => [lang, `${baseUrl}${path}`]));
 
