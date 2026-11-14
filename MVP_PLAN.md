@@ -447,8 +447,10 @@ Public submission (accounts and listing credits approved 2026-11-08):
   model wrapper, listed without an "unofficial" label (2026-11-13); a rejected
   credit-funded submission returns its credit; a previously rejected domain may be
   resubmitted with a credit;
-- paid and free listings are researched, labelled, linked (`rel="ugc"`), indexed
-  and ordered the same way; payment never buys rank, badges or editorial verdicts;
+- paid and free listings are researched, labelled, indexed and ordered the same
+  way; payment never buys rank, badges or editorial verdicts. Website links:
+  free submissions published from 2026-11-14 carry `rel="nofollow"`, credit
+  submissions carry no rel marker, and earlier submissions keep `rel="ugc"`;
 - a purchase is refundable within 14 days only if none of its credits has been used (no partial refunds; 2026-11-13); PayPal refunds and chargebacks
   remove the matching credits;
 - the free claim is guarded by account, normalized Gmail address, device cookie
