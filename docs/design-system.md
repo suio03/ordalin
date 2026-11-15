@@ -66,6 +66,7 @@ The defining idea is **quiet orientation**: users should understand where they a
 | `focusRing` | `#1F60D3` | `#78A9FF` | Keyboard focus only; never replaced by green. |
 | `danger` | `#A63F32` | `#EF8D7F` | Destructive or error state only. |
 | `logoCharcoal` | `#111111` | `#FFFFFF` | Approved primary or reversed logo treatment. |
+| `presentationGround` | `#000000` | `#000000` | Full-screen slideshow backdrop and blackout only; same in both themes, like a projector. |
 
 Measured WCAG contrast on the principal surfaces:
 

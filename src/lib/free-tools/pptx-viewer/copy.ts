@@ -1,0 +1,77 @@
+// Interface strings for the pptx viewer. Placeholders in {braces}.
+import type { DetectError } from "./detect";
+
+export const pptxViewerCopy = {
+  drop: {
+    title: "Drop a PowerPoint file here",
+    action: "or choose a file",
+    formats: "PPTX, PPSX, POTX or PPTM. The file stays on your device.",
+  },
+  loading: "Opening {name}…",
+  errors: {
+    ppt: "{name} is an old PowerPoint 97–2003 (.ppt) file. This viewer reads .pptx files only. PowerPoint for the web, Google Slides or LibreOffice Impress can open it and save it as .pptx.",
+    encrypted: "{name} is protected with a password. Remove the password in PowerPoint (File › Info › Protect Presentation), then open it here.",
+    odp: "{name} is an OpenDocument presentation (.odp). Open it in LibreOffice Impress and save it as .pptx to view it here.",
+    key: "{name} is a Keynote file. In Keynote, choose File › Export To › PowerPoint, then open the .pptx here.",
+    word: "{name} is a Word document, not a presentation.",
+    excel: "{name} is an Excel workbook, not a presentation.",
+    pdf: "{name} is a PDF. Your browser can open PDFs directly.",
+    empty: "{name} is empty.",
+    corrupt: "{name} looks damaged or incomplete, so it can't be opened. Try downloading it again.",
+    unknown: "{name} isn't a PowerPoint file this viewer can read. It opens .pptx, .ppsx, .potx and .pptm.",
+    tooBig: "{name} is larger than this viewer can unpack ({detail}). Try a copy with compressed pictures (PowerPoint: File › Compress Pictures).",
+    failed: "{name} could not be opened: {detail}",
+  } satisfies Record<DetectError | "tooBig" | "failed", string>,
+  toolbar: {
+    open: "Open another file",
+    prev: "Previous slide",
+    next: "Next slide",
+    counter: "Slide {n} of {total}",
+    jump: "Go to slide",
+    fit: "Fit",
+    zoomIn: "Zoom in",
+    zoomOut: "Zoom out",
+    present: "Present",
+    notes: "Notes",
+    slides: "Slides",
+  },
+  hidden: "Hidden",
+  hiddenNote: "Hidden slide: shown here, skipped in the slideshow.",
+  macros: "This file contains macros. They are never run here.",
+  notes: { title: "Speaker notes", empty: "No notes on this slide." },
+  report: {
+    title: "What may look different",
+    none: "Nothing in this file is known to look different from PowerPoint.",
+    slides: "slides {list}",
+    deck: "whole deck",
+    media: {
+      plays: "{media} ({ext}) plays with its controls; it does not start on its own.",
+      unsupported: "{media} in .{ext} format can't play in a browser; its poster frame is shown.",
+      linked: "{media} linked from outside the file isn't loaded.",
+    },
+    video: "Video",
+    audio: "Audio",
+    ole: "Embedded object (Excel sheet, document): its preview picture is shown, it can't be opened.",
+    smartart: "SmartArt saved without its drawing isn't shown.",
+    animation: "Animations and transitions don't play; each slide shows its final state.",
+    tiff: "TIFF pictures are converted to show in the browser.",
+    emf: "EMF/WMF vector pictures may look slightly different.",
+    ink: "Ink drawings aren't shown.",
+    fonts: "Fonts not on this device, replaced by a similar font, so lines may wrap differently: {fonts}.",
+  },
+  exports: {
+    title: "Download",
+    png: "This slide as PNG",
+    zip: "All slides as PNG (ZIP)",
+    pdf: "Whole deck as PDF",
+    working: "Preparing slide {n} of {total}…",
+    failed: "Export failed: {detail}",
+  },
+  show: {
+    end: "End of slide show. Press → or click to exit.",
+    help: "→ next · ← previous · B / W blank · number + Enter jumps · Esc ends",
+    exit: "End show",
+  },
+};
+
+export type PptxViewerCopy = typeof pptxViewerCopy;

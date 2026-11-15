@@ -14,7 +14,7 @@ import hub from "./free-tools.module.css";
 export const metadata: Metadata = withSocial({
   title: "Free tools",
   description:
-    "Free Ordalin tools for checking how AI search sees a website, cropping, squaring and flipping images, and removing the metadata that gets images labelled as AI. No sign-up.",
+    "Free Ordalin tools for checking how AI search sees a website, cropping, squaring and flipping images, removing the metadata that gets images labelled as AI, and viewing PowerPoint files. No sign-up.",
   alternates: {
     canonical: freeToolsHubPath,
     languages: hubLanguages,
@@ -33,10 +33,10 @@ export default function FreeToolsPage() {
       <header className={styles.indexHeader}>
         <div>
           <p className={styles.eyebrow}>Ordalin free tools</p>
-          <h1>Free tools for AI search and images.</h1>
+          <h1>Free tools for AI search, images and slides.</h1>
           <p>
-            Each tool runs for free with no sign-up. Image tools work in your
-            browser, so files are never uploaded.
+            Each tool runs for free with no sign-up. Image and document tools work
+            in your browser, so files are never uploaded.
           </p>
         </div>
         <p className={styles.issueCount}>{freeTools.length} tools</p>

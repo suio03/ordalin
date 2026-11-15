@@ -97,6 +97,7 @@ export function ToolPage({
   tool,
   locale = "en",
   locales = ["en"],
+  category = "MultimediaApplication",
 }: {
   copy: ToolPageCopy;
   path: string;
@@ -105,6 +106,8 @@ export function ToolPage({
   locale?: Locale;
   /** Every locale this page is published in, for the language switcher. */
   locales?: Locale[];
+  /** schema.org applicationCategory for the WebApplication JSON-LD. */
+  category?: string;
 }) {
   const url = `${SITE}${localizePath(path, locale)}`;
   return (
@@ -169,7 +172,7 @@ export function ToolPage({
               url,
               description: copy.description,
               inLanguage: locale,
-              applicationCategory: "MultimediaApplication",
+              applicationCategory: category,
               operatingSystem: "Any",
               browserRequirements: "Requires JavaScript",
               offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },

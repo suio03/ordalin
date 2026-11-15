@@ -1,6 +1,6 @@
 // Single list of Ordalin's free tools. Footer, sitemap and llms.txt read from here,
 // so a new tool is added once. Newest last.
-export type FreeToolGroup = "site" | "image";
+export type FreeToolGroup = "site" | "image" | "document";
 export type FreeTool = {
   slug: string;
   name: string;
@@ -25,6 +25,12 @@ export const freeToolGroups: {
     title: "Images",
     intro:
       "Crop, square, flip and clean images, including the hidden metadata that makes platforms label an image as AI. Files stay in your browser.",
+  },
+  {
+    id: "document",
+    title: "Documents and slides",
+    intro:
+      "Open, present and export office files without installing anything. Files stay in your browser.",
   },
 ];
 
@@ -95,6 +101,13 @@ export const freeTools: FreeTool[] = [
     summary:
       "Mirror an image, make it symmetrical or add a reflection, in the browser",
     group: "image",
+  },
+  {
+    slug: "pptx-viewer",
+    name: "PPTX viewer",
+    summary:
+      "Open a PowerPoint file in the browser, read the speaker notes, present it full screen or save it as PDF; nothing is uploaded",
+    group: "document",
   },
 ];
 
