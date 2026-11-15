@@ -3,7 +3,7 @@
 - Market / language: US + global, English (IN 2.4K, PH 1.0K, TR 880, PK 720 in Semrush)
 - Started: 2026-11-15
 - Mode: default stops
-- Now: step 10 launch report sent, waiting on owner to say ship (commit + push = production deploy)
+- Now: live 2026-11-16 (45381f4, 27711fe). Open: real-device iPhone/Android/Safari/Firefox checks, phone size limit, re-ask ChatGPT Q1–Q4 after indexing
 
 ## Steps
 
@@ -20,7 +20,7 @@
 | 7 | Page implementation and internal links | done | 2026-11-16 | registry (new group "Documents and slides"), hub copy, header menu/footer/sitemap/llms.txt via registry; noindex removed; JSON-LD BusinessApplication |
 | 8 | Localization | skipped for now | 2026-11-16 | English only: Semrush top markets IN/PH/PK use English; TR alone doesn't justify a locale yet (free-tools i18n opens per tool on demand) |
 | 9 | Pre-launch SEO | done | 2026-11-16 | subagent (lyl-onpage-seo): all checks pass; fixed one FAQ sentence and thumbnail aria-labels ("Go to slide N (Hidden)") |
-| 10 | Launch report and commit | waiting on owner | 2026-11-16 | `next build` passes |
+| 10 | Launch report and commit | done | 2026-11-16 | 45381f4 + 27711fe pushed; live 200, canonical, sitemap, hub, llms.txt, deck opens live |
 
 ## Inputs from owner (2026-11-15)
 
@@ -46,6 +46,7 @@
 - 2026-11-16: step 5 copy, owner: "确定。" (examples wall skipped as recommended)
 - 2026-11-16: step 4 accepted, fullscreen works, owner: "我试了，可以的。 下一步吧"
 - 2026-11-16: new design token `presentationGround` #000 (both themes) for the slideshow backdrop
+- 2026-11-16: step 10, owner: "好的 上线。": committed and pushed to main; verified live the same day.
 
 ## Feature requirements
 
