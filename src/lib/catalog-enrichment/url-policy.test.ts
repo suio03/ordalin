@@ -26,4 +26,15 @@ describe("robots policy", () => {
     expect(robotsAllows(robots, "/private/pricing")).toBe(true);
     expect(robotsAllows(robots, "/features")).toBe(true);
   });
+
+  it("supports * wildcards and $ end anchors in robots rules", () => {
+    const robots = "User-agent: *\nAllow: /$\nAllow: /terms$\nAllow: /terms?*\nDisallow: /\nDisallow: /*.pdf$\n";
+    expect(robotsAllows(robots, "/")).toBe(true);
+    expect(robotsAllows(robots, "/terms")).toBe(true);
+    expect(robotsAllows(robots, "/terms?lang=en")).toBe(true);
+    expect(robotsAllows(robots, "/terms/old")).toBe(false);
+    expect(robotsAllows(robots, "/pricing")).toBe(false);
+    expect(robotsAllows("User-agent: *\nDisallow: /*.pdf$\n", "/guide.pdf")).toBe(false);
+    expect(robotsAllows("User-agent: *\nDisallow: /*.pdf$\n", "/guide.pdfx")).toBe(true);
+  });
 });

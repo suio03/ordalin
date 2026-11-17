@@ -53,8 +53,19 @@ export function robotsAllows(robots: string, pathname: string) {
     }
   }
 
+  // RFC 9309: `*` matches any run of characters and a trailing `$` anchors the end. The longest
+  // matching rule wins, and on a tie Allow wins (the least restrictive rule).
   const matching = rules
-    .filter((rule) => pathname.startsWith(rule.path))
-    .sort((a, b) => b.path.length - a.path.length);
+    .filter((rule) => robotsPattern(rule.path).test(pathname))
+    .sort((a, b) => b.path.length - a.path.length || Number(b.allow) - Number(a.allow));
   return matching[0]?.allow ?? true;
+}
+
+function robotsPattern(path: string) {
+  const anchored = path.endsWith("$");
+  const body = (anchored ? path.slice(0, -1) : path)
+    .split("*")
+    .map((part) => part.replace(/[.+?^${}()|[\]\\]/g, "\\$&"))
+    .join(".*");
+  return new RegExp(`^${body}${anchored ? "$" : ""}`);
 }
