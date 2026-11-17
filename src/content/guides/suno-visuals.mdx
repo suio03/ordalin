@@ -1,0 +1,120 @@
+export const metadata = {
+  title: "Suno Visuals: lyric videos, music videos, credits and limits",
+  description: "Suno Visuals turns songs in your Suno library into lyric videos, 15-second music video clips and album art. How it works, what it costs, the H3 Move model and its limits.",
+  author: "Ordalin",
+  publishedAt: "2026-11-18",
+  updatedAt: "2026-11-18",
+  status: "published",
+  topics: ["Music & Audio"],
+  tools: ["suno", "minimax-h3"],
+  relatedLinks: [
+    { href: "/guides/suno-mcp", label: "Suno MCP guide" },
+    { href: "/alternatives/suno", label: "Suno alternatives" },
+    { href: "/categories/video/video-generation", label: "AI video generators" },
+  ],
+};
+
+**Suno Visuals** is Suno's built-in tool for making images and short videos for the songs in your Suno library: lyric videos that move with the beat, music video clips up to 15 seconds long that follow the song and lip-sync to its lyrics, album art, and photos turned into moving clips. Suno launched it on 17 November 2026. Visuals runs on its own Visual credits, separate from song credits, and the video model behind it is H3 Move, which Suno built on [MiniMax H3](/tools/minimax-h3).
+
+Everything below comes from Suno's [announcement](https://suno.com/blog/introducing-visuals), its [Visuals page and FAQ](https://suno.com/visuals), the [pricing page](https://suno.com/pricing) and the [help centre](https://help.suno.com/en/articles/14617153), checked on 18 November 2026. We have not used Suno Visuals ourselves yet, so credit costs per clip are not tested.
+
+## Suno Visuals at a glance
+
+- **Made by:** Suno, inside the same app you use to make songs. See the [Suno profile](/tools/suno) for the music side.
+- **Where:** a new Visuals tab. Suno's announcement says it launched on web, iOS and Android; some launch-day press said the mobile apps would follow within weeks.
+- **Makes:** lyric videos, video clips with lip sync, album art and other images, and clips from your own photo.
+- **Clip length:** up to 15 seconds per clip. You can extend clips on a timeline to build a longer music video.
+- **Quality:** Fast (cheaper, for quick ideas) or Standard (for more complex ideas).
+- **Model:** H3 Move, based on MiniMax H3 and adjusted by Suno with extra safeguards.
+- **Credits:** Visual credits only. The cost depends on duration and quality; Suno has not published a per-clip price.
+- **Not available:** a public API or batch generation.
+
+## What can Suno Visuals make?
+
+**Lyric videos.** The words appear in time with the song. You can change the font, the colour and other styling. This answers the common question "can Suno make lyric videos": yes, since 17 November 2026, inside Suno.
+
+**Music video clips.** Suno says it tuned the model to suit music: clips follow the song's structure, pick up on the lyrics and lip-sync with the vocals. Each clip runs up to 15 seconds, and you can extend, edit and re-prompt it with text.
+
+**Album art.** Visuals also makes still images, so you can create cover art that matches the track without leaving Suno.
+
+**Your photo, animated.** Upload an original image and turn it into a moving clip. The first time you upload, Suno asks you to confirm you have the rights to the file.
+
+**Starter characters.** To get past a blank canvas, Suno includes original characters such as Astronaut, Chrome Diva, Sphere Girl, Metal Clay and Disco that you can drop into a scene.
+
+## How to make a music video with Suno Visuals
+
+1. **Pick a song.** Drag a song from your Suno library into the Visuals tab.
+2. **Choose a starting point.** Use one of Suno's characters, upload your own photo as a reference, or describe the scene from scratch. Suno's Visuals page has an Inspiration Guide with styles such as film noir that you can recreate.
+3. **Set the format.** Choose the clip duration and aspect ratio for where you will post it, such as a vertical clip for Shorts or Reels or a widescreen one for YouTube.
+4. **Choose Fast or Standard.** Use Fast to try ideas cheaply, then Standard for the version you keep.
+5. **Generate, then refine.** Re-prompt with text until the clip looks right. For a lyric video, adjust the font and colour.
+6. **Extend on the timeline.** Add clips one after another to cover more of the song with a consistent look.
+7. **Share.** Suno adds an embedded watermark before a Visual can be shared outside Suno.
+
+Before generating, check the cost shown in the app. Suno only says that longer clips and Standard quality use more credits.
+
+## How much does Suno Visuals cost?
+
+Suno sells Visual credits separately from song credits. Credits you buy in a pack don't expire and can be used at any time. Credits that come with a subscription reset each month.
+
+| Plan | Price | Visual credits |
+| --- | --- | --- |
+| Free | $0 | None listed. Billboard reported free users can make one five-second video. |
+| Pro | $10/month ($8 billed yearly) | A limited number for a limited time, to try it out |
+| Premier | $30/month ($24 billed yearly) | A limited number for a limited time, to try it out |
+| Platinum | $120/month ($100 billed yearly) | 20,000 a month, plus 15,000 song credits and 120 song downloads |
+| Credit packs | Shown at [suno.com/pricing/visuals](https://suno.com/pricing/visuals) after sign-in | Any user can buy them |
+
+Platinum is new with Visuals and is Suno's top tier. It includes everything in Premier, and for now it can only be bought on the web. If you only want to try a few clips, a credit pack or the Pro or Premier trial credits cost far less than Platinum.
+
+## Limits to know before you start
+
+- **No artists, celebrities or famous characters.** New text and image filters block prompts and uploads that try to show specific artists, public figures, copyrighted works or other IP. Suno says prompts that work on other video platforms may not work on Suno, by design.
+- **Generated videos are checked before you see them.** Suno screens results against its Community Guidelines. Uploads with copyrighted audio are blocked through Audible Magic, ACRCloud and Musixmatch.
+- **Watermarks.** Visuals carry an embedded watermark when shared off Suno.
+- **15-second clips.** A full-length video means extending and joining many clips. Suno has not said whether there is a maximum total length.
+- **Only Suno songs.** Visuals starts from songs in your Suno library.
+- **Model background.** H3 Move is based on a model from MiniMax, which Disney and other Hollywood studios are suing, as Music Business Worldwide noted. Suno says it added its own protections on top.
+- **Not published:** output resolution, export file format, commercial-use terms for Visuals, and exact credit costs.
+
+## Suno Visuals vs other ways to make a Suno music video
+
+Before 17 November, people made videos for Suno songs with general AI video models or dedicated music-video apps. Those routes still make sense when you need longer shots or styles that Suno's filters block, or when you don't want another subscription.
+
+| | Suno Visuals | General AI video models | Music-video apps |
+| --- | --- | --- | --- |
+| Examples | Built into Suno | MiniMax H3, [Kling 4.0](/tools/kling-4-0), [Vidu Q4](/tools/vidu-q4) | Apps that take a song link or audio file |
+| Uses the song | Follows structure, lyrics and lip sync automatically | No; you cut clips to the beat yourself | Usually beat-synced from the audio |
+| Lyric videos | Built in, with custom fonts | No | Varies by app |
+| Workflow | Stays in your Suno library | Generate, download, then edit elsewhere | Upload audio, then edit in the app |
+| Cost | Visual credits or Platinum | That model's own plan | That app's own plan |
+
+For video models compared side by side, see [Vidu Q4 vs MiniMax H3](/compare/vidu-q4-vs-minimax-h3) or browse [AI video generators](/categories/video/video-generation) on [Ordalin](/).
+
+## FAQ
+
+### Can Suno turn your song into a video?
+
+Yes. Drag a song from your library into the Visuals tab to make clips up to 15 seconds long. Then extend them on the timeline to cover more of the song.
+
+### Is Suno Visuals free?
+
+Not really. Visuals needs Visual credits. For a limited time, Pro and Premier subscribers get a small number of trial credits. Free users were reported to get one five-second video. Platinum includes 20,000 Visual credits a month, and anyone can buy credit packs.
+
+### What model does Suno Visuals use?
+
+H3 Move, which Suno built on MiniMax H3 and tuned for music, with added safeguards.
+
+### Can I make a full music video with Suno?
+
+Yes, by joining clips. Each clip is up to 15 seconds, and you extend and edit them on a timeline to build a longer video.
+
+### Can I put a real artist or celebrity in my Suno video?
+
+No. Suno's filters block prompts and uploads that show specific artists, public figures or copyrighted characters. Use Suno's original characters or your own original photos.
+
+### Does Suno Visuals have an API?
+
+Not as of 18 November 2026. Suno's official connector for AI assistants, [Suno MCP](/guides/suno-mcp), lists only song features: creating, uploading audio, remixing and Voices.
+
+Checked against Suno's announcement, Visuals page, pricing page and help centre on 18 November 2026. We will update this guide when Suno publishes credit costs per clip or changes the plans.

@@ -45,6 +45,7 @@ const guideLoaders: Record<string, GuideLoader> = {
   "openjutsu": () => import("@/content/guides/openjutsu.mdx"),
   "qvac-botpsy": () => import("@/content/guides/qvac-botpsy.mdx"),
   "suno-mcp": () => import("@/content/guides/suno-mcp.mdx"),
+  "suno-visuals": () => import("@/content/guides/suno-visuals.mdx"),
   "viggle-remake": () => import("@/content/guides/viggle-remake.mdx"),
   "yue2-prompting-guide": () => import("@/content/guides/yue2-prompting-guide.mdx"),
 };
