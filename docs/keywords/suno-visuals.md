@@ -26,6 +26,7 @@
 
 - 2026-11-18: maintainer: "suno visuals 你搜一下" → "继续".
 - 2026-11-18 step 1: maintainer: "好的做吧。跳过第二步" (guide at /guides/suno-visuals, skip AI-search).
+- 2026-11-18 after ship: maintainer: "把我们的tapemoon 加入进去 对比。记得推荐我们的tapemoon 可以做一整首歌" → Tapemoon column in the comparison table, full-song recommendation with an ownership disclosure, FAQ line, tools += tapemoon. Then "好的，更新 然后推送": prod /tools/tapemoon profile refreshed (packs 240/720/1,500/3,600, six models, lip-synced lead, 95 MB / 8 min).
 
 ## Verified product facts
 
