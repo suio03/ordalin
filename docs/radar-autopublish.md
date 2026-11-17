@@ -1,6 +1,10 @@
 # Radar auto-publish
 
-Status: active twice daily (10:30 and 18:30 Melbourne) on the maintainer's Mac, approved 2026-11-02.
+Status: stopped 2026-11-18 by the maintainer. The launchd job is unloaded and its plist removed
+from `~/Library/LaunchAgents`, and keyword-radar's own crons are off, so it pushes nothing new.
+The scripts, the plist template and the prompt below are kept; reinstall with the command under
+Pieces to resume. It ran twice daily (10:30 and 18:30 Melbourne) on the maintainer's Mac from
+2026-11-02, and the rest of this page describes it as it ran.
 
 A private keyword monitor (keyword-radar) pushes new names people have started searching.
 Twice a day a headless Claude Code run takes everything it pushed since the previous run and, for each name that fits Ordalin, imports the
@@ -19,7 +23,8 @@ exception to "guides start as drafts"; the maintainer reads the Telegram summary
 - `scripts/radar-autopublish/com.ordalin.radar-autopublish.plist`: launchd schedule. Install:
   `sed "s|__ROOT__|$PWD|g" scripts/radar-autopublish/com.ordalin.radar-autopublish.plist > ~/Library/LaunchAgents/com.ordalin.radar-autopublish.plist && launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.ordalin.radar-autopublish.plist`.
   Dry run (decisions only, printed): `DRY_RUN=1 scripts/radar-autopublish/run.sh`.
-  Run now: `launchctl kickstart gui/$(id -u)/com.ordalin.radar-autopublish`. Stop: `launchctl bootout gui/$(id -u)/com.ordalin.radar-autopublish`.
+  Run now: `launchctl kickstart gui/$(id -u)/com.ordalin.radar-autopublish`. Stop: `launchctl bootout gui/$(id -u)/com.ordalin.radar-autopublish`, then delete the installed
+  plist so it does not load again at login.
 - Logs and summaries: `.ordalin-imports/radar-auto/<YYYY-MM-DD-HHMM>/`.
 
 Limits: at most 10 tool candidates and 2 guides per run; the import gate and the 20-per-day

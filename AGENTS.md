@@ -25,7 +25,7 @@
 - Page metadata (titles, canonical, robots, share tags) follows `docs/seo.md`; wrap new indexable pages in `withSocial()`.
 - Editorial pages (`/best`, `/alternatives`, `/compare`) follow `docs/editorial-standard.md`. Write new articles as `status: "draft"`; only the maintainer publishes them.
 - Approved 2026-11-05: pages the maintainer asks for (editorial, guides, skills, MCP) ship in the same session: set `status: "published"`, push to `main` after the local checks, then verify live. Unrequested pages still start as drafts.
-- Exception (approved 2026-11-02): the unattended radar auto-publish run in `docs/radar-autopublish.md` imports tools and publishes guides directly, and pushes guide commits to `main`. It does not write editorial pages.
+- Exception (approved 2026-11-02): the unattended radar auto-publish run in `docs/radar-autopublish.md` imports tools and publishes guides directly, and pushes guide commits to `main`. It does not write editorial pages. The run is stopped since 2026-11-18 (job unloaded); the exception applies only if the maintainer turns it back on.
 
 ## Local verification
 
