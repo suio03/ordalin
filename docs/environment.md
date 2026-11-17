@@ -262,7 +262,11 @@ server components only add `data-*` attributes.
 | `Search` | `query`, `results` | a new non-empty query renders its first page (`/tools`, `/search`) |
 | `Submission Started` | — | the submit website check returns a draft |
 | `Submission Sent` | `funding` (`free`, `credit`) | a submission is accepted for review |
-| `Credits Purchased` | `packs` | a PayPal credit purchase completes on `/account` |
+| `Credits Purchased` | `pack` | a PayPal credit purchase completes on `/account` |
+| `Sign In Opened` | `reason` (`submit`, `buy`, `account`, `general`) | the sign-in dialog opens without an error |
+| `Sign In Started` | `reason` | "Continue with Google" is clicked |
+| `Sign In Completed` | `reason`, `new` (`yes`, `no`) | the first page after a successful Google sign-in loads |
+| `Sign In Failed` | `reason`, `error` (`unavailable`, `failed`, `unverified`, `blocked`) | Google sign-in returns with `?signin=<error>` |
 
 - `placement` comes from `data-placement` (`profile`, `row`, `task`, `compare`,
   `editorial`), falling back to the page's first path segment for outbound

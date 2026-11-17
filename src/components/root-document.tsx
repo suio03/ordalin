@@ -72,10 +72,11 @@ export function RootDocument({ lang, children }: { lang: string; children: React
         <script dangerouslySetInnerHTML={{ __html: themeInitializationScript }} />
       </head>
       <body>
+        {/* First, so its effect creates the tracker queues before any page effect reports an event. */}
+        <Analytics />
         <SiteHeader />
         {children}
         <SiteFooter />
-        <Analytics />
       </body>
     </html>
   );

@@ -2,7 +2,7 @@ import { getCloudflareEnv } from "@/lib/cloudflare";
 import { cookieHeader, readCookie } from "@/lib/account/crypto";
 import { normalizeEmail } from "@/lib/account/email";
 import { decodeNext, googleConfig, googleProfile, OAUTH_COOKIE, withSignInError } from "@/lib/account/google";
-import { createSession, DEVICE_COOKIE, sessionCookies } from "@/lib/account/session";
+import { createSession, DEVICE_COOKIE, sessionCookies, SIGN_IN_EVENT_COOKIE } from "@/lib/account/session";
 import { recordSignalStatements, requestSignals } from "@/lib/account/signals";
 import { clientAddress, submissionHashSalt } from "@/lib/submissions/request";
 
@@ -35,13 +35,15 @@ export async function GET(request: Request) {
       .prepare("INSERT INTO users (id, google_sub, email, email_normalized, name, status, created_at, last_login_at) VALUES (?, ?, ?, ?, ?, 'active', ?, ?) ON CONFLICT(google_sub) DO UPDATE SET email = excluded.email, email_normalized = excluded.email_normalized, name = excluded.name, last_login_at = excluded.last_login_at")
       .bind(`user_${crypto.randomUUID()}`, profile.sub, profile.email, normalizeEmail(profile.email), profile.name, now, now)
       .run();
-    const user = await db.prepare("SELECT id, status FROM users WHERE google_sub = ?").bind(profile.sub).first<{ id: string; status: string }>();
+    const user = await db.prepare("SELECT id, status, created_at FROM users WHERE google_sub = ?").bind(profile.sub).first<{ id: string; status: string; created_at: number }>();
     if (!user || user.status !== "active") return redirect(url, withSignInError(next, "blocked"), [clearOauth]);
     const signals = await requestSignals(clientAddress(request), readCookie(request.headers.get("cookie"), DEVICE_COOKIE), submissionHashSalt(env.SUBMISSION_HASH_SALT));
     const statements = recordSignalStatements(db, user.id, signals, now);
     if (statements.length) await db.batch(statements);
     const token = await createSession(db, user.id, now);
-    return redirect(url, next, [clearOauth, ...sessionCookies(token, secure)]);
+    // The upsert keeps created_at on conflict, so it equals `now` only for a first sign-in.
+    const signInEvent = cookieHeader(SIGN_IN_EVENT_COOKIE, user.created_at === now ? "new" : "returning", 300, secure, "/", false);
+    return redirect(url, next, [clearOauth, ...sessionCookies(token, secure), signInEvent]);
   } catch (error) {
     console.error("Google sign-in failed", error);
     return redirect(url, withSignInError(next, "failed"), [clearOauth]);

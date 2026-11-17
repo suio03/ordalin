@@ -2,11 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type ReactNode, useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { type MouseEvent, type ReactNode, useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { trackEvent } from "@/lib/analytics";
 import styles from "./sign-in.module.css";
 
 const OPEN_EVENT = "ordalin:sign-in";
 const HINT_COOKIE = "ordalin_signed_in";
+// Set by the Google callback for five minutes; read once to report a completed sign-in.
+const EVENT_COOKIE = "ordalin_signin_event";
+const REASON_KEY = "ordalin_signin_reason";
 
 type Reason = "submit" | "buy" | "account" | "general";
 type OpenDetail = { next: string; reason: Reason; error?: string };
@@ -39,6 +43,29 @@ export function useSignedIn() {
   return useSyncExternalStore(() => () => {}, readHint, () => false);
 }
 
+// The dialog's reason survives the round trip to Google in sessionStorage.
+function rememberReason(reason: Reason) {
+  try { window.sessionStorage.setItem(REASON_KEY, reason); } catch { /* storage blocked */ }
+}
+
+function takeReason() {
+  try {
+    const reason = window.sessionStorage.getItem(REASON_KEY);
+    window.sessionStorage.removeItem(REASON_KEY);
+    return reason && reason in REASONS ? reason : "general";
+  } catch {
+    return "general";
+  }
+}
+
+/** Reports `Sign In Completed` once, when the page loads with the callback's event cookie. */
+function reportCompletedSignIn() {
+  const value = document.cookie.split(";").map((part) => part.trim()).find((part) => part.startsWith(`${EVENT_COOKIE}=`))?.slice(EVENT_COOKIE.length + 1);
+  if (!value) return;
+  document.cookie = `${EVENT_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax`;
+  trackEvent("Sign In Completed", { reason: takeReason(), new: value === "new" ? "yes" : "no" });
+}
+
 function GoogleMark() {
   return (
     <svg viewBox="0 0 18 18" aria-hidden="true" width="18" height="18">
@@ -59,8 +86,12 @@ export function AccountControl({ className }: { className?: string }) {
 
   const show = useCallback((next: OpenDetail) => {
     setState(next);
-    if (!dialog.current?.open) dialog.current?.showModal();
+    if (dialog.current?.open) return;
+    dialog.current?.showModal();
+    if (!next.error) trackEvent("Sign In Opened", { reason: next.reason });
   }, []);
+
+  useEffect(reportCompletedSignIn, []);
 
   useEffect(() => {
     const onOpen = (event: Event) => show((event as CustomEvent<OpenDetail>).detail);
@@ -76,10 +107,29 @@ export function AccountControl({ className }: { className?: string }) {
     url.searchParams.delete("signin");
     window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
     const reason: Reason = url.pathname === "/submit" ? "submit" : url.pathname === "/account" ? "account" : "buy";
+    trackEvent("Sign In Failed", { reason: takeReason(), error: code in ERRORS ? code : "failed" });
     window.dispatchEvent(new CustomEvent<OpenDetail>(OPEN_EVENT, { detail: { next: `${url.pathname}${url.search}`, reason, error: ERRORS[code] ?? ERRORS.failed } }));
   }, [pathname]);
 
   const start = `/api/auth/google?${new URLSearchParams({ next: state.next })}`;
+  // Plausible sends with XHR, which an immediate same-tab navigation cancels: wait for it, at most 1 s.
+  const onStart = (event: MouseEvent<HTMLAnchorElement>) => {
+    rememberReason(state.reason);
+    const plain = event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+    if (!plain) {
+      trackEvent("Sign In Started", { reason: state.reason });
+      return;
+    }
+    event.preventDefault();
+    let left = false;
+    const leave = () => {
+      if (left) return;
+      left = true;
+      window.location.assign(start);
+    };
+    trackEvent("Sign In Started", { reason: state.reason }, leave);
+    window.setTimeout(leave, 1000);
+  };
   return (
     <>
       {signedIn ? (
@@ -96,7 +146,7 @@ export function AccountControl({ className }: { className?: string }) {
           <p>{REASONS[state.reason]}</p>
           {state.error ? <p className={styles.error} role="alert">{state.error}</p> : null}
           {/* OAuth starts on an API route, so it needs a full page navigation. */}
-          <a className={styles.google} href={start}><GoogleMark /> Continue with Google</a>
+          <a className={styles.google} href={start} onClick={onStart}><GoogleMark /> Continue with Google</a>
           <small>We use your Google email to tell you about your listings and to keep track of your free submission and credits. By continuing you agree to the <Link href="/terms" prefetch={false}>terms</Link> and <Link href="/privacy" prefetch={false}>privacy policy</Link>.</small>
         </div>
       </dialog>

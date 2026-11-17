@@ -5,6 +5,8 @@ export const DEVICE_COOKIE = "ordalin_device";
 /** Readable by scripts so the header can show "Account" instead of "Sign in". It grants nothing. */
 export const SIGNED_IN_HINT_COOKIE = "ordalin_signed_in";
 export const SESSION_SECONDS = 60 * 86_400;
+/** Readable by the page for five minutes after sign-in, so it can report `Sign In Completed` once. */
+export const SIGN_IN_EVENT_COOKIE = "ordalin_signin_event";
 export const DEVICE_SECONDS = 2 * 365 * 86_400;
 
 export type AccountUser = { id: string; email: string; emailNormalized: string; name: string | null };

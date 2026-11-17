@@ -5,6 +5,7 @@
 ### Added
 
 - Homepage footer slot for partner and directory links, filled by the footer links Worker.
+- Sign-in funnel events: `Sign In Opened`, `Sign In Started`, `Sign In Completed` and `Sign In Failed`.
 
 ### Removed
 
