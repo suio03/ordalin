@@ -189,5 +189,5 @@ export const pptxViewerPageEn: ToolPageCopy = {
     },
   ],
   closing:
-    "Looking for more? See the other [free tools](/free-tools) or browse the [Ordalin AI tool directory](/) for presentation and productivity tools.",
+    "Got a spreadsheet instead? Open it in the [XLSX viewer](/free-tools/xlsx-viewer). Looking for more? See the other [free tools](/free-tools) or browse the [Ordalin AI tool directory](/) for presentation and productivity tools.",
 };

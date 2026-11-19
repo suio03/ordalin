@@ -30,7 +30,7 @@ export const freeToolGroups: {
     id: "document",
     title: "Documents and slides",
     intro:
-      "Open, present and export office files without installing anything. Files stay in your browser.",
+      "Open slides and spreadsheets without installing anything. Files stay in your browser.",
   },
 ];
 
@@ -107,6 +107,13 @@ export const freeTools: FreeTool[] = [
     name: "PPTX viewer",
     summary:
       "Open a PowerPoint file in the browser, read the speaker notes, present it full screen or save it as PDF; nothing is uploaded",
+    group: "document",
+  },
+  {
+    slug: "xlsx-viewer",
+    name: "XLSX viewer",
+    summary:
+      "Open an Excel file in the browser: every sheet, formulas, hidden rows and columns, find across sheets and CSV export; nothing is uploaded",
     group: "document",
   },
 ];
