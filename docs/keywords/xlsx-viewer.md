@@ -3,7 +3,7 @@
 - Market / language: US + global, English (IN 4.4K, US 1.6K, PK 1.0K, ID 880, EG 590, TR 590 in Semrush)
 - Started: 2026-11-19
 - Mode: default stops
-- Now: pushed 2026-11-19 (owner: "推送"); verifying live
+- Now: live 2026-11-19 (`650cdcc`). Verified on ordalin.com: page 200, canonical, sitemap, llms.txt, `pnpm seo:check` ok, a test .xlsx opens. Production build installed `xlsx` from the SheetJS tarball; the .xls/.xlsb/.ods path was not opened on the live site
 
 ## Steps
 

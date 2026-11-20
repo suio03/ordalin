@@ -10,7 +10,7 @@
       "category": "personal agent",
       "launch_date": "2026-09-08",
       "official_url": "https://muse.ai",
-      "checked_on": "2026-11-13",
+      "checked_on": "2026-11-20",
       "access": {
         "free_tier": "yes — free with a usage limit that refreshes (limit not stated officially)",
         "paid_plans": [
@@ -40,7 +40,7 @@
       "messaging": [
         "WhatsApp"
       ],
-      "regions": "US (rolling out); Japan since 2026-10-23 on iOS, Android and muse.ai, the first region outside North America; Singapore since 2026-10-27 on iOS, Android and muse.ai",
+      "regions": "US (rolling out); Japan since 2026-10-23 on iOS, Android and muse.ai, the first region outside North America; Singapore since 2026-10-27 on iOS, Android and muse.ai; Australia since 2026-11-17 on iOS, Android, muse.ai and the Mac app",
       "actions": "browse web, fill forms, send email, book travel, purchases, negotiate on user's behalf; paid US subscribers can have it phone US businesses for them (since 2026-11-12)",
       "connectors_notable": [
         "Link (Stripe)",
@@ -71,6 +71,7 @@
         "https://about.fb.com/news/2026/11/introducing-muse-ai-voice-expressive-avatars/",
         "https://about.fb.com/news/2026/11/introducing-spaces-customize-muse-app/",
         "https://about.fb.com/ja/news/2026/10/muse-personal-ai-agent-launches-in-japan/",
+        "https://about.fb.com/news/2026/11/muse-is-now-available-in-australia/",
         "https://1password.com/partners/meta-muse",
         "https://www.meta.com/help/subscriptions/1021145227643680/",
         "https://www.meta.com/help/artificial-intelligence/1126304576638594/",
