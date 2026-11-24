@@ -27,6 +27,14 @@
 - Approved 2026-11-05: pages the maintainer asks for (editorial, guides, skills, MCP) ship in the same session: set `status: "published"`, push to `main` after the local checks, then verify live. Unrequested pages still start as drafts.
 - Exception (approved 2026-11-02): the unattended radar auto-publish run in `docs/radar-autopublish.md` imports tools and publishes guides directly, and pushes guide commits to `main`. It does not write editorial pages. The run is stopped since 2026-11-18 (job unloaded); the exception applies only if the maintainer turns it back on.
 
+## ChatGPT experiments (maintainer, 2026-11-25)
+
+- Some pages on this site are part of experiments on how ChatGPT picks pages. They are registered in another repo: `~/Documents/side-projects/gpt-researcher/experiments/` (one file per experiment) and `~/Documents/side-projects/gpt-researcher/tracking/pages.tsv` (the tracked URLs).
+- Before changing the title, H1 or first sentence of a page, check `tracking/pages.tsv`. If the page is listed, do not change those three things; record the wanted change in the experiment's file there and tell the maintainer.
+- For a term that has a file in `experiments/`, the target question, title, H1 and first-sentence rules in that file win over SERP research and over `lyl-keyword-launch` steps 1, 2 and 5.
+- Problems the research sessions notice on this site but do not fix are in `~/Documents/side-projects/gpt-researcher/product-notes/ordalin.md` (it may not exist yet). When you pick one up, change its status there and add the date.
+- New pages for this site are built from sessions opened in `gpt-researcher`, together with the frontend and backend changes that one page needs. Later fixes and other backend work happen here as usual.
+
 ## Local verification
 
 - `pnpm dev` uses ignored `wrangler.production.jsonc` for production D1/R2
