@@ -3,6 +3,7 @@ import { readConfirmedProfile, type ConfirmedProfile } from "@/lib/submissions/p
 import { getToolProfile } from "@/content/tool-profiles/granola";
 import { cache } from "react";
 import { getCloudflareEnv } from "@/lib/cloudflare";
+import { shortCache } from "@/lib/short-cache";
 import { cataloguePageSize, toFtsQuery, toolCompanions, type CatalogueSort } from "@/lib/catalog";
 import type { TagKind } from "@/domain/catalog";
 import { submissionLinkPolicySql, type SubmissionLinkPolicy } from "@/lib/catalog-links";
@@ -181,7 +182,15 @@ async function getDatabase() {
   return (await getCloudflareEnv()).DB;
 }
 
-export const listCategories = cache(async (): Promise<CategorySummary[]> => {
+// The header runs both count queries on every page and each one walks all of tool_tags.
+// A newly published tool reaches these counts within about ten minutes.
+const navigationCountTtlSeconds = 300;
+
+export const listCategories = cache((): Promise<CategorySummary[]> =>
+  shortCache("categories", navigationCountTtlSeconds, loadCategories),
+);
+
+async function loadCategories(): Promise<CategorySummary[]> {
   const database = await getDatabase();
   const result = await database
     .prepare(
@@ -212,7 +221,7 @@ export const listCategories = cache(async (): Promise<CategorySummary[]> => {
     description: row.description,
     publishedToolCount: Number(row.published_tool_count),
   }));
-});
+}
 
 export const getCategoryBySlug = cache(
   async (slug: string): Promise<CategorySummary | null> => {
@@ -247,51 +256,56 @@ export const listSubmissionCategoryGroups = cache(
 );
 
 export const listBrowseCategories = cache(
-  async (groupSlug?: string): Promise<BrowseCategorySummary[]> => {
-    const database = await getDatabase();
-    const groupCondition = groupSlug ? "AND category_group.slug = ?" : "";
-    const statement = database.prepare(
-      `SELECT tag.slug, tag.name, tag.description,
-        category_group.slug AS group_slug, category_group.name AS group_name,
-        COUNT(DISTINCT tool.id) AS published_tool_count
-       FROM tags tag
-       JOIN categories category_group
-         ON category_group.id = tag.category_group_id
-        AND category_group.is_active = 1
-       JOIN tool_tags tt ON tt.tag_id = tag.id
-       JOIN tools tool ON tool.id = tt.tool_id AND tool.status = 'published'
-       WHERE tag.kind = 'category' AND tag.is_active = 1 ${groupCondition}
-       GROUP BY tag.id
-       HAVING COUNT(DISTINCT tool.id) > 0
-       ORDER BY category_group.sort_order ASC, tag.name COLLATE NOCASE ASC`,
-    );
-    const result = groupSlug
-      ? await statement.bind(groupSlug).all<{
-          slug: string;
-          name: string;
-          description: string;
-          group_slug: string;
-          group_name: string;
-          published_tool_count: number;
-        }>()
-      : await statement.all<{
-          slug: string;
-          name: string;
-          description: string;
-          group_slug: string;
-          group_name: string;
-          published_tool_count: number;
-        }>();
-    return result.results.map((row) => ({
-      slug: row.slug,
-      name: row.name,
-      description: row.description,
-      groupSlug: row.group_slug,
-      groupName: row.group_name,
-      publishedToolCount: Number(row.published_tool_count),
-    }));
-  },
+  (groupSlug?: string): Promise<BrowseCategorySummary[]> =>
+    shortCache(`browse-categories:${groupSlug ?? ""}`, navigationCountTtlSeconds, () =>
+      loadBrowseCategories(groupSlug),
+    ),
 );
+
+async function loadBrowseCategories(groupSlug?: string): Promise<BrowseCategorySummary[]> {
+  const database = await getDatabase();
+  const groupCondition = groupSlug ? "AND category_group.slug = ?" : "";
+  const statement = database.prepare(
+    `SELECT tag.slug, tag.name, tag.description,
+      category_group.slug AS group_slug, category_group.name AS group_name,
+      COUNT(DISTINCT tool.id) AS published_tool_count
+     FROM tags tag
+     JOIN categories category_group
+       ON category_group.id = tag.category_group_id
+      AND category_group.is_active = 1
+     JOIN tool_tags tt ON tt.tag_id = tag.id
+     JOIN tools tool ON tool.id = tt.tool_id AND tool.status = 'published'
+     WHERE tag.kind = 'category' AND tag.is_active = 1 ${groupCondition}
+     GROUP BY tag.id
+     HAVING COUNT(DISTINCT tool.id) > 0
+     ORDER BY category_group.sort_order ASC, tag.name COLLATE NOCASE ASC`,
+  );
+  const result = groupSlug
+    ? await statement.bind(groupSlug).all<{
+        slug: string;
+        name: string;
+        description: string;
+        group_slug: string;
+        group_name: string;
+        published_tool_count: number;
+      }>()
+    : await statement.all<{
+        slug: string;
+        name: string;
+        description: string;
+        group_slug: string;
+        group_name: string;
+        published_tool_count: number;
+      }>();
+  return result.results.map((row) => ({
+    slug: row.slug,
+    name: row.name,
+    description: row.description,
+    groupSlug: row.group_slug,
+    groupName: row.group_name,
+    publishedToolCount: Number(row.published_tool_count),
+  }));
+}
 
 export const getBrowseCategory = cache(
   async (groupSlug: string, slug: string): Promise<BrowseCategorySummary | null> => {
